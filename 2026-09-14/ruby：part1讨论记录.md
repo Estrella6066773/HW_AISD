@@ -1,4 +1,4 @@
-# Part 1 讨论记录
+# ruby：Part 1 讨论记录
 
 > 会议总结（类飞书纪要）  
 > **主题**：Case Study — Hospital Patient Referral, Treatment and Administration System  
@@ -41,6 +41,6 @@
 
 | 事项 | 负责人 |
 |------|--------|
-| 整理 Part 1 案例摘要成文 | 全组（见 `part1案例摘要.md`） |
+| 整理 Part 1 案例摘要成文 | 全组（见 `ruby：part1案例摘要.md`） |
 | 紧急咨询判定规则确认 | 待问 tutor |
 | 外部排班/支付本期 mock 边界写入假设 | Minghao Qin / Guanyan He |
