@@ -1,4 +1,4 @@
-# Part 1 Discussion Notes
+# ruby: Part 1 Discussion Notes
 
 > Meeting summary  
 > **Topic**: Case Study — Hospital Patient Referral, Treatment and Administration System  
@@ -41,6 +41,6 @@ The group reviewed Part 1 against the case study text. The patient pathway start
 
 | Action | Owner |
 |--------|--------|
-| Finalise the Part 1 case summary | Whole group (see `part1-case-summary.md` / `part1案例摘要.md`) |
+| Finalise the Part 1 case summary | Whole group (see `ruby-part1-case-summary.md` / `ruby：part1案例摘要.md`) |
 | Confirm urgency rules for clinical enquiries | To ask tutor |
 | Document mock boundary for scheduling/payment in this phase | Minghao Qin / Guanyan He |
