@@ -1,7 +1,7 @@
 # Dluffy：Part 1 起草 · 系统要解决的问题
 
-**起草**：C · Minghao Qin（Ender Qin / Dluffy，23084402）
-**复核**：A · Hao Zheng
+**起草**：Ender（23084402）
+**复核**：Ruby
 **依据**：Agile Workshop Part 1 讨论项第 4 问
 **日期**：2026-09-15
 

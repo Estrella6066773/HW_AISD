@@ -1,7 +1,7 @@
 # ruby: Part 1 Case Study Summary
 
 **Date**: 2026-09-14  
-**Participants**: A Hao Zheng, B Geping Chen, C Minghao Qin, D Guanyan He  
+**Participants**: Ruby, Estrella, Ender, Ryan  
 **Topic**: Hospital Patient Referral, Treatment and Administration System — group case summary  
 
 ---
