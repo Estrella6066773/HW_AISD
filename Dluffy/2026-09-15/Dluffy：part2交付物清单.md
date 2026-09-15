@@ -18,7 +18,7 @@
 | 运营 / 可执行 BPMN | 主路径可跑 | 战略 BPMN | 28 Sep（Sprint 1 片段） | 转诊核验 → Consultant 决策片段可演示 |
 | i*（SD / SR） | 利益相关者与依赖 | Part 1 | 周三 | 含外部组织依赖（排班、检验影像、支付） |
 | 需求追溯矩阵 | 需求 ↔ 模型 ↔ 实现 ↔ 测试 | Part 3 / Part 4（Estrella、Ryan） | 28 Sep | 每行可回溯到 Backlog ID |
-| 验收标准 | 按工作包 | Part 4（Ruby） | 周三 | 每条可测、有对应证据 |
+| 验收标准 | 按工作包 | Part 4（Ender） | 周三 | 每条可测、有对应证据 |
 
 ## 二、Agile 过程证据
 
@@ -26,7 +26,7 @@
 |-------------|------------------------|--------------|----------|---------------------|
 | Product Backlog | Part 3 | Estrella 主笔 | 周三 | 12 字段齐全（ID / 名称 / 描述 / 优先级 / 关联需求 / 估算 / 一责 / 二责 / 依赖 / 验收 / 证据 / 状态） |
 | Definition of Done | 全组约定 | Ender 提议 | 周三 | 含证据最低要求（Backlog ID + 文件/commit + 截图） |
-| Sprint Backlog + Goal | Part 6 | Ender 主笔 | 周三 | Sprint 1 目标 + 条目带双负责人与验收 |
+| Sprint Backlog + Goal | Part 6 | Ruby 主笔 | 周三 | Sprint 1 目标 + 条目带双负责人与验收 |
 | Standup 记录与汇总 | Part 7 | 每人自写、Ryan 汇总 | 周三起每人 ≥ 1 次 | 含完成 / 证据 / 下一步 / 阻塞 / 支持 / 交接 |
 | Sprint Review | Part 8 | Ruby 主笔 | 周三 | 展示分工、完成 / 未完成、证据、反馈 |
 | 反馈与 Backlog 变更 | Part 8 | Ryan 维护 | 持续 | 变更可追溯 |
