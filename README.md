@@ -187,6 +187,26 @@ main          ← production-grade, always deployable
 
 ---
 
+---
+
+## Wednesday Workshop (Phase 1)
+
+First workshop delivery plan: see [workshop-plan.md](./workshop-plan.md).
+
+Part-aligned folders (in addition to the structure above):
+
+| Part | Path |
+|------|------|
+| Case summary | docs/part1-case-summary/ |
+| Deliverables list | docs/part2-deliverables/ |
+| Product backlog | docs/part3-product-backlog/ |
+| Task breakdown | docs/part4-task-breakdown/ |
+| Assumptions | docs/part5-assumptions/ |
+| Sprint backlog | gile/part6-sprint-backlog/ |
+| Standup | gile/part7-standup/ |
+| Sprint review | gile/part8-sprint-review/ |
+| Contributions | gile/contributions/ |
+
 ## License
 
 This project is created for academic purposes as part of the Advanced Information Systems Development module.
