@@ -1,7 +1,7 @@
 # ruby：Part 1 案例摘要
 
 **日期**：2026-09-14  
-**参与**：A Hao Zheng、B Geping Chen、C Minghao Qin、D Guanyan He  
+**参与**：Ruby、Estrella、Ender、Ryan  
 **议题**：Hospital Patient Referral, Treatment and Administration System — 小组案例摘要  
 
 ---
