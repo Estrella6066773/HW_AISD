@@ -1,4 +1,4 @@
-# Part 1 案例摘要
+# ruby：Part 1 案例摘要
 
 **日期**：2026-09-14  
 **参与**：A Hao Zheng、B Geping Chen、C Minghao Qin、D Guanyan He  
@@ -66,4 +66,4 @@
 
 ---
 
-详细展开见各人 `2026-09-14/*-分工内容.md`。
+详细展开见各人分工内容文档。
