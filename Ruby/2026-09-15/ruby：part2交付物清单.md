@@ -14,9 +14,9 @@
 | 案例理解与问题总结 | 背景、参与者、主流程、问题、规则、异常、外部系统、信息 | 全组讨论；Hao Zheng 汇总，Geping Chen 复核 | 16 Sep 2026 | 8 问有答案；假设单独标明；用文档即可 |
 | 交付物清单（本文） | 明确以后交什么、何时交 | 案例摘要 | 16 Sep 2026 | 五列齐全；16 Sep 与 28 Sep 分开 |
 | Product Backlog | 覆盖以后的建模、实现、测试、评审、证据 | Geping Chen 主笔，Guanyan He 复核 | 16 Sep 2026 | 12 字段齐全（含双负责人）；条目是计划，不是已完成代码 |
-| 任务拆分 | 小到一个 sprint 能做完 | Hao Zheng 主笔，Minghao Qin 复核 | 16 Sep 2026 | 无「做系统/做 BPMN」这种空任务；有验收与证据栏 |
+| 任务拆分 | 小到一个 sprint 能做完 | Minghao Qin 主笔，Guanyan He 复核 | 16 Sep 2026 | 无「做系统/做 BPMN」这种空任务；有验收与证据栏 |
 | 依赖映射 | 先后顺序、延误知会、备份 | Guanyan He 主笔，Geping Chen 复核 | 16 Sep 2026 | 每项能回答前置/后继/通知谁/备份 |
-| Sprint Backlog + Goal | 第一个 sprint 准备做什么 | Minghao Qin 主笔，Guanyan He 复核 | 16 Sep 2026 | 有 Goal；条目来自 Product Backlog；讲计划不演示软件 |
+| Sprint Backlog + Goal | 第一个 sprint 准备做什么 | Hao Zheng 主笔，Minghao Qin 复核 | 16 Sep 2026 | 有 Goal；条目来自 Product Backlog；讲计划不演示软件 |
 | Standup 准备与记录 | 个人进度 | 每人自写；Guanyan He 汇总，Hao Zheng 复核格式 | 16 Sep 2026 | 完成/下一步/阻塞/证据；证据可以是文档与讨论记录 |
 | Sprint Review 准备 | 演示本周的计划增量 | Hao Zheng 主笔，Geping Chen 复核 | 16 Sep 2026 | 能讲已完成文档、未做的图/代码、决策、下一步 |
 | Definition of Done | 全组约定何为完成 | 全组确认 | 16 Sep 2026 | 16 Sep：文档有负责人+可检查；实现阶段再加 commit/截图 |
