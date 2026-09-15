@@ -1,7 +1,9 @@
-# Estrella
+# Est
 
 | 项 | 内容 |
 |----|------|
-| 中文名 | 待本人填写 |
-| 英文名 | Estrella |
-| 学号（UWE ID） | 23084393 |
+| UWE ID | 23084393 |
+| Neusoft | 23265120215 |
+| Name | Geping Chen (陈格平) |
+| Name on Blackboard | Estrella Chen |
+
