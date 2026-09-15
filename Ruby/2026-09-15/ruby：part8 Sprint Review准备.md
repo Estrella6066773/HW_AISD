@@ -1,5 +1,8 @@
 # ruby：Part 8 Sprint Review 准备
 
+**主笔**：Ruby（23084382）
+**复核**：Estrella
+
 **Sprint Goal（建议）**：完成 Workshop 计划（案例、交付物、Backlog、任务拆分、Sprint 计划、Standup、Review 准备）。16 Sep 只演示计划，不画图、不写代码。实现增量放到 28 Sep。
 
 ## 展示分工
