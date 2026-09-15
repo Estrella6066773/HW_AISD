@@ -1,6 +1,6 @@
 # ruby：Part 8 Sprint Review 准备
 
-**Sprint Goal（建议）**：完成案例理解与计划基线，并说明第一期将演示「转诊核验 → Consultant 决策 → 新患预约（排班可 mock）」。
+**Sprint Goal（建议）**：完成 Workshop 计划（案例、交付物、Backlog、任务拆分、Sprint 计划、Standup、Review 准备）。16 Sep 只演示计划，不画图、不写代码。实现增量放到 28 Sep。
 
 ## 展示分工
 
@@ -24,8 +24,8 @@
 
 | 项 | 原因 | 下一步 |
 |----|------|--------|
-| 可部署运营 BPMN / Forms / Workers | 属于 28 Sep 实现，不在本周三范围 | Sprint 1 按 T02–T11 开工 |
-| 测试截图与端到端演示 | 依赖实现 | 先出测试标题（T19） |
+| 战略/运营 BPMN、i*、Forms、Workers | 16 Sep 不画图、不写代码 | 28 Sep 再做 |
+| 测试截图与端到端演示 | 依赖实现 | 28 Sep；16 Sep 只说明打算测什么 |
 | Part 3 总表定稿 | 等 B 把 PB 与 T 编号锁死 | 锁定后回写 Part 4/6 |
 | Part 5 依赖映射 | D 主责 | 基于 T 表补前置/备份 |
 
@@ -39,7 +39,7 @@
 
 ## 集成证据（当前）
 
-周三集成的是计划增量：案例摘要、交付物、任务拆分、（待补）Backlog 与 Sprint Backlog 使用同一套 ID。实现集成证据放到 28 Sep 的 Review。
+16 Sep 集成的是计划增量：案例摘要、交付物、任务拆分、（待补）Backlog 与 Sprint Backlog 使用同一套 ID。实现集成证据放到 28 Sep 的 Review。
 
 ## 测试 / 校验证据（当前）
 
