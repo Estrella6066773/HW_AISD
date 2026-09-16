@@ -1,6 +1,6 @@
 # Requirements Traceability Matrix
 
-> **Provenance**: first written on 2026-09-15, deleted in commit `3d114fa`, restored from history on 2026-09-16 into `docs/`. Paths inside follow the repository layout of that time; the current layout is in the root `README.md`. The BR numbers are used in this file only.
+> **Provenance**: first written on 2026-09-14 as `docs/requirements/traceability-matrix.md`, in the initial repository skeleton (commit `c8da046`); deleted in commit `3d114fa`; restored from history on 2026-09-16 into `docs/`. Paths inside follow the repository layout of that time; the current layout is in the root `README.md`. The BR numbers are used in this file only.
 
 > **Purpose**: Trace each requirement across the entire development lifecycle — from the strategic process model, through the operational BPMN, down to the actual implementation. This is a **grading criterion** (BPM&EA Task 3).
 >
