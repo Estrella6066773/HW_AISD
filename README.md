@@ -17,7 +17,7 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 
 | Path | Content |
 |------|---------|
-| `docs/` | Group-level deliverables: product backlog, sprint backlog, task breakdown |
+| `docs/` | Group-level deliverables: product backlog, task breakdown, sprint backlog, requirements traceability matrix, definition of done |
 | `Ruby/`, `Est/`, `Dluffy/`, `Ryan/` | Individual workspaces: drafts, part-level documents, meeting notes |
 | `Coursework/` | Agile Workshop workbook transcription |
 | `W01/` | Course materials: session slides, case study, assessment specifications |
@@ -26,8 +26,8 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 
 16 September 2026 is the first standup. It is checked against three things:
 
-1. A complete product backlog — `docs/product-backlog.md`
-2. The Sprint 1 backlog — `docs/sprint-backlog.md`
+1. A complete product backlog — `docs/p3-product-backlog.md`
+2. The Sprint 1 backlog — `docs/p6-sprint-backlog.md`
 3. All four members added to the repository, with both tables uploaded
 
 Sprint 1 covers planning only: no models and no code. The first slice under specification is referral check → doctor decision → first clinic booking, with outside scheduling mocked. Payment, clinic letters and enquiry routing come in later sprints, toward the initial release on 28 September 2026.
@@ -38,12 +38,19 @@ Sprint 1 covers planning only: no models and no code. The first slice under spec
 |------|------|
 | 1 Case summary | `Ruby/2026-09-14/ruby：part1案例摘要.md`, discussion notes alongside; individual drafts under `Ryan/2026-09-15/` and `Dluffy/2026-09-15/` |
 | 2 Deliverable list | `Dluffy/2026-09-15/Dluffy：part2交付物清单.md` |
-| 3 Product backlog | `docs/product-backlog.md` |
-| 4 Task breakdown | `docs/work-breakdown.md` |
+| 3 Product backlog | `docs/p3-product-backlog.md` |
+| 4 Task breakdown | `docs/p4-work-breakdown.md` |
 | 5 Dependency mapping | `Ryan/2026-09-15/Ryan：part5依赖映射.md` |
-| 6 Sprint backlog | `docs/sprint-backlog.md`, notes in `Ruby/2026-09-15/ruby：part6 Sprint Backlog-理解.md` |
+| 6 Sprint backlog | `docs/p6-sprint-backlog.md`, notes in `Ruby/2026-09-15/ruby：part6 Sprint Backlog-理解.md` |
 | 7 Standups | `Ryan/2026-09-15/Ryan：part7 standup.md` and the summary alongside |
 | 8 Sprint Review | `Ruby/2026-09-15/ruby：part8 Sprint Review准备.md` |
+
+Supporting documents, not tied to a single part:
+
+| File | Content |
+|------|---------|
+| `docs/requirements-traceability-matrix.md` | BR-01 to BR-42 with case paragraph sources, and the matrix to fill per release |
+| `docs/definition-of-done.md` | Definition of Done and the minimum delivery evidence, across BPMN, workers, forms, code quality and documentation |
 
 ## Conventions
 
