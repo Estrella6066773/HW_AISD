@@ -1,6 +1,6 @@
 # Definition of Done
 
-> **Provenance**: first written on 2026-09-15, deleted in commit `3d114fa`, restored from history on 2026-09-16 into `docs/`. Corrected on 2026-09-16 against the layout the repository actually has: every path below now points at a file or folder that exists, and items that belong to the implementation increment are labelled as such.
+> **Provenance**: first written on 2026-09-14 as `agile/definition-of-done.md`, in the initial repository skeleton (commit `c8da046`); deleted in commit `3d114fa`; restored from history on 2026-09-16 into `docs/`. Corrected on 2026-09-16 against the layout the repository actually has: every path below now points at a file or folder that exists, and items that belong to the implementation increment are labelled as such.
 >
 > This file is the evidence for **PB-29** (first owner Dluffy, second owner Estrella). Group sign-off is still required before PB-29 is counted as Done.
 
