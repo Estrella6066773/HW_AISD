@@ -3,7 +3,7 @@
 **主笔**：Ruby（23084382）
 **复核**：Dluffy（Ender）
 
-与 `Coursework/Agile Workshop-ZH.docx` / `Agile Workshop-EN.docx` 一致。任务编号与 Part 4（`docs/work-breakdown.md`）一致；每条任务行首标出对应的 Backlog 条目。
+与 `Coursework/Agile Workshop-ZH.docx` / `Agile Workshop-EN.docx` 一致。任务编号与 Part 4（`docs/p4-work-breakdown.md`）一致；每条任务行首标出对应的 Backlog 条目。
 
 | Sprint | Goal |
 |--------|------|
