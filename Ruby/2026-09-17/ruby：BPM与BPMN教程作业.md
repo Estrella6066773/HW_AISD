@@ -7,7 +7,8 @@
 **日期**：2026-09-17  
 **依据**：两份 tutorial 表格；案例第 1–30 段；Part 1 摘要；Part 5 依赖映射
 
-> 用法：第一节是「要干啥」。后面从 Task 1 起到 Task D 是填好的答案。交仓库时交英文正文即可；中文是给组内讲和答辩用的。
+> 用法：第一节是「要干啥」。后面从 Task 1 起到 Task D 是填好的答案。交仓库时交英文正文即可；中文是给组内讲和答辩用的。  
+> BPMN 的 Task A 已按 `Introduction to BPMN - Completed(1).docx` 收录；**Task B / C / D 是接着写的提交稿**。
 
 ---
 
@@ -29,12 +30,12 @@
 
 ### 第二份：Introduction to BPMN
 
-目标：搞清 BPMN 怎么建模、什么叫好模型、AS-IS 该用什么记号。
+目标：搞清 BPMN 怎么建模、什么叫好模型、AS-IS 该用什么记号。Completed 稿里 **Task A 已填完**，后面从 Task B 起要自己写。
 
 | 题号 | 要交什么 | 怎么做 |
 |------|----------|--------|
-| Task A | 填 UML vs BPMN 对比表 | 按 Capability / Audience / Adaptability / Scalability / Ability to automation 逐行对比，最后补一行 Purpose |
-| Task B | AS-IS 系统该用哪种建模工具，并说明理由 | 结论：**BPMN**（可用 UML Activity 作补充）。要结合医院案例，不要空谈 |
+| Task A | 填 UML vs BPMN 对比表 | **已完成**（Completed 文档：Capability / Audience / Adaptability / Scalability / Ability to automation / Notation） |
+| Task B | AS-IS 系统该用哪种建模工具，并说明理由 | 结论：**BPMN**。必须扣医院案例，不要空谈 |
 | Task C | 什么叫好模型 | 小组讨论口径：目的对、抽象层对、完整、一致、可验证 |
 | Task D | 把答案传到小组仓库 | 本文件上传后勾掉 |
 
@@ -49,8 +50,9 @@
 - [ ] 五阶段每段都写了，没有只列标题
 - [ ] stakeholders 覆盖临床 / 行政 / 财务 / 患者转诊方 / 外部服务
 - [ ] 流程依赖服从案例门禁：未接受不能约号，未授权不能约治疗
-- [ ] Task A 表格 6 行都填了
-- [ ] Task B 明确写出工具名 + 针对 AS-IS 的理由
+- [x] Task A 表格 6 行都填了（Completed 稿）
+- [x] Task B 明确写出工具名 + 针对 AS-IS 的理由
+- [x] Task C 什么叫好模型已写
 - [ ] 已上传小组仓库（Task D）
 
 ---
@@ -197,116 +199,77 @@ P13 Audit sits on P2, P5, P7, P8, P9, P11 — not a substitute for them.
 
 ## Tutorial 2 · Introduction to BPMN
 
-**Aim:** The aim of this tutorial is to explore BPMN and modelling aspects and good practices.  
-**Constraint:** For this tutorial, we MUST work in our groups.
+**Aim:** The aim of this tutorial is to explore the BPMN and modelling aspects and good practices.  
+**Constraint:** For this tutorial, you MUST work in your groups.
 
----
+> Task A 原文照抄 `Introduction to BPMN - Completed(1).docx`。  
+> **Task B / C / D 是接着空表写的提交稿**，可直接贴回 Word。
 
-### Task A · Compare and contrast UML and BPMN
+### Task A · Compare and contrast UML and BPMN modelling notations.
 
 | Criteria | BPMN | UML |
 |----------|------|-----|
-| **Capability** | Built for end-to-end **business processes**: events, gateways, pools/lanes, message flows, interrupting vs non-interrupting events, compensation. Strong at showing *when work starts, who waits, and how exceptions branch*. | A **family of diagrams** for software structure and behaviour (class, sequence, state, component, deployment, activity). Activity diagrams can show flow, but UML’s centre of gravity is system design, not organisational process. |
-| **Audience** | Business analysts, process owners, operations staff, and developers. The same diagram can be discussed with a secretary and later executed in an engine. | Primarily software engineers and architects. Class/sequence diagrams are not intended for a finance clerk or a pathway coordinator. |
-| **Adaptability** | One notation scales from a strategic (level-1) map to an operational (level-3) executable model by adding events and data, without changing language. Easy to mark AS-IS (phone, letter, paper) versus TO-BE (workflow tasks). | Highly adaptable **across concerns** (data, interaction, deployment), but switching concern means switching diagram type. Adapting an activity diagram into an implementation usually requires other UML views. |
-| **Scalability** | Pools and lanes scale to many roles and organisations (hospital vs payment provider vs GP). Sub-processes hide detail. Collaboration diagrams scale across enterprise boundaries. | Scales well **inside a software system** (packages, components). Cross-organisation work is possible but less natural; there is no first-class “external participant pool”. |
-| **Ability to automation** | High. BPMN 2.0 is an **executable** standard. Engines (e.g. Camunda) can run the model, bind user forms, and call external workers. This matches our later AISD work. | Indirect. UML can generate or guide code, especially class/state models, but UML activity diagrams are not the native language of process engines. Automation needs a separate implementation step. |
-| **Purpose / focus** *(extra row)* | **What work happens, in what order, under which business rules**, including human tasks and external messages. | **What the software is**: structure, object interaction, and technical behaviour. Process is only one of several views. |
-
-**Short contrast:**  
-UML answers “how do we build the system?” BPMN answers “how does the hospital actually move a patient from referral to treatment?” For this unit we need both later (BPMN for process, UML or class/API notes for software), but they are not interchangeable.
+| Capability | Models end-to-end business processes, including tasks, decisions, events and communication between participants. | Models system structure and behaviour using diagrams such as class, use case, sequence and activity diagrams. |
+| Audience | Business analysts, process owners and managers, as well as developers implementing workflows. | Mainly software developers, architects and systems analysts; use case and activity diagrams also support business discussions. |
+| Adaptability | Applies across industries and supports both AS-IS and TO-BE processes, while remaining focused on process modelling. | Supports many modelling purposes and domains; profiles and stereotypes allow domain-specific extensions. |
+| Scalability | Uses subprocesses and reusable processes to manage complexity. Large diagrams still need decomposition to remain readable. | Uses packages, components and multiple diagram views to organise large systems. Views must be kept consistent. |
+| Ability to automation | Executable BPMN 2.0 models can run on compatible process engines after adding execution details and integrations; not every diagram is executable. | Can support code generation and simulation with suitable tools. Executable subsets such as fUML exist, but ordinary UML diagrams are not directly executable. |
+| Notation | Uses events, activities, gateways, pools, lanes, sequence flows and message flows to describe processes and collaboration. | Uses different symbols for each diagram type, such as classes and associations, actors and use cases, or lifelines and messages. |
 
 ---
 
-### Task B · Most appropriate modelling tool for the AS-IS system
+### Task B · Based on the case study provided, what would be the most appropriate modelling tool for modelling the AS-IS system. Justify your answer.
 
-**Choice: BPMN 2.0, at a strategic / descriptive level, as the primary AS-IS tool.**  
-UML Activity Diagrams may be used as a secondary view if we need to zoom into one software interaction. They are not the best primary choice for this AS-IS.
+**Most appropriate tool: BPMN** (descriptive / strategic level).  
+UML activity diagrams may be used later as a secondary view of one software interaction. They are not the primary AS-IS tool.
 
-**Why BPMN fits this AS-IS**
+The case describes a specialist hospital **patient pathway**, not a single software application. Referrals currently move through Medical Secretaries, Consultants, Outpatient Bookings, Finance, Call Handling, letters, telephone and paper, plus external scheduling, correspondence and payment services. The AS-IS model must show **who does the work, in what order, and where the work waits or fails**. BPMN is designed for that: pools and lanes show clinical, administrative and finance responsibilities; message flows show letters, phone contact and external replies; gateways show accept / reject / request further information / redirect.
 
-1. **The AS-IS is a cross-role pathway, not a single application.**  
-   Today the work already exists: secretaries, consultants, booking teams, finance, call handling, plus letters, phone and paper. BPMN pools/lanes show those roles without pretending there is already one system.
+The case also contains **hard gates** that an AS-IS model must not hide. A New Patient Appointment may be arranged only after an authorised Consultant has accepted the referral. Administrative staff must not process an unauthorised treatment request. A clinic letter cannot be sent until the Consultant approves it. If an external service is unavailable, the booking remains pending and duplicate appointments must not be created. BPMN can put these gates and exception paths on the same diagram as the happy path. A UML class or sequence diagram would start from system objects and method calls, which pretends the current work is already one application.
 
-2. **AS-IS includes messages and waiting, not only sequential actions.**  
-   Referral packs, appointment letters, two-week phone chases, payment receipts and clinic letters are *message flows* and *wait states*. BPMN events and message flows represent this directly. A UML class diagram cannot.
+UML remains useful later for software structure. i* is useful for *why* actors depend on each other. Neither replaces BPMN for documenting how the hospital actually runs today. Starting AS-IS in BPMN also matches the later course deliverable: a strategic BPMN that can be refined into an operational, engine-ready model without changing notation.
 
-3. **Exception paths are first-class in the case.**  
-   Missing documents, reject/redirect, no slot, unpaid treatment, payment with no hospital receipt, letter delay, DNA. BPMN gateways and boundary events keep these on the same diagram as the happy path. That is what “AS-IS honestly” requires.
-
-4. **External organisations are participants, not just APIs.**  
-   GP, insurer, scheduling service, payment provider, lab/imaging sit outside the hospital. BPMN black-box pools show them as independent actors. That matches Task 2.1 dependencies.
-
-5. **The course stack expects BPMN later.**  
-   Deliverables already include a strategic BPMN and later an operational BPMN with Camunda forms and workers. Starting AS-IS in BPMN avoids a notation change between discovery and redesign.
-
-**Why not the other common options as the main AS-IS tool**
-
-| Tool | Why not primary for AS-IS |
-|------|---------------------------|
-| UML Class / Sequence | Good for TO-BE software structure and API calls. They hide the current paper/phone work and the role gates. |
-| UML Activity only | Can sketch flow, but weaker on organisational pools, message events, and later execution in a process engine. |
-| i* (SD/SR) | Needed for *why* actors depend on each other (goals, soft goals). It does not show sequence, gates or time. Use it alongside BPMN, not instead of it. |
-| EPC / flowcharts | Readable, but not the unit standard and not executable. |
-| Data-flow diagram | Shows information movement, not responsibility or clinical/finance gates. |
-
-**Abstraction rule for the AS-IS model:**  
-Show processes P1–P10, the three internal lanes (Clinical / Admin / Finance), external pools, and the hard gates listed in Task 2.1. Do **not** put form field lists or Camunda worker names on the AS-IS diagram. Those belong to TO-BE operational BPMN.
-
-**Justification in one sentence:**  
-The AS-IS system is a human-and-paper specialist-hospital pathway with strict role gates and external messages; BPMN is the notation designed to make that visible, discussable with non-developers, and later refinable into an executable TO-BE model.
+**One-sentence justification:**  
+The AS-IS system is a cross-role, paper-and-phone hospital pathway with external participants and strict clinical/finance gates; BPMN is the notation that makes that pathway visible to business and technical readers.
 
 ---
 
-### Task C · What constitutes a good model?
+### Task C · What constitutes a good model? Discuss in your groups.
 
-A good model is **fit for a stated purpose at a stated abstraction level**. Pretty notation is not enough.
+A good model is a shared, checkable statement about work. It is **fit for a stated purpose at a stated abstraction level**. A diagram that looks complete but serves no purpose, or mixes AS-IS paper work with TO-BE system tasks, is not a good model.
 
-Our group checklist:
+Our group agreed on the following tests.
 
-1. **Purpose is explicit.**  
-   AS-IS discovery, TO-BE redesign, execution, or stakeholder goals are different jobs. Mixing them produces a diagram nobody can use. For this tutorial the purpose of the process model is: *show how referral-to-treatment actually runs, including gates and exceptions*.
-
-2. **Right abstraction.**  
-   Strategic model: processes, roles, gates, external parties. Operational model: user tasks, forms, workers. A good model omits detail that does not serve the purpose, and says so (our PB-12 acceptance condition).
-
-3. **Correct against the domain.**  
-   Every gate in the case must be true in the model: no booking before accept; no treatment booking before clinical authorisation; no letter before approval. If the model allows a secretary to accept a referral, it is a bad model even if it looks neat.
-
-4. **Complete at that level.**  
-   Happy path plus the exceptions the case actually names (missing pack, reject, no slot, payment failure, no receipt, letter delay). Invented clinical policy (e.g. how to grade “urgent” calls) must be marked as unresolved, not drawn as fact.
-
-5. **Consistent.**  
-   Names of roles, processes and states match Part 1, the backlog IDs, and later BPMN files. One concept, one name.
-
-6. **Understandable to its audience.**  
-   A secretary and a developer should both recognise their work. BPMN lanes and plain task names matter more than rare symbols.
-
-7. **Traceable and testable.**  
-   A reader can point from a model element to a case paragraph and to a backlog item. If the model claims a gate, a test can fail when that gate is missing.
-
-8. **Honest about AS-IS vs TO-BE.**  
-   A good AS-IS model shows email, phone and paper. Hiding them to make the hospital look digital is not modelling; it is wishful TO-BE.
+| Test | What it means on this case |
+|------|----------------------------|
+| Purpose | The AS-IS model exists to show how referral-to-treatment currently runs, including gates and exceptions. It is not yet an executable Camunda diagram. |
+| Right abstraction | Strategic BPMN shows processes, roles, gates and external parties. Form fields and worker names belong to the later operational model and should be omitted here, with that choice stated. |
+| Correctness | The model must not allow a secretary to accept a referral, or allow treatment booking before clinical authorisation. If it does, it is wrong even if the notation is tidy. |
+| Completeness at that level | Happy path plus the exceptions the case actually names: missing documents, reject/redirect, no slot, payment failure, payment with no hospital receipt, letter delay. Rules the case leaves open (how to grade an “urgent” call) must be marked unresolved, not invented. |
+| Consistency | Role names, process names and states match Part 1 and the backlog. One concept, one name. |
+| Understandability | A secretary and a developer should both recognise their work. Common BPMN symbols and plain task names matter more than rare notation. |
+| Traceability | A reader can point from a model element to a case paragraph. If the model claims a gate, a later test can fail when that gate is missing. |
+| Honesty (AS-IS vs TO-BE) | A good AS-IS model shows email, phone and paper. Hiding them to make the hospital look digital is wishful TO-BE, not discovery. |
 
 **Group conclusion:**  
-A good model is a shared, checkable statement about work. It is good when it is purposeful, correctly abstracted, faithful to the case, consistent with our other artefacts, and usable in the next BPM phase (analysis or redesign).
+A good model is purposeful, correctly abstracted, faithful to the case, consistent with our other artefacts, understandable to its audience, and usable in the next BPM phase (analysis or redesign). Pretty notation is not enough.
 
 ---
 
-### Task D · Upload to the group repository
+### Task D · Upload your answers to the group repository you created during the last tutorial.
 
-Upload this file to the group repository created in the previous tutorial.
+Upload this file (or the completed Word) to the group repository created in the previous tutorial.
 
-**Suggested path:** `Ruby/2026-09-17/ruby：BPM与BPMN教程作业.md`  
-After merge to the shared repo, record the commit hash in the contribution log.
+**Suggested path:** `Ruby/2026-09-17/Introduction to BPMN - Completed.docx`  
+After merge, record the commit hash in the contribution log.
 
 | Item | Status |
 |------|--------|
 | Tutorial 1 Task 1.1–1.2 | Filled |
 | Tutorial 1 Task 2.1 stakeholders / processes / dependencies | Filled |
-| Tutorial 2 Task A comparison table | Filled |
-| Tutorial 2 Task B AS-IS tool + justification | Filled |
-| Tutorial 2 Task C good model | Filled |
+| Tutorial 2 Task A comparison table | Copied from Completed worksheet |
+| Tutorial 2 Task B AS-IS tool + justification | Filled in this file |
+| Tutorial 2 Task C good model | Filled in this file |
 | Tutorial 2 Task D repository upload | Pending — do after this file is committed |
 
 ---
