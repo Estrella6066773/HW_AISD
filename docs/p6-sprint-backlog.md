@@ -1,9 +1,9 @@
-# ruby：Part 6 Sprint Backlog（Sprint 1）
+# Part 6 Sprint Backlog（Sprint 1）
 
 **主笔**：Ruby（23084382）
 **复核**：Dluffy（Ender）
 
-与 `Coursework/Agile Workshop-ZH.docx` / `Agile Workshop-EN.docx` 一致。
+与 `Coursework/Agile Workshop-ZH.docx` / `Agile Workshop-EN.docx` 一致。任务编号与 Part 4（`docs/p4-work-breakdown.md`）一致；每条任务行首标出对应的 Backlog 条目。
 
 | Sprint | Goal |
 |--------|------|
@@ -19,3 +19,5 @@
 | Sprint 1 | T06 | From PB-03: confirm a slot (para 5); handle no suitable slot (para 6). Mock, and using para 24 follow-up wording for the first visit, are group assumptions | Minghao Qin | Guanyan He | 5h | No suitable slot is not recorded as booked; case vs assumption is labelled | Rule note including assumptions | Not started |
 | Sprint 1 | T07 | From PB-04: letter as normal; also phone if within two weeks; log every call result (para 5–6) | Geping Chen | Hao Zheng | 3h | Visits within two weeks must have a phone-attempt record | Notification rules | Not started |
 | Sprint 1 | T20 | From PB-15: upload Product Backlog and this table; all members on GitHub; plan only | Hao Zheng | Geping Chen | 2h | Repo has PB and Sprint Backlog; four members added | GitHub; Parts 3 and 6 | In progress |
+
+本期只做规格与计划：不出图，不写代码。
