@@ -1,22 +1,46 @@
 # Introduction to Business Process Modelling · 文档对照批注
 
 对照：`Introduction to Business Process Modelling - Completed.docx`  
-用法：左边 / 上边是 Word 里交的英文；下面是中文意思 + 简单开口。  
-讲的时候用「简单讲」斜体英文，不要把 Word 长句背下来。
+用法：每道题先看 **题目 EN / 题目中文**，再看我们交的答案。上场用「简单讲」，不要背 Word 长句。
 
 **今天只讲这份表格。不画图，不写代码，不是 Sprint。**  
 *This worksheet is about BPM ideas and our hospital. No diagram. No code.*
 
 ---
 
+## 整张表的题目（先看这个）
+
+Word 上的标题和题目，原句 + 中文。
+
+| Word 原句 | 中文 |
+|-----------|------|
+| TUTORIAL — Business Process Modelling and Enterprise Architecture & Advanced Information System Development | 教程：业务流程建模与企业架构，以及高级信息系统开发 |
+| Introduction to Business Process Modelling | 业务流程建模入门 |
+| Aim: The aim of this tutorial is to establish a thorough understanding of business process, business process modelling and to research new ways of representing business processes. | 目的：搞清什么是业务流程、什么是业务流程建模，并研究怎么把流程画出来。（Word 原文有拼写 *through understand*，意思按这句。） |
+| Task 1: Understanding Key Concepts | 任务 1：理解关键概念 |
+| 1.1: Define Business Process and BPM | 1.1：定义业务流程和 BPM |
+| Define a Business Process and explain its significance in an organization. | 什么是业务流程？说明它对一个组织为什么重要。 |
+| What is Business Process Management (BPM)? List the main phases involved in BPM. | 什么是业务流程管理（BPM）？列出 BPM 的主要阶段。 |
+| 1.2: Research and Review | 1.2：查阅与综述 |
+| Use lecture materials or online resources to learn about the five phases of BPM lifecycle | 用讲义或网上资料，了解 BPM 生命周期的五个阶段 |
+| Task: Write a brief description of each phase. | 题目：给每个阶段写一段简短说明。 |
+| Task 2: Application of Key Concepts | 任务 2：把概念用到案例上 |
+| 2.1: Analyse the case study provided | 2.1：分析所给案例 |
+| Identify different stakeholders of the business | 找出这项业务里不同的利益相关者（Word 写成 *stake holders*） |
+| Identify all the business processes | 找出全部业务流程 |
+| Identify the dependencies among the business processes. | 找出这些业务流程之间的依赖关系 |
+
+---
+
 ## 0. 封面 / Aim
 
-**Word**  
+**题目 EN**  
 Introduction to Business Process Modelling  
-Aim: establish a thorough understanding of business process, business process modelling, and new ways of representing business processes.
+Aim: The aim of this tutorial is to establish a thorough understanding of business process, business process modelling and to research new ways of representing business processes.
 
-**中文**  
-搞清什么是业务流程、怎么给流程建模。
+**题目中文**  
+业务流程建模入门。  
+目的：搞清什么是业务流程、什么是业务流程建模，并研究怎么把流程画出来。
 
 **批注**  
 标题有点绕。开口说：这是 BPM 练习，先定义，再套医院。
@@ -25,11 +49,25 @@ Aim: establish a thorough understanding of business process, business process mo
 
 ---
 
-## Task 1.1 · 什么是 Business Process；什么是 BPM
+## Task 1 · Understanding Key Concepts
+
+**题目 EN** Task 1: Understanding Key Concepts  
+**题目中文** 任务 1：理解关键概念  
+（先讲定义，先不要翻到医院那张表。）
+
+---
+
+## Task 1.1 · Define Business Process and BPM
+
+**题目 EN** 1.1: Define Business Process and BPM  
+**题目中文** 1.1：定义业务流程和 BPM
 
 ### Define a Business Process
 
-**Word（交上去的）**  
+**题目 EN** Define a Business Process and explain its significance in an organization.  
+**题目中文** 什么是业务流程？说明它对一个组织为什么重要。
+
+**Word（交上去的答案）**  
 A business process is a structured, repeatable set of activities that transforms inputs into outputs of value for a customer or stakeholder. It has a clear trigger, a sequence of tasks, decision points, roles, and an end state. In a hospital, “referral to first appointment” is a process: the trigger is an incoming referral; the output is either an accepted booking or a recorded rejection. A process is significant because organisations create value when work crosses roles in a controlled order. If the process is unclear, delays, duplicated work and unauthorised actions appear. In our case, clinical judgement, administrative execution and financial approval must stay separate; the process is the mechanism that enforces that separation.
 
 **中文**  
@@ -49,7 +87,10 @@ A business process is a structured, repeatable set of activities that transforms
 
 ### What is BPM? List the main phases
 
-**Word（交上去的）**  
+**题目 EN** What is Business Process Management (BPM)? List the main phases involved in BPM.  
+**题目中文** 什么是业务流程管理（BPM）？列出 BPM 的主要阶段。
+
+**Word（交上去的答案）**  
 Business Process Management (BPM) is a management discipline for identifying, documenting, analysing, improving, executing and monitoring processes so that they remain aligned with organisational goals. BPM is not only drawing diagrams. It is a cycle: understand the current work, find problems, redesign, put the new design into operation, and check whether it actually improved. Main phases: Process Identification; Process Discovery; Process Analysis; Process Redesign; Process Monitoring.
 
 **中文**  
@@ -65,88 +106,52 @@ BPM = 管流程的方法。找到流程、写下来、找问题、改、再检�
 
 ---
 
-## Task 1.2 · 五个阶段
+## Task 1.2 · Research and Review
 
-**Word 题目**  
-Write a brief description of each phase.
+**题目 EN** 1.2: Research and Review. Use lecture materials or online resources to learn about the five phases of BPM lifecycle: Process Identification; Process Discovery; Process Analysis; Process Redesign; Process Monitoring.  
+**题目 EN** Task: Write a brief description of each phase.  
+**题目中文** 1.2：查阅与综述。用讲义或网上资料，了解 BPM 生命周期的五个阶段（识别、发现、分析、再设计、监控）。  
+**题目中文** 给每个阶段写一段简短说明。
 
-每阶段：Word 原句 → 中文 → 简单讲。
+**Word 答案（一张表，不要五段）**  
+表头：Phase 阶段 ／ What we do 做什么 ／ Output 产出什么 ／ In our case 我们医院怎么对上
 
-### Process Identification
+| Phase 阶段 | What we do 做什么 | Output 产出 | In our case 医院 |
+|------------|-------------------|-------------|------------------|
+| Process Identification 识别 | Decide which processes exist and which one matters now. Map a process landscape, not a department list. 有哪些流程、现在先做哪条。画流程全景，不要按部门点名。 | A shortlist 短名单 | Patient administration path, not the whole hospital IT. 患者这条路，不是整个医院电脑系统。 |
+| Process Discovery 发现 | Document AS-IS: who, order, papers and systems. Include paper, phone and spreadsheets. Not the future path. 写清今天怎么走。要写纸、电话、表格。不要先画理想系统。 | AS-IS model 现状模型 | Email, phone, letters and paper. 现在还是邮件、电话、信和纸。 |
+| Process Analysis 分析 | Find waste, delay, handoff failure and rule violations. 找浪费、延误、交接失败、越权。 | Issues with evidence 有证据的问题清单 | Scattered records; no audit trail; admin must not decide like a doctor; external failure can duplicate bookings or charges. 信息很散；查不到谁做了什么；行政不能当医生；外面挂了可能重复约号或重复扣款。 |
+| Process Redesign 再设计 | Design TO-BE without breaking mandatory rules. Keep the gates; change paper/email into a controlled workflow. 设计以后怎么走。规则不能改，只换工具。 | TO-BE model + why 未来模型 + 理由 | A secretary still cannot accept a referral. Finance still cannot decide treatment. 秘书还是不能接受转诊。财务还是不能决定治不治。 |
+| Process Monitoring 监控 | After the new process is in use, measure delays. The process itself must raise warnings. 上线以后盯延误。流程自己要报警，不是写一次报告。 | KPIs and alerts 指标和提醒 | Letter unapproved after 7 days: delay and escalation. 信超过 7 天没批准，就算延迟并升级。 |
 
-**Word**  
-Decide which processes exist and which ones matter now. The organisation is mapped as a process landscape, not as a list of departments. Output: a process architecture and a shortlist. In our project this is the patient administration path, not the whole hospital IT estate.
+**简单讲（指着表，一行一句）**
 
-**中文**  
-先问：有哪些流程？现在先做哪一条？不要按部门点名。我们选的是患者这条路，不是整个医院 IT。
-
-**简单讲**  
-> *First we choose which process matters. We look at the patient path, not the whole hospital computer system.*
-
----
-
-### Process Discovery
-
-**Word**  
-Document the AS-IS process: who does what, in what order, with which documents and systems. Discovery must record real work, including paper, phone and spreadsheets, not the ideal future path.
-
-**中文**  
-写清**今天怎么走（AS-IS）**：谁、按什么顺序、用什么文件。要写纸、电话、表格。不要先画理想系统。
-
-**简单讲**  
-> *Discovery means: how does it work today? Paper, phone and email. Not the future system.*
+> *Five phases in one table.*  
+> *Identification: we choose the patient path, not the whole hospital IT.*  
+> *Discovery: how it works today. Paper, phone and email.*  
+> *Analysis: what is wrong. Information is scattered. Admin cannot decide like a doctor.*  
+> *Redesign: later we use a system, but the rules stay.*  
+> *Monitoring: if a letter is not approved after seven days, the process should warn us.*  
+> *Today we are only at the first two steps. No BPMN yet.*
 
 ---
 
-### Process Analysis
+## Task 2 · Application of Key Concepts
 
-**Word**  
-Examine the AS-IS model for waste, delay, risk, handoff failure and rule violations. In the case: fragmented records, no audit trail, unauthorised clinical decisions by admin staff, and external-service failures that create duplicate bookings or duplicate charges.
-
-**中文**  
-找问题：浪费、延误、交接失败、越权。  
-这个案例：信息很散；查不到谁做了什么；行政不能替医生决定；外面系统挂了可能重复预约、重复扣款。
-
-**简单讲**  
-> *Analysis means: what is wrong today? Information is in many places. Hard to see who did what. Admin cannot decide like a doctor.*
+**题目 EN** Task 2: Application of Key Concepts  
+**题目中文** 任务 2：把概念用到案例上
 
 ---
 
-### Process Redesign
+## Task 2.1 · Analyse the case study provided
 
-**Word**  
-Design the TO-BE process that removes the issues without breaking mandatory rules. In our case the redesign cannot let a secretary accept a referral or let finance decide treatment. The gates stay; the medium (email/paper) is replaced by a controlled workflow.
+**题目 EN** 2.1: Analyse the case study provided  
+**题目中文** 2.1：分析所给案例
 
-**中文**  
-设计以后怎么走（TO-BE）。可以换工具（纸 → 系统），**规则不能改**。秘书还是不能接受转诊。财务还是不能决定治不治。
+案例名 EN：Hospital Patient Referral, Treatment and Administration System  
+案例名中文：医院患者转诊、治疗与行政系统
 
-**简单讲**  
-> *Redesign means: later we use a system. But the rules stay. A secretary still cannot accept a referral.*
-
----
-
-### Process Monitoring
-
-**Word**  
-After the new process is in use, measure whether it behaves as designed. KPIs include backlog, waiting time, letter delay, unpaid funding, failed payments and unfinished enquiries. If a letter is unapproved after seven days, the process itself must raise delay and escalation.
-
-**中文**  
-上线以后盯着看：积压、等待、信晚了、钱没付。信超过 7 天没批准，流程自己要提醒，不是等人写报告。
-
-**简单讲**  
-> *Monitoring means: after we change it, we watch delays. If a letter is not approved after seven days, the process should warn us.*
-
-**五阶段收一句**  
-> *Today we are only at the first two steps: which path, and how it works now. We have not drawn BPMN yet.*
-
----
-
-## Task 2.1 · 用医院案例
-
-**Word**  
-Case: Hospital Patient Referral, Treatment and Administration System.
-
-**中文**  
+**中文（案例在讲什么）**  
 专科医院。病人从 GP 或别的医院转来。看病、治疗、付钱、写信、打电话。现在信息很散。新系统要把这条路串起来，并且看病 / 办事 / 管钱分开。
 
 **简单讲**  
@@ -154,9 +159,13 @@ Case: Hospital Patient Referral, Treatment and Administration System.
 
 ---
 
-### (1) Stakeholders 利益相关者
+### (1) Identify different stakeholders of the business
 
-**这就是「利益相关者分析」。** Word 问：Identify different stakeholders of the business.
+**题目 EN** Identify different stakeholders of the business  
+**题目中文** 找出这项业务里不同的利益相关者  
+（Word 写成 *stake holders*，开口说 *stakeholders*。）
+
+**这就是「利益相关者分析」。** 问的是：谁被卷进来、各自要什么。
 
 **Word 先写的冲突**  
 Clinicians want less recording during clinics; management wants an audit trail. Patients disagree on paper versus electronic contact.
@@ -167,6 +176,8 @@ Clinicians want less recording during clinics; management wants an audit trail. 
 **简单讲**  
 > *Stakeholders means who is involved, and what they care about.*  
 > *Doctors do not want too much recording. Managers want a clear record. We keep both. We do not hide it.*
+
+表头：Category 类别 ／ Stakeholder 谁 ／ Interest 要什么。
 
 | Word Category | Word Stakeholder | Word Interest | 中文 | 简单讲 |
 |---------------|------------------|---------------|------|--------|
@@ -185,9 +196,12 @@ Clinicians want less recording during clinics; management wants an audit trail. 
 
 ---
 
-### (2) Business processes 有哪些流程
+### (2) Identify all the business processes
 
-**Word**  
+**题目 EN** Identify all the business processes  
+**题目中文** 找出全部业务流程
+
+**Word 答案开头**  
 The processes below each have a trigger, owner and end state.
 
 **中文**  
@@ -195,6 +209,8 @@ The processes below each have a trigger, owner and end state.
 
 **简单讲**  
 > *We split the work into smaller processes. Each one has a start, an owner, and a rule.*
+
+表头：ID 编号 ／ Business process 流程名 ／ Trigger 什么时候开始 ／ Main owner 谁负责 ／ End state 做到什么算结束。
 
 | ID | Word 流程名 | 中文 | 简单讲 |
 |----|-------------|------|--------|
@@ -217,9 +233,13 @@ The processes below each have a trigger, owner and end state.
 
 ---
 
-### (3) Dependencies 依赖
+### (3) Identify the dependencies among the business processes
 
-**Word**  
+**题目 EN** Identify the dependencies among the business processes.  
+**题目中文** 找出这些业务流程之间的依赖关系。  
+（谁必须先做完，后面才能开始。）
+
+**Word 答案**  
 P1 → P2. If P2 = reject/redirect, stop (no New Patient Appointment). If P2 = request more information, return to P1. If P2 = accept → P3 → P4, then first visit → P5 → P6, P7 (P8 only if delay risks the patient), P9, P11. P10 after first visit. P12 follow-up. P13 audit sits on P2, P5, P7, P8, P9, P11.
 
 **中文**  
