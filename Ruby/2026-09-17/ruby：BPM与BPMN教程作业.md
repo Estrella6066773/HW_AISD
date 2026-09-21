@@ -91,20 +91,13 @@ Main phases (as required by this tutorial):
 
 #### 1.2 Research and Review — Five phases of the BPM lifecycle
 
-**Process Identification**  
-Decide which processes exist and which ones matter now. The organisation is mapped as a process landscape, not as a list of departments. Criteria such as strategic importance, pain, volume and risk are used to choose a candidate. Output: a process architecture and a shortlist. In our project this is “patient administration path”, not “the whole hospital IT estate”.
-
-**Process Discovery**  
-Document the **AS-IS** process: who does what, in what order, with which documents and systems. Sources include interviews, observation, existing forms, emails and the case study. Output: an AS-IS model at an agreed abstraction level. Discovery must record real work, including paper, phone and spreadsheets, not the ideal future path.
-
-**Process Analysis**  
-Examine the AS-IS model for waste, delay, risk, handoff failure and rule violations. Qualitative analysis finds bottlenecks and unclear responsibilities; quantitative analysis uses waiting time, backlog and failure rates if data exist. Output: a list of issues with evidence. In the case: fragmented records, no audit trail, unauthorised clinical decisions by admin staff, and external-service failures that create duplicate bookings or duplicate charges.
-
-**Process Redesign**  
-Design the **TO-BE** process that removes the issues without breaking mandatory rules. Options include removing waste, tightening gates, automating handoffs, and adding exception paths. Output: a TO-BE model plus change rationale. In our case the redesign cannot let a secretary accept a referral or let finance decide treatment. The gates stay; the medium (email/paper) is replaced by a controlled workflow.
-
-**Process Monitoring**  
-After the new process is in use, measure whether it behaves as designed. KPIs include backlog, waiting time, letter delay, unpaid funding, failed payments and unfinished enquiries. Monitoring feeds the next Identification/Analysis cycle. If a letter is unapproved after seven days, the process itself must raise delay and escalation — that is monitoring, not a one-off report.
+| Phase | What we do | Output | In our case |
+|-------|------------|--------|-------------|
+| Process Identification | Decide which processes exist and which one matters now. Map a process landscape, not a department list. | A shortlist of processes | Patient administration path, not the whole hospital IT estate |
+| Process Discovery | Document AS-IS: who does what, in what order, with which papers and systems. Include paper, phone and spreadsheets. Not the future path. | AS-IS model | Work still sits in email, phone, letters and paper |
+| Process Analysis | Find waste, delay, handoff failure and rule violations. | Issues with evidence | Scattered records; no audit trail; admin must not decide like a doctor; external failure can duplicate bookings or charges |
+| Process Redesign | Design TO-BE without breaking mandatory rules. Keep the gates; change paper/email into a controlled workflow. | TO-BE model + why | A secretary still cannot accept a referral. Finance still cannot decide treatment |
+| Process Monitoring | After the new process is in use, measure delays. The process itself must raise warnings, not a one-off report. | KPIs and alerts | Letter unapproved after 7 days: delay and escalation |
 
 ---
 
