@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Treatment" targetNamespace="http://example.com/aisd/week2" exporter="Camunda Modeler">
+<bpmn:collaboration id="Collaboration_Treatment"><bpmn:participant id="Hospital" name="Hospital - Treatment Booking and Payment" processRef="TreatmentProcess" /></bpmn:collaboration>
+<bpmn:process id="TreatmentProcess" name="Treatment Booking and Payment" isExecutable="false">
+<bpmn:documentation>Student-level conceptual main flow based on the supplied hospital case study. The Consultant records consent and completes the authorised request before administration begins. Prepare provisional booking abstracts obtaining suitable available appointments; it does not confirm an appointment. Check charge and funding records any required approved funding details; the task waits for a resolved funding decision before the payment decision. The No branch means direct patient payment is not required because valid funding or an authorised arrangement is in place. Send and receive steps abstract interactions with the external payment provider and correspondence service. Record payment result includes status, transaction reference, date and amount. A non-successful result leaves the booking pending for Finance follow-up and notification of the patient and bookings team; it does not trigger an automatic repeat charge. Missing payment confirmations, external-service failures, detailed retries, urgent clinical overrides and refunds are outside this simple view and need separate modelling. Pending resolution ends this diagram segment, not the patient case. This diagram is not configured for execution.</bpmn:documentation>
+<bpmn:laneSet id="Lanes_Treatment">
+<bpmn:lane id="Lane_Clinical" name="Consultant"><bpmn:flowNodeRef>TreatmentAgreed</bpmn:flowNodeRef><bpmn:flowNodeRef>AuthoriseTreatment</bpmn:flowNodeRef></bpmn:lane>
+<bpmn:lane id="Lane_Bookings" name="Treatment Bookings Team"><bpmn:flowNodeRef>PrepareBooking</bpmn:flowNodeRef><bpmn:flowNodeRef>ConfirmBooking</bpmn:flowNodeRef><bpmn:flowNodeRef>NotifyPatient</bpmn:flowNodeRef><bpmn:flowNodeRef>Booked</bpmn:flowNodeRef></bpmn:lane>
+<bpmn:lane id="Lane_Finance" name="Finance Team"><bpmn:flowNodeRef>CheckFunding</bpmn:flowNodeRef><bpmn:flowNodeRef>PaymentRequired</bpmn:flowNodeRef><bpmn:flowNodeRef>RequestPayment</bpmn:flowNodeRef><bpmn:flowNodeRef>PaymentReceived</bpmn:flowNodeRef><bpmn:flowNodeRef>RecordPayment</bpmn:flowNodeRef><bpmn:flowNodeRef>PaymentSucceeded</bpmn:flowNodeRef><bpmn:flowNodeRef>FollowUp</bpmn:flowNodeRef><bpmn:flowNodeRef>Pending</bpmn:flowNodeRef></bpmn:lane>
+</bpmn:laneSet>
+<bpmn:startEvent id="TreatmentAgreed" name="Treatment&#10;agreed">
+<bpmn:outgoing>TF1</bpmn:outgoing>
+</bpmn:startEvent>
+<bpmn:userTask id="AuthoriseTreatment" name="Record consent and&#10;authorise treatment">
+<bpmn:incoming>TF1</bpmn:incoming>
+<bpmn:outgoing>TF2</bpmn:outgoing>
+</bpmn:userTask>
+<bpmn:userTask id="PrepareBooking" name="Prepare provisional&#10;booking">
+<bpmn:incoming>TF2</bpmn:incoming>
+<bpmn:outgoing>TF3</bpmn:outgoing>
+</bpmn:userTask>
+<bpmn:userTask id="CheckFunding" name="Check charge&#10;and funding">
+<bpmn:incoming>TF3</bpmn:incoming>
+<bpmn:outgoing>TF4</bpmn:outgoing>
+</bpmn:userTask>
+<bpmn:exclusiveGateway id="PaymentRequired" name="Patient payment&#10;required?">
+<bpmn:incoming>TF4</bpmn:incoming>
+<bpmn:outgoing>TF5</bpmn:outgoing>
+<bpmn:outgoing>TF6</bpmn:outgoing>
+</bpmn:exclusiveGateway>
+<bpmn:sendTask id="RequestPayment" name="Send payment&#10;request">
+<bpmn:incoming>TF5</bpmn:incoming>
+<bpmn:outgoing>TF7</bpmn:outgoing>
+</bpmn:sendTask>
+<bpmn:intermediateCatchEvent id="PaymentReceived" name="Payment result&#10;received">
+<bpmn:incoming>TF7</bpmn:incoming>
+<bpmn:outgoing>TF8</bpmn:outgoing>
+<bpmn:messageEventDefinition id="PaymentMessageDefinition" />
+</bpmn:intermediateCatchEvent>
+<bpmn:userTask id="RecordPayment" name="Record payment&#10;result">
+<bpmn:incoming>TF8</bpmn:incoming>
+<bpmn:outgoing>TF9</bpmn:outgoing>
+</bpmn:userTask>
+<bpmn:exclusiveGateway id="PaymentSucceeded" name="Payment&#10;successful?">
+<bpmn:incoming>TF9</bpmn:incoming>
+<bpmn:outgoing>TF10</bpmn:outgoing>
+<bpmn:outgoing>TF11</bpmn:outgoing>
+</bpmn:exclusiveGateway>
+<bpmn:userTask id="FollowUp" name="Keep pending&#10;and follow up">
+<bpmn:incoming>TF11</bpmn:incoming>
+<bpmn:outgoing>TF12</bpmn:outgoing>
+</bpmn:userTask>
+<bpmn:endEvent id="Pending" name="Pending&#10;resolution">
+<bpmn:incoming>TF12</bpmn:incoming>
+</bpmn:endEvent>
+<bpmn:userTask id="ConfirmBooking" name="Confirm treatment&#10;booking">
+<bpmn:incoming>TF6</bpmn:incoming>
+<bpmn:incoming>TF10</bpmn:incoming>
+<bpmn:outgoing>TF13</bpmn:outgoing>
+</bpmn:userTask>
+<bpmn:sendTask id="NotifyPatient" name="Send booking&#10;confirmation">
+<bpmn:incoming>TF13</bpmn:incoming>
+<bpmn:outgoing>TF14</bpmn:outgoing>
+</bpmn:sendTask>
+<bpmn:endEvent id="Booked" name="Booking&#10;confirmed">
+<bpmn:incoming>TF14</bpmn:incoming>
+</bpmn:endEvent>
+<bpmn:sequenceFlow id="TF1" sourceRef="TreatmentAgreed" targetRef="AuthoriseTreatment" />
+<bpmn:sequenceFlow id="TF2" sourceRef="AuthoriseTreatment" targetRef="PrepareBooking" />
+<bpmn:sequenceFlow id="TF3" sourceRef="PrepareBooking" targetRef="CheckFunding" />
+<bpmn:sequenceFlow id="TF4" sourceRef="CheckFunding" targetRef="PaymentRequired" />
+<bpmn:sequenceFlow id="TF5" sourceRef="PaymentRequired" targetRef="RequestPayment" name="Yes" />
+<bpmn:sequenceFlow id="TF6" sourceRef="PaymentRequired" targetRef="ConfirmBooking" name="No" />
+<bpmn:sequenceFlow id="TF7" sourceRef="RequestPayment" targetRef="PaymentReceived" />
+<bpmn:sequenceFlow id="TF8" sourceRef="PaymentReceived" targetRef="RecordPayment" />
+<bpmn:sequenceFlow id="TF9" sourceRef="RecordPayment" targetRef="PaymentSucceeded" />
+<bpmn:sequenceFlow id="TF10" sourceRef="PaymentSucceeded" targetRef="ConfirmBooking" name="Yes" />
+<bpmn:sequenceFlow id="TF11" sourceRef="PaymentSucceeded" targetRef="FollowUp" name="No" />
+<bpmn:sequenceFlow id="TF12" sourceRef="FollowUp" targetRef="Pending" />
+<bpmn:sequenceFlow id="TF13" sourceRef="ConfirmBooking" targetRef="NotifyPatient" />
+<bpmn:sequenceFlow id="TF14" sourceRef="NotifyPatient" targetRef="Booked" />
+</bpmn:process>
+<bpmndi:BPMNDiagram id="Diagram_Treatment"><bpmndi:BPMNPlane id="Plane_Treatment" bpmnElement="Collaboration_Treatment">
+<bpmndi:BPMNShape id="Hospital_di" bpmnElement="Hospital" isHorizontal="true"><dc:Bounds x="120" y="140" width="1440" height="690" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane_Clinical_di" bpmnElement="Lane_Clinical" isHorizontal="true"><dc:Bounds x="150" y="140" width="1410" height="160" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane_Bookings_di" bpmnElement="Lane_Bookings" isHorizontal="true"><dc:Bounds x="150" y="300" width="1410" height="220" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane_Finance_di" bpmnElement="Lane_Finance" isHorizontal="true"><dc:Bounds x="150" y="520" width="1410" height="310" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="TreatmentAgreed_di" bpmnElement="TreatmentAgreed"><dc:Bounds x="220" y="202" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="190" y="245" width="96" height="34" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="AuthoriseTreatment_di" bpmnElement="AuthoriseTreatment"><dc:Bounds x="320" y="180" width="160" height="80" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="PrepareBooking_di" bpmnElement="PrepareBooking"><dc:Bounds x="510" y="370" width="150" height="80" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="CheckFunding_di" bpmnElement="CheckFunding"><dc:Bounds x="510" y="600" width="150" height="80" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="PaymentRequired_di" bpmnElement="PaymentRequired" isMarkerVisible="true"><dc:Bounds x="720" y="615" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="690" y="680" width="110" height="38" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="RequestPayment_di" bpmnElement="RequestPayment"><dc:Bounds x="825" y="600" width="150" height="80" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="PaymentReceived_di" bpmnElement="PaymentReceived"><dc:Bounds x="1032" y="622" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1000" y="680" width="100" height="34" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="RecordPayment_di" bpmnElement="RecordPayment"><dc:Bounds x="1130" y="600" width="150" height="80" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="PaymentSucceeded_di" bpmnElement="PaymentSucceeded" isMarkerVisible="true"><dc:Bounds x="1365" y="615" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1423" y="620" width="105" height="40" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="FollowUp_di" bpmnElement="FollowUp"><dc:Bounds x="1210" y="730" width="150" height="70" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Pending_di" bpmnElement="Pending"><dc:Bounds x="1096" y="747" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1060" y="785" width="110" height="34" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="ConfirmBooking_di" bpmnElement="ConfirmBooking"><dc:Bounds x="1030" y="370" width="170" height="80" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="NotifyPatient_di" bpmnElement="NotifyPatient"><dc:Bounds x="1260" y="370" width="160" height="80" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Booked_di" bpmnElement="Booked"><dc:Bounds x="1475" y="392" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1448" y="438" width="92" height="34" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNEdge id="TF1_di" bpmnElement="TF1"><di:waypoint x="256" y="220" /><di:waypoint x="320" y="220" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF2_di" bpmnElement="TF2"><di:waypoint x="480" y="220" /><di:waypoint x="585" y="220" /><di:waypoint x="585" y="370" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF3_di" bpmnElement="TF3"><di:waypoint x="585" y="450" /><di:waypoint x="585" y="600" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF4_di" bpmnElement="TF4"><di:waypoint x="660" y="640" /><di:waypoint x="720" y="640" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF5_di" bpmnElement="TF5"><di:waypoint x="770" y="640" /><di:waypoint x="825" y="640" /><bpmndi:BPMNLabel><dc:Bounds x="783" y="613" width="32" height="20" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF6_di" bpmnElement="TF6"><di:waypoint x="745" y="615" /><di:waypoint x="745" y="410" /><di:waypoint x="1030" y="410" /><bpmndi:BPMNLabel><dc:Bounds x="756" y="492" width="32" height="20" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF7_di" bpmnElement="TF7"><di:waypoint x="975" y="640" /><di:waypoint x="1032" y="640" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF8_di" bpmnElement="TF8"><di:waypoint x="1068" y="640" /><di:waypoint x="1130" y="640" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF9_di" bpmnElement="TF9"><di:waypoint x="1280" y="640" /><di:waypoint x="1365" y="640" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF10_di" bpmnElement="TF10"><di:waypoint x="1390" y="615" /><di:waypoint x="1390" y="495" /><di:waypoint x="1115" y="495" /><di:waypoint x="1115" y="450" /><bpmndi:BPMNLabel><dc:Bounds x="1398" y="548" width="32" height="20" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF11_di" bpmnElement="TF11"><di:waypoint x="1390" y="665" /><di:waypoint x="1390" y="765" /><di:waypoint x="1360" y="765" /><bpmndi:BPMNLabel><dc:Bounds x="1400" y="700" width="32" height="20" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF12_di" bpmnElement="TF12"><di:waypoint x="1210" y="765" /><di:waypoint x="1132" y="765" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF13_di" bpmnElement="TF13"><di:waypoint x="1200" y="410" /><di:waypoint x="1260" y="410" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="TF14_di" bpmnElement="TF14"><di:waypoint x="1420" y="410" /><di:waypoint x="1475" y="410" /></bpmndi:BPMNEdge>
+</bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn:definitions>
