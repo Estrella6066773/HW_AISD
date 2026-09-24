@@ -95,7 +95,7 @@ To start Camunda 8 Run, follow these simple steps:
    - Windows: `camunda-starter.bat`
    - Mac/Linux: `./camunda-starter.sh`
 3. Watch the logs in the terminal.
-4. You should see messages indicating that web interfaces are available at `http://localhost:8080` for various tools (Operate, Tasklist, etc.)
+4. You should see messages indicating that web interfaces are available at `http://localhost:8090` for various tools (Operate, Tasklist, etc.)
 
 **中文**
 
@@ -106,7 +106,7 @@ To start Camunda 8 Run, follow these simple steps:
    - Windows：`camunda-starter.bat`
    - Mac/Linux：`./camunda-starter.sh`
 3. 观察终端里的日志输出。
-4. 应当看到提示信息，说明各工具（Operate、Tasklist 等）的 Web 界面已在 `http://localhost:8080` 可用。
+4. 应当看到提示信息，说明各工具（Operate、Tasklist 等）的 Web 界面已在 `http://localhost:8090` 可用。
 
 ---
 
@@ -116,9 +116,9 @@ To start Camunda 8 Run, follow these simple steps:
 
 Access each component using the following URLs:
 
-- Operate: `http://localhost:8080/operate`
-- Tasklist: `http://localhost:8080/tasklist`
-- Admin: `http://localhost:8080/admin`
+- Operate: `http://localhost:8090/operate`
+- Tasklist: `http://localhost:8090/tasklist`
+- Admin: `http://localhost:8090/admin`
 
 Login with:
 - Username: `demo`
@@ -128,9 +128,9 @@ Login with:
 
 通过以下地址访问各个组件：
 
-- Operate（流程运行监控）：`http://localhost:8080/operate`
-- Tasklist（任务列表）：`http://localhost:8080/tasklist`
-- Admin（管理后台）：`http://localhost:8080/admin`
+- Operate（流程运行监控）：`http://localhost:8090/operate`
+- Tasklist（任务列表）：`http://localhost:8090/tasklist`
+- Admin（管理后台）：`http://localhost:8090/admin`
 
 登录凭据：
 - 用户名：`demo`
@@ -182,7 +182,7 @@ Login with:
 
 1. First, launch the Camunda Modeler application.
 2. Configure the connection:
-   - Cluster endpoint: `http://localhost:8080/v2/`
+   - Cluster endpoint: `http://localhost:8090/v2/`
    - or Zeebe API (gRPC): `http://localhost:26500`
    - You can find this on the console.
 3. Select "Camunda connection" as the connection you just created.
@@ -193,7 +193,7 @@ Login with:
 
 1. 先启动 Camunda Modeler。
 2. 配置连接：
-   - 集群端点（Cluster endpoint）：`http://localhost:8080/v2/`
+   - 集群端点（Cluster endpoint）：`http://localhost:8090/v2/`
    - 或 Zeebe API（gRPC）：`http://localhost:26500`
    - 该地址可以在控制台输出中找到。
 3. 选择你刚创建的 "Camunda connection" 作为连接。
@@ -210,9 +210,9 @@ Login with:
 2. Make sure your model is executable.
 3. Deploying the process to the engine:
    - Click the Rocket icon on the bottom ribbon.
-4. Go to: `http://localhost:8080/tasklist/processes`
+4. Go to: `http://localhost:8090/tasklist/processes`
    - You should see your process ready to start.
-5. Go to: `http://localhost:8080/operate/`
+5. Go to: `http://localhost:8090/operate/`
    - Observe the process that you just started.
 
 *[image: screenshot of the Modeler]*
@@ -223,9 +223,9 @@ Login with:
 2. 确认你的模型是可执行的（executable）。
 3. 把流程部署到引擎：
    - 点击底部工具栏上的火箭图标。
-4. 访问 `http://localhost:8080/tasklist/processes`
+4. 访问 `http://localhost:8090/tasklist/processes`
    - 应能看到你的流程已就绪、可以启动。
-5. 访问 `http://localhost:8080/operate/`
+5. 访问 `http://localhost:8090/operate/`
    - 观察你刚启动的流程实例。
 
 > 「可执行」指 BPMN 模型带有引擎可识别的技术属性（如任务类型、表单、变量绑定）；只画图不设这些属性，部署时不会真正生成可运行实例。
