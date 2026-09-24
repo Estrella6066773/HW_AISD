@@ -1,0 +1,31 @@
+{
+  "components": [
+    {
+      "text": "Recording follow-up does not mean the payment is settled.",
+      "type": "text",
+      "layout": { "row": "Row_intro", "columns": null },
+      "id": "Text_recordIntro"
+    },
+    {
+      "label": "Follow-up record",
+      "type": "textarea",
+      "layout": { "row": "Row_followUpRecord", "columns": null },
+      "id": "Field_followUpRecord",
+      "key": "followUpRecord",
+      "validate": { "required": true }
+    },
+    {
+      "label": "Next action",
+      "type": "textfield",
+      "layout": { "row": "Row_nextAction", "columns": null },
+      "id": "Field_nextAction",
+      "key": "nextAction",
+      "validate": { "required": true }
+    }
+  ],
+  "type": "default",
+  "id": "Form_Lane_RecordFollowUp",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "schemaVersion": 18
+}

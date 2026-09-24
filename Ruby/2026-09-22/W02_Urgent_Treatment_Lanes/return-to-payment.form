@@ -1,0 +1,23 @@
+{
+  "components": [
+    {
+      "text": "Delay does not risk patient safety, so the case returns to normal funding and payment (P7). This is a hand-off, not a completed payment.",
+      "type": "text",
+      "layout": { "row": "Row_intro", "columns": null },
+      "id": "Text_normalIntro"
+    },
+    {
+      "label": "Handover note",
+      "type": "textarea",
+      "layout": { "row": "Row_handoverNote", "columns": null },
+      "id": "Field_handoverNote",
+      "key": "handoverNote",
+      "validate": { "required": true }
+    }
+  ],
+  "type": "default",
+  "id": "Form_Lane_NormalPayment",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "schemaVersion": 18
+}
