@@ -1,0 +1,72 @@
+{
+  "components": [
+    {
+      "text": "Finance follows up after urgent treatment has started. If the provider has taken payment but the hospital has no receipt, mark the case for investigation and do not request payment again.",
+      "type": "text",
+      "layout": {
+        "row": "Row_intro",
+        "columns": null
+      },
+      "id": "Text_reviewIntro"
+    },
+    {
+      "label": "Current payment status",
+      "type": "select",
+      "layout": {
+        "row": "Row_paymentStatus",
+        "columns": null
+      },
+      "id": "Field_paymentStatus",
+      "key": "paymentStatus",
+      "validate": {
+        "required": true
+      },
+      "values": [
+        {
+          "label": "No provider transaction",
+          "value": "none"
+        },
+        {
+          "label": "Provider charged the patient, but the hospital has no receipt",
+          "value": "charged_no_receipt"
+        },
+        {
+          "label": "Other outstanding funding or payment",
+          "value": "other"
+        }
+      ]
+    },
+    {
+      "label": "Mark for investigation and do not request another payment",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_markForInvestigation",
+        "columns": null
+      },
+      "id": "Field_markForInvestigation",
+      "key": "markForInvestigation"
+    },
+    {
+      "label": "Review note",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_reviewNote",
+        "columns": null
+      },
+      "id": "Field_reviewNote",
+      "key": "reviewNote",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "Form_ReviewFinance",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "schemaVersion": 18
+}

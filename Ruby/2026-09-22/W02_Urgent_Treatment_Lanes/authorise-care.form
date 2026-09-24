@@ -1,0 +1,39 @@
+{
+  "components": [
+    {
+      "text": "Only an authorised clinician may approve treatment before payment is confirmed.",
+      "type": "text",
+      "layout": { "row": "Row_intro", "columns": null },
+      "id": "Text_authoriseIntro"
+    },
+    {
+      "label": "Responsible clinician",
+      "type": "textfield",
+      "layout": { "row": "Row_clinicianName", "columns": null },
+      "id": "Field_authoriseClinician",
+      "key": "clinicianName",
+      "validate": { "required": true }
+    },
+    {
+      "label": "Reason for proceeding without confirmed payment",
+      "type": "textarea",
+      "layout": { "row": "Row_authorisationReason", "columns": null },
+      "id": "Field_authorisationReason",
+      "key": "authorisationReason",
+      "validate": { "required": true }
+    },
+    {
+      "label": "I confirm urgent treatment may start before payment is confirmed",
+      "type": "checkbox",
+      "layout": { "row": "Row_authorised", "columns": null },
+      "id": "Field_authorised",
+      "key": "urgentCareAuthorised",
+      "validate": { "required": true }
+    }
+  ],
+  "type": "default",
+  "id": "Form_Lane_Authorise",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "schemaVersion": 18
+}
