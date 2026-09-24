@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Student" targetNamespace="http://aisd.example/student" exporter="Camunda Modeler" exporterVersion="5.51.0">
+  <bpmn:collaboration id="Collaboration_Student">
+    <bpmn:participant id="Hospital" name="Hospital - Referral Review and First Appointment" processRef="Process_Student" />
+    <bpmn:participant id="Patient" name="Patient" />
+    <bpmn:participant id="ReferringOrganisation" name="Referring Organisation (GP / Other Hospital)" />
+    <bpmn:messageFlow id="Message_AppointmentLetter" name="Appointment letter" sourceRef="Letter" targetRef="Patient" />
+    <bpmn:messageFlow id="Message_TelephoneContact" name="Telephone contact attempt" sourceRef="Call" targetRef="Patient" />
+    <bpmn:messageFlow id="MF_Referral" name="Referral documents" sourceRef="ReferringOrganisation" targetRef="Start" />
+    <bpmn:messageFlow id="MF_InfoRequest" name="Request for further information" sourceRef="MoreInfo" targetRef="ReferringOrganisation" />
+    <bpmn:messageFlow id="MF_InfoResponse" name="Further information" sourceRef="ReferringOrganisation" targetRef="InfoReceived" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Student" name="Referral Review and First Appointment - Simple Collaboration" isExecutable="false">
+    <bpmn:documentation>Simple conceptual collaboration based on the supplied hospital case study. Referring Organisation represents a GP or another hospital; Patient is a separate participant. Both external participants are black-box pools. Hospital roles remain lanes within one hospital process. The message start event receives referral documents. The Consultant alone makes and records the clinical referral decision; secretaries check and complete supporting information. Check / complete referral documents abstracts initial missing-document collection. Modelling assumption: the further-information branch requested by the Consultant is routed by the secretaries to the referring organisation, based on the explicit missing-information rule in paragraph 3; paragraph 4 does not prescribe every source of further information. Information received refers to the external reply, not an internal hospital message. Appointment-letter delivery abstracts the external correspondence service; booking abstracts the external scheduling service. Telephone contact represents an attempt and does not guarantee an answer; the outcome is recorded. An appointment within the following two weeks also requires telephone contact. No-slot cases, urgent referrals, alternative appointment requests and detailed contact failures are outside this simple main-flow view. External scheduling, correspondence and destination specialist-service details are not expanded here. This is a conceptual model and is not configured for execution.</bpmn:documentation>
+    <bpmn:laneSet id="Lanes">
+      <bpmn:lane id="Lane_Bookings" name="Outpatient Bookings Team">
+        <bpmn:flowNodeRef>Book</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Letter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>TwoWeeks</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Call</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Done</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Consultant" name="Consultant">
+        <bpmn:flowNodeRef>Review</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Decision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RejectEnd</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Redirect</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RedirectEnd</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Secretary" name="Medical Secretaries">
+        <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Check</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>InfoReceived</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>MoreInfo</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start" name="Referral received">
+      <bpmn:outgoing>F1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="ReferralStart_Definition" messageRef="Message_Referral" />
+    </bpmn:startEvent>
+    <bpmn:userTask id="Check" name="Check / complete&#10;referral documents">
+      <bpmn:incoming>F1</bpmn:incoming>
+      <bpmn:incoming>F15</bpmn:incoming>
+      <bpmn:outgoing>F2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:intermediateCatchEvent id="InfoReceived" name="Information received">
+      <bpmn:incoming>F5</bpmn:incoming>
+      <bpmn:outgoing>F15</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="InfoReceived_Definition" messageRef="Message_FurtherInfo" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="Review" name="Review referral and&#10;record decision">
+      <bpmn:incoming>F2</bpmn:incoming>
+      <bpmn:outgoing>F3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Decision" name="Decision?">
+      <bpmn:incoming>F3</bpmn:incoming>
+      <bpmn:outgoing>F4</bpmn:outgoing>
+      <bpmn:outgoing>F6</bpmn:outgoing>
+      <bpmn:outgoing>F7</bpmn:outgoing>
+      <bpmn:outgoing>F9</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="RejectEnd" name="Rejected">
+      <bpmn:incoming>F6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Redirect" name="Redirect referral">
+      <bpmn:incoming>F7</bpmn:incoming>
+      <bpmn:outgoing>F8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="RedirectEnd" name="Redirected">
+      <bpmn:incoming>F8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Book" name="Book and confirm&#10;appointment">
+      <bpmn:incoming>F9</bpmn:incoming>
+      <bpmn:outgoing>F10</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sendTask id="Letter" name="Send appointment&#10;letter">
+      <bpmn:incoming>F10</bpmn:incoming>
+      <bpmn:outgoing>F11</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="TwoWeeks" name="Within two&#10;weeks?">
+      <bpmn:incoming>F11</bpmn:incoming>
+      <bpmn:outgoing>F12</bpmn:outgoing>
+      <bpmn:outgoing>F13</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Call" name="Call patient and&#10;record outcome">
+      <bpmn:incoming>F13</bpmn:incoming>
+      <bpmn:outgoing>F14</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Done" name="Finished">
+      <bpmn:incoming>F12</bpmn:incoming>
+      <bpmn:incoming>F14</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="F1" sourceRef="Start" targetRef="Check" />
+    <bpmn:sequenceFlow id="F5" sourceRef="MoreInfo" targetRef="InfoReceived" />
+    <bpmn:sequenceFlow id="F2" sourceRef="Check" targetRef="Review" />
+    <bpmn:sequenceFlow id="F4" name="More information" sourceRef="Decision" targetRef="MoreInfo" />
+    <bpmn:sequenceFlow id="F3" sourceRef="Review" targetRef="Decision" />
+    <bpmn:sequenceFlow id="F6" name="Reject" sourceRef="Decision" targetRef="RejectEnd" />
+    <bpmn:sequenceFlow id="F7" name="Redirect" sourceRef="Decision" targetRef="Redirect" />
+    <bpmn:sequenceFlow id="F9" name="Accept" sourceRef="Decision" targetRef="Book" />
+    <bpmn:sequenceFlow id="F8" sourceRef="Redirect" targetRef="RedirectEnd" />
+    <bpmn:sequenceFlow id="F10" sourceRef="Book" targetRef="Letter" />
+    <bpmn:sequenceFlow id="F11" sourceRef="Letter" targetRef="TwoWeeks" />
+    <bpmn:sequenceFlow id="F12" name="No" sourceRef="TwoWeeks" targetRef="Done" />
+    <bpmn:sequenceFlow id="F13" name="Yes" sourceRef="TwoWeeks" targetRef="Call" />
+    <bpmn:sequenceFlow id="F14" sourceRef="Call" targetRef="Done" />
+    <bpmn:sequenceFlow id="F15" sourceRef="InfoReceived" targetRef="Check" />
+    <bpmn:sendTask id="MoreInfo" name="Request further&#10;information" messageRef="Message_InfoRequest">
+      <bpmn:incoming>F4</bpmn:incoming>
+      <bpmn:outgoing>F5</bpmn:outgoing>
+    </bpmn:sendTask>
+  </bpmn:process>
+  <bpmn:message id="Message_FurtherInfo" name="Further information received" />
+  <bpmn:message id="Message_Referral" name="Referral documents" />
+  <bpmn:message id="Message_InfoRequest" name="Request for further information" />
+  <bpmndi:BPMNDiagram id="Diagram_Student">
+    <bpmndi:BPMNPlane id="Plane_Student" bpmnElement="Collaboration_Student">
+      <bpmndi:BPMNShape id="Hospital_di" bpmnElement="Hospital" isHorizontal="true">
+        <dc:Bounds x="150" y="205" width="1440" height="555" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Secretary_di" bpmnElement="Lane_Secretary" isHorizontal="true">
+        <dc:Bounds x="180" y="205" width="1410" height="155" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Consultant_di" bpmnElement="Lane_Consultant" isHorizontal="true">
+        <dc:Bounds x="180" y="360" width="1410" height="185" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Bookings_di" bpmnElement="Lane_Bookings" isHorizontal="true">
+        <dc:Bounds x="180" y="545" width="1410" height="215" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start">
+        <dc:Bounds x="240" y="259" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="210" y="300" width="96" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Check_di" bpmnElement="Check">
+        <dc:Bounds x="325" y="239" width="150" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="InfoReceived_di" bpmnElement="InfoReceived">
+        <dc:Bounds x="560" y="259" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="523" y="302" width="110" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Review_di" bpmnElement="Review">
+        <dc:Bounds x="490" y="395" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Decision_di" bpmnElement="Decision" isMarkerVisible="true">
+        <dc:Bounds x="730" y="408" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="665" y="462" width="82" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RejectEnd_di" bpmnElement="RejectEnd">
+        <dc:Bounds x="1055" y="377" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1030" y="419" width="86" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Redirect_di" bpmnElement="Redirect">
+        <dc:Bounds x="1010" y="472" width="150" height="68" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RedirectEnd_di" bpmnElement="RedirectEnd">
+        <dc:Bounds x="1220" y="488" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1201" y="527" width="76" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Book_di" bpmnElement="Book">
+        <dc:Bounds x="860" y="575" width="155" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Letter_di" bpmnElement="Letter">
+        <dc:Bounds x="1070" y="575" width="150" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TwoWeeks_di" bpmnElement="TwoWeeks" isMarkerVisible="true">
+        <dc:Bounds x="1280" y="588" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1270" y="550" width="76" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Call_di" bpmnElement="Call">
+        <dc:Bounds x="1225" y="667" width="160" height="66" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Done_di" bpmnElement="Done">
+        <dc:Bounds x="1485" y="595" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1527" y="638" width="60" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="MoreInfo_di" bpmnElement="MoreInfo">
+        <dc:Bounds x="675" y="239" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F1_di" bpmnElement="F1">
+        <di:waypoint x="276" y="277" />
+        <di:waypoint x="325" y="277" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F5_di" bpmnElement="F5">
+        <di:waypoint x="675" y="277" />
+        <di:waypoint x="596" y="277" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F2_di" bpmnElement="F2">
+        <di:waypoint x="400" y="315" />
+        <di:waypoint x="400" y="433" />
+        <di:waypoint x="490" y="433" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F4_di" bpmnElement="F4">
+        <di:waypoint x="755" y="408" />
+        <di:waypoint x="755" y="315" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="765" y="367" width="105" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F3_di" bpmnElement="F3">
+        <di:waypoint x="650" y="433" />
+        <di:waypoint x="730" y="433" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F6_di" bpmnElement="F6">
+        <di:waypoint x="769" y="419" />
+        <di:waypoint x="835" y="395" />
+        <di:waypoint x="1055" y="395" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="934" y="369" width="48" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F7_di" bpmnElement="F7">
+        <di:waypoint x="780" y="433" />
+        <di:waypoint x="925" y="433" />
+        <di:waypoint x="925" y="506" />
+        <di:waypoint x="1010" y="506" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="947" y="480" width="65" height="22" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F9_di" bpmnElement="F9">
+        <di:waypoint x="755" y="458" />
+        <di:waypoint x="755" y="613" />
+        <di:waypoint x="860" y="613" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="766" y="564" width="60" height="22" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F8_di" bpmnElement="F8">
+        <di:waypoint x="1160" y="506" />
+        <di:waypoint x="1220" y="506" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F10_di" bpmnElement="F10">
+        <di:waypoint x="1015" y="613" />
+        <di:waypoint x="1070" y="613" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F11_di" bpmnElement="F11">
+        <di:waypoint x="1220" y="613" />
+        <di:waypoint x="1280" y="613" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F12_di" bpmnElement="F12">
+        <di:waypoint x="1330" y="613" />
+        <di:waypoint x="1485" y="613" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1393" y="589" width="35" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F13_di" bpmnElement="F13">
+        <di:waypoint x="1305" y="638" />
+        <di:waypoint x="1305" y="667" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1317" y="641" width="35" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F14_di" bpmnElement="F14">
+        <di:waypoint x="1385" y="700" />
+        <di:waypoint x="1503" y="700" />
+        <di:waypoint x="1503" y="631" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F15_di" bpmnElement="F15">
+        <di:waypoint x="560" y="277" />
+        <di:waypoint x="475" y="277" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Patient_di" bpmnElement="Patient" isHorizontal="true" isExpanded="false">
+        <dc:Bounds x="150" y="835" width="1440" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReferringOrganisation_di" bpmnElement="ReferringOrganisation" isHorizontal="true" isExpanded="false">
+        <dc:Bounds x="150" y="50" width="1440" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Message_AppointmentLetter_di" bpmnElement="Message_AppointmentLetter">
+        <di:waypoint x="1145" y="651" />
+        <di:waypoint x="1145" y="835" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="990" y="787" width="140" height="26" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Message_TelephoneContact_di" bpmnElement="Message_TelephoneContact">
+        <di:waypoint x="1305" y="733" />
+        <di:waypoint x="1305" y="835" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1320" y="783" width="150" height="32" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MF_Referral_di" bpmnElement="MF_Referral">
+        <di:waypoint x="258" y="110" />
+        <di:waypoint x="258" y="259" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="273" y="147" width="105" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MF_InfoRequest_di" bpmnElement="MF_InfoRequest">
+        <di:waypoint x="755" y="239" />
+        <di:waypoint x="755" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="770" y="147" width="150" height="34" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MF_InfoResponse_di" bpmnElement="MF_InfoResponse">
+        <di:waypoint x="578" y="110" />
+        <di:waypoint x="578" y="259" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="590" y="147" width="110" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
