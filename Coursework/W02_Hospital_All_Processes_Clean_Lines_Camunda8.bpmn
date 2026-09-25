@@ -1,0 +1,1567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Hospital_Simple_C8" targetNamespace="https://aisd.example/hospital/simple-c8" exporter="Camunda Modeler" exporterVersion="5.51.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.10.0">
+  <bpmn:collaboration id="Collaboration_Hospital_Simple">
+    <bpmn:participant id="Hospital" name="HOSPITAL | Patient pathway and supporting services" processRef="Hospital_All_Processes_Simple_C8" />
+    <bpmn:participant id="Referrer" name="Referring organisation | GP / Other hospital" />
+    <bpmn:participant id="Patient" name="Patient / authorised representative" />
+    <bpmn:participant id="Scheduling" name="External scheduling service" />
+    <bpmn:participant id="Correspondence" name="External correspondence service" />
+    <bpmn:participant id="Insurer" name="Insurer / funding organisation" />
+    <bpmn:participant id="PaymentProvider" name="External Payment Service Provider" />
+    <bpmn:messageFlow id="Msg_Referral" name="Referral documents" sourceRef="Referrer" targetRef="Register" />
+    <bpmn:messageFlow id="Msg_Contact" name="Appointment / contact" sourceRef="BookVisit" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_Treatment" name="Treatment arrangements" sourceRef="BookTreatment" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_Slot" name="Slot / service result" sourceRef="Scheduling" targetRef="Hospital" />
+    <bpmn:messageFlow id="Msg_Letter" name="Approved letter + recipients" sourceRef="Hospital" targetRef="Correspondence" />
+    <bpmn:messageFlow id="Msg_Funding" name="Funding approval" sourceRef="Insurer" targetRef="Hospital" />
+    <bpmn:messageFlow id="Msg_Payment" name="Verified transaction result" sourceRef="PaymentProvider" targetRef="Hospital" />
+    <bpmn:textAnnotation id="Stage_1">
+      <bpmn:text>1  REFERRAL REVIEW</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Stage_2">
+      <bpmn:text>2  VISIT AND CLINICAL CARE</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Stage_3">
+      <bpmn:text>3  LETTER AND NEXT STEP</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Stage_4">
+      <bpmn:text>4  FUNDING AND TREATMENT</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Change_Section">
+      <bpmn:text>CHANGES / CANCELLATIONS</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Guide_Main">
+      <bpmn:text>READING GUIDE | Blue lines = normal care route. Grey lines = supporting / exception paths.
+Every solid arrow connects directly to its next activity. Follow the arrowhead; crossings do not join flows.
+All P1-P13 business tasks stay visible on this canvas. External services / elapsed time are simulated for the classroom demo.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Guide_Rules">
+      <bpmn:text>BUSINESS CONTROLS | P4: within 2 weeks, also phone and record contact. P9: 7-day letter target; weekly reminders; escalate at 1 and 3 months.
+P7: unknown payment confirmation -&gt; investigate; never automatically charge again. P8: clinical urgent-care authorisation then Finance follow-up.
+P11/P12: formal clinical change first; Finance approves affected payments / refunds. P13: identity, authorised roles and audit apply throughout.</bpmn:text>
+    </bpmn:textAnnotation>
+  </bpmn:collaboration>
+  <bpmn:process id="Hospital_All_Processes_Simple_C8" name="Hospital - All Business Processes (Simple Camunda 8)" isExecutable="true">
+    <bpmn:documentation>Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. All external interactions and elapsed time are simulated manually. Every work step is a native Camunda 8 user task; there are no unimplemented workers, timers or message subscriptions. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. Forms are deliberately not bound yet. Inputs taskTitle/taskHelp/actionOptions/action/notes/patientId prepare one reusable form; task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving. A startable main-path demonstration will use a normal none start event. See coverage and variable documentation in the companion README.</bpmn:documentation>
+    <bpmn:laneSet id="Hospital_Lanes">
+      <bpmn:lane id="Admin" name="Administration">
+        <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Register</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RequestType</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GetDocuments</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Redirect</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndReferral</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>BookVisit</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VisitOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>DispatchLetter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>LetterOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>MonitorLetters</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>BookTreatment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>TreatmentOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AdminEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndAdminEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AuditReports</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndReport</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Clinical" name="Clinical team">
+        <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ReferralDecision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndRejected</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ClinicalCare</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentFollowupNeeded</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CarePlan</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentAuthorisation</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentDecision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndCare</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ClinicalChange</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ChangeValid</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>MoneyAffected</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ChangeRoute</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ClinicalEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndClinicalEnquiry</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Finance" name="Finance">
+        <bpmn:flowNodeRef>Funding</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FundingOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FundingIssue</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentFinance</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FinanceAdjustment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AdjustmentOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FinanceEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndFinanceEnquiry</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start" name="Start request">
+      <bpmn:outgoing>Flow_01</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Register" name="P1 / P10 / P13&#10;Register request;&#10;check documents and ID">
+      <bpmn:documentation>Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. Demo only; enter no real patient or card data.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P1 / P10 / P13 Register request; check documents and ID&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. Demo only; enter no real patient or card data.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;Register&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;New referral - documents checked&#34;, value: &#34;referral&#34; }, { label: &#34;Referral - supporting documents missing&#34;, value: &#34;referral_incomplete&#34; }, { label: &#34;Administrative enquiry&#34;, value: &#34;enquiry_admin&#34; }, { label: &#34;Clinical enquiry&#34;, value: &#34;enquiry_clinical&#34; }, { label: &#34;Financial enquiry&#34;, value: &#34;enquiry_finance&#34; }, { label: &#34;Authorised change / follow-up / cancellation&#34;, value: &#34;change&#34; }, { label: &#34;Management audit / report&#34;, value: &#34;report&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="RegisterNotes" />
+          <zeebe:output source="= action" target="requestKind" />
+          <zeebe:output source="= false" target="urgentCase" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_01</bpmn:incoming>
+      <bpmn:incoming>Flow_24</bpmn:incoming>
+      <bpmn:incoming>Flow_30</bpmn:incoming>
+      <bpmn:outgoing>Flow_02</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="RequestType" name="Request&#10;type?" default="Flow_24">
+      <bpmn:incoming>Flow_02</bpmn:incoming>
+      <bpmn:outgoing>Flow_03</bpmn:outgoing>
+      <bpmn:outgoing>Flow_18</bpmn:outgoing>
+      <bpmn:outgoing>Flow_19</bpmn:outgoing>
+      <bpmn:outgoing>Flow_20</bpmn:outgoing>
+      <bpmn:outgoing>Flow_21</bpmn:outgoing>
+      <bpmn:outgoing>Flow_22</bpmn:outgoing>
+      <bpmn:outgoing>Flow_23</bpmn:outgoing>
+      <bpmn:outgoing>Flow_24</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="GetDocuments" name="P1 / P11&#10;Obtain missing or&#10;formally authorised records">
+      <bpmn:documentation>Request and record receipt of missing referral material, or obtain a formally authorised modification request. Do not treat an email or phone call as treatment-change authorisation. In the classroom, completing this task simulates the reply; do not wait for an external message.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P1 / P11 Obtain missing or formally authorised records&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Request and record receipt of missing referral material, or obtain a formally authorised modification request. Do not treat an email or phone call as treatment-change authorisation. In the classroom, completing this task simulates the reply; do not wait for an external message.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;GetDocuments&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="GetDocumentsNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_19</bpmn:incoming>
+      <bpmn:incoming>Flow_29</bpmn:incoming>
+      <bpmn:incoming>Flow_52</bpmn:incoming>
+      <bpmn:outgoing>Flow_30</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="ReviewReferral" name="P2&#10;Consultant reviews referral;&#10;records decision and reason">
+      <bpmn:documentation>Only an authorised Consultant decides acceptance. Record decision, clinician identity and reason. Urgent referrals and requested timeframes must be passed to booking staff.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P2 Consultant reviews referral; records decision and reason&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Only an authorised Consultant decides acceptance. Record decision, clinician identity and reason. Urgent referrals and requested timeframes must be passed to booking staff.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;ReviewReferral&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Accept&#34;, value: &#34;accept&#34; }, { label: &#34;Reject&#34;, value: &#34;reject&#34; }, { label: &#34;Redirect&#34;, value: &#34;redirect&#34; }, { label: &#34;Request more information&#34;, value: &#34;more_information&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="ReviewReferralNotes" />
+          <zeebe:output source="= action" target="referralDecision" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_03</bpmn:incoming>
+      <bpmn:incoming>Flow_34</bpmn:incoming>
+      <bpmn:outgoing>Flow_04</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ReferralDecision" name="Referral&#10;decision?" default="Flow_34">
+      <bpmn:incoming>Flow_04</bpmn:incoming>
+      <bpmn:outgoing>Flow_05</bpmn:outgoing>
+      <bpmn:outgoing>Flow_29</bpmn:outgoing>
+      <bpmn:outgoing>Flow_31</bpmn:outgoing>
+      <bpmn:outgoing>Flow_33</bpmn:outgoing>
+      <bpmn:outgoing>Flow_34</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Redirect" name="P2&#10;Record authorised redirect&#10;and notify referrer">
+      <bpmn:documentation>Administrative staff carry out the Consultant-approved redirect and record its destination; they do not make the clinical decision.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P2 Record authorised redirect and notify referrer&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Administrative staff carry out the Consultant-approved redirect and record its destination; they do not make the clinical decision.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;Redirect&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="RedirectNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_31</bpmn:incoming>
+      <bpmn:outgoing>Flow_32</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndReferral" name="Referral closed">
+      <bpmn:incoming>Flow_32</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndRejected" name="Referral rejected">
+      <bpmn:incoming>Flow_33</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="BookVisit" name="P3 / P4 / P12&#10;Book visit; notify patient;&#10;record attendance / contact">
+      <bpmn:documentation>Outpatient Bookings: only after referral acceptance or a clinical follow-up request. Confirm a slot within the requested timeframe; if unavailable keep pending, flag to the pathway team and avoid duplicates. Send an appointment letter. If within two weeks ALSO phone and record each attempt/outcome, including failed contact or an alternative date. Record attendance, cancellation, decline or DNA. Classroom completion represents these actions and elapsed time.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P3 / P4 / P12 Book visit; notify patient; record attendance / contact&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Outpatient Bookings: only after referral acceptance or a clinical follow-up request. Confirm a slot within the requested timeframe; if unavailable keep pending, flag to the pathway team and avoid duplicates. Send an appointment letter. If within two weeks ALSO phone and record each attempt/outcome, including failed contact or an alternative date. Record attendance, cancellation, decline or DNA. Classroom completion represents these actions and elapsed time.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;BookVisit&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Booked, notified and attended&#34;, value: &#34;attended&#34; }, { label: &#34;No suitable slot / contact or service pending&#34;, value: &#34;pending&#34; }, { label: &#34;Cancelled / declined / did not attend&#34;, value: &#34;cancelled&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="BookVisitNotes" />
+          <zeebe:output source="= action" target="visitOutcome" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05</bpmn:incoming>
+      <bpmn:incoming>Flow_35</bpmn:incoming>
+      <bpmn:incoming>Flow_42</bpmn:incoming>
+      <bpmn:incoming>Flow_60</bpmn:incoming>
+      <bpmn:outgoing>Flow_06</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="VisitOutcome" name="Visit&#10;outcome?" default="Flow_35">
+      <bpmn:incoming>Flow_06</bpmn:incoming>
+      <bpmn:outgoing>Flow_07</bpmn:outgoing>
+      <bpmn:outgoing>Flow_35</bpmn:outgoing>
+      <bpmn:outgoing>Flow_36</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="ClinicalCare" name="P5 / P9 / P12&#10;Consult / treat / review;&#10;authorise care and clinic letter">
+      <bpmn:documentation>Consultant / authorised clinician: record consultation, treatment and review as applicable. Before each subsequent chemotherapy cycle, review blood tests and fitness before giving treatment; only authorised clinicians decide whether to continue, delay or change the plan. Treatment requires patient consent and an authorised request with dates, cycles and resources. Decide further treatment, follow-up or discharge; prepare and approve the clinic letter and recipients after EVERY consultation. Give CNS contact information after the first visit. A returned letter is corrected and reapproved without repeating treatment. No administrative or finance user may make these clinical decisions.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P5 / P9 / P12 Consult / treat / review; authorise care and clinic letter&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Consultant / authorised clinician: record consultation, treatment and review as applicable. Before each subsequent chemotherapy cycle, review blood tests and fitness before giving treatment; only authorised clinicians decide whether to continue, delay or change the plan. Treatment requires patient consent and an authorised request with dates, cycles and resources. Decide further treatment, follow-up or discharge; prepare and approve the clinic letter and recipients after EVERY consultation. Give CNS contact information after the first visit. A returned letter is corrected and reapproved without repeating treatment. No administrative or finance user may make these clinical decisions.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;ClinicalCare&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Authorise treatment / next cycle&#34;, value: &#34;treatment&#34; }, { label: &#34;Request follow-up visit&#34;, value: &#34;follow_up&#34; }, { label: &#34;Authorise discharge / no further care&#34;, value: &#34;discharge&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="ClinicalCareNotes" />
+          <zeebe:output source="= action" target="careDecision" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07</bpmn:incoming>
+      <bpmn:incoming>Flow_16</bpmn:incoming>
+      <bpmn:incoming>Flow_39</bpmn:incoming>
+      <bpmn:incoming>Flow_41</bpmn:incoming>
+      <bpmn:incoming>Flow_43</bpmn:incoming>
+      <bpmn:outgoing>Flow_08</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="UrgentFollowupNeeded" name="Urgent finance&#10;follow-up?" default="Flow_09">
+      <bpmn:incoming>Flow_08</bpmn:incoming>
+      <bpmn:outgoing>Flow_09</bpmn:outgoing>
+      <bpmn:outgoing>Flow_37</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="DispatchLetter" name="P9&#10;Check and dispatch&#10;approved clinic letter">
+      <bpmn:documentation>Medical Secretaries: check administration and Consultant-approved recipients, send the approved letter, and record all relevant dates and dispatch method. Do not change clinical meaning. Suspected clinical errors return to the Consultant. Complete/approve/send within seven days; recipients normally receive within about two weeks. External correspondence is simulated by recording the result.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P9 Check and dispatch approved clinic letter&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Medical Secretaries: check administration and Consultant-approved recipients, send the approved letter, and record all relevant dates and dispatch method. Do not change clinical meaning. Suspected clinical errors return to the Consultant. Complete/approve/send within seven days; recipients normally receive within about two weeks. External correspondence is simulated by recording the result.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;DispatchLetter&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Approved letter sent and recorded&#34;, value: &#34;sent&#34; }, { label: &#34;Suspected clinical error - return to Consultant&#34;, value: &#34;revise&#34; }, { label: &#34;Incomplete / unapproved / dispatch delayed&#34;, value: &#34;delayed&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="DispatchLetterNotes" />
+          <zeebe:output source="= action" target="letterStatus" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09</bpmn:incoming>
+      <bpmn:incoming>Flow_38</bpmn:incoming>
+      <bpmn:outgoing>Flow_10</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="LetterOutcome" name="Letter&#10;status?" default="Flow_40">
+      <bpmn:incoming>Flow_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_11</bpmn:outgoing>
+      <bpmn:outgoing>Flow_39</bpmn:outgoing>
+      <bpmn:outgoing>Flow_40</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="MonitorLetters" name="P9&#10;Monitor delay; remind&#10;and escalate if overdue">
+      <bpmn:documentation>Patient Pathway Coordinators: after seven days mark delayed; send weekly reminders only while outstanding. Over one month escalate to Administrative Manager; over three months to higher management. Record reasons, reminders and responses; stop reminders after completion. Classroom demo records the applicable time band without a real multi-day timer.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P9 Monitor delay; remind and escalate if overdue&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Patient Pathway Coordinators: after seven days mark delayed; send weekly reminders only while outstanding. Over one month escalate to Administrative Manager; over three months to higher management. Record reasons, reminders and responses; stop reminders after completion. Classroom demo records the applicable time band without a real multi-day timer.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;MonitorLetters&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="MonitorLettersNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_40</bpmn:incoming>
+      <bpmn:outgoing>Flow_41</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="CarePlan" name="Clinical&#10;plan?" default="Flow_43">
+      <bpmn:incoming>Flow_11</bpmn:incoming>
+      <bpmn:outgoing>Flow_12</bpmn:outgoing>
+      <bpmn:outgoing>Flow_17</bpmn:outgoing>
+      <bpmn:outgoing>Flow_42</bpmn:outgoing>
+      <bpmn:outgoing>Flow_43</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Funding" name="P7&#10;Assess funding; record&#10;payment / approval status">
+      <bpmn:documentation>Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. This task only records simulated provider outcomes.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P7 Assess funding; record payment / approval status&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. This task only records simulated provider outcomes.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;Funding&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Hospital funding confirmed&#34;, value: &#34;hospital_funded&#34; }, { label: &#34;Insurer approval recorded&#34;, value: &#34;insurer_approved&#34; }, { label: &#34;Payment verified&#34;, value: &#34;patient_paid&#34; }, { label: &#34;Authorised exemption / payment arrangement&#34;, value: &#34;arrangement&#34; }, { label: &#34;Declined / incomplete / funding pending&#34;, value: &#34;pending&#34; }, { label: &#34;Provider success but confirmation missing&#34;, value: &#34;investigate&#34; }, { label: &#34;Request clinical review of urgent-care exception&#34;, value: &#34;urgent_review&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="FundingNotes" />
+          <zeebe:output source="= action" target="fundingStatus" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_12</bpmn:incoming>
+      <bpmn:incoming>Flow_46</bpmn:incoming>
+      <bpmn:incoming>Flow_49</bpmn:incoming>
+      <bpmn:incoming>Flow_59</bpmn:incoming>
+      <bpmn:outgoing>Flow_13</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="FundingOutcome" name="Funding&#10;status?" default="Flow_45">
+      <bpmn:incoming>Flow_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_14</bpmn:outgoing>
+      <bpmn:outgoing>Flow_44</bpmn:outgoing>
+      <bpmn:outgoing>Flow_45</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="FundingIssue" name="P7&#10;Resolve funding issue /&#10;investigate missing receipt">
+      <bpmn:documentation>Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P7 Resolve funding issue / investigate missing receipt&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;FundingIssue&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="FundingIssueNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_45</bpmn:incoming>
+      <bpmn:outgoing>Flow_46</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="UrgentAuthorisation" name="P8&#10;Clinician authorises&#10;urgent care with reason">
+      <bpmn:documentation>Only a clinician may authorise treatment before confirmed payment where delay risks the patient. Record clinician identity, clinical reason and the decision, and create a Finance follow-up obligation. Finance can request this review but cannot approve the clinical exception.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P8 Clinician authorises urgent care with reason&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Only a clinician may authorise treatment before confirmed payment where delay risks the patient. Record clinician identity, clinical reason and the decision, and create a Finance follow-up obligation. Finance can request this review but cannot approve the clinical exception.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;UrgentAuthorisation&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Authorise urgent care and record reason&#34;, value: &#34;authorise&#34; }, { label: &#34;Not authorised - continue finance resolution&#34;, value: &#34;hold&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="UrgentAuthorisationNotes" />
+          <zeebe:output source="= action" target="urgentDecision" />
+          <zeebe:output source="= action = &#34;authorise&#34;" target="urgentCase" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_44</bpmn:incoming>
+      <bpmn:outgoing>Flow_47</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="UrgentDecision" name="Urgent care&#10;authorised?" default="Flow_49">
+      <bpmn:incoming>Flow_47</bpmn:incoming>
+      <bpmn:outgoing>Flow_48</bpmn:outgoing>
+      <bpmn:outgoing>Flow_49</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="BookTreatment" name="P6&#10;Confirm authorised treatment&#10;and investigation appointments">
+      <bpmn:documentation>Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm and notify patient only after these checks. Classroom task records external outcomes.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P6 Confirm authorised treatment and investigation appointments&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm and notify patient only after these checks. Classroom task records external outcomes.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;BookTreatment&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Resources available; booking confirmed&#34;, value: &#34;ready&#34; }, { label: &#34;External service / resource unavailable&#34;, value: &#34;pending&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="BookTreatmentNotes" />
+          <zeebe:output source="= action" target="treatmentSlotStatus" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_14</bpmn:incoming>
+      <bpmn:incoming>Flow_48</bpmn:incoming>
+      <bpmn:incoming>Flow_50</bpmn:incoming>
+      <bpmn:outgoing>Flow_15</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="TreatmentOutcome" name="Resources&#10;ready?" default="Flow_50">
+      <bpmn:incoming>Flow_15</bpmn:incoming>
+      <bpmn:outgoing>Flow_16</bpmn:outgoing>
+      <bpmn:outgoing>Flow_50</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="UrgentFinance" name="P8&#10;Finance follows up&#10;after urgent care">
+      <bpmn:documentation>After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P8 Finance follows up after urgent care&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;UrgentFinance&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="UrgentFinanceNotes" />
+          <zeebe:output source="= false" target="urgentCase" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_37</bpmn:incoming>
+      <bpmn:outgoing>Flow_38</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndCare" name="Care episode ended">
+      <bpmn:incoming>Flow_17</bpmn:incoming>
+      <bpmn:incoming>Flow_61</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="ClinicalChange" name="P11 / P12&#10;Authorise modification,&#10;follow-up or cancellation">
+      <bpmn:documentation>Consultant / authorised clinician: review formal treatment changes, DNA/cancellation or follow-up requests. Reject unapproved verbal/email changes. Urgent safety postponement must be promptly documented and authorised. Select the clinical plan and indicate whether existing charges/funding/payments are affected; this flags Finance review and does NOT authorise a refund.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P11 / P12 Authorise modification, follow-up or cancellation&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Consultant / authorised clinician: review formal treatment changes, DNA/cancellation or follow-up requests. Reject unapproved verbal/email changes. Urgent safety postponement must be promptly documented and authorised. Select the clinical plan and indicate whether existing charges/funding/payments are affected; this flags Finance review and does NOT authorise a refund.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;ClinicalChange&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Authorise treatment change - no financial impact&#34;, value: &#34;reschedule_unpaid&#34; }, { label: &#34;Authorise treatment change - Finance review required&#34;, value: &#34;reschedule_paid&#34; }, { label: &#34;Authorise follow-up / rebook - no financial impact&#34;, value: &#34;follow_up_unpaid&#34; }, { label: &#34;Authorise follow-up / rebook - Finance review required&#34;, value: &#34;follow_up_paid&#34; }, { label: &#34;Authorise stop / discharge - no financial impact&#34;, value: &#34;discharge_unpaid&#34; }, { label: &#34;Authorise stop / discharge - Finance review required&#34;, value: &#34;discharge_paid&#34; }, { label: &#34;Formal clinical authorisation is missing&#34;, value: &#34;invalid&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="ClinicalChangeNotes" />
+          <zeebe:output source="= action" target="modificationDecision" />
+          <zeebe:output source="= action = &#34;reschedule_paid&#34; or action = &#34;follow_up_paid&#34; or action = &#34;discharge_paid&#34;" target="moneyAffected" />
+          <zeebe:output source="= if action = &#34;reschedule_paid&#34; or action = &#34;reschedule_unpaid&#34; then &#34;treatment&#34; else if action = &#34;follow_up_paid&#34; or action = &#34;follow_up_unpaid&#34; then &#34;visit&#34; else if action = &#34;discharge_paid&#34; or action = &#34;discharge_unpaid&#34; then &#34;discharge&#34; else &#34;invalid&#34;" target="changeTarget" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_22</bpmn:incoming>
+      <bpmn:incoming>Flow_36</bpmn:incoming>
+      <bpmn:incoming>Flow_62</bpmn:incoming>
+      <bpmn:outgoing>Flow_51</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ChangeValid" name="Formal request&#10;authorised?" default="Flow_52">
+      <bpmn:incoming>Flow_51</bpmn:incoming>
+      <bpmn:outgoing>Flow_52</bpmn:outgoing>
+      <bpmn:outgoing>Flow_53</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="MoneyAffected" name="Financial&#10;impact?" default="Flow_55">
+      <bpmn:incoming>Flow_53</bpmn:incoming>
+      <bpmn:outgoing>Flow_54</bpmn:outgoing>
+      <bpmn:outgoing>Flow_55</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="FinanceAdjustment" name="P7 / P11 / P12&#10;Approve and record refund,&#10;payment transfer or retention">
+      <bpmn:documentation>Only authorised Finance approves full/partial refunds or payment transfer/retention. Record decision, amount, reason and provider result linked to patient, appointment and original transaction. Clinical staff supply treatment facts but do not approve refunds. Pending provider results remain open for recorded follow-up.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P7 / P11 / P12 Approve and record refund, payment transfer or retention&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Only authorised Finance approves full/partial refunds or payment transfer/retention. Record decision, amount, reason and provider result linked to patient, appointment and original transaction. Clinical staff supply treatment facts but do not approve refunds. Pending provider results remain open for recorded follow-up.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;FinanceAdjustment&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Financial decision authorised and outcome recorded&#34;, value: &#34;resolved&#34; }, { label: &#34;Provider / approval result pending&#34;, value: &#34;pending&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="FinanceAdjustmentNotes" />
+          <zeebe:output source="= action" target="financeAdjustment" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_54</bpmn:incoming>
+      <bpmn:incoming>Flow_58</bpmn:incoming>
+      <bpmn:outgoing>Flow_56</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="AdjustmentOutcome" name="Adjustment&#10;recorded?" default="Flow_58">
+      <bpmn:incoming>Flow_56</bpmn:incoming>
+      <bpmn:outgoing>Flow_57</bpmn:outgoing>
+      <bpmn:outgoing>Flow_58</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="ChangeRoute" name="Revised&#10;clinical plan?" default="Flow_62">
+      <bpmn:incoming>Flow_55</bpmn:incoming>
+      <bpmn:incoming>Flow_57</bpmn:incoming>
+      <bpmn:outgoing>Flow_59</bpmn:outgoing>
+      <bpmn:outgoing>Flow_60</bpmn:outgoing>
+      <bpmn:outgoing>Flow_61</bpmn:outgoing>
+      <bpmn:outgoing>Flow_62</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="AdminEnquiry" name="P10&#10;Resolve administrative&#10;enquiry; record response">
+      <bpmn:documentation>Call Handling / relevant administrative team: answer only authorised administrative information. Record response, owner, priority and resolution. Reclassify and transfer financial/clinical matters; do not diagnose or give clinical advice.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P10 Resolve administrative enquiry; record response&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Call Handling / relevant administrative team: answer only authorised administrative information. Record response, owner, priority and resolution. Reclassify and transfer financial/clinical matters; do not diagnose or give clinical advice.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;AdminEnquiry&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="AdminEnquiryNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_18</bpmn:incoming>
+      <bpmn:outgoing>Flow_25</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="ClinicalEnquiry" name="P10&#10;CNS / clinician responds&#10;and records clinical advice">
+      <bpmn:documentation>Qualified CNS / clinician responds to clinical matters. Highlight urgent clinical concerns immediately; exact urgency rules remain a stakeholder clarification. Record response and resolution; significant care changes use a separate formal modification request.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P10 CNS / clinician responds and records clinical advice&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Qualified CNS / clinician responds to clinical matters. Highlight urgent clinical concerns immediately; exact urgency rules remain a stakeholder clarification. Record response and resolution; significant care changes use a separate formal modification request.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;ClinicalEnquiry&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="ClinicalEnquiryNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_26</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="FinanceEnquiry" name="P10&#10;Finance responds to&#10;payment / funding enquiry">
+      <bpmn:documentation>Finance handles financial enquiries beyond information authorised for call handlers. Record response, owner, resolution and any separate follow-up case; do not make clinical decisions.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P10 Finance responds to payment / funding enquiry&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Finance handles financial enquiries beyond information authorised for call handlers. Record response, owner, resolution and any separate follow-up case; do not make clinical decisions.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;FinanceEnquiry&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="FinanceEnquiryNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_21</bpmn:incoming>
+      <bpmn:outgoing>Flow_27</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndAdminEnquiry" name="Enquiry resolved">
+      <bpmn:incoming>Flow_25</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndClinicalEnquiry" name="Enquiry resolved">
+      <bpmn:incoming>Flow_26</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndFinanceEnquiry" name="Enquiry resolved">
+      <bpmn:incoming>Flow_27</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="AuditReports" name="P13&#10;Authorised manager reviews&#10;audit trail and pathway reports">
+      <bpmn:documentation>Authorised management views referrals, waits, failed contacts, letter delays, enquiries, booking delays, funding/payment exceptions and refunds. P13 controls apply to EVERY significant task: verified identity, role-limited access, secure exchange, user/time/action audit, linked records and downtime recovery. Ordinary users must not edit audit history. This model documents these requirements; demo assignment is not production RBAC.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= &#34;P13 Authorised manager reviews audit trail and pathway reports&#34;" target="taskTitle" />
+          <zeebe:input source="= &#34;Authorised management views referrals, waits, failed contacts, letter delays, enquiries, booking delays, funding/payment exceptions and refunds. P13 controls apply to EVERY significant task: verified identity, role-limited access, secure exchange, user/time/action audit, linked records and downtime recovery. Ordinary users must not edit audit history. This model documents these requirements; demo assignment is not production RBAC.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;AuditReports&#34;" target="taskCode" />
+          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="AuditReportsNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_23</bpmn:incoming>
+      <bpmn:outgoing>Flow_28</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndReport" name="Report reviewed">
+      <bpmn:incoming>Flow_28</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_01" sourceRef="Start" targetRef="Register" />
+    <bpmn:sequenceFlow id="Flow_24" name="Select type" sourceRef="RequestType" targetRef="Register" />
+    <bpmn:sequenceFlow id="Flow_30" name="Recheck" sourceRef="GetDocuments" targetRef="Register" />
+    <bpmn:sequenceFlow id="Flow_02" sourceRef="Register" targetRef="RequestType" />
+    <bpmn:sequenceFlow id="Flow_03" name="Referral" sourceRef="RequestType" targetRef="ReviewReferral">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "referral"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_18" name="Admin enquiry" sourceRef="RequestType" targetRef="AdminEnquiry">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "enquiry_admin"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_19" name="Missing documents" sourceRef="RequestType" targetRef="GetDocuments">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "referral_incomplete"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_20" name="Clinical enquiry" sourceRef="RequestType" targetRef="ClinicalEnquiry">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "enquiry_clinical"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_21" name="Finance enquiry" sourceRef="RequestType" targetRef="FinanceEnquiry">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "enquiry_finance"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_22" name="Change / follow-up" sourceRef="RequestType" targetRef="ClinicalChange">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "change"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_23" name="Reports" sourceRef="RequestType" targetRef="AuditReports">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "report"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_29" name="More info" sourceRef="ReferralDecision" targetRef="GetDocuments">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "more_information"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_52" name="Missing / invalid" sourceRef="ChangeValid" targetRef="GetDocuments" />
+    <bpmn:sequenceFlow id="Flow_34" name="Select decision" sourceRef="ReferralDecision" targetRef="ReviewReferral" />
+    <bpmn:sequenceFlow id="Flow_04" sourceRef="ReviewReferral" targetRef="ReferralDecision" />
+    <bpmn:sequenceFlow id="Flow_05" name="Accept" sourceRef="ReferralDecision" targetRef="BookVisit">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "accept"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_31" name="Redirect" sourceRef="ReferralDecision" targetRef="Redirect">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "redirect"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_33" name="Reject" sourceRef="ReferralDecision" targetRef="EndRejected">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "reject"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_32" sourceRef="Redirect" targetRef="EndReferral" />
+    <bpmn:sequenceFlow id="Flow_35" name="Pending / retry" sourceRef="VisitOutcome" targetRef="BookVisit" />
+    <bpmn:sequenceFlow id="Flow_42" name="Follow-up" sourceRef="CarePlan" targetRef="BookVisit">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= careDecision = "follow_up"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_60" name="Follow-up" sourceRef="ChangeRoute" targetRef="BookVisit">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "visit"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_06" sourceRef="BookVisit" targetRef="VisitOutcome" />
+    <bpmn:sequenceFlow id="Flow_07" name="Attended" sourceRef="VisitOutcome" targetRef="ClinicalCare">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "attended"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_36" name="Cancel / DNA" sourceRef="VisitOutcome" targetRef="ClinicalChange">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "cancelled"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_16" name="Treatment / review" sourceRef="TreatmentOutcome" targetRef="ClinicalCare">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= treatmentSlotStatus = "ready"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_39" name="Clinical correction" sourceRef="LetterOutcome" targetRef="ClinicalCare">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "revise"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_41" name="Review / approve" sourceRef="MonitorLetters" targetRef="ClinicalCare" />
+    <bpmn:sequenceFlow id="Flow_43" name="Select care plan" sourceRef="CarePlan" targetRef="ClinicalCare" />
+    <bpmn:sequenceFlow id="Flow_08" sourceRef="ClinicalCare" targetRef="UrgentFollowupNeeded" />
+    <bpmn:sequenceFlow id="Flow_09" name="No" sourceRef="UrgentFollowupNeeded" targetRef="DispatchLetter" />
+    <bpmn:sequenceFlow id="Flow_37" name="Yes" sourceRef="UrgentFollowupNeeded" targetRef="UrgentFinance">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentCase = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_38" name="Follow-up recorded" sourceRef="UrgentFinance" targetRef="DispatchLetter" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="DispatchLetter" targetRef="LetterOutcome" />
+    <bpmn:sequenceFlow id="Flow_11" name="Sent" sourceRef="LetterOutcome" targetRef="CarePlan">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "sent"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_40" name="Delay / follow-up" sourceRef="LetterOutcome" targetRef="MonitorLetters" />
+    <bpmn:sequenceFlow id="Flow_12" name="Treatment" sourceRef="CarePlan" targetRef="Funding">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= careDecision = "treatment"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_17" name="Discharge" sourceRef="CarePlan" targetRef="EndCare">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= careDecision = "discharge"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_46" name="Reassess" sourceRef="FundingIssue" targetRef="Funding" />
+    <bpmn:sequenceFlow id="Flow_49" name="Hold" sourceRef="UrgentDecision" targetRef="Funding" />
+    <bpmn:sequenceFlow id="Flow_59" name="Treatment" sourceRef="ChangeRoute" targetRef="Funding">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "treatment"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_13" sourceRef="Funding" targetRef="FundingOutcome" />
+    <bpmn:sequenceFlow id="Flow_14" name="Cleared" sourceRef="FundingOutcome" targetRef="BookTreatment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "hospital_funded" or fundingStatus = "insurer_approved" or fundingStatus = "patient_paid" or fundingStatus = "arrangement"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_44" name="Urgent review" sourceRef="FundingOutcome" targetRef="UrgentAuthorisation">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "urgent_review"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_45" name="Pending / investigate" sourceRef="FundingOutcome" targetRef="FundingIssue" />
+    <bpmn:sequenceFlow id="Flow_47" sourceRef="UrgentAuthorisation" targetRef="UrgentDecision" />
+    <bpmn:sequenceFlow id="Flow_48" name="Authorised" sourceRef="UrgentDecision" targetRef="BookTreatment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentDecision = "authorise"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_50" name="Pending / retry" sourceRef="TreatmentOutcome" targetRef="BookTreatment" />
+    <bpmn:sequenceFlow id="Flow_15" sourceRef="BookTreatment" targetRef="TreatmentOutcome" />
+    <bpmn:sequenceFlow id="Flow_61" name="Discharge" sourceRef="ChangeRoute" targetRef="EndCare">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "discharge"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_62" name="Review plan" sourceRef="ChangeRoute" targetRef="ClinicalChange" />
+    <bpmn:sequenceFlow id="Flow_51" sourceRef="ClinicalChange" targetRef="ChangeValid" />
+    <bpmn:sequenceFlow id="Flow_53" name="Authorised" sourceRef="ChangeValid" targetRef="MoneyAffected">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget != "invalid"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_54" name="Yes" sourceRef="MoneyAffected" targetRef="FinanceAdjustment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= moneyAffected = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_55" name="No" sourceRef="MoneyAffected" targetRef="ChangeRoute" />
+    <bpmn:sequenceFlow id="Flow_58" name="Pending / retry" sourceRef="AdjustmentOutcome" targetRef="FinanceAdjustment" />
+    <bpmn:sequenceFlow id="Flow_56" sourceRef="FinanceAdjustment" targetRef="AdjustmentOutcome" />
+    <bpmn:sequenceFlow id="Flow_57" name="Recorded" sourceRef="AdjustmentOutcome" targetRef="ChangeRoute">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= financeAdjustment = "resolved"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_25" sourceRef="AdminEnquiry" targetRef="EndAdminEnquiry" />
+    <bpmn:sequenceFlow id="Flow_26" sourceRef="ClinicalEnquiry" targetRef="EndClinicalEnquiry" />
+    <bpmn:sequenceFlow id="Flow_27" sourceRef="FinanceEnquiry" targetRef="EndFinanceEnquiry" />
+    <bpmn:sequenceFlow id="Flow_28" sourceRef="AuditReports" targetRef="EndReport" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Clean_Lines_C8">
+    <bpmndi:BPMNPlane id="Plane_Clean_Lines_C8" bpmnElement="Collaboration_Hospital_Simple">
+      <bpmndi:BPMNShape id="Hospital_di" bpmnElement="Hospital" isHorizontal="true" isExpanded="true">
+        <dc:Bounds x="150" y="280" width="3520" height="1740" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Admin_di" bpmnElement="Admin" isHorizontal="true">
+        <dc:Bounds x="185" y="280" width="3485" height="620" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Clinical_di" bpmnElement="Clinical" isHorizontal="true">
+        <dc:Bounds x="185" y="900" width="3485" height="620" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Finance_di" bpmnElement="Finance" isHorizontal="true">
+        <dc:Bounds x="185" y="1520" width="3485" height="500" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start">
+        <dc:Bounds x="260" y="430" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="264" y="520" width="63" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Register_di" bpmnElement="Register" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="340" y="400" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RequestType_di" bpmnElement="RequestType" isMarkerVisible="true">
+        <dc:Bounds x="670" y="430" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="665" y="320" width="41" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GetDocuments_di" bpmnElement="GetDocuments" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="910" y="640" width="220" height="100" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReviewReferral_di" bpmnElement="ReviewReferral" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="910" y="980" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReferralDecision_di" bpmnElement="ReferralDecision" isMarkerVisible="true">
+        <dc:Bounds x="1210" y="1010" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1202" y="1120" width="47" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Redirect_di" bpmnElement="Redirect" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="1230" y="640" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndReferral_di" bpmnElement="EndReferral">
+        <dc:Bounds x="1370" y="790" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1368" y="840" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndRejected_di" bpmnElement="EndRejected">
+        <dc:Bounds x="1350" y="1010" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1329" y="1058" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BookVisit_di" bpmnElement="BookVisit" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="1500" y="400" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="VisitOutcome_di" bpmnElement="VisitOutcome" isMarkerVisible="true">
+        <dc:Bounds x="1790" y="430" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1781" y="320" width="49" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ClinicalCare_di" bpmnElement="ClinicalCare" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="1500" y="980" width="240" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UrgentFollowupNeeded_di" bpmnElement="UrgentFollowupNeeded" isMarkerVisible="true">
+        <dc:Bounds x="1820" y="1010" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1919" y="980" width="72" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DispatchLetter_di" bpmnElement="DispatchLetter" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="2190" y="400" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LetterOutcome_di" bpmnElement="LetterOutcome" isMarkerVisible="true">
+        <dc:Bounds x="2490" y="430" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2492" y="382" width="36" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="MonitorLetters_di" bpmnElement="MonitorLetters" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="2190" y="640" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CarePlan_di" bpmnElement="CarePlan" isMarkerVisible="true">
+        <dc:Bounds x="2490" y="1010" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2487" y="1120" width="36" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Funding_di" bpmnElement="Funding" bioc:stroke="#263746" bioc:fill="#fff3e5">
+        <dc:Bounds x="3080" y="1570" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FundingOutcome_di" bpmnElement="FundingOutcome" isMarkerVisible="true">
+        <dc:Bounds x="3380" y="1600" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3477" y="1600" width="40" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FundingIssue_di" bpmnElement="FundingIssue" bioc:stroke="#263746" bioc:fill="#fff3e5">
+        <dc:Bounds x="3080" y="1830" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UrgentAuthorisation_di" bpmnElement="UrgentAuthorisation" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="2780" y="1220" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UrgentDecision_di" bpmnElement="UrgentDecision" isMarkerVisible="true">
+        <dc:Bounds x="3050" y="1250" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3138" y="1250" width="58" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BookTreatment_di" bpmnElement="BookTreatment" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="3080" y="400" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TreatmentOutcome_di" bpmnElement="TreatmentOutcome" isMarkerVisible="true">
+        <dc:Bounds x="3380" y="430" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3369" y="340" width="53" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UrgentFinance_di" bpmnElement="UrgentFinance" bioc:stroke="#263746" bioc:fill="#fff3e5">
+        <dc:Bounds x="2190" y="1830" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndCare_di" bpmnElement="EndCare">
+        <dc:Bounds x="2790" y="1010" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2760" y="962" width="100" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ClinicalChange_di" bpmnElement="ClinicalChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="1050" y="1320" width="240" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ChangeValid_di" bpmnElement="ChangeValid" isMarkerVisible="true">
+        <dc:Bounds x="1350" y="1350" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1328" y="1420" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="MoneyAffected_di" bpmnElement="MoneyAffected" isMarkerVisible="true">
+        <dc:Bounds x="1570" y="1350" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1568" y="1302" width="45" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FinanceAdjustment_di" bpmnElement="FinanceAdjustment" bioc:stroke="#263746" bioc:fill="#fff3e5">
+        <dc:Bounds x="1740" y="1830" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AdjustmentOutcome_di" bpmnElement="AdjustmentOutcome" isMarkerVisible="true">
+        <dc:Bounds x="2040" y="1860" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2032" y="1812" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ChangeRoute_di" bpmnElement="ChangeRoute" isMarkerVisible="true">
+        <dc:Bounds x="2260" y="1350" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2184" y="1300" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AdminEnquiry_di" bpmnElement="AdminEnquiry" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="340" y="640" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ClinicalEnquiry_di" bpmnElement="ClinicalEnquiry" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="340" y="1320" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FinanceEnquiry_di" bpmnElement="FinanceEnquiry" bioc:stroke="#263746" bioc:fill="#fff3e5">
+        <dc:Bounds x="340" y="1830" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndAdminEnquiry_di" bpmnElement="EndAdminEnquiry">
+        <dc:Bounds x="620" y="670" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="734" y="700" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndClinicalEnquiry_di" bpmnElement="EndClinicalEnquiry">
+        <dc:Bounds x="620" y="1350" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="599" y="1398" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndFinanceEnquiry_di" bpmnElement="EndFinanceEnquiry">
+        <dc:Bounds x="620" y="1860" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="599" y="1908" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AuditReports_di" bpmnElement="AuditReports" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="340" y="780" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndReport_di" bpmnElement="EndReport">
+        <dc:Bounds x="620" y="810" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="735" y="800" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Stage_1_di" bpmnElement="Stage_1">
+        <dc:Bounds x="850" y="200" width="420" height="45" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Stage_2_di" bpmnElement="Stage_2">
+        <dc:Bounds x="1480" y="200" width="420" height="45" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Stage_3_di" bpmnElement="Stage_3">
+        <dc:Bounds x="2160" y="200" width="440" height="45" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Stage_4_di" bpmnElement="Stage_4">
+        <dc:Bounds x="3060" y="200" width="440" height="45" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Change_Section_di" bpmnElement="Change_Section">
+        <dc:Bounds x="1050" y="1230" width="280" height="45" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Guide_Main_di" bpmnElement="Guide_Main">
+        <dc:Bounds x="230" y="2220" width="3410" height="95" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Guide_Rules_di" bpmnElement="Guide_Rules">
+        <dc:Bounds x="230" y="2350" width="3410" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01" bioc:stroke="#1768a6">
+        <di:waypoint x="300" y="450" />
+        <di:waypoint x="340" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_24_di" bpmnElement="Flow_24" bioc:stroke="#667481">
+        <di:waypoint x="690" y="430" />
+        <di:waypoint x="690" y="380" />
+        <di:waypoint x="450" y="380" />
+        <di:waypoint x="450" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="542" y="337" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_30_di" bpmnElement="Flow_30" bioc:stroke="#667481">
+        <di:waypoint x="910" y="700" />
+        <di:waypoint x="750" y="700" />
+        <di:waypoint x="750" y="360" />
+        <di:waypoint x="240" y="360" />
+        <di:waypoint x="240" y="520" />
+        <di:waypoint x="450" y="520" />
+        <di:waypoint x="450" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="473" y="337" width="43" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_di" bpmnElement="Flow_02" bioc:stroke="#1768a6">
+        <di:waypoint x="560" y="450" />
+        <di:waypoint x="670" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03_di" bpmnElement="Flow_03" bioc:stroke="#1768a6">
+        <di:waypoint x="710" y="450" />
+        <di:waypoint x="890" y="450" />
+        <di:waypoint x="890" y="1030" />
+        <di:waypoint x="910" y="1030" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="779" y="427" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18_di" bpmnElement="Flow_18" bioc:stroke="#667481">
+        <di:waypoint x="690" y="470" />
+        <di:waypoint x="690" y="620" />
+        <di:waypoint x="450" y="620" />
+        <di:waypoint x="450" y="640" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="494" y="577" width="71" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19_di" bpmnElement="Flow_19" bioc:stroke="#667481">
+        <di:waypoint x="710" y="450" />
+        <di:waypoint x="730" y="450" />
+        <di:waypoint x="730" y="680" />
+        <di:waypoint x="910" y="680" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="772" y="657" width="95" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_20_di" bpmnElement="Flow_20" bioc:stroke="#667481">
+        <di:waypoint x="690" y="470" />
+        <di:waypoint x="690" y="490" />
+        <di:waypoint x="580" y="490" />
+        <di:waypoint x="580" y="600" />
+        <di:waypoint x="320" y="600" />
+        <di:waypoint x="320" y="1370" />
+        <di:waypoint x="340" y="1370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="412" y="557" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_21_di" bpmnElement="Flow_21" bioc:stroke="#667481">
+        <di:waypoint x="690" y="470" />
+        <di:waypoint x="690" y="490" />
+        <di:waypoint x="710" y="490" />
+        <di:waypoint x="710" y="1810" />
+        <di:waypoint x="320" y="1810" />
+        <di:waypoint x="320" y="1880" />
+        <di:waypoint x="340" y="1880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="476" y="1787" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_22_di" bpmnElement="Flow_22" bioc:stroke="#667481">
+        <di:waypoint x="690" y="470" />
+        <di:waypoint x="690" y="500" />
+        <di:waypoint x="700" y="500" />
+        <di:waypoint x="700" y="640" />
+        <di:waypoint x="690" y="640" />
+        <di:waypoint x="690" y="1370" />
+        <di:waypoint x="1050" y="1370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="823" y="1347" width="92" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_23_di" bpmnElement="Flow_23" bioc:stroke="#667481">
+        <di:waypoint x="690" y="470" />
+        <di:waypoint x="690" y="490" />
+        <di:waypoint x="680" y="490" />
+        <di:waypoint x="680" y="640" />
+        <di:waypoint x="580" y="640" />
+        <di:waypoint x="580" y="820" />
+        <di:waypoint x="560" y="820" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="592" y="721" width="39" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_29_di" bpmnElement="Flow_29" bioc:stroke="#667481">
+        <di:waypoint x="1230" y="1010" />
+        <di:waypoint x="1230" y="990" />
+        <di:waypoint x="1150" y="990" />
+        <di:waypoint x="1150" y="760" />
+        <di:waypoint x="1010" y="760" />
+        <di:waypoint x="1010" y="740" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1167" y="967" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_52_di" bpmnElement="Flow_52" bioc:stroke="#667481">
+        <di:waypoint x="1370" y="1350" />
+        <di:waypoint x="1370" y="1120" />
+        <di:waypoint x="870" y="1120" />
+        <di:waypoint x="870" y="780" />
+        <di:waypoint x="1030" y="780" />
+        <di:waypoint x="1030" y="740" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="911" y="757" width="78" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_34_di" bpmnElement="Flow_34" bioc:stroke="#667481">
+        <di:waypoint x="1230" y="1050" />
+        <di:waypoint x="1230" y="1100" />
+        <di:waypoint x="1020" y="1100" />
+        <di:waypoint x="1020" y="1080" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1052" y="1127" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04_di" bpmnElement="Flow_04" bioc:stroke="#1768a6">
+        <di:waypoint x="1130" y="1030" />
+        <di:waypoint x="1210" y="1030" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_di" bpmnElement="Flow_05" bioc:stroke="#1768a6">
+        <di:waypoint x="1230" y="1010" />
+        <di:waypoint x="1230" y="760" />
+        <di:waypoint x="1480" y="760" />
+        <di:waypoint x="1480" y="450" />
+        <di:waypoint x="1500" y="450" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1491" y="596" width="34" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_31_di" bpmnElement="Flow_31" bioc:stroke="#667481">
+        <di:waypoint x="1230" y="1010" />
+        <di:waypoint x="1230" y="990" />
+        <di:waypoint x="1330" y="990" />
+        <di:waypoint x="1330" y="740" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1259" y="967" width="41" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_33_di" bpmnElement="Flow_33" bioc:stroke="#667481">
+        <di:waypoint x="1250" y="1030" />
+        <di:waypoint x="1350" y="1030" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1283" y="1007" width="32" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_32_di" bpmnElement="Flow_32" bioc:stroke="#667481">
+        <di:waypoint x="1350" y="740" />
+        <di:waypoint x="1350" y="770" />
+        <di:waypoint x="1390" y="770" />
+        <di:waypoint x="1390" y="790" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_35_di" bpmnElement="Flow_35" bioc:stroke="#667481">
+        <di:waypoint x="1810" y="430" />
+        <di:waypoint x="1810" y="380" />
+        <di:waypoint x="1610" y="380" />
+        <di:waypoint x="1610" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1640" y="337" width="72" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_42_di" bpmnElement="Flow_42" bioc:stroke="#667481">
+        <di:waypoint x="2490" y="1030" />
+        <di:waypoint x="1880" y="1030" />
+        <di:waypoint x="1880" y="520" />
+        <di:waypoint x="1620" y="520" />
+        <di:waypoint x="1620" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2161" y="1007" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_60_di" bpmnElement="Flow_60" bioc:stroke="#667481">
+        <di:waypoint x="2280" y="1350" />
+        <di:waypoint x="2280" y="1120" />
+        <di:waypoint x="1480" y="1120" />
+        <di:waypoint x="1480" y="950" />
+        <di:waypoint x="1600" y="950" />
+        <di:waypoint x="1600" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1516" y="927" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06_di" bpmnElement="Flow_06" bioc:stroke="#1768a6">
+        <di:waypoint x="1720" y="450" />
+        <di:waypoint x="1790" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_di" bpmnElement="Flow_07" bioc:stroke="#1768a6">
+        <di:waypoint x="1810" y="470" />
+        <di:waypoint x="1810" y="960" />
+        <di:waypoint x="1610" y="960" />
+        <di:waypoint x="1610" y="980" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1687" y="917" width="45" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_36_di" bpmnElement="Flow_36" bioc:stroke="#667481">
+        <di:waypoint x="1830" y="450" />
+        <di:waypoint x="1850" y="450" />
+        <di:waypoint x="1850" y="360" />
+        <di:waypoint x="1470" y="360" />
+        <di:waypoint x="1470" y="1300" />
+        <di:waypoint x="1170" y="1300" />
+        <di:waypoint x="1170" y="1320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1286" y="1277" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16_di" bpmnElement="Flow_16" bioc:stroke="#1768a6">
+        <di:waypoint x="3400" y="470" />
+        <di:waypoint x="3400" y="500" />
+        <di:waypoint x="3320" y="500" />
+        <di:waypoint x="3320" y="1100" />
+        <di:waypoint x="1620" y="1100" />
+        <di:waypoint x="1620" y="1080" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2135" y="1077" width="91" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_39_di" bpmnElement="Flow_39" bioc:stroke="#667481">
+        <di:waypoint x="2490" y="450" />
+        <di:waypoint x="2470" y="450" />
+        <di:waypoint x="2470" y="940" />
+        <di:waypoint x="1630" y="940" />
+        <di:waypoint x="1630" y="980" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2006" y="917" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#667481">
+        <di:waypoint x="2190" y="690" />
+        <di:waypoint x="1860" y="690" />
+        <di:waypoint x="1860" y="990" />
+        <di:waypoint x="1760" y="990" />
+        <di:waypoint x="1760" y="1010" />
+        <di:waypoint x="1740" y="1010" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1982" y="667" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_43_di" bpmnElement="Flow_43" bioc:stroke="#667481">
+        <di:waypoint x="2510" y="1050" />
+        <di:waypoint x="2510" y="1070" />
+        <di:waypoint x="1760" y="1070" />
+        <di:waypoint x="1760" y="1050" />
+        <di:waypoint x="1740" y="1050" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2095" y="1047" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_di" bpmnElement="Flow_08" bioc:stroke="#1768a6">
+        <di:waypoint x="1740" y="1030" />
+        <di:waypoint x="1820" y="1030" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_di" bpmnElement="Flow_09" bioc:stroke="#1768a6">
+        <di:waypoint x="1840" y="1010" />
+        <di:waypoint x="1840" y="490" />
+        <di:waypoint x="2170" y="490" />
+        <di:waypoint x="2170" y="450" />
+        <di:waypoint x="2190" y="450" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1998" y="467" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_37_di" bpmnElement="Flow_37" bioc:stroke="#667481">
+        <di:waypoint x="1840" y="1050" />
+        <di:waypoint x="1840" y="1810" />
+        <di:waypoint x="2170" y="1810" />
+        <di:waypoint x="2170" y="1880" />
+        <di:waypoint x="2190" y="1880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1996" y="1787" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_38_di" bpmnElement="Flow_38" bioc:stroke="#667481">
+        <di:waypoint x="2300" y="1830" />
+        <di:waypoint x="2300" y="1410" />
+        <di:waypoint x="2430" y="1410" />
+        <di:waypoint x="2430" y="520" />
+        <di:waypoint x="2300" y="520" />
+        <di:waypoint x="2300" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2317" y="1417" width="95" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10" bioc:stroke="#1768a6">
+        <di:waypoint x="2410" y="450" />
+        <di:waypoint x="2490" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11" bioc:stroke="#1768a6">
+        <di:waypoint x="2530" y="450" />
+        <di:waypoint x="2550" y="450" />
+        <di:waypoint x="2550" y="990" />
+        <di:waypoint x="2510" y="990" />
+        <di:waypoint x="2510" y="1010" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2519" y="967" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_40_di" bpmnElement="Flow_40" bioc:stroke="#667481">
+        <di:waypoint x="2510" y="470" />
+        <di:waypoint x="2510" y="620" />
+        <di:waypoint x="2300" y="620" />
+        <di:waypoint x="2300" y="640" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2328" y="597" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12" bioc:stroke="#1768a6">
+        <di:waypoint x="2530" y="1030" />
+        <di:waypoint x="2760" y="1030" />
+        <di:waypoint x="2760" y="1610" />
+        <di:waypoint x="3080" y="1610" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2895" y="1587" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17_di" bpmnElement="Flow_17" bioc:stroke="#1768a6">
+        <di:waypoint x="2530" y="1030" />
+        <di:waypoint x="2550" y="1030" />
+        <di:waypoint x="2550" y="1010" />
+        <di:waypoint x="2770" y="1010" />
+        <di:waypoint x="2770" y="1030" />
+        <di:waypoint x="2790" y="1030" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2635" y="987" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_46_di" bpmnElement="Flow_46" bioc:stroke="#667481">
+        <di:waypoint x="3080" y="1880" />
+        <di:waypoint x="3060" y="1880" />
+        <di:waypoint x="3060" y="1690" />
+        <di:waypoint x="3190" y="1690" />
+        <di:waypoint x="3190" y="1670" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3100" y="1697" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_49_di" bpmnElement="Flow_49" bioc:stroke="#667481">
+        <di:waypoint x="3070" y="1290" />
+        <di:waypoint x="3070" y="1550" />
+        <di:waypoint x="3190" y="1550" />
+        <di:waypoint x="3190" y="1570" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3119" y="1527" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_59_di" bpmnElement="Flow_59" bioc:stroke="#667481">
+        <di:waypoint x="2300" y="1370" />
+        <di:waypoint x="2740" y="1370" />
+        <di:waypoint x="2740" y="1630" />
+        <di:waypoint x="3080" y="1630" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2495" y="1347" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13_di" bpmnElement="Flow_13" bioc:stroke="#1768a6">
+        <di:waypoint x="3300" y="1620" />
+        <di:waypoint x="3380" y="1620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14_di" bpmnElement="Flow_14" bioc:stroke="#1768a6">
+        <di:waypoint x="3400" y="1600" />
+        <di:waypoint x="3400" y="520" />
+        <di:waypoint x="3200" y="520" />
+        <di:waypoint x="3200" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3412" y="1051" width="39" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_44_di" bpmnElement="Flow_44" bioc:stroke="#667481">
+        <di:waypoint x="3380" y="1620" />
+        <di:waypoint x="3360" y="1620" />
+        <di:waypoint x="3360" y="1230" />
+        <di:waypoint x="3020" y="1230" />
+        <di:waypoint x="3020" y="1340" />
+        <di:waypoint x="2890" y="1340" />
+        <di:waypoint x="2890" y="1320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3155" y="1207" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_45_di" bpmnElement="Flow_45" bioc:stroke="#667481">
+        <di:waypoint x="3400" y="1640" />
+        <di:waypoint x="3400" y="1880" />
+        <di:waypoint x="3300" y="1880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3328" y="1857" width="103" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_47_di" bpmnElement="Flow_47" bioc:stroke="#667481">
+        <di:waypoint x="3000" y="1270" />
+        <di:waypoint x="3050" y="1270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_48_di" bpmnElement="Flow_48" bioc:stroke="#667481">
+        <di:waypoint x="3070" y="1250" />
+        <di:waypoint x="3070" y="520" />
+        <di:waypoint x="3180" y="520" />
+        <di:waypoint x="3180" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3099" y="527" width="53" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_50_di" bpmnElement="Flow_50" bioc:stroke="#667481">
+        <di:waypoint x="3400" y="430" />
+        <di:waypoint x="3400" y="380" />
+        <di:waypoint x="3190" y="380" />
+        <di:waypoint x="3190" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3223" y="357" width="72" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15_di" bpmnElement="Flow_15" bioc:stroke="#1768a6">
+        <di:waypoint x="3300" y="450" />
+        <di:waypoint x="3380" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_61_di" bpmnElement="Flow_61" bioc:stroke="#667481">
+        <di:waypoint x="2300" y="1370" />
+        <di:waypoint x="2320" y="1370" />
+        <di:waypoint x="2320" y="1120" />
+        <di:waypoint x="2810" y="1120" />
+        <di:waypoint x="2810" y="1050" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2540" y="1077" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_62_di" bpmnElement="Flow_62" bioc:stroke="#667481">
+        <di:waypoint x="2280" y="1390" />
+        <di:waypoint x="2280" y="1410" />
+        <di:waypoint x="1310" y="1410" />
+        <di:waypoint x="1310" y="1380" />
+        <di:waypoint x="1290" y="1380" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1764" y="1387" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_51_di" bpmnElement="Flow_51" bioc:stroke="#667481">
+        <di:waypoint x="1290" y="1360" />
+        <di:waypoint x="1330" y="1360" />
+        <di:waypoint x="1330" y="1370" />
+        <di:waypoint x="1350" y="1370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_53_di" bpmnElement="Flow_53" bioc:stroke="#667481">
+        <di:waypoint x="1390" y="1370" />
+        <di:waypoint x="1570" y="1370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1454" y="1347" width="53" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_54_di" bpmnElement="Flow_54" bioc:stroke="#667481">
+        <di:waypoint x="1590" y="1390" />
+        <di:waypoint x="1590" y="1880" />
+        <di:waypoint x="1740" y="1880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1656" y="1857" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_55_di" bpmnElement="Flow_55" bioc:stroke="#667481">
+        <di:waypoint x="1610" y="1370" />
+        <di:waypoint x="2260" y="1370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1928" y="1347" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_58_di" bpmnElement="Flow_58" bioc:stroke="#667481">
+        <di:waypoint x="2060" y="1900" />
+        <di:waypoint x="2060" y="1950" />
+        <di:waypoint x="1850" y="1950" />
+        <di:waypoint x="1850" y="1930" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1919" y="1957" width="72" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_56_di" bpmnElement="Flow_56" bioc:stroke="#667481">
+        <di:waypoint x="1960" y="1880" />
+        <di:waypoint x="2040" y="1880" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_57_di" bpmnElement="Flow_57" bioc:stroke="#667481">
+        <di:waypoint x="2080" y="1880" />
+        <di:waypoint x="2150" y="1880" />
+        <di:waypoint x="2150" y="1430" />
+        <di:waypoint x="2280" y="1430" />
+        <di:waypoint x="2280" y="1390" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2090" y="1857" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_25_di" bpmnElement="Flow_25" bioc:stroke="#667481">
+        <di:waypoint x="560" y="690" />
+        <di:waypoint x="620" y="690" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_26_di" bpmnElement="Flow_26" bioc:stroke="#667481">
+        <di:waypoint x="560" y="1370" />
+        <di:waypoint x="620" y="1370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_27_di" bpmnElement="Flow_27" bioc:stroke="#667481">
+        <di:waypoint x="560" y="1880" />
+        <di:waypoint x="620" y="1880" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_28_di" bpmnElement="Flow_28" bioc:stroke="#667481">
+        <di:waypoint x="560" y="840" />
+        <di:waypoint x="600" y="840" />
+        <di:waypoint x="600" y="830" />
+        <di:waypoint x="620" y="830" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Referrer_di" bpmnElement="Referrer" isHorizontal="true">
+        <dc:Bounds x="150" y="80" width="1000" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Patient_di" bpmnElement="Patient" isHorizontal="true">
+        <dc:Bounds x="1350" y="80" width="2320" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Scheduling_di" bpmnElement="Scheduling" isHorizontal="true">
+        <dc:Bounds x="150" y="2120" width="760" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Correspondence_di" bpmnElement="Correspondence" isHorizontal="true">
+        <dc:Bounds x="990" y="2120" width="800" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Insurer_di" bpmnElement="Insurer" isHorizontal="true">
+        <dc:Bounds x="1870" y="2120" width="800" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PaymentProvider_di" bpmnElement="PaymentProvider" isHorizontal="true">
+        <dc:Bounds x="2750" y="2120" width="920" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Msg_Referral_di" bpmnElement="Msg_Referral" bioc:stroke="#81909d">
+        <di:waypoint x="450" y="140" />
+        <di:waypoint x="450" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="471" y="261" width="96" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_Contact_di" bpmnElement="Msg_Contact" bioc:stroke="#81909d">
+        <di:waypoint x="1620" y="400" />
+        <di:waypoint x="1620" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1646" y="261" width="107" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_Treatment_di" bpmnElement="Msg_Treatment" bioc:stroke="#81909d">
+        <di:waypoint x="3190" y="400" />
+        <di:waypoint x="3190" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3212" y="261" width="121" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_Slot_di" bpmnElement="Msg_Slot" bioc:stroke="#81909d">
+        <di:waypoint x="530" y="2120" />
+        <di:waypoint x="530" y="2020" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="563" y="2061" width="93" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_Letter_di" bpmnElement="Msg_Letter" bioc:stroke="#81909d">
+        <di:waypoint x="1390" y="2020" />
+        <di:waypoint x="1390" y="2120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1426" y="2061" width="135" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_Funding_di" bpmnElement="Msg_Funding" bioc:stroke="#81909d">
+        <di:waypoint x="2270" y="2120" />
+        <di:waypoint x="2270" y="2020" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2289" y="2061" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_Payment_di" bpmnElement="Msg_Payment" bioc:stroke="#81909d">
+        <di:waypoint x="3210" y="2120" />
+        <di:waypoint x="3210" y="2020" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3248" y="2061" width="124" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
