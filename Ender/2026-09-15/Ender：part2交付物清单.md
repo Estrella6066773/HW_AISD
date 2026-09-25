@@ -1,4 +1,4 @@
-# Dluffy：Part 2 交付物清单（Deliverable List）
+# Ender：Part 2 交付物清单（Deliverable List）
 
 **主笔**：Ender（23084402）
 **复核**：Ruby
@@ -45,7 +45,7 @@
 | Deliverable | Related Requirement(s) | Dependencies | Due Date | Acceptance Criteria |
 |-------------|------------------------|--------------|----------|---------------------|
 | 仓库目录与分支约定 | 协作规则 | — | 持续 | `main` 保持可演示；功能分支 `feature/简短说明` |
-| 个人工作区与分工文 | 协作规则 | 按日期建文件夹 | 持续 | 各成员在各自文件夹（Ruby / Est / Dluffy / Ryan）上传 |
+| 个人工作区与分工文 | 协作规则 | 按日期建文件夹 | 持续 | 各成员在各自文件夹（Ruby / Est / Ender / Ryan）上传 |
 | 关键里程碑记录 | 协作规则 | — | 里程碑时 | README 版本说明或 git tag |
 
 ---

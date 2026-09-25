@@ -1,7 +1,7 @@
 # Part 6 Sprint Backlog（Sprint 1）
 
 **主笔**：Ruby（23084382）
-**复核**：Dluffy（Ender）
+**复核**：Ender（Ender）
 
 与 `Coursework/Agile Workshop-ZH.docx` / `Agile Workshop-EN.docx` 一致。任务编号与 Part 4（`docs/p4-work-breakdown.md`）一致；每条任务行首标出对应的 Backlog 条目。
 

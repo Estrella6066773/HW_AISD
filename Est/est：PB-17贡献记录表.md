@@ -1,6 +1,6 @@
 # PB-17 贡献记录表
 
-**主笔**：Estrella　**复核**：Dluffy　**起表日期**：2026-09-16　**对应条目**：PB-17 举证与贡献记录维护
+**主笔**：Estrella　**复核**：Ender　**起表日期**：2026-09-16　**对应条目**：PB-17 举证与贡献记录维护
 
 **用途**：留存全组贡献证据，供 tutor 核查个人贡献。依据考核规范 Section 4 的要求：*Group-based marks are subject to individual contribution. Retain contribution evidence for tutor moderation.*
 
@@ -11,7 +11,7 @@
 ## 一、使用说明
 
 1. 本表分两个视图。**视图 A** 按证据逐行登记，回答「有哪些证据」；**视图 B** 按条目对账，回答「证据够不够、能不能认定完成」。
-2. 证据由**本人自交**，不代填；Estrella 汇总核对，Dluffy 复核。
+2. 证据由**本人自交**，不代填；Estrella 汇总核对，Ender 复核。
 3. 每行证据的位置必须是**真实可打开的路径或链接**，不写「说明」「见上文」「截图」这类占位内容。
 4. 条目状态沿用产品待办的口径：In progress 表示已开工，Not started 表示尚未开工，Blocked 表示受阻，Done 表示完成。
 5. 标 Done 必须有可打开的产物与证据位置；缺证据的条目在视图 B 中标为「不可认定完成」，并在备注写明缺什么。
@@ -26,10 +26,10 @@
 |----------|------------|-------------------|-------------------|--------|
 | Ruby | `Ruby/` | Ruby Zheng | 郑好 | 23084382 |
 | Estrella | `Est/` | Estrella Chen | Estrella6066 | 23084393 |
-| Dluffy | `Dluffy/` | Ender Qin | DLuffy | 23084402 |
+| Ender | `Ender/` | Ender Qin | DLuffy | 23084402 |
 | Ryan | `Ryan/` | HeGuanYan He | ENTONG-Ryan | 23084395 |
 
-**注意**：任务拆分 `docs/p4-work-breakdown.md` 里 C 组员写作 `Ender`，与产品待办里的 `Dluffy` 是同一人，登记时统一写 `Dluffy`。
+**注意**：任务拆分 `docs/p4-work-breakdown.md` 里 C 组员写作 `Ender`，与产品待办里的 `Ender` 是同一人，登记时统一写 `Ender`。
 
 ---
 
@@ -72,7 +72,7 @@
 | 证据日期 | 证据产生日期，非录入日期 |
 | 条目当前状态 | 抄产品待办，录入时抄一次 |
 | 核对结果 | 通过 / 缺件 / 待补 / 待核 |
-| 核对人与日期 | 由 Estrella 核对，Dluffy 复核 |
+| 核对人与日期 | 由 Estrella 核对，Ender 复核 |
 
 ---
 
@@ -84,33 +84,33 @@
 |----------|--------|------------|------------|--------------|--------------|------------------|----------------|--------------|------|
 | PB-01 | P0 | Ruby | Estrella | In progress |  |  |  |  |  |
 | PB-02 | P0 | Ruby | Ryan | Not started |  |  |  |  |  |
-| PB-03 | P0 | Ruby | Dluffy | Not started |  |  |  |  |  |
+| PB-03 | P0 | Ruby | Ender | Not started |  |  |  |  |  |
 | PB-04 | P0 | Estrella | Ruby | Not started |  |  |  |  |  |
 | PB-05 | P0 | Ruby | Estrella | Not started |  |  |  |  |  |
-| PB-06 | P0 | Dluffy | Ryan | Not started |  |  |  |  |  |
-| PB-07 | P0 | Dluffy | Estrella | Not started |  |  |  |  |  |
+| PB-06 | P0 | Ender | Ryan | Not started |  |  |  |  |  |
+| PB-07 | P0 | Ender | Estrella | Not started |  |  |  |  |  |
 | PB-08 | P1 | Ryan | Ruby | Not started |  |  |  |  |  |
 | PB-09 | P1 | Estrella | Ryan | Not started |  |  |  |  |  |
-| PB-10 | P1 | Estrella | Dluffy | Not started |  |  |  |  |  |
+| PB-10 | P1 | Estrella | Ender | Not started |  |  |  |  |  |
 | PB-11 | P0 | Ryan | Ruby | Not started |  |  |  |  |  |
 | PB-12 | P0 | Ruby | Estrella | Not started |  |  |  |  |  |
 | PB-13 | P1 | Estrella | Ruby | Not started |  |  |  |  |  |
-| PB-14 | P1 | Ryan | Dluffy | Not started |  |  |  |  |  |
+| PB-14 | P1 | Ryan | Ender | Not started |  |  |  |  |  |
 | PB-15 | P0 | Ruby | Estrella | In progress |  |  |  |  |  |
 | PB-16 | P0 | Estrella | Ryan | Not started |  |  |  |  |  |
-| PB-17 | P0 | Estrella | Dluffy | In progress |  |  |  |  |  |
-| PB-18 | P1 | Ryan | Dluffy | Not started |  |  |  |  |  |
-| PB-19 | P1 | Dluffy | Ryan | Not started |  |  |  |  |  |
-| PB-20 | P1 | Dluffy | Estrella | Not started |  |  |  |  |  |
-| PB-21 | P1 | Ryan | Dluffy | Not started |  |  |  |  |  |
+| PB-17 | P0 | Estrella | Ender | In progress |  |  |  |  |  |
+| PB-18 | P1 | Ryan | Ender | Not started |  |  |  |  |  |
+| PB-19 | P1 | Ender | Ryan | Not started |  |  |  |  |  |
+| PB-20 | P1 | Ender | Estrella | Not started |  |  |  |  |  |
+| PB-21 | P1 | Ryan | Ender | Not started |  |  |  |  |  |
 | PB-22 | P0 | Ruby | Estrella | Not started |  |  |  |  |  |
 | PB-23 | P2 | Ryan | Ruby | Not started |  |  |  |  |  |
-| PB-24 | P2 | Ryan | Dluffy | Not started |  |  |  |  |  |
+| PB-24 | P2 | Ryan | Ender | Not started |  |  |  |  |  |
 | PB-25 | P2 | Ryan | Ruby | Not started |  |  |  |  |  |
-| PB-26 | P2 | Estrella | Dluffy | Not started |  |  |  |  |  |
+| PB-26 | P2 | Estrella | Ender | Not started |  |  |  |  |  |
 | PB-27 | P2 | Estrella | Ryan | Not started |  |  |  |  |  |
 | PB-28 | P0 | Ruby | Ryan | In progress |  |  |  |  |  |
-| PB-29 | P0 | Dluffy | Estrella | In progress |  |  |  |  |  |
+| PB-29 | P0 | Ender | Estrella | In progress |  |  |  |  |  |
 
 **首轮已知反例（须如实标出，不要掩盖）**
 
@@ -128,7 +128,7 @@
 | 1 | 存放位置 | 仓库根目录新建 `evidence/PB-xx/`，个人日期文件夹只放工作草稿 | 待确认 |
 | 2 | 人名统一 | 统一用仓库文件夹名，按第二节对照表 | 待确认 |
 | 3 | 表头列数 | 采用视图 A 的 11 列，或删减到已约定的 5 列加最少增补 | 待确认 |
-| 4 | 视图 B 维护人 | Estrella 汇总，Dluffy 复核 | 待确认 |
+| 4 | 视图 B 维护人 | Estrella 汇总，Ender 复核 | 待确认 |
 | 5 | Ruby 的提交身份 | 现有两个身份，其中一个为 Gitee 邮箱；建议此后改用 GitHub 账号邮箱，历史提交不改写、如实说明 | 待确认 |
 
 ---
@@ -152,4 +152,4 @@
 - [ ] 提交记录类证据带条目编号，显示名与邮箱能对应到人
 - [ ] 每次评审有版本快照
 - [ ] 站会个人记录逐人留档
-- [ ] 全组对表头与存放位置无异议，核对结果经 Dluffy 复核
+- [ ] 全组对表头与存放位置无异议，核对结果经 Ender 复核
