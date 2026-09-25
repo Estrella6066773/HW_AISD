@@ -1,0 +1,57 @@
+{
+  "components": [
+    {
+      "id": "Text_TaskTitle",
+      "type": "text",
+      "text": "## Hospital task record\n\n**Current task:** {{taskTitle}}",
+      "layout": { "row": "Row_Title", "columns": null }
+    },
+    {
+      "id": "Text_TaskHelp",
+      "type": "text",
+      "text": "{{taskHelp}}",
+      "layout": { "row": "Row_Help", "columns": null }
+    },
+    {
+      "id": "Field_PatientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "Patient / case ID",
+      "description": "Use a fictional case ID, for example DEMO-001. For a report, use a report reference.",
+      "validate": { "required": true },
+      "layout": { "row": "Row_Patient", "columns": null }
+    },
+    {
+      "id": "Field_Action",
+      "type": "select",
+      "key": "action",
+      "label": "Outcome / next action",
+      "description": "Select the result of this task.",
+      "valuesKey": "actionOptions",
+      "validate": { "required": true },
+      "layout": { "row": "Row_Action", "columns": null }
+    },
+    {
+      "id": "Field_Notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Action record / reason",
+      "description": "Record the staff name and role, what was done and why, and any relevant date or reference.",
+      "validate": { "required": true },
+      "layout": { "row": "Row_Notes", "columns": null }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "Complete task",
+      "action": "submit",
+      "layout": { "row": "Row_Submit", "columns": null }
+    }
+  ],
+  "type": "default",
+  "id": "hospital_task_form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": { "name": "Camunda Modeler", "version": "5.51.0" },
+  "schemaVersion": 19
+}
