@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='utf-8'?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_ClinicLetter" targetNamespace="http://aisd.example/student" exporter="Camunda Modeler" exporterVersion="5.51.0">
+  <bpmn:collaboration id="Collaboration_ClinicLetter">
+    <bpmn:participant id="Hospital_ClinicLetter" name="Hospital - Clinic Letter Approval and Sending" processRef="Process_ClinicLetter" />
+    <bpmn:participant id="Letter_Correspondence" name="External Correspondence Service" />
+    <bpmn:participant id="Letter_Patient" name="Patient" />
+    <bpmn:participant id="Letter_ClinicalRecipient" name="GP / Other Healthcare Provider" />
+    <bpmn:messageFlow id="LM_Dispatch" name="Approved letter +&#10;recipient details" sourceRef="SendLetter" targetRef="Letter_Correspondence" />
+    <bpmn:messageFlow id="LM_Status" name="Dispatch details" sourceRef="Letter_Correspondence" targetRef="RecordDispatch" />
+    <bpmn:messageFlow id="LM_PatientLetter" name="Clinic letter&#10;(if selected)" sourceRef="Letter_Correspondence" targetRef="Letter_Patient" />
+    <bpmn:messageFlow id="LM_ClinicalLetter" name="Clinic letter&#10;(if selected)" sourceRef="Letter_Correspondence" targetRef="Letter_ClinicalRecipient" />
+    <bpmn:textAnnotation id="SevenDays">
+      <bpmn:text>Complete, approve and send within 7 days of the appointment.
+Send only to recipients approved by the Consultant.</bpmn:text>
+    </bpmn:textAnnotation>
+  </bpmn:collaboration>
+  <bpmn:process id="Process_ClinicLetter" name="Clinic Letter Approval and Sending - Student Version" isExecutable="false">
+    <bpmn:documentation>Simplified classroom diagram based on the hospital case study. The Consultant writes or revises the clinical content, identifies the recipients and approves the letter. Medical Secretaries check administrative details and confirm recipients. Suspected clinical errors are returned to the Consultant for revision and renewed approval; secretaries do not change the clinical meaning. Clear administrative or formatting corrections are included in Check letter and confirm recipients. Send approved clinic letter abstracts the approved correspondence channel. Dates of preparation, approval and processing are captured in their tasks; dispatch date and method are recorded after sending. Complete, approve, process and send within seven days of the appointment. Overdue reminders and escalation are outside this introductory diagram. This is a process explanation, not a deployed workflow. External participants are now explicit black-box pools. Modelling assumption for this simplified communication route: the approved channel is the external correspondence service, which dispatches copies only to Consultant-approved recipients and returns dispatch details for recording. The two recipient pools show possible recipient roles, not a requirement to send every letter to both. Dispatch does not prove the recipient has read or received the letter. Provider internals and failure handling are not expanded.</bpmn:documentation>
+    <bpmn:laneSet id="LetterLanes">
+      <bpmn:lane id="LetterLane_Secretary" name="Medical Secretaries">
+        <bpmn:flowNodeRef>CheckLetter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ClinicalError</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SendLetter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RecordDispatch</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>LetterSent</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="LetterLane_Consultant" name="Consultant">
+        <bpmn:flowNodeRef>ConsultationDone</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>WriteLetter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ApproveLetter</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="ConsultationDone" name="Consultation&#10;completed">
+      <bpmn:outgoing>LF1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="WriteLetter" name="Write / revise&#10;clinic letter">
+      <bpmn:incoming>LF1</bpmn:incoming>
+      <bpmn:incoming>LF5</bpmn:incoming>
+      <bpmn:outgoing>LF2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="ApproveLetter" name="Approve clinic&#10;letter">
+      <bpmn:incoming>LF2</bpmn:incoming>
+      <bpmn:outgoing>LF3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="CheckLetter" name="Check letter and&#10;confirm recipients">
+      <bpmn:incoming>LF3</bpmn:incoming>
+      <bpmn:outgoing>LF4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ClinicalError" name="Suspected clinical&#10;error?">
+      <bpmn:incoming>LF4</bpmn:incoming>
+      <bpmn:outgoing>LF5</bpmn:outgoing>
+      <bpmn:outgoing>LF6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="SendLetter" name="Send approved letter&#10;for dispatch">
+      <bpmn:incoming>LF6</bpmn:incoming>
+      <bpmn:outgoing>LF7</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="RecordDispatch" name="Record dispatch&#10;date and method">
+      <bpmn:incoming>LF7</bpmn:incoming>
+      <bpmn:outgoing>LF8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="LetterSent" name="Dispatch&#10;recorded">
+      <bpmn:incoming>LF8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="LF1" sourceRef="ConsultationDone" targetRef="WriteLetter" />
+    <bpmn:sequenceFlow id="LF5" name="Yes" sourceRef="ClinicalError" targetRef="WriteLetter" />
+    <bpmn:sequenceFlow id="LF2" sourceRef="WriteLetter" targetRef="ApproveLetter" />
+    <bpmn:sequenceFlow id="LF3" sourceRef="ApproveLetter" targetRef="CheckLetter" />
+    <bpmn:sequenceFlow id="LF4" sourceRef="CheckLetter" targetRef="ClinicalError" />
+    <bpmn:sequenceFlow id="LF6" name="No" sourceRef="ClinicalError" targetRef="SendLetter" />
+    <bpmn:sequenceFlow id="LF7" sourceRef="SendLetter" targetRef="RecordDispatch" />
+    <bpmn:sequenceFlow id="LF8" sourceRef="RecordDispatch" targetRef="LetterSent" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_ClinicLetter">
+    <bpmndi:BPMNPlane id="Plane_ClinicLetter" bpmnElement="Collaboration_ClinicLetter">
+      <bpmndi:BPMNShape id="Hospital_ClinicLetter_di" bpmnElement="Hospital_ClinicLetter" isHorizontal="true">
+        <dc:Bounds x="120" y="60" width="1460" height="400" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LetterLane_Secretary_di" bpmnElement="LetterLane_Secretary" isHorizontal="true">
+        <dc:Bounds x="150" y="260" width="1430" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LetterLane_Consultant_di" bpmnElement="LetterLane_Consultant" isHorizontal="true">
+        <dc:Bounds x="150" y="60" width="1430" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ConsultationDone_di" bpmnElement="ConsultationDone">
+        <dc:Bounds x="220" y="155" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="196" y="199" width="86" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="WriteLetter_di" bpmnElement="WriteLetter">
+        <dc:Bounds x="320" y="135" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ApproveLetter_di" bpmnElement="ApproveLetter">
+        <dc:Bounds x="570" y="135" width="150" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckLetter_di" bpmnElement="CheckLetter">
+        <dc:Bounds x="570" y="315" width="150" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ClinicalError_di" bpmnElement="ClinicalError" isMarkerVisible="true">
+        <dc:Bounds x="825" y="328" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="790" y="400" width="125" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendLetter_di" bpmnElement="SendLetter">
+        <dc:Bounds x="955" y="315" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RecordDispatch_di" bpmnElement="RecordDispatch">
+        <dc:Bounds x="1175" y="315" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LetterSent_di" bpmnElement="LetterSent">
+        <dc:Bounds x="1440" y="335" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1411" y="389" width="96" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SevenDays_di" bpmnElement="SevenDays">
+        <dc:Bounds x="950" y="135" width="485" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Letter_Correspondence_di" bpmnElement="Letter_Correspondence" isHorizontal="true" isExpanded="false">
+        <dc:Bounds x="120" y="575" width="1460" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Letter_Patient_di" bpmnElement="Letter_Patient" isHorizontal="true" isExpanded="false">
+        <dc:Bounds x="120" y="765" width="650" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Letter_ClinicalRecipient_di" bpmnElement="Letter_ClinicalRecipient" isHorizontal="true" isExpanded="false">
+        <dc:Bounds x="930" y="765" width="650" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="LF1_di" bpmnElement="LF1">
+        <di:waypoint x="256" y="173" />
+        <di:waypoint x="320" y="173" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LF2_di" bpmnElement="LF2">
+        <di:waypoint x="480" y="173" />
+        <di:waypoint x="570" y="173" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LF3_di" bpmnElement="LF3">
+        <di:waypoint x="645" y="211" />
+        <di:waypoint x="645" y="315" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LF4_di" bpmnElement="LF4">
+        <di:waypoint x="720" y="353" />
+        <di:waypoint x="825" y="353" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LF5_di" bpmnElement="LF5">
+        <di:waypoint x="850" y="328" />
+        <di:waypoint x="850" y="95" />
+        <di:waypoint x="400" y="95" />
+        <di:waypoint x="400" y="135" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="861" y="270" width="32" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LF6_di" bpmnElement="LF6">
+        <di:waypoint x="875" y="353" />
+        <di:waypoint x="955" y="353" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="902" y="326" width="32" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LF7_di" bpmnElement="LF7">
+        <di:waypoint x="1115" y="353" />
+        <di:waypoint x="1175" y="353" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LF8_di" bpmnElement="LF8">
+        <di:waypoint x="1335" y="353" />
+        <di:waypoint x="1440" y="353" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LM_Dispatch_di" bpmnElement="LM_Dispatch">
+        <di:waypoint x="1035" y="391" />
+        <di:waypoint x="1035" y="575" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="857" y="493" width="165" height="34" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LM_Status_di" bpmnElement="LM_Status">
+        <di:waypoint x="1255" y="575" />
+        <di:waypoint x="1255" y="391" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1270" y="491" width="140" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LM_PatientLetter_di" bpmnElement="LM_PatientLetter">
+        <di:waypoint x="450" y="635" />
+        <di:waypoint x="450" y="765" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="465" y="679" width="132" height="34" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="LM_ClinicalLetter_di" bpmnElement="LM_ClinicalLetter">
+        <di:waypoint x="1255" y="635" />
+        <di:waypoint x="1255" y="765" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1270" y="679" width="132" height="34" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

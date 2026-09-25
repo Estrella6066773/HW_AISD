@@ -20,7 +20,7 @@
 |------|------------------------------|------|
 | A（Ruby） | Part 1 主摘要 + Part 4 任务拆分 T01–T20 初稿完成 | 等 B 锁 PB 编号 |
 | B（Est） | Product Backlog（Part 3）+ DoD 起草中 | 等 A 的 T 编号对齐 |
-| C（Dluffy） | Part 2 交付物清单、Part 6 Sprint Backlog 完成；Part 4 复核意见已提 | 等 A 回写 Part 4 修订 |
+| C（Ender） | Part 2 交付物清单、Part 6 Sprint Backlog 完成；Part 4 复核意见已提 | 等 A 回写 Part 4 修订 |
 | D（Ryan/本文件） | Part 1 Q6/Q7、Part 8 测试风险/反馈模板完成 | 等 B 的 PB 编号、等三人个人 standup |
 
 > **当日小结论**：本期 Sprint 1 范围 = 转诊核验 → Consultant 决策 → 新患预约（排班可 mock）；外部系统本期允许 mock 并写清边界。

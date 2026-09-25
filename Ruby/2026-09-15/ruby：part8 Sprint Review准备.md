@@ -80,7 +80,7 @@ Finish and upload the Product Backlog and the Sprint 1 Backlog by 16 Sep. Then s
 | Task / 交付物 | Owner | 证据 | 状态 |
 |---------------|-------|------|------|
 | Part 1 案例摘要与 8 问讨论 | Ruby 汇总；全组起草 | `Ruby/2026-09-14/ruby：part1案例摘要.md`；`Ruby/2026-09-15/ruby：part1回答.md` | Done（计划级） |
-| Part 2 交付物清单 | Ender 主笔；Ruby 复核 | `Dluffy/2026-09-15/` 与 `Ruby/2026-09-15/ruby：part2交付物清单.md` | Done（计划级） |
+| Part 2 交付物清单 | Ender 主笔；Ruby 复核 | `Ender/2026-09-15/` 与 `Ruby/2026-09-15/ruby：part2交付物清单.md` | Done（计划级） |
 | Part 3 Product Backlog（29 条，12 字段） | Estrella 主笔；Ryan 复核 | `Est/part3产品待办.md` | 已成稿，待上传仓库作 16 Sep 硬检查 |
 | Part 4 任务拆分 T01–T20 | Ender 主笔；Ryan 复核 | `Ruby/2026-09-15/ruby：part4任务拆分.md` | 初稿完成 |
 | Part 5 依赖映射 | Ryan 主笔；Estrella 复核 | `Ryan/2026-09-15/Ryan：part5依赖映射.md` | Done（计划级） |
@@ -144,7 +144,7 @@ Finish and upload the Product Backlog and the Sprint 1 Backlog by 16 Sep. Then s
 | 范围一条线 | Sprint Goal = 转诊核验 → 医生决策 → 第一次预约 | Part 1 摘要、Part 5 关键路径、Part 6 Goal |
 | 角色一条线 | 秘书 / Consultant / 预约组 / 路径组 | T01 权限；案例第 3–6 段 |
 | 失败路径一条线 | 拒绝不约号；无号 pending；不重复建号 | Part 1 异常路径；Part 5 备份；T04/T06 |
-| 仓库 | 四人已加入；计划文件按人、按日期放 | GitHub；`Ruby/` `Est/` `Dluffy/` `Ryan/` |
+| 仓库 | 四人已加入；计划文件按人、按日期放 | GitHub；`Ruby/` `Est/` `Ender/` `Ryan/` |
 
 28 Sep 的集成证据才是：同一条 Camunda 流程上，转诊表单 → 医生决策 → mock 排班，四人能指出自己改过的文件与 commit。
 

@@ -8,7 +8,7 @@ BPM&EA and AISD · Group project · Agile Workshop Parts 1–8
 |----|------|------------|--------|-----------|
 | A | Hao Zheng | Ruby | 23084382 | Parts 1, 6, 8 |
 | B | Geping Chen | Estrella | 23084393 | Part 3, contribution record |
-| C | Minghao Qin | Dluffy | 23084402 | Parts 2, 4 |
+| C | Minghao Qin | Ender | 23084402 | Parts 2, 4 |
 | D | Guanyan He | Ryan | 23084395 | Parts 5, 7 |
 
 Every part has a first owner and a second owner; the full table is in `Ruby/2026-09-14/分工表.md`.
@@ -18,7 +18,7 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 | Path | Content |
 |------|---------|
 | `docs/` | Group-level deliverables: product backlog, task breakdown, sprint backlog, requirements traceability matrix, definition of done |
-| `Ruby/`, `Est/`, `Dluffy/`, `Ryan/` | Individual workspaces: drafts, part-level documents, meeting notes |
+| `Ruby/`, `Est/`, `Ender/`, `Ryan/` | Individual workspaces: drafts, part-level documents, meeting notes |
 | `Coursework/` | Agile Workshop workbook transcription |
 | `W01/` | Course materials: session slides, case study, assessment specifications |
 
@@ -36,8 +36,8 @@ Sprint 1 covers planning only: no models and no code. The first slice under spec
 
 | Part | File |
 |------|------|
-| 1 Case summary | `Ruby/2026-09-14/ruby：part1案例摘要.md`, discussion notes alongside; individual drafts under `Ryan/2026-09-15/` and `Dluffy/2026-09-15/` |
-| 2 Deliverable list | `Dluffy/2026-09-15/Dluffy：part2交付物清单.md` |
+| 1 Case summary | `Ruby/2026-09-14/ruby：part1案例摘要.md`, discussion notes alongside; individual drafts under `Ryan/2026-09-15/` and `Ender/2026-09-15/` |
+| 2 Deliverable list | `Ender/2026-09-15/Ender：part2交付物清单.md` |
 | 3 Product backlog | `docs/p3-product-backlog.md` |
 | 4 Task breakdown | `docs/p4-work-breakdown.md` |
 | 5 Dependency mapping | `Ryan/2026-09-15/Ryan：part5依赖映射.md` |

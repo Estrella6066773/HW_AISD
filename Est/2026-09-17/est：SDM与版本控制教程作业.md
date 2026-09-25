@@ -2,7 +2,7 @@
 
 **课程**：Business Process Modelling and Enterprise Architecture & Advanced Information System Development
 **Tutorial**：`W01/SDM Tutorial.docx`（正文标题为 Compare and Contrast Software Development Methodologies）；`W01/Version Controlling 1.docx`
-**小组**：Ruby / Estrella / Dluffy / Ryan
+**小组**：Ruby / Estrella / Ender / Ryan
 **日期**：2026-09-17
 **主笔**：Estrella（Geping Chen，23084393）
 **依据**：两份 tutorial 表格；`W01/UFCEP6-0-3_Portfolio_Assessment_Specification V2.docx`；Simão（2011）；SWEBOK v3
