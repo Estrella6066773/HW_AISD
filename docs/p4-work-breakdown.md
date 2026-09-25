@@ -27,4 +27,4 @@
 
 估算为第一负责人工时。Part 3 定稿后如编号有变，只改 Backlog ID 列即可。
 
-T01 的角色与权限规则已按案例第 3 段写进 Part 1 摘要，证据列据此指向该摘要；Dluffy 的复核意见要求补证据位置，即为此处。T02 沿用 Sprint Backlog 的记法，同为 In progress，故 `docs/p3-product-backlog.md` 的 PB-01 记 In progress。T20 与 Part 6 的 Sprint 1 范围一致，指第一次站会的上传动作。
+T01 的角色与权限规则已按案例第 3 段写进 Part 1 摘要，证据列据此指向该摘要；Ender 的复核意见要求补证据位置，即为此处。T02 沿用 Sprint Backlog 的记法，同为 In progress，故 `docs/p3-product-backlog.md` 的 PB-01 记 In progress。T20 与 Part 6 的 Sprint 1 范围一致，指第一次站会的上传动作。
