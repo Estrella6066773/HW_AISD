@@ -1,0 +1,132 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P7 — Funding assessment\n\nTo call Java payment worker: choose **Patient payment required**. Amount `10.01` = success, `10.00` = fail.\n\n_Never enter a full card number._",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "Patient / case ID",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "Funding outcome",
+      "values": [
+        {
+          "label": "Hospital funding confirmed",
+          "value": "hospital_funded"
+        },
+        {
+          "label": "Insurer approval recorded",
+          "value": "insurer_approved"
+        },
+        {
+          "label": "Patient payment required - call provider",
+          "value": "patient_payment_required"
+        },
+        {
+          "label": "Payment already verified",
+          "value": "patient_paid"
+        },
+        {
+          "label": "Authorised exemption / payment arrangement",
+          "value": "arrangement"
+        },
+        {
+          "label": "Declined / incomplete / funding pending",
+          "value": "pending"
+        },
+        {
+          "label": "Provider success but confirmation missing",
+          "value": "investigate"
+        },
+        {
+          "label": "Request clinical review of urgent-care exception",
+          "value": "urgent_review"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_charge_amount",
+      "type": "textfield",
+      "key": "charge_amount",
+      "label": "Charge amount (patient payment path)",
+      "validate": {
+        "required": false
+      },
+      "description": "Demo: 10.01 success, 10.00 fail",
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_insurerReference",
+      "type": "textfield",
+      "key": "insurerReference",
+      "label": "Insurer / funding reference",
+      "validate": {
+        "required": false
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Finance notes",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_4",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "Record funding status",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "funding_assessment",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

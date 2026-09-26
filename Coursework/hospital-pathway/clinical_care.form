@@ -3,7 +3,7 @@
     {
       "id": "Text_Title",
       "type": "text",
-      "text": "## Task record\n\nComplete this step and record what was done.\n\n_Demo only._",
+      "text": "## P5 / P9 / P12 — Clinical care\n\n_Demo only._",
       "layout": {
         "row": "Row_Title",
         "columns": null
@@ -26,7 +26,7 @@
       "id": "Field_staffRole",
       "type": "textfield",
       "key": "staffRole",
-      "label": "Staff name and role",
+      "label": "Clinician name and role",
       "validate": {
         "required": true
       },
@@ -42,8 +42,16 @@
       "label": "Outcome / next action",
       "values": [
         {
-          "label": "Completed and recorded",
-          "value": "recorded"
+          "label": "Authorise treatment / next cycle",
+          "value": "treatment"
+        },
+        {
+          "label": "Request follow-up visit",
+          "value": "follow_up"
+        },
+        {
+          "label": "Authorise discharge / no further care",
+          "value": "discharge"
         }
       ],
       "validate": {
@@ -58,7 +66,7 @@
       "id": "Field_notes",
       "type": "textarea",
       "key": "notes",
-      "label": "Action record / reason",
+      "label": "Clinical notes / letter approval notes",
       "validate": {
         "required": true
       },
@@ -79,7 +87,7 @@
     }
   ],
   "type": "default",
-  "id": "hospital_task_form",
+  "id": "clinical_care",
   "executionPlatform": "Camunda Cloud",
   "executionPlatformVersion": "8.10.0",
   "exporter": {

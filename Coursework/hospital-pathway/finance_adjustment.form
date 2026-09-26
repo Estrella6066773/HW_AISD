@@ -3,7 +3,7 @@
     {
       "id": "Text_Title",
       "type": "text",
-      "text": "## Task record\n\nComplete this step and record what was done.\n\n_Demo only._",
+      "text": "## P7 / P11 / P12 — Finance adjustment\n\n_Demo only. No card data._",
       "layout": {
         "row": "Row_Title",
         "columns": null
@@ -26,7 +26,7 @@
       "id": "Field_staffRole",
       "type": "textfield",
       "key": "staffRole",
-      "label": "Staff name and role",
+      "label": "Finance staff name and role",
       "validate": {
         "required": true
       },
@@ -42,8 +42,12 @@
       "label": "Outcome / next action",
       "values": [
         {
-          "label": "Completed and recorded",
-          "value": "recorded"
+          "label": "Financial decision authorised and outcome recorded",
+          "value": "resolved"
+        },
+        {
+          "label": "Provider / approval result pending",
+          "value": "pending"
         }
       ],
       "validate": {
@@ -58,7 +62,7 @@
       "id": "Field_notes",
       "type": "textarea",
       "key": "notes",
-      "label": "Action record / reason",
+      "label": "Refund / transfer / retention notes",
       "validate": {
         "required": true
       },
@@ -79,7 +83,7 @@
     }
   ],
   "type": "default",
-  "id": "hospital_task_form",
+  "id": "finance_adjustment",
   "executionPlatform": "Camunda Cloud",
   "executionPlatformVersion": "8.10.0",
   "exporter": {
