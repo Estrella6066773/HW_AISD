@@ -3,7 +3,7 @@
 **主笔**：Estrella（陈格平）
 **日期**：2026-09-26
 **依据**：[`Est/est：治疗预约与付款流程变量设计.md`](est：治疗预约与付款流程变量设计.md)、[`Est/est：治疗预约与付款可执行模型.md`](est：治疗预约与付款可执行模型.md)、[`Est/W02_Treatment_Booking_Payment_Executable.bpmn`](W02_Treatment_Booking_Payment_Executable.bpmn)
-**状态**：步骤 5 已固定程序行为。尚未创建 Java 工程，也尚未部署。
+**状态**：步骤 5 的行为已实现在 `src/workers/`。步骤 6 已在本机部署流程和表单，程序已订阅两个任务类型。Java 源文件：`src/workers/src/main/java/io/camunda/demo/treatment_booking/`。
 
 本文件放在个人目录 `Est/`。程序是一个保持运行的 Spring Boot 进程，使用 Camunda Java 客户端连接本机 Camunda。它等待引擎分配任务，不提供患者或员工使用的网页。程序不读取卡号、安全码或病历正文。
 
