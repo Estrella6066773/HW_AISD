@@ -1,0 +1,32 @@
+{
+  "components": [
+    {
+      "text": "治疗预约组准备临时预约。这一步只确认档期已经备好，不确认最终预约。",
+      "type": "text",
+      "id": "Text_PrepareIntro",
+      "layout": { "row": "Row_PrepareIntro" }
+    },
+    {
+      "label": "病例号",
+      "type": "textfield",
+      "id": "Field_case_reference_ro",
+      "key": "case_reference",
+      "readonly": true,
+      "layout": { "row": "Row_case_reference_ro" }
+    },
+    {
+      "label": "临时预约所需档期已经备好",
+      "type": "checkbox",
+      "id": "Field_provisional_booking_ready",
+      "key": "provisional_booking_ready",
+      "validate": { "required": true },
+      "layout": { "row": "Row_provisional_booking_ready" }
+    }
+  ],
+  "type": "default",
+  "id": "PrepareBookingForm",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": { "name": "Camunda Modeler", "version": "5.51.0" },
+  "schemaVersion": 19
+}

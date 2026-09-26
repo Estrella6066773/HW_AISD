@@ -1,0 +1,59 @@
+{
+  "components": [
+    {
+      "text": "财务组查看程序写回的付款结果。这里不能修改付款状态、交易参考号、日期或金额。",
+      "type": "text",
+      "id": "Text_RecordIntro",
+      "layout": { "row": "Row_RecordIntro" }
+    },
+    {
+      "label": "付款状态",
+      "type": "textfield",
+      "id": "Field_payment_status_ro",
+      "key": "payment_status",
+      "readonly": true,
+      "layout": { "row": "Row_payment_status_ro" }
+    },
+    {
+      "label": "交易参考号",
+      "type": "textfield",
+      "id": "Field_transaction_reference_ro",
+      "key": "transaction_reference",
+      "readonly": true,
+      "layout": { "row": "Row_transaction_reference_ro" }
+    },
+    {
+      "label": "付款日期",
+      "subtype": "date",
+      "dateLabel": "付款日期",
+      "type": "datetime",
+      "id": "Field_payment_date_ro",
+      "key": "payment_date",
+      "readonly": true,
+      "layout": { "row": "Row_payment_date_ro" }
+    },
+    {
+      "label": "患者应付金额",
+      "type": "number",
+      "id": "Field_charge_amount_ro",
+      "key": "charge_amount",
+      "readonly": true,
+      "layout": { "row": "Row_charge_amount_ro" }
+    },
+    {
+      "label": "我已核对此次付款结果",
+      "description": "勾选只表示财务组已经过目，不会改写付款状态。",
+      "type": "checkbox",
+      "id": "Field_payment_result_acknowledged",
+      "key": "payment_result_acknowledged",
+      "validate": { "required": true },
+      "layout": { "row": "Row_payment_result_acknowledged" }
+    }
+  ],
+  "type": "default",
+  "id": "RecordPaymentForm",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": { "name": "Camunda Modeler", "version": "5.51.0" },
+  "schemaVersion": 19
+}

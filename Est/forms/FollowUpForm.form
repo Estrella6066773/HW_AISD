@@ -1,0 +1,32 @@
+{
+  "components": [
+    {
+      "text": "付款没有成功。财务组写下跟进说明。不要在这里修改付款状态，也不要再次发起扣款。",
+      "type": "text",
+      "id": "Text_FollowUpIntro",
+      "layout": { "row": "Row_FollowUpIntro" }
+    },
+    {
+      "label": "付款状态",
+      "type": "textfield",
+      "id": "Field_payment_status_follow",
+      "key": "payment_status",
+      "readonly": true,
+      "layout": { "row": "Row_payment_status_follow" }
+    },
+    {
+      "label": "跟进说明",
+      "type": "textarea",
+      "id": "Field_follow_up_note",
+      "key": "follow_up_note",
+      "validate": { "required": true },
+      "layout": { "row": "Row_follow_up_note" }
+    }
+  ],
+  "type": "default",
+  "id": "FollowUpForm",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": { "name": "Camunda Modeler", "version": "5.51.0" },
+  "schemaVersion": 19
+}
