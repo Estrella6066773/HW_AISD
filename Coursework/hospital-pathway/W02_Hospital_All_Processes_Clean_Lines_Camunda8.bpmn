@@ -43,7 +43,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:textAnnotation>
   </bpmn:collaboration>
   <bpmn:process id="Hospital_All_Processes_Simple_C8" name="Hospital - All Business Processes (Simple Camunda 8)" isExecutable="true">
-    <bpmn:documentation>Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Two Camunda 8 service tasks use classroom Java workers: request-payment (inline mock provider result; no message catch) and send-booking-confirmation. There are no timers or message wait events. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. Forms are deliberately not bound yet. Inputs taskTitle/taskHelp/actionOptions/action/notes/patientId prepare one reusable form; task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving. A startable main-path demonstration will use a normal none start event. See coverage and variable documentation in the companion README.</bpmn:documentation>
+    <bpmn:documentation>Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Two Camunda 8 service tasks use classroom Java workers: request-payment (inline mock provider result; no message catch) and send-booking-confirmation. There are no timers or message wait events. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. User tasks use dedicated Camunda forms with hardcoded select options (no valuesKey). Inputs taskTitle/taskHelp/actionOptions/action/notes/patientId prepare one reusable form; task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving. A startable main-path demonstration will use a normal none start event. See coverage and variable documentation in the companion README.</bpmn:documentation>
     <bpmn:laneSet id="Hospital_Lanes">
       <bpmn:lane id="Admin" name="Administration">
         <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
@@ -100,19 +100,21 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:startEvent>
     <bpmn:userTask id="Register" name="P1 / P10 / P13&#10;Register request;&#10;check documents and ID">
       <bpmn:documentation>Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. Demo only; enter no real patient or card data.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="register_request" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P1 / P10 / P13 Register request; check documents and ID&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. Demo only; enter no real patient or card data.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;Register&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;New referral - documents checked&#34;, value: &#34;referral&#34; }, { label: &#34;Referral - supporting documents missing&#34;, value: &#34;referral_incomplete&#34; }, { label: &#34;Administrative enquiry&#34;, value: &#34;enquiry_admin&#34; }, { label: &#34;Clinical enquiry&#34;, value: &#34;enquiry_clinical&#34; }, { label: &#34;Financial enquiry&#34;, value: &#34;enquiry_finance&#34; }, { label: &#34;Authorised change / follow-up / cancellation&#34;, value: &#34;change&#34; }, { label: &#34;Management audit / report&#34;, value: &#34;report&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(specialty) then specialty else null" target="specialty" />
+          <zeebe:input source="= if is defined(priority) then priority else null" target="priority" />
+          <zeebe:input source="= if is defined(timeframe) then timeframe else &#34;&#34;" target="timeframe" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= specialty" target="specialty" />
+          <zeebe:output source="= priority" target="priority" />
+          <zeebe:output source="= timeframe" target="timeframe" />
           <zeebe:output source="= notes" target="RegisterNotes" />
           <zeebe:output source="= action" target="requestKind" />
           <zeebe:output source="= false" target="urgentCase" />
@@ -136,19 +138,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="GetDocuments" name="P1 / P11&#10;Obtain missing or&#10;formally authorised records">
       <bpmn:documentation>Request and record receipt of missing referral material, or obtain a formally authorised modification request. Do not treat an email or phone call as treatment-change authorisation. In the classroom, completing this task simulates the reply; do not wait for an external message.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P1 / P11 Obtain missing or formally authorised records&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Request and record receipt of missing referral material, or obtain a formally authorised modification request. Do not treat an email or phone call as treatment-change authorisation. In the classroom, completing this task simulates the reply; do not wait for an external message.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;GetDocuments&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="GetDocumentsNotes" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -159,19 +159,19 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:userTask>
     <bpmn:userTask id="ReviewReferral" name="P2&#10;Consultant reviews referral;&#10;records decision and reason">
       <bpmn:documentation>Only an authorised Consultant decides acceptance. Record decision, clinician identity and reason. Urgent referrals and requested timeframes must be passed to booking staff.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="review_referral" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P2 Consultant reviews referral; records decision and reason&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Only an authorised Consultant decides acceptance. Record decision, clinician identity and reason. Urgent referrals and requested timeframes must be passed to booking staff.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;ReviewReferral&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Accept&#34;, value: &#34;accept&#34; }, { label: &#34;Reject&#34;, value: &#34;reject&#34; }, { label: &#34;Redirect&#34;, value: &#34;redirect&#34; }, { label: &#34;Request more information&#34;, value: &#34;more_information&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(clinicianId) then clinicianId else &#34;&#34;" target="clinicianId" />
+          <zeebe:input source="= &#34;&#34;" target="decisionReason" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= clinicianId" target="clinicianId" />
+          <zeebe:output source="= decisionReason" target="decisionReason" />
           <zeebe:output source="= notes" target="ReviewReferralNotes" />
           <zeebe:output source="= action" target="referralDecision" />
         </zeebe:ioMapping>
@@ -190,19 +190,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="Redirect" name="P2&#10;Record authorised redirect&#10;and notify referrer">
       <bpmn:documentation>Administrative staff carry out the Consultant-approved redirect and record its destination; they do not make the clinical decision.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P2 Record authorised redirect and notify referrer&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Administrative staff carry out the Consultant-approved redirect and record its destination; they do not make the clinical decision.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;Redirect&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="RedirectNotes" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -217,19 +215,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:endEvent>
     <bpmn:userTask id="BookVisit" name="P3 / P4 / P12&#10;Book visit; notify patient;&#10;record attendance / contact">
       <bpmn:documentation>Outpatient Bookings: only after referral acceptance or a clinical follow-up request. Confirm a slot within the requested timeframe; if unavailable keep pending, flag to the pathway team and avoid duplicates. Send an appointment letter. If within two weeks ALSO phone and record each attempt/outcome, including failed contact or an alternative date. Record attendance, cancellation, decline or DNA. Classroom completion represents these actions and elapsed time.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="book_visit" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P3 / P4 / P12 Book visit; notify patient; record attendance / contact&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Outpatient Bookings: only after referral acceptance or a clinical follow-up request. Confirm a slot within the requested timeframe; if unavailable keep pending, flag to the pathway team and avoid duplicates. Send an appointment letter. If within two weeks ALSO phone and record each attempt/outcome, including failed contact or an alternative date. Record attendance, cancellation, decline or DNA. Classroom completion represents these actions and elapsed time.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;BookVisit&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Booked, notified and attended&#34;, value: &#34;attended&#34; }, { label: &#34;No suitable slot / contact or service pending&#34;, value: &#34;pending&#34; }, { label: &#34;Cancelled / declined / did not attend&#34;, value: &#34;cancelled&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="BookVisitNotes" />
           <zeebe:output source="= action" target="visitOutcome" />
         </zeebe:ioMapping>
@@ -248,19 +244,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="ClinicalCare" name="P5 / P9 / P12&#10;Consult / treat / review;&#10;authorise care and clinic letter">
       <bpmn:documentation>Consultant / authorised clinician: record consultation, treatment and review as applicable. Before each subsequent chemotherapy cycle, review blood tests and fitness before giving treatment; only authorised clinicians decide whether to continue, delay or change the plan. Treatment requires patient consent and an authorised request with dates, cycles and resources. Decide further treatment, follow-up or discharge; prepare and approve the clinic letter and recipients after EVERY consultation. Give CNS contact information after the first visit. A returned letter is corrected and reapproved without repeating treatment. No administrative or finance user may make these clinical decisions.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="clinical_care" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P5 / P9 / P12 Consult / treat / review; authorise care and clinic letter&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Consultant / authorised clinician: record consultation, treatment and review as applicable. Before each subsequent chemotherapy cycle, review blood tests and fitness before giving treatment; only authorised clinicians decide whether to continue, delay or change the plan. Treatment requires patient consent and an authorised request with dates, cycles and resources. Decide further treatment, follow-up or discharge; prepare and approve the clinic letter and recipients after EVERY consultation. Give CNS contact information after the first visit. A returned letter is corrected and reapproved without repeating treatment. No administrative or finance user may make these clinical decisions.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;ClinicalCare&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Authorise treatment / next cycle&#34;, value: &#34;treatment&#34; }, { label: &#34;Request follow-up visit&#34;, value: &#34;follow_up&#34; }, { label: &#34;Authorise discharge / no further care&#34;, value: &#34;discharge&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="ClinicalCareNotes" />
           <zeebe:output source="= action" target="careDecision" />
         </zeebe:ioMapping>
@@ -279,19 +273,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="DispatchLetter" name="P9&#10;Check and dispatch&#10;approved clinic letter">
       <bpmn:documentation>Medical Secretaries: check administration and Consultant-approved recipients, send the approved letter, and record all relevant dates and dispatch method. Do not change clinical meaning. Suspected clinical errors return to the Consultant. Complete/approve/send within seven days; recipients normally receive within about two weeks. External correspondence is simulated by recording the result.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="dispatch_letter" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P9 Check and dispatch approved clinic letter&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Medical Secretaries: check administration and Consultant-approved recipients, send the approved letter, and record all relevant dates and dispatch method. Do not change clinical meaning. Suspected clinical errors return to the Consultant. Complete/approve/send within seven days; recipients normally receive within about two weeks. External correspondence is simulated by recording the result.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;DispatchLetter&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Approved letter sent and recorded&#34;, value: &#34;sent&#34; }, { label: &#34;Suspected clinical error - return to Consultant&#34;, value: &#34;revise&#34; }, { label: &#34;Incomplete / unapproved / dispatch delayed&#34;, value: &#34;delayed&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="DispatchLetterNotes" />
           <zeebe:output source="= action" target="letterStatus" />
         </zeebe:ioMapping>
@@ -308,19 +300,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="MonitorLetters" name="P9&#10;Monitor delay; remind&#10;and escalate if overdue">
       <bpmn:documentation>Patient Pathway Coordinators: after seven days mark delayed; send weekly reminders only while outstanding. Over one month escalate to Administrative Manager; over three months to higher management. Record reasons, reminders and responses; stop reminders after completion. Classroom demo records the applicable time band without a real multi-day timer.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P9 Monitor delay; remind and escalate if overdue&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Patient Pathway Coordinators: after seven days mark delayed; send weekly reminders only while outstanding. Over one month escalate to Administrative Manager; over three months to higher management. Record reasons, reminders and responses; stop reminders after completion. Classroom demo records the applicable time band without a real multi-day timer.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;MonitorLetters&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="MonitorLettersNotes" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -336,21 +326,22 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="Funding" name="P7&#10;Assess funding; record&#10;payment / approval status">
       <bpmn:documentation>Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. Choose patient_payment_required to hand off to the request-payment worker; choose patient_paid only when payment is already verified without calling the provider.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="funding_assessment" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P7 Assess funding; record payment / approval status&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. Choose patient_payment_required to hand off to the request-payment worker; choose patient_paid only when payment is already verified without calling the provider.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;Funding&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Hospital funding confirmed&#34;, value: &#34;hospital_funded&#34; }, { label: &#34;Insurer approval recorded&#34;, value: &#34;insurer_approved&#34; }, { label: &#34;Patient payment required - call provider&#34;, value: &#34;patient_payment_required&#34; }, { label: &#34;Payment already verified&#34;, value: &#34;patient_paid&#34; }, { label: &#34;Authorised exemption / payment arrangement&#34;, value: &#34;arrangement&#34; }, { label: &#34;Declined / incomplete / funding pending&#34;, value: &#34;pending&#34; }, { label: &#34;Provider success but confirmation missing&#34;, value: &#34;investigate&#34; }, { label: &#34;Request clinical review of urgent-care exception&#34;, value: &#34;urgent_review&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(charge_amount) then charge_amount else &#34;&#34;" target="charge_amount" />
+          <zeebe:input source="= if is defined(insurerReference) then insurerReference else &#34;&#34;" target="insurerReference" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= charge_amount" target="charge_amount" />
+          <zeebe:output source="= insurerReference" target="insurerReference" />
           <zeebe:output source="= notes" target="FundingNotes" />
           <zeebe:output source="= action" target="fundingStatus" />
+          <zeebe:output source="= false" target="payment_requested_once" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_12</bpmn:incoming>
@@ -382,19 +373,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="FundingIssue" name="P7&#10;Resolve funding issue /&#10;investigate missing receipt">
       <bpmn:documentation>Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding. Also reached when the request-payment worker returns an unsuccessful result.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P7 Resolve funding issue / investigate missing receipt&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding. Also reached when the request-payment worker returns an unsuccessful result.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;FundingIssue&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="FundingIssueNotes" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -404,19 +393,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:userTask>
     <bpmn:userTask id="UrgentAuthorisation" name="P8&#10;Clinician authorises&#10;urgent care with reason">
       <bpmn:documentation>Only a clinician may authorise treatment before confirmed payment where delay risks the patient. Record clinician identity, clinical reason and the decision, and create a Finance follow-up obligation. Finance can request this review but cannot approve the clinical exception.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="urgent_authorisation" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P8 Clinician authorises urgent care with reason&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Only a clinician may authorise treatment before confirmed payment where delay risks the patient. Record clinician identity, clinical reason and the decision, and create a Finance follow-up obligation. Finance can request this review but cannot approve the clinical exception.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;UrgentAuthorisation&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Authorise urgent care and record reason&#34;, value: &#34;authorise&#34; }, { label: &#34;Not authorised - continue finance resolution&#34;, value: &#34;hold&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(clinicianId) then clinicianId else &#34;&#34;" target="clinicianId" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= clinicianId" target="clinicianId" />
           <zeebe:output source="= notes" target="UrgentAuthorisationNotes" />
           <zeebe:output source="= action" target="urgentDecision" />
           <zeebe:output source="= action = &#34;authorise&#34;" target="urgentCase" />
@@ -432,19 +419,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="BookTreatment" name="P6&#10;Confirm authorised treatment&#10;and investigation appointments">
       <bpmn:documentation>Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm booking only after these checks; patient notification is handed to the send-booking-confirmation worker after resources are ready. Classroom task records scheduling outcomes.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="book_treatment" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P6 Confirm authorised treatment and investigation appointments&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm booking only after these checks; patient notification is handed to the send-booking-confirmation worker after resources are ready. Classroom task records scheduling outcomes.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;BookTreatment&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Resources available; booking confirmed&#34;, value: &#34;ready&#34; }, { label: &#34;External service / resource unavailable&#34;, value: &#34;pending&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="BookTreatmentNotes" />
           <zeebe:output source="= action" target="treatmentSlotStatus" />
         </zeebe:ioMapping>
@@ -470,19 +455,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:serviceTask>
     <bpmn:userTask id="UrgentFinance" name="P8&#10;Finance follows up&#10;after urgent care">
       <bpmn:documentation>After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P8 Finance follows up after urgent care&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;UrgentFinance&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="UrgentFinanceNotes" />
           <zeebe:output source="= false" target="urgentCase" />
         </zeebe:ioMapping>
@@ -496,19 +479,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:endEvent>
     <bpmn:userTask id="ClinicalChange" name="P11 / P12&#10;Authorise modification,&#10;follow-up or cancellation">
       <bpmn:documentation>Consultant / authorised clinician: review formal treatment changes, DNA/cancellation or follow-up requests. Reject unapproved verbal/email changes. Urgent safety postponement must be promptly documented and authorised. Select the clinical plan and indicate whether existing charges/funding/payments are affected; this flags Finance review and does NOT authorise a refund.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="clinical_change" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P11 / P12 Authorise modification, follow-up or cancellation&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Consultant / authorised clinician: review formal treatment changes, DNA/cancellation or follow-up requests. Reject unapproved verbal/email changes. Urgent safety postponement must be promptly documented and authorised. Select the clinical plan and indicate whether existing charges/funding/payments are affected; this flags Finance review and does NOT authorise a refund.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;ClinicalChange&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Authorise treatment change - no financial impact&#34;, value: &#34;reschedule_unpaid&#34; }, { label: &#34;Authorise treatment change - Finance review required&#34;, value: &#34;reschedule_paid&#34; }, { label: &#34;Authorise follow-up / rebook - no financial impact&#34;, value: &#34;follow_up_unpaid&#34; }, { label: &#34;Authorise follow-up / rebook - Finance review required&#34;, value: &#34;follow_up_paid&#34; }, { label: &#34;Authorise stop / discharge - no financial impact&#34;, value: &#34;discharge_unpaid&#34; }, { label: &#34;Authorise stop / discharge - Finance review required&#34;, value: &#34;discharge_paid&#34; }, { label: &#34;Formal clinical authorisation is missing&#34;, value: &#34;invalid&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(clinicianId) then clinicianId else &#34;&#34;" target="clinicianId" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= clinicianId" target="clinicianId" />
           <zeebe:output source="= notes" target="ClinicalChangeNotes" />
           <zeebe:output source="= action" target="modificationDecision" />
           <zeebe:output source="= action = &#34;reschedule_paid&#34; or action = &#34;follow_up_paid&#34; or action = &#34;discharge_paid&#34;" target="moneyAffected" />
@@ -532,19 +513,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="FinanceAdjustment" name="P7 / P11 / P12&#10;Approve and record refund,&#10;payment transfer or retention">
       <bpmn:documentation>Only authorised Finance approves full/partial refunds or payment transfer/retention. Record decision, amount, reason and provider result linked to patient, appointment and original transaction. Clinical staff supply treatment facts but do not approve refunds. Pending provider results remain open for recorded follow-up.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="finance_adjustment" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P7 / P11 / P12 Approve and record refund, payment transfer or retention&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Only authorised Finance approves full/partial refunds or payment transfer/retention. Record decision, amount, reason and provider result linked to patient, appointment and original transaction. Clinical staff supply treatment facts but do not approve refunds. Pending provider results remain open for recorded follow-up.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;FinanceAdjustment&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Financial decision authorised and outcome recorded&#34;, value: &#34;resolved&#34; }, { label: &#34;Provider / approval result pending&#34;, value: &#34;pending&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="FinanceAdjustmentNotes" />
           <zeebe:output source="= action" target="financeAdjustment" />
         </zeebe:ioMapping>
@@ -568,19 +547,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="AdminEnquiry" name="P10&#10;Resolve administrative&#10;enquiry; record response">
       <bpmn:documentation>Call Handling / relevant administrative team: answer only authorised administrative information. Record response, owner, priority and resolution. Reclassify and transfer financial/clinical matters; do not diagnose or give clinical advice.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P10 Resolve administrative enquiry; record response&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Call Handling / relevant administrative team: answer only authorised administrative information. Record response, owner, priority and resolution. Reclassify and transfer financial/clinical matters; do not diagnose or give clinical advice.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;AdminEnquiry&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="AdminEnquiryNotes" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -589,19 +566,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:userTask>
     <bpmn:userTask id="ClinicalEnquiry" name="P10&#10;CNS / clinician responds&#10;and records clinical advice">
       <bpmn:documentation>Qualified CNS / clinician responds to clinical matters. Highlight urgent clinical concerns immediately; exact urgency rules remain a stakeholder clarification. Record response and resolution; significant care changes use a separate formal modification request.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P10 CNS / clinician responds and records clinical advice&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Qualified CNS / clinician responds to clinical matters. Highlight urgent clinical concerns immediately; exact urgency rules remain a stakeholder clarification. Record response and resolution; significant care changes use a separate formal modification request.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;ClinicalEnquiry&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="ClinicalEnquiryNotes" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -610,19 +585,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:userTask>
     <bpmn:userTask id="FinanceEnquiry" name="P10&#10;Finance responds to&#10;payment / funding enquiry">
       <bpmn:documentation>Finance handles financial enquiries beyond information authorised for call handlers. Record response, owner, resolution and any separate follow-up case; do not make clinical decisions.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P10 Finance responds to payment / funding enquiry&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Finance handles financial enquiries beyond information authorised for call handlers. Record response, owner, resolution and any separate follow-up case; do not make clinical decisions.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;FinanceEnquiry&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="FinanceEnquiryNotes" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -640,19 +613,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:endEvent>
     <bpmn:userTask id="AuditReports" name="P13&#10;Authorised manager reviews&#10;audit trail and pathway reports">
       <bpmn:documentation>Authorised management views referrals, waits, failed contacts, letter delays, enquiries, booking delays, funding/payment exceptions and refunds. P13 controls apply to EVERY significant task: verified identity, role-limited access, secure exchange, user/time/action audit, linked records and downtime recovery. Ordinary users must not edit audit history. This model documents these requirements; demo assignment is not production RBAC.</bpmn:documentation>
-      <bpmn:extensionElements>
+            <bpmn:extensionElements>
         <zeebe:userTask />
-        <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
+        <zeebe:formDefinition formId="simple_record" bindingType="latest" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
-          <zeebe:input source="= &#34;P13 Authorised manager reviews audit trail and pathway reports&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Authorised management views referrals, waits, failed contacts, letter delays, enquiries, booking delays, funding/payment exceptions and refunds. P13 controls apply to EVERY significant task: verified identity, role-limited access, secure exchange, user/time/action audit, linked records and downtime recovery. Ordinary users must not edit audit history. This model documents these requirements; demo assignment is not production RBAC.&#34;" target="taskHelp" />
-          <zeebe:input source="= &#34;AuditReports&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="AuditReportsNotes" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>

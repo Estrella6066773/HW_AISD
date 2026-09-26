@@ -50,7 +50,7 @@
 			<resource>
 				<directory>${project.basedir}</directory>
 				<includes>
-					<include>hospital_task_form.form</include>
+					<include>*.form</include>
 				</includes>
 				<targetPath>forms</targetPath>
 			</resource>

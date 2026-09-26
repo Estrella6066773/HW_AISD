@@ -3,7 +3,7 @@
     {
       "id": "Text_Title",
       "type": "text",
-      "text": "## Task record\n\nComplete this step and record what was done.\n\n_Demo only._",
+      "text": "## P2 — Consultant referral review\n\n_Demo only._",
       "layout": {
         "row": "Row_Title",
         "columns": null
@@ -23,10 +23,10 @@
       }
     },
     {
-      "id": "Field_staffRole",
+      "id": "Field_clinicianId",
       "type": "textfield",
-      "key": "staffRole",
-      "label": "Staff name and role",
+      "key": "clinicianId",
+      "label": "Clinician ID / name",
       "validate": {
         "required": true
       },
@@ -39,11 +39,23 @@
       "id": "Field_action",
       "type": "select",
       "key": "action",
-      "label": "Outcome / next action",
+      "label": "Referral decision",
       "values": [
         {
-          "label": "Completed and recorded",
-          "value": "recorded"
+          "label": "Accept",
+          "value": "accept"
+        },
+        {
+          "label": "Reject",
+          "value": "reject"
+        },
+        {
+          "label": "Redirect to another specialty",
+          "value": "redirect"
+        },
+        {
+          "label": "Request more information",
+          "value": "more_information"
         }
       ],
       "validate": {
@@ -55,10 +67,10 @@
       }
     },
     {
-      "id": "Field_notes",
+      "id": "Field_decisionReason",
       "type": "textarea",
-      "key": "notes",
-      "label": "Action record / reason",
+      "key": "decisionReason",
+      "label": "Decision reason",
       "validate": {
         "required": true
       },
@@ -68,9 +80,22 @@
       }
     },
     {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Additional notes",
+      "validate": {
+        "required": false
+      },
+      "layout": {
+        "row": "Row_4",
+        "columns": null
+      }
+    },
+    {
       "id": "Button_Submit",
       "type": "button",
-      "label": "Complete task",
+      "label": "Record decision",
       "action": "submit",
       "layout": {
         "row": "Row_Submit",
@@ -79,7 +104,7 @@
     }
   ],
   "type": "default",
-  "id": "hospital_task_form",
+  "id": "review_referral",
   "executionPlatform": "Camunda Cloud",
   "executionPlatformVersion": "8.10.0",
   "exporter": {

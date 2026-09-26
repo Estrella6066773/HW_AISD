@@ -3,7 +3,7 @@
     {
       "id": "Text_Title",
       "type": "text",
-      "text": "## Task record\n\nComplete this step and record what was done.\n\n_Demo only._",
+      "text": "## P9 — Dispatch clinic letter\n\n_Demo only._",
       "layout": {
         "row": "Row_Title",
         "columns": null
@@ -42,8 +42,16 @@
       "label": "Outcome / next action",
       "values": [
         {
-          "label": "Completed and recorded",
-          "value": "recorded"
+          "label": "Approved letter sent and recorded",
+          "value": "sent"
+        },
+        {
+          "label": "Suspected clinical error - return to Consultant",
+          "value": "revise"
+        },
+        {
+          "label": "Incomplete / unapproved / dispatch delayed",
+          "value": "delayed"
         }
       ],
       "validate": {
@@ -58,7 +66,7 @@
       "id": "Field_notes",
       "type": "textarea",
       "key": "notes",
-      "label": "Action record / reason",
+      "label": "Dispatch notes",
       "validate": {
         "required": true
       },
@@ -79,7 +87,7 @@
     }
   ],
   "type": "default",
-  "id": "hospital_task_form",
+  "id": "dispatch_letter",
   "executionPlatform": "Camunda Cloud",
   "executionPlatformVersion": "8.10.0",
   "exporter": {

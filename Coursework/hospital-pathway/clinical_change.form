@@ -3,7 +3,7 @@
     {
       "id": "Text_Title",
       "type": "text",
-      "text": "## Task record\n\nComplete this step and record what was done.\n\n_Demo only._",
+      "text": "## P11 / P12 — Authorise modification\n\n_Demo only._",
       "layout": {
         "row": "Row_Title",
         "columns": null
@@ -23,10 +23,10 @@
       }
     },
     {
-      "id": "Field_staffRole",
+      "id": "Field_clinicianId",
       "type": "textfield",
-      "key": "staffRole",
-      "label": "Staff name and role",
+      "key": "clinicianId",
+      "label": "Clinician ID / name",
       "validate": {
         "required": true
       },
@@ -42,8 +42,32 @@
       "label": "Outcome / next action",
       "values": [
         {
-          "label": "Completed and recorded",
-          "value": "recorded"
+          "label": "Authorise treatment change - no financial impact",
+          "value": "reschedule_unpaid"
+        },
+        {
+          "label": "Authorise treatment change - Finance review required",
+          "value": "reschedule_paid"
+        },
+        {
+          "label": "Authorise follow-up / rebook - no financial impact",
+          "value": "follow_up_unpaid"
+        },
+        {
+          "label": "Authorise follow-up / rebook - Finance review required",
+          "value": "follow_up_paid"
+        },
+        {
+          "label": "Authorise stop / discharge - no financial impact",
+          "value": "discharge_unpaid"
+        },
+        {
+          "label": "Authorise stop / discharge - Finance review required",
+          "value": "discharge_paid"
+        },
+        {
+          "label": "Formal clinical authorisation is missing",
+          "value": "invalid"
         }
       ],
       "validate": {
@@ -58,7 +82,7 @@
       "id": "Field_notes",
       "type": "textarea",
       "key": "notes",
-      "label": "Action record / reason",
+      "label": "Modification notes",
       "validate": {
         "required": true
       },
@@ -79,7 +103,7 @@
     }
   ],
   "type": "default",
-  "id": "hospital_task_form",
+  "id": "clinical_change",
   "executionPlatform": "Camunda Cloud",
   "executionPlatformVersion": "8.10.0",
   "exporter": {

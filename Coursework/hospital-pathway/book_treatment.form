@@ -3,7 +3,7 @@
     {
       "id": "Text_Title",
       "type": "text",
-      "text": "## Task record\n\nComplete this step and record what was done.\n\n_Demo only._",
+      "text": "## P6 — Confirm treatment appointments\n\nChoosing **Resources available** triggers Java `send-booking-confirmation`.\n\n_Demo only._",
       "layout": {
         "row": "Row_Title",
         "columns": null
@@ -42,8 +42,12 @@
       "label": "Outcome / next action",
       "values": [
         {
-          "label": "Completed and recorded",
-          "value": "recorded"
+          "label": "Resources available; booking confirmed",
+          "value": "ready"
+        },
+        {
+          "label": "External service / resource unavailable",
+          "value": "pending"
         }
       ],
       "validate": {
@@ -58,7 +62,7 @@
       "id": "Field_notes",
       "type": "textarea",
       "key": "notes",
-      "label": "Action record / reason",
+      "label": "Booking notes",
       "validate": {
         "required": true
       },
@@ -70,7 +74,7 @@
     {
       "id": "Button_Submit",
       "type": "button",
-      "label": "Complete task",
+      "label": "Complete booking check",
       "action": "submit",
       "layout": {
         "row": "Row_Submit",
@@ -79,7 +83,7 @@
     }
   ],
   "type": "default",
-  "id": "hospital_task_form",
+  "id": "book_treatment",
   "executionPlatform": "Camunda Cloud",
   "executionPlatformVersion": "8.10.0",
   "exporter": {

@@ -79,7 +79,7 @@
     }
   ],
   "type": "default",
-  "id": "hospital_task_form",
+  "id": "simple_record",
   "executionPlatform": "Camunda Cloud",
   "executionPlatformVersion": "8.10.0",
   "exporter": {

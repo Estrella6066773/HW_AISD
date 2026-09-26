@@ -1,0 +1,174 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P1 / P10 / P13 — Register request\n\n_Demo only — fictional data only._",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "Patient / case ID",
+      "validate": {
+        "required": true
+      },
+      "description": "e.g. DEMO-001",
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_specialty",
+      "type": "select",
+      "key": "specialty",
+      "label": "Specialty / service",
+      "values": [
+        {
+          "label": "Oncology",
+          "value": "oncology"
+        },
+        {
+          "label": "Chemotherapy",
+          "value": "chemotherapy"
+        },
+        {
+          "label": "General medicine",
+          "value": "general"
+        },
+        {
+          "label": "Other / not applicable",
+          "value": "other"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_priority",
+      "type": "select",
+      "key": "priority",
+      "label": "Priority",
+      "values": [
+        {
+          "label": "Routine",
+          "value": "routine"
+        },
+        {
+          "label": "Urgent",
+          "value": "urgent"
+        },
+        {
+          "label": "Two-week wait / suspected cancer",
+          "value": "two_week_wait"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_timeframe",
+      "type": "textfield",
+      "key": "timeframe",
+      "label": "Requested timeframe",
+      "validate": {
+        "required": true
+      },
+      "description": "e.g. within 2 weeks",
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "Request type",
+      "values": [
+        {
+          "label": "New referral - documents checked",
+          "value": "referral"
+        },
+        {
+          "label": "Referral - supporting documents missing",
+          "value": "referral_incomplete"
+        },
+        {
+          "label": "Administrative enquiry",
+          "value": "enquiry_admin"
+        },
+        {
+          "label": "Clinical enquiry",
+          "value": "enquiry_clinical"
+        },
+        {
+          "label": "Financial enquiry",
+          "value": "enquiry_finance"
+        },
+        {
+          "label": "Authorised change / follow-up / cancellation",
+          "value": "change"
+        },
+        {
+          "label": "Management audit / report",
+          "value": "report"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_4",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Registration notes",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_5",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "Complete registration",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "register_request",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}
