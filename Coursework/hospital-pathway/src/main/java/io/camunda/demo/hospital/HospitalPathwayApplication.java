@@ -14,12 +14,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**
- * 部署全院流程 {@code Hospital_All_Processes_Simple_C8}。
- * 依据 {@code Coursework/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn}：
- * 每个工作步骤都是用户任务，指派给 demo，共用表单 {@code hospital_task_form}。
- * 协作图上指向支付服务、排程和信函服务的箭头只表示对外往来，流程里没有消息订阅，也没有服务任务。
- * 因此本进程不注册任务工作器。部署写入引擎后进程可以退出；Tasklist 从引擎领取用户任务，不依赖本进程继续运行。
- * 人提交表单后，引擎用各任务的输出映射写入网关变量。
+ * Deploys {@code Hospital_All_Processes_Simple_C8} and keeps the process listening for
+ * the two classroom service tasks. Package layout lives under
+ * {@code Coursework/hospital-pathway/}: BPMN + {@code hospital_task_form} + these workers.
+ * User tasks still drive clinical / finance decisions; {@code request-payment} and
+ * {@code send-booking-confirmation} cover the automated hand-offs.
  */
 @SpringBootApplication
 public class HospitalPathwayApplication {
@@ -31,11 +30,8 @@ public class HospitalPathwayApplication {
 	}
 
 	/**
-	 * 启动时部署流程图和共用表单。没有任务工作器时，Spring 进程在部署结束后退出，部署本身留在引擎上。
-	 * classpath 里的文件由 {@code Coursework/pom.xml} 从本目录复制。
-	 * 表单 id 必须是 {@code hospital_task_form}，与模型中每个用户任务的 formId 相同。
-	 * 提交变量是 {@code patientId}、{@code action}、{@code notes}；网关不直接读 {@code action}，
-	 * 而读各任务输出映射写回的 {@code requestKind}、{@code fundingStatus} 等流程变量。
+	 * Deploys the BPMN and shared form from this Maven module. Workers stay registered
+	 * for the lifetime of the process. Form id must remain {@code hospital_task_form}.
 	 */
 	@Bean
 	CommandLineRunner deployHospitalPathway(CamundaClient camundaClient) {
@@ -57,7 +53,8 @@ public class HospitalPathwayApplication {
 			}
 			DeploymentEvent deployment = command.send().join();
 			LOG.info("已部署全院流程 Hospital_All_Processes_Simple_C8，部署键 {}", deployment.getKey());
-			LOG.info("用户任务使用表单 hospital_task_form，指派给 demo。本流程没有外部任务类型");
+			LOG.info(
+					"用户任务: hospital_task_form / demo。服务任务: request-payment, send-booking-confirmation");
 		};
 	}
 

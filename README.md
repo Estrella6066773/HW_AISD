@@ -19,7 +19,7 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 |------|---------|
 | `docs/` | Group-level deliverables: product backlog, task breakdown, sprint backlog, requirements traceability matrix, definition of done |
 | `Ruby/`, `Est/`, `Ender/`, `Ryan/` | Individual workspaces: drafts, part-level documents, meeting notes |
-| `Coursework/` | Agile Workshop workbook transcription |
+| `Coursework/` | Workbook Word copies; executable pathway package in `hospital-pathway/` (BPMN + form + Java workers) |
 | `W01/` | Course materials: session slides, case study, assessment specifications |
 
 ## Current status

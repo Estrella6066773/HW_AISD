@@ -3,7 +3,7 @@
 **主笔**：Estrella（陈格平）
 **日期**：2026-09-26
 **依据**：[`Est/est：治疗预约与付款流程变量设计.md`](est：治疗预约与付款流程变量设计.md)、[`Est/est：治疗预约与付款可执行模型.md`](est：治疗预约与付款可执行模型.md)、[`Est/W02_Treatment_Booking_Payment_Executable.bpmn`](W02_Treatment_Booking_Payment_Executable.bpmn)
-**状态**：本文件描述的是较早的治疗预约概念图。最新全院图是 `Coursework/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`。针对这张图，`Coursework/` 里的程序只部署流程和共用表单 `hospital_task_form`，不再订阅 `request-payment` 与 `send-booking-confirmation`。入口类是 `Coursework/src/main/java/io/camunda/demo/hospital/HospitalPathwayApplication.java`。
+**状态**：本文件描述的是较早的治疗预约概念图。最新全院可执行包在 `Coursework/hospital-pathway/`（BPMN + `hospital_task_form` + Java workers）。程序部署流程并订阅 `request-payment` 与 `send-booking-confirmation`。入口类是 `Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/HospitalPathwayApplication.java`。
 
 本文件放在个人目录 `Est/`。程序是一个保持运行的 Spring Boot 进程，使用 Camunda Java 客户端连接本机 Camunda。它等待引擎分配任务，不提供患者或员工使用的网页。程序不读取卡号、安全码或病历正文。
 
