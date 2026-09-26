@@ -10,11 +10,12 @@
     <bpmn:participant id="PaymentProvider" name="External Payment Service Provider" />
     <bpmn:messageFlow id="Msg_Referral" name="Referral documents" sourceRef="Referrer" targetRef="Register" />
     <bpmn:messageFlow id="Msg_Contact" name="Appointment / contact" sourceRef="BookVisit" targetRef="Patient" />
-    <bpmn:messageFlow id="Msg_Treatment" name="Treatment arrangements" sourceRef="BookTreatment" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_Treatment" name="Treatment arrangements" sourceRef="SendBookingConfirmation" targetRef="Patient" />
     <bpmn:messageFlow id="Msg_Slot" name="Slot / service result" sourceRef="Scheduling" targetRef="Hospital" />
     <bpmn:messageFlow id="Msg_Letter" name="Approved letter + recipients" sourceRef="Hospital" targetRef="Correspondence" />
     <bpmn:messageFlow id="Msg_Funding" name="Funding approval" sourceRef="Insurer" targetRef="Hospital" />
-    <bpmn:messageFlow id="Msg_Payment" name="Verified transaction result" sourceRef="PaymentProvider" targetRef="Hospital" />
+    <bpmn:messageFlow id="Msg_PaymentRequest" name="Payment request" sourceRef="RequestPayment" targetRef="PaymentProvider" />
+    <bpmn:messageFlow id="Msg_Payment" name="Verified transaction result" sourceRef="PaymentProvider" targetRef="RequestPayment" />
     <bpmn:textAnnotation id="Stage_1">
       <bpmn:text>1  REFERRAL REVIEW</bpmn:text>
     </bpmn:textAnnotation>
@@ -33,7 +34,7 @@
     <bpmn:textAnnotation id="Guide_Main">
       <bpmn:text>READING GUIDE | Blue lines = normal care route. Grey lines = supporting / exception paths.
 Every solid arrow connects directly to its next activity. Follow the arrowhead; crossings do not join flows.
-All P1-P13 business tasks stay visible on this canvas. External services / elapsed time are simulated for the classroom demo.</bpmn:text>
+All P1-P13 business tasks stay visible on this canvas. Two service tasks call classroom Java workers for payment and booking confirmation; other external services / elapsed time remain simulated.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Guide_Rules">
       <bpmn:text>BUSINESS CONTROLS | P4: within 2 weeks, also phone and record contact. P9: 7-day letter target; weekly reminders; escalate at 1 and 3 months.
@@ -42,7 +43,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:textAnnotation>
   </bpmn:collaboration>
   <bpmn:process id="Hospital_All_Processes_Simple_C8" name="Hospital - All Business Processes (Simple Camunda 8)" isExecutable="true">
-    <bpmn:documentation>Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. All external interactions and elapsed time are simulated manually. Every work step is a native Camunda 8 user task; there are no unimplemented workers, timers or message subscriptions. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. Forms are deliberately not bound yet. Inputs taskTitle/taskHelp/actionOptions/action/notes/patientId prepare one reusable form; task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving. A startable main-path demonstration will use a normal none start event. See coverage and variable documentation in the companion README.</bpmn:documentation>
+    <bpmn:documentation>Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Two Camunda 8 service tasks use classroom Java workers: request-payment (inline mock provider result; no message catch) and send-booking-confirmation. There are no timers or message wait events. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. Forms are deliberately not bound yet. Inputs taskTitle/taskHelp/actionOptions/action/notes/patientId prepare one reusable form; task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving. A startable main-path demonstration will use a normal none start event. See coverage and variable documentation in the companion README.</bpmn:documentation>
     <bpmn:laneSet id="Hospital_Lanes">
       <bpmn:lane id="Admin" name="Administration">
         <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
@@ -58,6 +59,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>MonitorLetters</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>BookTreatment</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>TreatmentOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SendBookingConfirmation</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>AdminEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndAdminEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>AuditReports</bpmn:flowNodeRef>
@@ -83,6 +85,8 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:lane id="Finance" name="Finance">
         <bpmn:flowNodeRef>Funding</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FundingOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RequestPayment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>PaymentResult</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FundingIssue</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>UrgentFinance</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FinanceAdjustment</bpmn:flowNodeRef>
@@ -262,7 +266,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_07</bpmn:incoming>
-      <bpmn:incoming>Flow_16</bpmn:incoming>
+      <bpmn:incoming>Flow_66</bpmn:incoming>
       <bpmn:incoming>Flow_39</bpmn:incoming>
       <bpmn:incoming>Flow_41</bpmn:incoming>
       <bpmn:incoming>Flow_43</bpmn:incoming>
@@ -331,16 +335,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_43</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="Funding" name="P7&#10;Assess funding; record&#10;payment / approval status">
-      <bpmn:documentation>Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. This task only records simulated provider outcomes.</bpmn:documentation>
+      <bpmn:documentation>Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. Choose patient_payment_required to hand off to the request-payment worker; choose patient_paid only when payment is already verified without calling the provider.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
           <zeebe:input source="= &#34;P7 Assess funding; record payment / approval status&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. This task only records simulated provider outcomes.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. Choose patient_payment_required to hand off to the request-payment worker; choose patient_paid only when payment is already verified without calling the provider.&#34;" target="taskHelp" />
           <zeebe:input source="= &#34;Funding&#34;" target="taskCode" />
-          <zeebe:input source="= [{ label: &#34;Hospital funding confirmed&#34;, value: &#34;hospital_funded&#34; }, { label: &#34;Insurer approval recorded&#34;, value: &#34;insurer_approved&#34; }, { label: &#34;Payment verified&#34;, value: &#34;patient_paid&#34; }, { label: &#34;Authorised exemption / payment arrangement&#34;, value: &#34;arrangement&#34; }, { label: &#34;Declined / incomplete / funding pending&#34;, value: &#34;pending&#34; }, { label: &#34;Provider success but confirmation missing&#34;, value: &#34;investigate&#34; }, { label: &#34;Request clinical review of urgent-care exception&#34;, value: &#34;urgent_review&#34; }]" target="actionOptions" />
+          <zeebe:input source="= [{ label: &#34;Hospital funding confirmed&#34;, value: &#34;hospital_funded&#34; }, { label: &#34;Insurer approval recorded&#34;, value: &#34;insurer_approved&#34; }, { label: &#34;Patient payment required - call provider&#34;, value: &#34;patient_payment_required&#34; }, { label: &#34;Payment already verified&#34;, value: &#34;patient_paid&#34; }, { label: &#34;Authorised exemption / payment arrangement&#34;, value: &#34;arrangement&#34; }, { label: &#34;Declined / incomplete / funding pending&#34;, value: &#34;pending&#34; }, { label: &#34;Provider success but confirmation missing&#34;, value: &#34;investigate&#34; }, { label: &#34;Request clinical review of urgent-care exception&#34;, value: &#34;urgent_review&#34; }]" target="actionOptions" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
           <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
@@ -358,18 +362,33 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:exclusiveGateway id="FundingOutcome" name="Funding&#10;status?" default="Flow_45">
       <bpmn:incoming>Flow_13</bpmn:incoming>
       <bpmn:outgoing>Flow_14</bpmn:outgoing>
+      <bpmn:outgoing>Flow_63</bpmn:outgoing>
       <bpmn:outgoing>Flow_44</bpmn:outgoing>
       <bpmn:outgoing>Flow_45</bpmn:outgoing>
     </bpmn:exclusiveGateway>
+
+    <bpmn:serviceTask id="RequestPayment" name="P7&#10;Request payment from&#10;external provider">
+      <bpmn:documentation>Classroom Java worker type request-payment. Reads patientId (as case reference) and optional charge_amount; mocks the Payment Provider result inline and returns payment_status, transaction_reference, payment_date. On success also sets fundingStatus=patient_paid. Does not store card data. Idempotent when payment_requested_once is already true. No message catch event.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="request-payment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_63</bpmn:incoming>
+      <bpmn:outgoing>Flow_64</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="PaymentResult" name="Payment&#10;result?" default="Flow_67">
+      <bpmn:incoming>Flow_64</bpmn:incoming>
+      <bpmn:outgoing>Flow_65</bpmn:outgoing>
+      <bpmn:outgoing>Flow_67</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:userTask id="FundingIssue" name="P7&#10;Resolve funding issue /&#10;investigate missing receipt">
-      <bpmn:documentation>Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding.</bpmn:documentation>
+      <bpmn:documentation>Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding. Also reached when the request-payment worker returns an unsuccessful result.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
           <zeebe:input source="= &#34;P7 Resolve funding issue / investigate missing receipt&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding. Also reached when the request-payment worker returns an unsuccessful result.&#34;" target="taskHelp" />
           <zeebe:input source="= &#34;FundingIssue&#34;" target="taskCode" />
           <zeebe:input source="= [{ label: &#34;Completed and recorded&#34;, value: &#34;recorded&#34; }]" target="actionOptions" />
           <zeebe:input source="= null" target="action" />
@@ -380,6 +399,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_45</bpmn:incoming>
+      <bpmn:incoming>Flow_67</bpmn:incoming>
       <bpmn:outgoing>Flow_46</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="UrgentAuthorisation" name="P8&#10;Clinician authorises&#10;urgent care with reason">
@@ -411,14 +431,14 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_49</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="BookTreatment" name="P6&#10;Confirm authorised treatment&#10;and investigation appointments">
-      <bpmn:documentation>Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm and notify patient only after these checks. Classroom task records external outcomes.</bpmn:documentation>
+      <bpmn:documentation>Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm booking only after these checks; patient notification is handed to the send-booking-confirmation worker after resources are ready. Classroom task records scheduling outcomes.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="hospital_task_form" bindingType="deployment" />
         <zeebe:assignmentDefinition assignee="demo" />
         <zeebe:ioMapping>
           <zeebe:input source="= &#34;P6 Confirm authorised treatment and investigation appointments&#34;" target="taskTitle" />
-          <zeebe:input source="= &#34;Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm and notify patient only after these checks. Classroom task records external outcomes.&#34;" target="taskHelp" />
+          <zeebe:input source="= &#34;Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm booking only after these checks; patient notification is handed to the send-booking-confirmation worker after resources are ready. Classroom task records scheduling outcomes.&#34;" target="taskHelp" />
           <zeebe:input source="= &#34;BookTreatment&#34;" target="taskCode" />
           <zeebe:input source="= [{ label: &#34;Resources available; booking confirmed&#34;, value: &#34;ready&#34; }, { label: &#34;External service / resource unavailable&#34;, value: &#34;pending&#34; }]" target="actionOptions" />
           <zeebe:input source="= null" target="action" />
@@ -430,6 +450,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_14</bpmn:incoming>
+      <bpmn:incoming>Flow_65</bpmn:incoming>
       <bpmn:incoming>Flow_48</bpmn:incoming>
       <bpmn:incoming>Flow_50</bpmn:incoming>
       <bpmn:outgoing>Flow_15</bpmn:outgoing>
@@ -439,6 +460,14 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_16</bpmn:outgoing>
       <bpmn:outgoing>Flow_50</bpmn:outgoing>
     </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="SendBookingConfirmation" name="P6&#10;Send booking&#10;confirmation">
+      <bpmn:documentation>Classroom Java worker type send-booking-confirmation. After treatment resources are ready, notifies the patient via the mocked correspondence path and returns confirmation_sent=true. Uses patientId and optional booking_reference. Does not wait on an inbound message.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="send-booking-confirmation" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_66</bpmn:outgoing>
+    </bpmn:serviceTask>
     <bpmn:userTask id="UrgentFinance" name="P8&#10;Finance follows up&#10;after urgent care">
       <bpmn:documentation>After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.</bpmn:documentation>
       <bpmn:extensionElements>
@@ -688,9 +717,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_36" name="Cancel / DNA" sourceRef="VisitOutcome" targetRef="ClinicalChange">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "cancelled"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_16" name="Treatment / review" sourceRef="TreatmentOutcome" targetRef="ClinicalCare">
+    <bpmn:sequenceFlow id="Flow_16" name="Resources ready" sourceRef="TreatmentOutcome" targetRef="SendBookingConfirmation">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= treatmentSlotStatus = "ready"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_66" name="Treatment / review" sourceRef="SendBookingConfirmation" targetRef="ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_39" name="Clinical correction" sourceRef="LetterOutcome" targetRef="ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "revise"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -726,6 +756,14 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "urgent_review"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_45" name="Pending / investigate" sourceRef="FundingOutcome" targetRef="FundingIssue" />
+    <bpmn:sequenceFlow id="Flow_63" name="Patient payment" sourceRef="FundingOutcome" targetRef="RequestPayment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "patient_payment_required"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_64" sourceRef="RequestPayment" targetRef="PaymentResult" />
+    <bpmn:sequenceFlow id="Flow_65" name="Paid" sourceRef="PaymentResult" targetRef="BookTreatment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= payment_status = "successful"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_67" name="Unsuccessful" sourceRef="PaymentResult" targetRef="FundingIssue" />
     <bpmn:sequenceFlow id="Flow_47" sourceRef="UrgentAuthorisation" targetRef="UrgentDecision" />
     <bpmn:sequenceFlow id="Flow_48" name="Authorised" sourceRef="UrgentDecision" targetRef="BookTreatment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentDecision = "authorise"</bpmn:conditionExpression>
@@ -757,16 +795,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
   <bpmndi:BPMNDiagram id="Diagram_Clean_Lines_C8">
     <bpmndi:BPMNPlane id="Plane_Clean_Lines_C8" bpmnElement="Collaboration_Hospital_Simple">
       <bpmndi:BPMNShape id="Hospital_di" bpmnElement="Hospital" isHorizontal="true" isExpanded="true">
-        <dc:Bounds x="150" y="280" width="3520" height="1740" />
+        <dc:Bounds x="150" y="280" width="3950" height="1740" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Admin_di" bpmnElement="Admin" isHorizontal="true">
-        <dc:Bounds x="185" y="280" width="3485" height="620" />
+        <dc:Bounds x="185" y="280" width="3915" height="620" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Clinical_di" bpmnElement="Clinical" isHorizontal="true">
-        <dc:Bounds x="185" y="900" width="3485" height="620" />
+        <dc:Bounds x="185" y="900" width="3915" height="620" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Finance_di" bpmnElement="Finance" isHorizontal="true">
-        <dc:Bounds x="185" y="1520" width="3485" height="500" />
+        <dc:Bounds x="185" y="1520" width="3915" height="500" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Start_di" bpmnElement="Start">
         <dc:Bounds x="260" y="430" width="40" height="40" />
@@ -853,7 +891,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="FundingOutcome_di" bpmnElement="FundingOutcome" isMarkerVisible="true">
         <dc:Bounds x="3380" y="1600" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3477" y="1600" width="40" height="27" />
+          <dc:Bounds x="3372" y="1552" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RequestPayment_di" bpmnElement="RequestPayment" bioc:stroke="#263746" bioc:fill="#fff3e5">
+        <dc:Bounds x="3520" y="1570" width="200" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PaymentResult_di" bpmnElement="PaymentResult" isMarkerVisible="true">
+        <dc:Bounds x="3800" y="1600" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3788" y="1552" width="64" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="FundingIssue_di" bpmnElement="FundingIssue" bioc:stroke="#263746" bioc:fill="#fff3e5">
@@ -876,6 +923,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3369" y="340" width="53" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendBookingConfirmation_di" bpmnElement="SendBookingConfirmation" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="3520" y="400" width="200" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UrgentFinance_di" bpmnElement="UrgentFinance" bioc:stroke="#263746" bioc:fill="#fff3e5">
         <dc:Bounds x="2190" y="1830" width="220" height="100" />
@@ -1200,9 +1250,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16_di" bpmnElement="Flow_16" bioc:stroke="#1768a6">
-        <di:waypoint x="3400" y="470" />
-        <di:waypoint x="3400" y="500" />
-        <di:waypoint x="3320" y="500" />
+        <di:waypoint x="3420" y="450" />
+        <di:waypoint x="3520" y="450" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3428" y="423" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_66_di" bpmnElement="Flow_66" bioc:stroke="#1768a6">
+        <di:waypoint x="3620" y="500" />
+        <di:waypoint x="3620" y="540" />
+        <di:waypoint x="3320" y="540" />
         <di:waypoint x="3320" y="1100" />
         <di:waypoint x="1620" y="1100" />
         <di:waypoint x="1620" y="1080" />
@@ -1380,6 +1437,35 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <dc:Bounds x="3328" y="1857" width="103" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_63_di" bpmnElement="Flow_63" bioc:stroke="#1768a6">
+        <di:waypoint x="3420" y="1620" />
+        <di:waypoint x="3520" y="1620" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3426" y="1593" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_64_di" bpmnElement="Flow_64" bioc:stroke="#1768a6">
+        <di:waypoint x="3720" y="1620" />
+        <di:waypoint x="3800" y="1620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_65_di" bpmnElement="Flow_65" bioc:stroke="#1768a6">
+        <di:waypoint x="3820" y="1600" />
+        <di:waypoint x="3820" y="520" />
+        <di:waypoint x="3300" y="520" />
+        <di:waypoint x="3300" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3548" y="497" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_67_di" bpmnElement="Flow_67" bioc:stroke="#667481">
+        <di:waypoint x="3820" y="1640" />
+        <di:waypoint x="3820" y="1920" />
+        <di:waypoint x="3190" y="1920" />
+        <di:waypoint x="3190" y="1930" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3468" y="1897" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_47_di" bpmnElement="Flow_47" bioc:stroke="#667481">
         <di:waypoint x="3000" y="1270" />
         <di:waypoint x="3050" y="1270" />
@@ -1511,7 +1597,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <dc:Bounds x="1870" y="2120" width="800" height="60" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="PaymentProvider_di" bpmnElement="PaymentProvider" isHorizontal="true">
-        <dc:Bounds x="2750" y="2120" width="920" height="60" />
+        <dc:Bounds x="2750" y="2120" width="1300" height="60" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Msg_Referral_di" bpmnElement="Msg_Referral" bioc:stroke="#81909d">
         <di:waypoint x="450" y="140" />

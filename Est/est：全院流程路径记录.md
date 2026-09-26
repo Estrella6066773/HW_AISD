@@ -2,8 +2,8 @@
 
 **主笔**：Estrella（陈格平）
 **日期**：2026-09-26
-**依据**：`Coursework/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`，流程编号 `Hospital_All_Processes_Simple_C8`，版本 1，流程定义键 `2251799813868529`，部署键 `2251799813868527`。引擎 http://localhost:8090 。
-**状态**：Java 程序已改为部署这张全院图和共用表单 `hospital_task_form`。下面六条路径是在引擎上提交用户任务后读到的停靠位置。
+**依据**：`Coursework/hospital-pathway/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`，流程编号 `Hospital_All_Processes_Simple_C8`，版本 1，流程定义键 `2251799813868529`，部署键 `2251799813868527`。引擎 http://localhost:8090 。
+**状态**：Java 程序与图、表单同在 `Coursework/hospital-pathway/`：部署全院图和共用表单 `hospital_task_form`，并运行 `request-payment` / `send-booking-confirmation` 两个 service-task worker。下面六条路径是在引擎上提交用户任务后读到的停靠位置。
 
 这张图比 `Est/W02_Treatment_Booking_Payment.bpmn` 新。图上的支付服务、排程和信函服务只出现在协作图的消息箭头上。流程内部没有服务任务，也没有消息捕获。付款是否通过，由财务在用户任务 `Funding` 里选择 `action`，输出映射写入 `fundingStatus`。
 
