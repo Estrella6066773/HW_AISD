@@ -2,7 +2,7 @@
 
 **主笔**：Estrella（陈格平）
 **日期**：2026-09-26
-**依据**：步骤 7。流程定义 `TreatmentProcess`，引擎 http://localhost:8090 。工作器日志在运行中的 `src/workers` 进程里。
+**依据**：步骤 7。流程定义 `TreatmentProcess`，引擎 http://localhost:8090 。走路径时，工作器进程从当时的 `src/workers/` 启动。源码随后移到 `Coursework/`。
 **状态**：五条路径都已在引擎上走完。Operate 页面截图未采集；浏览器打开 Operate 时页面停在空白。下面用流程实例键、结束状态和变量代替截图。在 Operate 搜索这些实例键可以打开对应路径。
 
 登录 Operate / Tasklist 使用 `demo` / `demo`，地址是 http://localhost:8090/operate 和 http://localhost:8090/tasklist 。
