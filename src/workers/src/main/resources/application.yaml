@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: treatment-booking-workers
+
+camunda:
+  client:
+    mode: self-managed
+    grpc-address: http://127.0.0.1:26500
+    rest-address: http://127.0.0.1:8090
