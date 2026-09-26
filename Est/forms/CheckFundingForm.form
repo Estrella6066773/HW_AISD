@@ -1,0 +1,44 @@
+{
+  "components": [
+    {
+      "text": "财务组核对费用与资助。必须先确认资助决定已经做出，才能选择患者是否需要自己付款。",
+      "type": "text",
+      "id": "Text_FundingIntro",
+      "layout": { "row": "Row_FundingIntro" }
+    },
+    {
+      "label": "资助决定已经做出",
+      "description": "未勾选时不能提交。",
+      "type": "checkbox",
+      "id": "Field_funding_resolved",
+      "key": "funding_resolved",
+      "validate": { "required": true },
+      "layout": { "row": "Row_funding_resolved" }
+    },
+    {
+      "label": "患者需要自己付款",
+      "description": "不勾选表示有效资助或已授权安排已经覆盖费用，流程将直接进入确认预约。",
+      "type": "checkbox",
+      "id": "Field_patient_payment_required",
+      "key": "patient_payment_required",
+      "layout": { "row": "Row_patient_payment_required" }
+    },
+    {
+      "label": "患者应付金额",
+      "description": "只有在需要患者自己付款时填写。不要填写卡号或安全码。",
+      "type": "number",
+      "id": "Field_charge_amount",
+      "key": "charge_amount",
+      "decimalDigits": 2,
+      "validate": { "required": true, "min": 0.01 },
+      "conditional": { "hide": "=not(patient_payment_required)" },
+      "layout": { "row": "Row_charge_amount" }
+    }
+  ],
+  "type": "default",
+  "id": "CheckFundingForm",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": { "name": "Camunda Modeler", "version": "5.51.0" },
+  "schemaVersion": 19
+}
