@@ -1,0 +1,74 @@
+{
+  "components": [
+    {
+      "label": "Select Movie",
+      "values": [
+        {
+          "label": "Star Wars",
+          "value": "star_wars"
+        },
+        {
+          "label": "Harry Potter",
+          "value": "harry_potter"
+        },
+        {
+          "label": "Frozon",
+          "value": "frozon"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_0d5k2kp",
+        "columns": null
+      },
+      "id": "Field_13iq7s6",
+      "key": "movie_list"
+    },
+    {
+      "label": "Number of tickets",
+      "type": "number",
+      "layout": {
+        "row": "Row_0tmrw8q",
+        "columns": null
+      },
+      "id": "Field_1q1r3yf",
+      "key": "number_of_tickets",
+      "defaultValue": 1,
+      "decimalDigits": 0,
+      "increment": "1",
+      "validate": {
+        "max": "5"
+      }
+    },
+    {
+      "label": "Next",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_0q6pgjs",
+        "columns": null
+      },
+      "id": "Field_0ofgyjj"
+    },
+    {
+      "computeOn": "presubmit",
+      "type": "expression",
+      "layout": {
+        "row": "Row_1ccaog6",
+        "columns": null
+      },
+      "id": "Field_1v73bub",
+      "key": "price",
+      "expression": "=if movie_list = \"star_wars\" then number_of_tickets*10 else number_of_tickets*15"
+    }
+  ],
+  "type": "default",
+  "id": "select_movie",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.1"
+  },
+  "schemaVersion": 19
+}

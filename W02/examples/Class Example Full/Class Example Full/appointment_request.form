@@ -1,0 +1,77 @@
+{
+  "components": [
+    {
+      "text": "# Request Doctor's Appoinment",
+      "type": "text",
+      "layout": {
+        "row": "Row_0rgf93p",
+        "columns": null
+      },
+      "id": "Field_1nzscrm"
+    },
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1ca2lm4",
+        "columns": null
+      },
+      "id": "Field_0vkauls",
+      "key": "patient_name",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Select Doctor",
+      "values": [
+        {
+          "label": "Doctor 01",
+          "value": "doc1"
+        },
+        {
+          "label": "Doctor 02",
+          "value": "doc2"
+        },
+        {
+          "label": "Doctor 03",
+          "value": "doc3"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0c22urn",
+        "columns": null
+      },
+      "id": "Field_1cv6gmd",
+      "key": "radio_ajhy7g",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Date",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_0z2oauc",
+        "columns": null
+      },
+      "id": "Field_10mjm6b",
+      "key": "date_of_appointment",
+      "validate": {
+        "required": true
+      },
+      "disallowPassedDates": true
+    }
+  ],
+  "type": "default",
+  "id": "appointment_request",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.1"
+  },
+  "schemaVersion": 19
+}

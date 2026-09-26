@@ -1,0 +1,111 @@
+{
+  "components": [
+    {
+      "text": "# Request Doctor's Appoinment\n# Confirmation",
+      "type": "text",
+      "layout": {
+        "row": "Row_0rgf93p",
+        "columns": null
+      },
+      "id": "Field_1nzscrm"
+    },
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1ca2lm4",
+        "columns": null
+      },
+      "id": "Field_0vkauls",
+      "key": "patient_name",
+      "validate": {
+        "required": true
+      },
+      "readonly": true
+    },
+    {
+      "label": "Select Doctor",
+      "values": [
+        {
+          "label": "Doctor 01",
+          "value": "doc1"
+        },
+        {
+          "label": "Doctor 02",
+          "value": "doc2"
+        },
+        {
+          "label": "Doctor 03",
+          "value": "doc3"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0c22urn",
+        "columns": null
+      },
+      "id": "Field_1cv6gmd",
+      "key": "radio_ajhy7g",
+      "validate": {
+        "required": true
+      },
+      "readonly": true
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Date",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_0z2oauc",
+        "columns": null
+      },
+      "id": "Field_10mjm6b",
+      "key": "date_of_appointment",
+      "validate": {
+        "required": true
+      },
+      "readonly": true
+    },
+    {
+      "label": "Requested Appointment",
+      "values": [
+        {
+          "label": "Available",
+          "value": "available"
+        },
+        {
+          "label": "Not Available",
+          "value": "not_available"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0yvqvih",
+        "columns": null
+      },
+      "id": "Field_0yu3p3d",
+      "key": "availability",
+      "readonly": true
+    },
+    {
+      "label": "Notes",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0nrt4x7",
+        "columns": null
+      },
+      "id": "Field_1s0y2vw",
+      "key": "clinic_notes",
+      "readonly": true
+    }
+  ],
+  "type": "default",
+  "id": "appointment_confirmation",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.1"
+  },
+  "schemaVersion": 19
+}

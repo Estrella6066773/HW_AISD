@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1hky68i" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.51.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <bpmn:process id="ticket_issue_class_exmaple_v1" name="Ticket_Issueing_Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_17rqjd8</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_17rqjd8" sourceRef="StartEvent_1" targetRef="Activity_09748dg" />
+    <bpmn:userTask id="Activity_09748dg" name="Enter Personal Infomation">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="personal_info_form" bindingType="deployment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_17rqjd8</bpmn:incoming>
+      <bpmn:outgoing>Flow_03l2rgo</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_03l2rgo" sourceRef="Activity_09748dg" targetRef="Activity_1xxe8jt" />
+    <bpmn:sequenceFlow id="Flow_1e74v0k" sourceRef="Activity_1xxe8jt" targetRef="Activity_1i0wsq8" />
+    <bpmn:userTask id="Activity_1xxe8jt" name="Add Ticket Details">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="select_movie" bindingType="deployment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_03l2rgo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1e74v0k</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_0aabp0c" name="Make Payment by Card">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="card_detial_form" bindingType="deployment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08aqkr2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ydwwuc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0oh4b7u" sourceRef="Activity_1i0wsq8" targetRef="Gateway_0e3uaga" />
+    <bpmn:exclusiveGateway id="Gateway_0e3uaga">
+      <bpmn:incoming>Flow_0oh4b7u</bpmn:incoming>
+      <bpmn:outgoing>Flow_08aqkr2</bpmn:outgoing>
+      <bpmn:outgoing>Flow_06cjyrn</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_08aqkr2" sourceRef="Gateway_0e3uaga" targetRef="Activity_0aabp0c">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=payment_method = "card"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_06cjyrn" sourceRef="Gateway_0e3uaga" targetRef="Activity_13bwqn3">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=payment_method = "cash"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0ydwwuc" sourceRef="Activity_0aabp0c" targetRef="Activity_1vig4vl" />
+    <bpmn:userTask id="Activity_1vig4vl" name="Confirmation REcieved">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="Payment_confirmation_form" bindingType="deployment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ydwwuc</bpmn:incoming>
+      <bpmn:outgoing>Flow_18ounxc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_18ounxc" sourceRef="Activity_1vig4vl" targetRef="Gateway_0y9refu" />
+    <bpmn:userTask id="Activity_1hsu79q" name="Issue Ticket">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="ticket_issues_form1" bindingType="deployment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1jsqml0</bpmn:incoming>
+      <bpmn:outgoing>Flow_15cnqhn</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_09ddi7z" sourceRef="Activity_13bwqn3" targetRef="Gateway_0y9refu" />
+    <bpmn:exclusiveGateway id="Gateway_0y9refu">
+      <bpmn:incoming>Flow_18ounxc</bpmn:incoming>
+      <bpmn:incoming>Flow_09ddi7z</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jsqml0</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1jsqml0" sourceRef="Gateway_0y9refu" targetRef="Activity_1hsu79q" />
+    <bpmn:endEvent id="Event_0vzybil">
+      <bpmn:incoming>Flow_15cnqhn</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_15cnqhn" sourceRef="Activity_1hsu79q" targetRef="Event_0vzybil" />
+    <bpmn:userTask id="Activity_1i0wsq8" name="Select Payment Type">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="payment_method_select" bindingType="deployment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1e74v0k</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oh4b7u</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_13bwqn3" name="Make Payment by Cash">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="cash_message_form" bindingType="deployment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06cjyrn</bpmn:incoming>
+      <bpmn:outgoing>Flow_09ddi7z</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ticket_issue_class_exmaple_v1">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="192" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0w8ehn3_di" bpmnElement="Activity_09748dg">
+        <dc:Bounds x="280" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0dy3cxt_di" bpmnElement="Activity_1xxe8jt">
+        <dc:Bounds x="440" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0e3uaga_di" bpmnElement="Gateway_0e3uaga" isMarkerVisible="true">
+        <dc:Bounds x="745" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zmojx4_di" bpmnElement="Activity_0aabp0c">
+        <dc:Bounds x="860" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1x65aui_di" bpmnElement="Activity_1vig4vl">
+        <dc:Bounds x="1030" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1n5138b_di" bpmnElement="Activity_1hsu79q">
+        <dc:Bounds x="1250" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0y9refu_di" bpmnElement="Gateway_0y9refu" isMarkerVisible="true">
+        <dc:Bounds x="1165" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vzybil_di" bpmnElement="Event_0vzybil">
+        <dc:Bounds x="1392" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06aqezd_di" bpmnElement="Activity_1i0wsq8">
+        <dc:Bounds x="600" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0k01l2r_di" bpmnElement="Activity_13bwqn3">
+        <dc:Bounds x="860" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_17rqjd8_di" bpmnElement="Flow_17rqjd8">
+        <di:waypoint x="228" y="120" />
+        <di:waypoint x="280" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03l2rgo_di" bpmnElement="Flow_03l2rgo">
+        <di:waypoint x="380" y="120" />
+        <di:waypoint x="440" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1e74v0k_di" bpmnElement="Flow_1e74v0k">
+        <di:waypoint x="540" y="120" />
+        <di:waypoint x="600" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oh4b7u_di" bpmnElement="Flow_0oh4b7u">
+        <di:waypoint x="700" y="120" />
+        <di:waypoint x="745" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08aqkr2_di" bpmnElement="Flow_08aqkr2">
+        <di:waypoint x="795" y="120" />
+        <di:waypoint x="860" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06cjyrn_di" bpmnElement="Flow_06cjyrn">
+        <di:waypoint x="770" y="145" />
+        <di:waypoint x="770" y="230" />
+        <di:waypoint x="860" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ydwwuc_di" bpmnElement="Flow_0ydwwuc">
+        <di:waypoint x="960" y="120" />
+        <di:waypoint x="1030" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09ddi7z_di" bpmnElement="Flow_09ddi7z">
+        <di:waypoint x="960" y="230" />
+        <di:waypoint x="1190" y="230" />
+        <di:waypoint x="1190" y="145" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18ounxc_di" bpmnElement="Flow_18ounxc">
+        <di:waypoint x="1130" y="120" />
+        <di:waypoint x="1165" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jsqml0_di" bpmnElement="Flow_1jsqml0">
+        <di:waypoint x="1215" y="120" />
+        <di:waypoint x="1250" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15cnqhn_di" bpmnElement="Flow_15cnqhn">
+        <di:waypoint x="1350" y="120" />
+        <di:waypoint x="1392" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
