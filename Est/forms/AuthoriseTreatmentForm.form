@@ -1,0 +1,33 @@
+{
+  "components": [
+    {
+      "text": "顾问记录患者已经同意，并授权这次治疗预约。病例号将作为整条流程的消息关联键。",
+      "type": "text",
+      "id": "Text_AuthoriseIntro",
+      "layout": { "row": "Row_AuthoriseIntro" }
+    },
+    {
+      "label": "病例号",
+      "description": "一条流程只用这一个病例号。",
+      "type": "textfield",
+      "id": "Field_case_reference",
+      "key": "case_reference",
+      "validate": { "required": true },
+      "layout": { "row": "Row_case_reference" }
+    },
+    {
+      "label": "已记录患者同意并授权治疗",
+      "type": "checkbox",
+      "id": "Field_consent_recorded",
+      "key": "consent_recorded",
+      "validate": { "required": true },
+      "layout": { "row": "Row_consent_recorded" }
+    }
+  ],
+  "type": "default",
+  "id": "AuthoriseTreatmentForm",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": { "name": "Camunda Modeler", "version": "5.51.0" },
+  "schemaVersion": 19
+}

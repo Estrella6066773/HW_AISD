@@ -3,7 +3,7 @@
 **主笔**：Estrella（陈格平）
 **日期**：2026-09-26
 **依据**：[`Est/est：治疗预约与付款活动设计.md`](est：治疗预约与付款活动设计.md) 中已纳入的 14 个元素。概念图 `Est/W02_Treatment_Booking_Payment.bpmn` 写明：记录付款结果包含状态、交易参考号、日期和金额。
-**状态**：步骤 2 已规定变量名。概念图未改，没有写代码。两个网关条件已写入可执行副本。人工填写的变量要等步骤 4 的表单才会进入流程。
+**状态**：步骤 2 已规定变量名。概念图未改，没有写代码。两个网关条件已写入可执行副本。人工填写的变量由表单进入流程，表单说明见 [`Est/est：治疗预约与付款表单.md`](est：治疗预约与付款表单.md)。
 
 本文件放在个人目录 `Est/`。一条流程实例只用一个病例号。消息关联键等于变量 `case_reference` 的值。
 
@@ -24,6 +24,7 @@
 | `booking_reference` | 文本 | 治疗预约组 | 用户任务「确认治疗预约」 | 发出预约确认的程序 | 已确认的预约号 |
 | `confirmation_sent` | 是否 | 发出预约确认的程序 | 发送任务「发出预约确认」完成时 | 流程结束在「预约已确认」之前 | 为真表示预约确认已经发出。重复执行时保持为真 |
 | `follow_up_note` | 文本 | 财务组 | 用户任务「保持待处理并跟进」 | 本段结束前留在流程实例上 | 付款不成功之后的跟进说明。这张表单不改写 `payment_status` |
+| `payment_result_acknowledged` | 是否 | 财务组 | 用户任务「记录付款结果」 | 本段结束前留在流程实例上 | 财务组确认已经核对程序写回的付款结果。勾选不改写 `payment_status` |
 
 开始事件「治疗已同意」不写变量。结束事件「预约已确认」和「待处理结束」不写变量。
 
@@ -49,7 +50,7 @@
 | 患者是否需要付款 | 无 | `patient_payment_required` |
 | 发出付款请求 | `payment_status`、`transaction_reference`、`payment_date`、`payment_requested_once` | `case_reference`、`patient_payment_required`、`charge_amount`、`payment_requested_once` |
 | 收到付款结果 | 无。程序把 `payment_status`、`transaction_reference`、`payment_date` 随消息带回 | 关联键等于 `case_reference` |
-| 记录付款结果 | 无。财务组确认已看到结果，不改写付款状态 | `payment_status`、`transaction_reference`、`payment_date`、`charge_amount` |
+| 记录付款结果 | `payment_result_acknowledged`。财务组只确认已经过目，不改写付款状态 | `payment_status`、`transaction_reference`、`payment_date`、`charge_amount` |
 | 付款是否成功 | 无 | `payment_status` |
 | 保持待处理并跟进 | `follow_up_note` | `payment_status` |
 | 待处理结束 | 无 | 无 |
