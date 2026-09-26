@@ -1,6 +1,6 @@
 spring:
   application:
-    name: treatment-booking-workers
+    name: hospital-pathway
 
 camunda:
   client:
