@@ -37,7 +37,7 @@
 - 「患者是否需要付款」为否时，流程从 `PaymentRequired` 直接进入 `ConfirmBooking`，不经过付款请求、付款结果和付款是否成功。
 - 「付款是否成功」为否时，流程进入 `FollowUp`，结束在 `Pending`，不进入确认预约。
 
-概念图上的两个发送任务仍由所在泳道触发，执行者定为程序。改成服务任务、补任务类型，留到可执行模型那一步，不在本文件里改图。
+概念图上的两个发送任务仍由所在泳道触发，执行者定为程序。概念图本身不改。可执行副本 [`Est/W02_Treatment_Booking_Payment_Executable.bpmn`](W02_Treatment_Booking_Payment_Executable.bpmn) 已把这两处改成服务任务并写上任务类型，说明见 [`Est/est：治疗预约与付款可执行模型.md`](est：治疗预约与付款可执行模型.md)。
 
 ## 不纳入本段的内容
 
