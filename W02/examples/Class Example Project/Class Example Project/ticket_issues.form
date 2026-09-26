@@ -1,0 +1,49 @@
+{
+  "components": [
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0dbgywt",
+        "columns": null
+      },
+      "id": "Field_0ggz08q",
+      "key": "client_name",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Number of tickets",
+      "type": "number",
+      "layout": {
+        "row": "Row_0gll0c7",
+        "columns": null
+      },
+      "id": "Field_0sl1kzu",
+      "key": "number_of_tickets",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Next",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_0igvz4s",
+        "columns": null
+      },
+      "id": "Field_1d8b8ej"
+    }
+  ],
+  "type": "default",
+  "id": "ticket_issues_form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.1"
+  },
+  "schemaVersion": 19
+}

@@ -1,0 +1,68 @@
+{
+  "components": [
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0dbgywt",
+        "columns": null
+      },
+      "id": "Field_0ggz08q",
+      "key": "client_name",
+      "validate": {
+        "required": true
+      },
+      "readonly": true
+    },
+    {
+      "label": "Movie",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0u0s84h",
+        "columns": null
+      },
+      "id": "Field_0a7isv0",
+      "key": "movie_list"
+    },
+    {
+      "label": "Peyment Method",
+      "values": [
+        {
+          "label": "Card",
+          "value": "card"
+        },
+        {
+          "label": "Cash",
+          "value": "cash"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0mtnhk1",
+        "columns": null
+      },
+      "id": "Field_1qozaz0",
+      "key": "payment_method",
+      "defaultValue": "card"
+    },
+    {
+      "label": "Next",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_0igvz4s",
+        "columns": null
+      },
+      "id": "Field_1d8b8ej"
+    }
+  ],
+  "type": "default",
+  "id": "payment_method_select",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.1"
+  },
+  "schemaVersion": 19
+}

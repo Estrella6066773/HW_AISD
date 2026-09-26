@@ -1,0 +1,69 @@
+{
+  "components": [
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_13pn97d",
+        "columns": null
+      },
+      "id": "Field_1rcmk25",
+      "key": "client_name",
+      "readonly": true
+    },
+    {
+      "label": "Card Number",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0hvzmf5",
+        "columns": null
+      },
+      "id": "Field_0s2dku8",
+      "key": "textfield_klagm",
+      "validate": {
+        "required": false
+      }
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Expiery Date",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_0vw1xsw",
+        "columns": null
+      },
+      "id": "Field_1dubcvq",
+      "key": "datetime_9k4q3",
+      "disallowPassedDates": true
+    },
+    {
+      "label": "CVV",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0zaw5e0",
+        "columns": null
+      },
+      "id": "Field_1ax1r0n",
+      "key": "cvv"
+    },
+    {
+      "label": "Next",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_1ns7h60",
+        "columns": null
+      },
+      "id": "Field_19lvk05"
+    }
+  ],
+  "type": "default",
+  "id": "card_detial_form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.1"
+  },
+  "schemaVersion": 19
+}
