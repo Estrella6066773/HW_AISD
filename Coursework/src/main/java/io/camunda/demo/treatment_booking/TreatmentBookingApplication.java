@@ -15,8 +15,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**
  * 治疗预约与付款的外部工作器进程。
- * 启动后连接本机 Camunda（REST 8090，gRPC 26500），把打包进来的可执行模型和六张表单一并部署，
- * 然后保持运行。领任务的是 {@link TreatmentBookingWorkers}，本类只负责进程启动和部署。
+ * Maven 工程放在仓库的 {@code Coursework/}。启动后连接本机 Camunda（REST 8090，gRPC 26500），
+ * 把打包进来的可执行模型和六张表单一并部署，然后保持运行。
+ * 领任务的是 {@link TreatmentBookingWorkers}，本类只负责进程启动和部署。
  */
 @SpringBootApplication
 public class TreatmentBookingApplication {
@@ -29,7 +30,7 @@ public class TreatmentBookingApplication {
 
 	/**
 	 * 工作器开始领任务之前完成部署。
-	 * 资源来自编译期复制的 {@code Est/W02_Treatment_Booking_Payment_Executable.bpmn} 和 {@code Est/forms}。
+	 * {@code Coursework/pom.xml} 在编译时把 {@code ../Est} 下的可执行模型和 {@code ../Est/forms} 复制进 classpath。
 	 * 表单文件里的 id 必须与模型中的 formId 相同，Tasklist 才能打开第一张表单。
 	 */
 	@Bean
