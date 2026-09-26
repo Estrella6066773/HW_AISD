@@ -1,0 +1,169 @@
+{
+  "components": [
+    {
+      "text": "# Request Doctor's Appoinment\n# Confirmation",
+      "type": "text",
+      "layout": {
+        "row": "Row_0rgf93p",
+        "columns": null
+      },
+      "id": "Field_1nzscrm"
+    },
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1ca2lm4",
+        "columns": null
+      },
+      "id": "Field_0vkauls",
+      "key": "patient_name",
+      "validate": {
+        "required": true
+      },
+      "readonly": true
+    },
+    {
+      "label": "Select Doctor",
+      "values": [
+        {
+          "label": "Doctor 01",
+          "value": "doc1"
+        },
+        {
+          "label": "Doctor 02",
+          "value": "doc2"
+        },
+        {
+          "label": "Doctor 03",
+          "value": "doc3"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0c22urn",
+        "columns": null
+      },
+      "id": "Field_1cv6gmd",
+      "key": "radio_ajhy7g",
+      "validate": {
+        "required": true
+      },
+      "readonly": true
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Date",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_0z2oauc",
+        "columns": null
+      },
+      "id": "Field_10mjm6b",
+      "key": "date_of_appointment",
+      "validate": {
+        "required": true
+      },
+      "readonly": true
+    },
+    {
+      "label": "Confirmation",
+      "values": [
+        {
+          "label": "Accept",
+          "value": "accepet"
+        },
+        {
+          "label": "Reject",
+          "value": "reject"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_1v55m36",
+        "columns": null
+      },
+      "id": "Field_0t8hi0m",
+      "key": "confirmation_appoinemnt",
+      "defaultValue": "accepet"
+    },
+    {
+      "label": "Payment",
+      "components": [
+        {
+          "label": "Card Number",
+          "type": "textfield",
+          "layout": {
+            "row": "Row_1yryl0f",
+            "columns": null
+          },
+          "id": "Field_0ec3o4l",
+          "key": "textfield_tm0bf"
+        },
+        {
+          "subtype": "date",
+          "dateLabel": "Exp",
+          "type": "datetime",
+          "layout": {
+            "row": "Row_1yryl0f",
+            "columns": null
+          },
+          "id": "Field_0tdjf9k",
+          "key": "datetime_atvbjj"
+        },
+        {
+          "label": "CVV",
+          "type": "textfield",
+          "layout": {
+            "row": "Row_1jj0tjj",
+            "columns": null
+          },
+          "id": "Field_13lykdj",
+          "key": "textfield_udprea"
+        },
+        {
+          "label": "Pay",
+          "action": "submit",
+          "type": "button",
+          "layout": {
+            "row": "Row_1jj0tjj",
+            "columns": null
+          },
+          "id": "Field_0u7ihex"
+        }
+      ],
+      "showOutline": true,
+      "type": "group",
+      "layout": {
+        "row": "Row_0vrhs7w",
+        "columns": null
+      },
+      "id": "Field_1d3t1l6",
+      "conditional": {
+        "hide": "=confirmation_appoinemnt=\"reject\""
+      }
+    },
+    {
+      "label": "Cancel",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_0z8lzgx",
+        "columns": null
+      },
+      "id": "Field_0pn9341",
+      "conditional": {
+        "hide": "=confirmation_appoinemnt = \"accepet\""
+      }
+    }
+  ],
+  "type": "default",
+  "id": "appoinment_accept_reject",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.1"
+  },
+  "schemaVersion": 19
+}

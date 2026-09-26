@@ -1,0 +1,22 @@
+{
+  "components": [
+    {
+      "text": "# Go to the gate to pay!!!!\n## RUN Tickets might be sold out!!!!",
+      "type": "text",
+      "layout": {
+        "row": "Row_1hf4r5h",
+        "columns": null
+      },
+      "id": "Field_0xzpqau"
+    }
+  ],
+  "type": "default",
+  "id": "cash_message_form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.1"
+  },
+  "schemaVersion": 19
+}
