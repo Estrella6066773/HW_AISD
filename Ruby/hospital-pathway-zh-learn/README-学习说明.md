@@ -1,33 +1,25 @@
 # 医院路径 — 中文学习副本（可删）
 
-这是正式工程 `hospital-pathway` 的**独立副本**，用于自己跑通、看懂流程。交作业请用原英文目录。
+正式工程在 `Coursework/hospital-pathway`。本目录仅供自己看懂流程，交作业请用英文版。
 
-## 线旁批注 / 颜色分类
+## 每次怎么开（与英文版相同顺序）
 
-| 颜色 | 含义 | 例子 |
-|------|------|------|
-| 蓝 | 主路径前进 | 转诊→接受→已到诊→已寄出→经费通过→治疗 |
-| 绿 | 通过 / 授权 | 已授权、已记录、随访、出院 |
-| 橙 | 回环补正 | 待办/重试、重新核验、需补充信息、延误 |
-| 紫 | 支线入口 | 行政/临床/财务问询、报告、变更、转科、紧急财务是 |
-| 红 | 拒绝 / 失败 | 驳回、支付失败 |
-| 青 | 外部消息 | 与患者、保险、支付方等的消息流 |
-
-图底部「阅读说明」批注也写了同一套图例。
-
-## 怎么跑
-
-1. 先启动 Camunda 8（与正式版相同：gRPC `26500`，REST `8090`）
-2. **不要**同时跑正式版 `hospital-pathway`（会抢同一套 worker / 重复部署）
-3. 在本目录执行：
+1. **先开 Camunda**（c8run / starter），确认：
+   - Operate：http://localhost:8080/operate （demo / demo）
+   - Tasklist：http://localhost:8080/tasklist （demo / demo）
+2. **再开 Java**（二选一，窗口不要关）：
 
 ```bash
+cd "Ruby/hospital-pathway-zh-learn"
 mvn spring-boot:run
 ```
 
-4. 用 Camunda Tasklist / Operate 打开任务；表单已是中文**显示**，下拉选项的内部值仍是英文（保证网关条件能匹配）。
+或在 IDE 打开 `HospitalPathwayApplication.java` → Run（Java 21）。
 
-## 注意
+3. **不要**与正式版 `hospital-pathway` 同时跑。
 
-- 流程 ID、表单 ID、`value`、FEEL 条件**未改**，所以能跑通。
-- 看完可直接删除整个 `Ruby/hospital-pathway-zh-learn` 文件夹。
+若本机 Camunda 是 8090，把 `src/main/resources/application.yaml` 的 `rest-address` 改成 `8090`。
+
+## 完整路线
+
+见同目录 `完整体验路线.md`。
