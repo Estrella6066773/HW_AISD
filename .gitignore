@@ -13,12 +13,17 @@ logs/
 # ============================================================
 .idea/
 .vscode/
+.cursor/
 *.iml
 .project
 .classpath
 .settings/
 .factorypath
 *.sublime-workspace
+
+# Local agent artifacts — never commit
+agent-transcripts/
+mcps/
 
 # ============================================================
 # Java (if using Java for External Workers)
