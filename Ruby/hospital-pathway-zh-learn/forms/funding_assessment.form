@@ -1,0 +1,132 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P7 — 经费评估\n\n调用 Java 支付 Worker：选择 **需要患者付费**。金额 `10.01`=成功，`10.00`=失败。\n\n_切勿输入完整卡号。_",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "患者 / 病例编号",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "经费结果",
+      "values": [
+        {
+          "label": "医院经费已确认",
+          "value": "hospital_funded"
+        },
+        {
+          "label": "保险批准已记录",
+          "value": "insurer_approved"
+        },
+        {
+          "label": "需要患者付费 - 调用支付方",
+          "value": "patient_payment_required"
+        },
+        {
+          "label": "支付已核验",
+          "value": "patient_paid"
+        },
+        {
+          "label": "授权豁免 / 分期安排",
+          "value": "arrangement"
+        },
+        {
+          "label": "拒绝 / 不完整 / 经费待定",
+          "value": "pending"
+        },
+        {
+          "label": "提供方成功但确认缺失",
+          "value": "investigate"
+        },
+        {
+          "label": "申请紧急救治例外的临床复核",
+          "value": "urgent_review"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_charge_amount",
+      "type": "textfield",
+      "key": "charge_amount",
+      "label": "收费金额（患者付费路径）",
+      "validate": {
+        "required": false
+      },
+      "description": "Demo: 10.01 success, 10.00 fail",
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_insurerReference",
+      "type": "textfield",
+      "key": "insurerReference",
+      "label": "保险 / 经费参考号",
+      "validate": {
+        "required": false
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "财务备注",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_4",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "记录经费状态",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "funding_assessment",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

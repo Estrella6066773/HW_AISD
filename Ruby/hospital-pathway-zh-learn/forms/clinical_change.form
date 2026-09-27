@@ -1,0 +1,114 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P11 / P12 — 授权变更\n\n_演示用。_",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "患者 / 病例编号",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_clinicianId",
+      "type": "textfield",
+      "key": "clinicianId",
+      "label": "医生编号 / 姓名",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "结果 / 下一步",
+      "values": [
+        {
+          "label": "授权治疗变更 - 无财务影响",
+          "value": "reschedule_unpaid"
+        },
+        {
+          "label": "授权治疗变更 - 需财务复核",
+          "value": "reschedule_paid"
+        },
+        {
+          "label": "授权随访 / 改约 - 无财务影响",
+          "value": "follow_up_unpaid"
+        },
+        {
+          "label": "授权随访 / 改约 - 需财务复核",
+          "value": "follow_up_paid"
+        },
+        {
+          "label": "授权停止 / 出院 - 无财务影响",
+          "value": "discharge_unpaid"
+        },
+        {
+          "label": "授权停止 / 出院 - 需财务复核",
+          "value": "discharge_paid"
+        },
+        {
+          "label": "缺少正式临床授权",
+          "value": "invalid"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "变更备注",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "完成任务",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "clinical_change",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

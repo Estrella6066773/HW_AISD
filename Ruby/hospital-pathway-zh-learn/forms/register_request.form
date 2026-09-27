@@ -1,0 +1,174 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P1 / P10 / P13 — 登记申请\n\n_演示用 — 仅虚构数据。_",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "患者 / 病例编号",
+      "validate": {
+        "required": true
+      },
+      "description": "例如 DEMO-001",
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_specialty",
+      "type": "select",
+      "key": "specialty",
+      "label": "专科 / 服务",
+      "values": [
+        {
+          "label": "肿瘤科",
+          "value": "oncology"
+        },
+        {
+          "label": "化疗",
+          "value": "chemotherapy"
+        },
+        {
+          "label": "普通内科",
+          "value": "general"
+        },
+        {
+          "label": "其他 / 不适用",
+          "value": "other"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_priority",
+      "type": "select",
+      "key": "priority",
+      "label": "优先级",
+      "values": [
+        {
+          "label": "常规",
+          "value": "routine"
+        },
+        {
+          "label": "紧急",
+          "value": "urgent"
+        },
+        {
+          "label": "两周候诊 / 疑似癌症",
+          "value": "two_week_wait"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_timeframe",
+      "type": "textfield",
+      "key": "timeframe",
+      "label": "期望时间范围",
+      "validate": {
+        "required": true
+      },
+      "description": "e.g. within 2 weeks",
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "申请类型",
+      "values": [
+        {
+          "label": "新转诊 - 材料已核验",
+          "value": "referral"
+        },
+        {
+          "label": "转诊 - 支持材料缺失",
+          "value": "referral_incomplete"
+        },
+        {
+          "label": "行政问询",
+          "value": "enquiry_admin"
+        },
+        {
+          "label": "临床问询",
+          "value": "enquiry_clinical"
+        },
+        {
+          "label": "财务问询",
+          "value": "enquiry_finance"
+        },
+        {
+          "label": "授权变更 / 随访 / 取消",
+          "value": "change"
+        },
+        {
+          "label": "管理审计 / 报告",
+          "value": "report"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_4",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "登记备注",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_5",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "完成登记",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "register_request",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

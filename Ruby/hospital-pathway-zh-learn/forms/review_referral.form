@@ -1,0 +1,115 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P2 — 顾问医生转诊审阅\n\n_演示用。_",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "患者 / 病例编号",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_clinicianId",
+      "type": "textfield",
+      "key": "clinicianId",
+      "label": "医生编号 / 姓名",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "转诊决定",
+      "values": [
+        {
+          "label": "接受",
+          "value": "accept"
+        },
+        {
+          "label": "驳回",
+          "value": "reject"
+        },
+        {
+          "label": "转至其他专科",
+          "value": "redirect"
+        },
+        {
+          "label": "要求补充信息",
+          "value": "more_information"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_decisionReason",
+      "type": "textarea",
+      "key": "decisionReason",
+      "label": "决定理由",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "补充备注",
+      "validate": {
+        "required": false
+      },
+      "layout": {
+        "row": "Row_4",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "记录决定",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "review_referral",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

@@ -46,7 +46,7 @@ public class HospitalPathwayApplication {
 			}
 
 			DeploymentEvent deployment = command.send().join();
-			LOG.info("已部署 Hospital_All_Processes_Simple_C8，部署键 {}", deployment.getKey());
+			LOG.info("已部署中文学习副本 Hospital_All_Processes_Simple_C8，部署键 {}", deployment.getKey());
 			LOG.info("已部署 {} 个表单（硬编码下拉，无 valuesKey）", formFiles.length);
 			LOG.info("Workers: request-payment, send-booking-confirmation (keep this process running)");
 		};

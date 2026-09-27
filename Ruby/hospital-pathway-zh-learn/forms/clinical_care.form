@@ -1,0 +1,98 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P5 / P9 / P12 — 临床护理\n\n_演示用。_",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "患者 / 病例编号",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_staffRole",
+      "type": "textfield",
+      "key": "staffRole",
+      "label": "医生姓名与角色",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "结果 / 下一步",
+      "values": [
+        {
+          "label": "授权治疗 / 下一疗程",
+          "value": "treatment"
+        },
+        {
+          "label": "申请随访复诊",
+          "value": "follow_up"
+        },
+        {
+          "label": "授权出院 / 无需继续护理",
+          "value": "discharge"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "临床备注 / 信件批准备注",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "完成任务",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "clinical_care",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

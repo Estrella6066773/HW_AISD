@@ -10,10 +10,10 @@
 		<relativePath />
 	</parent>
 	<groupId>io.camunda.demo</groupId>
-	<artifactId>hospital-pathway</artifactId>
+	<artifactId>hospital-pathway-zh-learn</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Hospital Pathway</name>
-	<description>Executable hospital pathway: BPMN, forms, and service-task workers.</description>
+	<name>Hospital Pathway (中文学习副本)</name>
+	<description>中文学习/自测副本（可删）。显示文字已汉化；网关取值仍为英文以保证可运行。</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>

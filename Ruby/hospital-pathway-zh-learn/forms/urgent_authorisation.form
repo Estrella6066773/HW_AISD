@@ -3,7 +3,7 @@
     {
       "id": "Text_Title",
       "type": "text",
-      "text": "## Task record\n\nComplete this step and record what was done.\n\n_Demo only._",
+      "text": "## P8 — 紧急救治授权\n\n_演示用。_",
       "layout": {
         "row": "Row_Title",
         "columns": null
@@ -13,7 +13,7 @@
       "id": "Field_patientId",
       "type": "textfield",
       "key": "patientId",
-      "label": "Patient / case ID",
+      "label": "患者 / 病例编号",
       "validate": {
         "required": true
       },
@@ -23,10 +23,10 @@
       }
     },
     {
-      "id": "Field_staffRole",
+      "id": "Field_clinicianId",
       "type": "textfield",
-      "key": "staffRole",
-      "label": "Staff name and role",
+      "key": "clinicianId",
+      "label": "医生编号 / 姓名",
       "validate": {
         "required": true
       },
@@ -39,11 +39,15 @@
       "id": "Field_action",
       "type": "select",
       "key": "action",
-      "label": "Outcome / next action",
+      "label": "结果 / 下一步",
       "values": [
         {
-          "label": "Completed and recorded",
-          "value": "recorded"
+          "label": "授权紧急救治并记录理由",
+          "value": "authorise"
+        },
+        {
+          "label": "未授权 - 继续财务处理",
+          "value": "hold"
         }
       ],
       "validate": {
@@ -58,7 +62,7 @@
       "id": "Field_notes",
       "type": "textarea",
       "key": "notes",
-      "label": "Action record / reason",
+      "label": "临床理由 / 备注",
       "validate": {
         "required": true
       },
@@ -70,7 +74,7 @@
     {
       "id": "Button_Submit",
       "type": "button",
-      "label": "Complete task",
+      "label": "完成任务",
       "action": "submit",
       "layout": {
         "row": "Row_Submit",
@@ -79,7 +83,7 @@
     }
   ],
   "type": "default",
-  "id": "hospital_task_form",
+  "id": "urgent_authorisation",
   "executionPlatform": "Camunda Cloud",
   "executionPlatformVersion": "8.10.0",
   "exporter": {
