@@ -18,7 +18,12 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
  * service-task workers can process jobs.
  */
 @SpringBootApplication
-public class HospitalPathwayApplication {
+public class {
+		"patientId": "CASE-P6-PENDING",
+		"staffRole": "Alex Chen / Treatment Booking",
+		"treatmentSlotStatus": "pending",
+		"BookTreatmentNotes": "External imaging unavailable; pending retry; no duplicate booking."
+		}HospitalPathwayApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(HospitalPathwayApplication.class);
 
