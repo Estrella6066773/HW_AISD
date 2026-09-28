@@ -57,7 +57,7 @@ Closing Java stops the workers. Restart Java to resume waiting jobs. Use a non-e
 
 The student version removes the optional enquiry worker, failure switches, payment statistics and custom transaction/concurrency handling. A regular transaction and unique receipt key retain basic retry protection.
 
-See [D's explanation, variable contract and demonstration](../../Ryan/2026-09-28/D_外部工作器与数据库说明.md) and [verified evidence](../../evidence/PB-21_member-D_simple_2026-09-28/README.md). A/B second-owner review is pending.
+See [D's explanation, variable contract and demonstration](../../Ryan/2026-09-28/D_外部工作器与数据库说明.md). A/B second-owner review is pending.
 
 ## Shared domain database
 

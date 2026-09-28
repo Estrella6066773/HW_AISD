@@ -26,4 +26,4 @@
 
 | 工作项 | 一责 | 二责 | Evidence | Status |
 |---|---|---|---|---|
-| D：PB-21 单一变更通知切片 | Ryan / Guanyan He | A 或 B，待安排复核 | [代码、BPMN、运行与库表证据](../evidence/PB-21_member-D_simple_2026-09-28/README.md) | In progress：本地实现验证通过，待复核与合并；不表示整项 PB 验收完成 |
+| D：PB-21 单一变更通知切片 | Ryan / Guanyan He | A 或 B，待安排复核 | [D 工作器实现与演示说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md) | In progress：实现已合并，待二责复核；不表示整项 PB 验收完成 |

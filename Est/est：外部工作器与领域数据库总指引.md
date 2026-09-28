@@ -214,7 +214,7 @@ A、B、C、D 每人都开发 JobWorker（至少一责一个新类型，并交�
 | 既有两个 JobWorker | 保持现状 |
 | 成员 B 新工作器 + BPMN | 已完成（`check-slot` / `reserve-appointment` / `flag-resource-unavailable`） |
 | 成员 A / C 新工作器 + BPMN | 由各自一责推进 |
-| 成员 D（Ryan）：单一变更通知 | 按本人要求精简为一个 notify-care-change，保留数据库记录和基本重试保护；7 项 Java 测试、4 项图结构检查通过，7 个实际流程实例结束；见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)及[证据](../evidence/PB-21_member-D_simple_2026-09-28/README.md)。二责 A／B 复核待完成，合并前保持 In progress |
+| 成员 D（Ryan）：单一变更通知 | 按本人要求精简为一个 notify-care-change，保留数据库记录和基本重试保护；7 项 Java 测试、4 项图结构检查通过，7 个实际流程实例结束；见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)。二责 A／B 复核待完成，保持 In progress |
 
 ---
 

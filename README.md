@@ -47,7 +47,7 @@ Sprint 1 covers planning only: no models and no code. The first slice under spec
 
 Supporting documents, not tied to a single part:
 
-28 September implementation addition: [Member D single notification worker and demo guide](Ryan/2026-09-28/D_外部工作器与数据库说明.md), with [execution evidence](evidence/PB-21_member-D_simple_2026-09-28/README.md). Formal English package only; second-owner review pending.
+28 September implementation addition: [Member D single notification worker and demo guide](Ryan/2026-09-28/D_外部工作器与数据库说明.md). Formal English package only; second-owner review pending.
 
 | File | Content |
 |------|---------|
