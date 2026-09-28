@@ -1207,13 +1207,13 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_39_di" bpmnElement="Flow_39" bioc:stroke="#667481">
-        <di:waypoint x="2380" y="380" />
-        <di:waypoint x="2340" y="380" />
-        <di:waypoint x="2340" y="780" />
+        <di:waypoint x="2420" y="380" />
+        <di:waypoint x="2460" y="380" />
+        <di:waypoint x="2460" y="780" />
         <di:waypoint x="1690" y="780" />
         <di:waypoint x="1690" y="820" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2202" y="793" width="87" height="14" />
+          <dc:Bounds x="2305" y="793" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#667481">
@@ -1271,12 +1271,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="2380" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11" bioc:stroke="#1768a6">
-        <di:waypoint x="2420" y="380" />
-        <di:waypoint x="2430" y="380" />
-        <di:waypoint x="2430" y="870" />
-        <di:waypoint x="2420" y="870" />
+        <di:waypoint x="2400" y="400" />
+        <di:waypoint x="2400" y="850" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2440" y="609" width="23" height="14" />
+          <dc:Bounds x="2410" y="610" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_40_di" bpmnElement="Flow_40" bioc:stroke="#667481">
@@ -1289,13 +1287,14 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12" bioc:stroke="#1768a6">
-        <di:waypoint x="2400" y="850" />
-        <di:waypoint x="2400" y="780" />
-        <di:waypoint x="2740" y="780" />
+        <di:waypoint x="2420" y="870" />
+        <di:waypoint x="2490" y="870" />
+        <di:waypoint x="2490" y="790" />
+        <di:waypoint x="2740" y="790" />
         <di:waypoint x="2740" y="1430" />
         <di:waypoint x="2860" y="1430" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2755" y="1095" width="50" height="14" />
+          <dc:Bounds x="2755" y="1099" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17_di" bpmnElement="Flow_17" bioc:stroke="#1768a6">
