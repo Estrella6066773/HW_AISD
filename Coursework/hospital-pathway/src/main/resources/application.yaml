@@ -1,6 +1,22 @@
 spring:
   application:
     name: hospital-pathway
+  datasource:
+    # 应用领域库（文件型 H2）。路径相对进程工作目录，通常为 Coursework/hospital-pathway/。
+    # 勿与 c8run / Zeebe 引擎自带库混用。不含卡号字段。
+    url: jdbc:h2:file:./data/hospital-domain;DB_CLOSE_DELAY=-1;AUTO_SERVER=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      # update：保留演示数据；禁止 create-drop（关机清空则谈不上受维护）
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
 
 camunda:
   client:
