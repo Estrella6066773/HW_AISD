@@ -1,0 +1,210 @@
+{
+  "run": "PB18-20260929-011021",
+  "item": "PB-18",
+  "method": "Camunda REST /v2; labelled synthetic instances",
+  "tests": [
+    {
+      "id": "AT-03",
+      "scenario": "UNAUTH",
+      "case": "PB18-20260929-011021-UNAUTH",
+      "processInstanceKey": "2251799813927118",
+      "tasks": [
+        {
+          "element": "Register",
+          "userTaskKey": "2251799813927130",
+          "action": "referral",
+          "staffRole": "PB-18 / acceptance",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "ReviewReferral",
+          "userTaskKey": "2251799813927154",
+          "action": "accept",
+          "staffRole": "Medical Secretary / not authorised to accept",
+          "charge_amount": "10.01"
+        }
+      ],
+      "checks": {
+        "U1_BookVisit_created_after_secretary_accept": true,
+        "U1_referralDecision": "accept",
+        "U2_limitation": "All user tasks assignee=demo; no Camunda candidate-group RBAC in classroom model",
+        "U1_engine_refused_unauthorised_accept": false
+      },
+      "verdict": "FAIL",
+      "failure_reason": "Case rule: secretaries must not accept referrals. Observed: Accept by staffRole Medical Secretary still created BookVisit. Proposed handling: implement role candidate groups / Identity (PB-22); keep this FAIL visible until then."
+    },
+    {
+      "id": "AT-04",
+      "scenario": "PENDING",
+      "case": "PB18-20260929-011021-PENDING",
+      "processInstanceKey": "2251799813927181",
+      "tasks": [
+        {
+          "element": "Register",
+          "userTaskKey": "2251799813927193",
+          "action": "referral",
+          "staffRole": "PB-18 / acceptance",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "ReviewReferral",
+          "userTaskKey": "2251799813927221",
+          "action": "accept",
+          "staffRole": "Consultant / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "BookVisit",
+          "userTaskKey": "2251799813927243",
+          "action": "pending",
+          "staffRole": "Outpatient Bookings / PB-18",
+          "charge_amount": "10.01"
+        }
+      ],
+      "checks": {
+        "P1_BookVisit_again_after_pending": true,
+        "P2_ClinicalCare_absent": true,
+        "P3_visitOutcome": "pending",
+        "P4_incidents": 0
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "AT-05",
+      "scenario": "PAYFAIL",
+      "case": "PB18-20260929-011021-PAYFAIL",
+      "processInstanceKey": "2251799813927283",
+      "tasks": [
+        {
+          "element": "Register",
+          "userTaskKey": "2251799813927295",
+          "action": "referral",
+          "staffRole": "PB-18 / acceptance",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "ReviewReferral",
+          "userTaskKey": "2251799813927320",
+          "action": "accept",
+          "staffRole": "Consultant / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "BookVisit",
+          "userTaskKey": "2251799813927342",
+          "action": "attended",
+          "staffRole": "Outpatient Bookings / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "ClinicalCare",
+          "userTaskKey": "2251799813927383",
+          "action": "treatment",
+          "staffRole": "Consultant / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "DispatchLetter",
+          "userTaskKey": "2251799813927403",
+          "action": "sent",
+          "staffRole": "Medical Secretary / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "Funding",
+          "userTaskKey": "2251799813927434",
+          "action": "patient_payment_required",
+          "staffRole": "Finance / PB-18",
+          "charge_amount": "10.00"
+        },
+        {
+          "element": "FundingIssue",
+          "userTaskKey": "2251799813927483",
+          "action": "recorded",
+          "staffRole": "Finance / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "Funding",
+          "userTaskKey": "2251799813927500",
+          "action": "patient_payment_required",
+          "staffRole": "Finance / PB-18",
+          "charge_amount": "10.01"
+        }
+      ],
+      "checks": {
+        "F1_payment_status_after_fail": "investigate",
+        "F1b_payment_investigate": true,
+        "F2_payment_status_after_retry": "successful",
+        "F3_BookTreatment_reached": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "AT-06",
+      "scenario": "NOCONF",
+      "case": "PB18-20260929-011021-NOCONF",
+      "processInstanceKey": "2251799813927534",
+      "tasks": [
+        {
+          "element": "Register",
+          "userTaskKey": "2251799813927546",
+          "action": "referral",
+          "staffRole": "PB-18 / acceptance",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "ReviewReferral",
+          "userTaskKey": "2251799813927569",
+          "action": "accept",
+          "staffRole": "Consultant / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "BookVisit",
+          "userTaskKey": "2251799813927589",
+          "action": "attended",
+          "staffRole": "Outpatient Bookings / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "ClinicalCare",
+          "userTaskKey": "2251799813927619",
+          "action": "treatment",
+          "staffRole": "Consultant / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "DispatchLetter",
+          "userTaskKey": "2251799813927638",
+          "action": "sent",
+          "staffRole": "Medical Secretary / PB-18",
+          "charge_amount": "10.01"
+        },
+        {
+          "element": "Funding",
+          "userTaskKey": "2251799813927668",
+          "action": "investigate",
+          "staffRole": "Finance / PB-18",
+          "charge_amount": "10.01"
+        }
+      ],
+      "checks": {
+        "I1_payment_status": "investigate",
+        "I2_payment_investigate": true,
+        "I3_payment_requested_once": false,
+        "I4_BookTreatment_not_auto": true
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "definition": {
+    "processDefinitionId": "Hospital_All_Processes_Simple_C8",
+    "processDefinitionKey": "2251799813925244",
+    "version": 6
+  },
+  "result": "PASS_WITH_KNOWN_FAILS",
+  "failed_tests": [
+    "AT-03"
+  ]
+}

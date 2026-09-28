@@ -113,3 +113,13 @@ python scripts/pb14_acceptance.py
 ```
 
 AT-02 (reject) needs only Camunda; AT-01 also needs the Java `check-slot` worker. Archive any new JSON from `target/` as `Ryan/2026-09-26/PB-14_acceptance-run-log_<date>.json`.
+
+## Verify PB-18 additional acceptance (four exception paths)
+
+See `Ryan/2026-09-26/PB-18_acceptance-test-plan_2026-09-29.md`. With Camunda and Java up:
+
+```text
+python scripts/pb18_acceptance.py
+```
+
+AT-03 is expected to **FAIL** on the classroom model (no role RBAC) and must stay recorded as Fail with handling → PB-22. AT-04/05/06 should Pass.
