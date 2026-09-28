@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Hospital_Simple_C8" targetNamespace="https://aisd.example/hospital/simple-c8" exporter="Camunda Modeler" exporterVersion="5.51.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.10.0">
   <bpmn:collaboration id="Collaboration_Hospital_Simple">
-    <bpmn:participant id="Hospital" name="医院 | 患者路径与支持服务" processRef="Hospital_All_Processes_Simple_C8" />
-    <bpmn:participant id="Referrer" name="转诊机构 | 全科 / 其他医院" />
-    <bpmn:participant id="Patient" name="患者 / 授权代表" />
-    <bpmn:participant id="Scheduling" name="外部预约排班服务" />
-    <bpmn:participant id="Correspondence" name="外部通信寄送服务" />
-    <bpmn:participant id="Insurer" name="保险公司 / 经费机构" />
-    <bpmn:participant id="PaymentProvider" name="外部支付服务提供方" />
-    <bpmn:messageFlow id="Msg_Referral" name="转诊文件" sourceRef="Referrer" targetRef="Register" />
-    <bpmn:messageFlow id="Msg_Contact" name="预约 / 联系患者" sourceRef="BookVisit" targetRef="Patient" />
-    <bpmn:messageFlow id="Msg_Treatment" name="治疗安排通知" sourceRef="SendBookingConfirmation" targetRef="Patient" />
-    <bpmn:messageFlow id="Msg_Slot" name="号源 / 服务结果" sourceRef="Scheduling" targetRef="Hospital" />
-    <bpmn:messageFlow id="Msg_Letter" name="已批准信件 + 收件人" sourceRef="Hospital" targetRef="Correspondence" />
-    <bpmn:messageFlow id="Msg_Funding" name="经费批准" sourceRef="Insurer" targetRef="Hospital" />
-    <bpmn:messageFlow id="Msg_PaymentRequest" name="支付请求" sourceRef="RequestPayment" targetRef="PaymentProvider" />
-    <bpmn:messageFlow id="Msg_Payment" name="已核验的交易结果" sourceRef="PaymentProvider" targetRef="RequestPayment" />
+    <bpmn:participant id="Hospital" name="HOSPITAL | Patient pathway and supporting services" processRef="Hospital_All_Processes_Simple_C8" />
+    <bpmn:participant id="Referrer" name="Referring organisation | GP / Other hospital" />
+    <bpmn:participant id="Patient" name="Patient / authorised representative" />
+    <bpmn:participant id="Scheduling" name="External scheduling service" />
+    <bpmn:participant id="Correspondence" name="External correspondence service" />
+    <bpmn:participant id="Insurer" name="Insurer / funding organisation" />
+    <bpmn:participant id="PaymentProvider" name="External Payment Service Provider" />
+    <bpmn:messageFlow id="Msg_Referral" name="Referral documents" sourceRef="Referrer" targetRef="Register" />
+    <bpmn:messageFlow id="Msg_Contact" name="Appointment / contact" sourceRef="BookVisit" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_Treatment" name="Treatment arrangements" sourceRef="SendBookingConfirmation" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_Slot" name="Slot / service result" sourceRef="Scheduling" targetRef="Hospital" />
+    <bpmn:messageFlow id="Msg_Letter" name="Approved letter + recipients" sourceRef="Hospital" targetRef="Correspondence" />
+    <bpmn:messageFlow id="Msg_Funding" name="Funding approval" sourceRef="Insurer" targetRef="Hospital" />
+    <bpmn:messageFlow id="Msg_PaymentRequest" name="Payment request" sourceRef="RequestPayment" targetRef="PaymentProvider" />
+    <bpmn:messageFlow id="Msg_Payment" name="Verified transaction result" sourceRef="PaymentProvider" targetRef="PaymentReceived" />
     <bpmn:textAnnotation id="Stage_1">
-      <bpmn:text>1  转诊审查</bpmn:text>
+      <bpmn:text>1  REFERRAL REVIEW</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Stage_2">
-      <bpmn:text>2  就诊与临床护理</bpmn:text>
+      <bpmn:text>2  VISIT AND CLINICAL CARE</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Stage_3">
-      <bpmn:text>3  信件与下一步</bpmn:text>
+      <bpmn:text>3  LETTER AND NEXT STEP</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Stage_4">
-      <bpmn:text>4  经费与治疗</bpmn:text>
+      <bpmn:text>4  FUNDING AND TREATMENT</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Change_Section">
-      <bpmn:text>变更 / 取消</bpmn:text>
+      <bpmn:text>CHANGES / CANCELLATIONS</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Guide_Main">
-      <bpmn:text>阅读说明 | 线旁标签按颜色分类：
-蓝=主路径前进；绿=通过/授权；橙=回环补正；紫=支线入口；红=拒绝/失败；青=外部消息。
-阶段自左向右：转诊 → 就诊护理 → 信件 → 经费治疗。变更走临床下带。本副本仅供中文学习，可随时删除。</bpmn:text>
+      <bpmn:text>READING GUIDE | Blue = main care route (left to right by stage). Grey = side / exception paths kept on lane edges.
+Stages: 1 Referral review → 2 Visit &amp; clinical care → 3 Letter &amp; next step → 4 Funding &amp; treatment. Changes sit on the lower clinical band.
+All P1-P13 tasks remain visible. Payment uses a send task + payment-result message catch (Est pattern); booking confirmation uses a send task worker. Other external services / elapsed time stay simulated.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Guide_Rules">
-      <bpmn:text>业务控制要点 | P4：两周内还需电话并记录联系。P9：信件7天目标；每周催办；1/3个月升级。
-P7：支付确认缺失→核查，禁止自动重复扣款。P8：紧急救治先临床授权，再财务跟进。
-P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份、授权角色与审计全程适用。</bpmn:text>
+      <bpmn:text>BUSINESS CONTROLS | P4: within 2 weeks, also phone and record contact. P9: 7-day letter target; weekly reminders; escalate at 1 and 3 months.
+P7: unknown payment confirmation -&gt; investigate; never automatically charge again. P8: clinical urgent-care authorisation then Finance follow-up.
+P11/P12: formal clinical change first; Finance approves affected payments / refunds. P13: identity, authorised roles and audit apply throughout.</bpmn:text>
     </bpmn:textAnnotation>
   </bpmn:collaboration>
-  <bpmn:process id="Hospital_All_Processes_Simple_C8" name="医院 - 全部业务流程（简易 Camunda 8）" isExecutable="true">
-    <bpmn:documentation>Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Two Camunda 8 service tasks use classroom Java workers: request-payment (inline mock provider result; no message catch) and send-booking-confirmation. There are no timers or message wait events. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. User tasks use dedicated Camunda forms with hardcoded select options (no valuesKey). Inputs taskTitle/taskHelp/actionOptions/action/notes/patientId prepare one reusable form; task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving. A startable main-path demonstration will use a normal none start event. See coverage and variable documentation in the companion README.</bpmn:documentation>
+  <bpmn:process id="Hospital_All_Processes_Simple_C8" name="Hospital - All Business Processes (Simple Camunda 8)" isExecutable="true">
+    <bpmn:documentation>Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Payment follows the Est / Message Example pattern: send task request-payment publishes BPMN message payment-result (correlation key case_reference); intermediate catch PaymentReceived consumes it. Booking confirmation is send task send-booking-confirmation (worker completes the job; no separate inbound message wait). There are no timers. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. User tasks use dedicated Camunda forms with hardcoded select options (no valuesKey). Task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving.</bpmn:documentation>
     <bpmn:laneSet id="Hospital_Lanes">
-      <bpmn:lane id="Admin" name="行政">
+      <bpmn:lane id="Admin" name="Administration">
         <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Register</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>RequestType</bpmn:flowNodeRef>
@@ -65,7 +65,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
         <bpmn:flowNodeRef>AuditReports</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndReport</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Clinical" name="临床团队">
+      <bpmn:lane id="Clinical" name="Clinical team">
         <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ReferralDecision</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndRejected</bpmn:flowNodeRef>
@@ -82,23 +82,24 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
         <bpmn:flowNodeRef>EndClinicalEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>UrgentDecision</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Finance" name="财务">
+      <bpmn:lane id="Finance" name="Finance">
         <bpmn:flowNodeRef>Funding</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FundingOutcome</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>RequestPayment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>PaymentReceived</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>PaymentResult</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FundingIssue</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>UrgentFinance</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FinanceAdjustment</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>AdjustmentOutcome</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FinanceEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndFinanceEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentFinance</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:startEvent id="Start" name="开始申请">
+    <bpmn:startEvent id="Start" name="Start request">
       <bpmn:outgoing>Flow_01</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Register" name="P1 / P10 / P13&#10;登记申请；&#10;核验材料与身份">
+    <bpmn:userTask id="Register" name="P1 / P10 / P13&#10;Register request;&#10;check documents and ID">
       <bpmn:documentation>Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. Demo only; enter no real patient or card data.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -125,7 +126,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_30</bpmn:incoming>
       <bpmn:outgoing>Flow_02</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="RequestType" name="申请&#10;类型？" default="Flow_24">
+    <bpmn:exclusiveGateway id="RequestType" name="Request&#10;type?" default="Flow_24">
       <bpmn:incoming>Flow_02</bpmn:incoming>
       <bpmn:outgoing>Flow_03</bpmn:outgoing>
       <bpmn:outgoing>Flow_18</bpmn:outgoing>
@@ -136,7 +137,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:outgoing>Flow_23</bpmn:outgoing>
       <bpmn:outgoing>Flow_24</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="GetDocuments" name="P1 / P11&#10;补齐缺失或&#10;正式授权材料">
+    <bpmn:userTask id="GetDocuments" name="P1 / P11&#10;Obtain missing or&#10;formally authorised records">
       <bpmn:documentation>Request and record receipt of missing referral material, or obtain a formally authorised modification request. Do not treat an email or phone call as treatment-change authorisation. In the classroom, completing this task simulates the reply; do not wait for an external message.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -157,7 +158,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_52</bpmn:incoming>
       <bpmn:outgoing>Flow_30</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="ReviewReferral" name="P2&#10;顾问医生审阅转诊；&#10;记录决定与理由">
+    <bpmn:userTask id="ReviewReferral" name="P2&#10;Consultant reviews referral;&#10;records decision and reason">
       <bpmn:documentation>Only an authorised Consultant decides acceptance. Record decision, clinician identity and reason. Urgent referrals and requested timeframes must be passed to booking staff.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -180,7 +181,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_34</bpmn:incoming>
       <bpmn:outgoing>Flow_04</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="ReferralDecision" name="转诊&#10;决定？" default="Flow_34">
+    <bpmn:exclusiveGateway id="ReferralDecision" name="Referral&#10;decision?" default="Flow_34">
       <bpmn:incoming>Flow_04</bpmn:incoming>
       <bpmn:outgoing>Flow_05</bpmn:outgoing>
       <bpmn:outgoing>Flow_29</bpmn:outgoing>
@@ -188,7 +189,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:outgoing>Flow_33</bpmn:outgoing>
       <bpmn:outgoing>Flow_34</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Redirect" name="P2&#10;记录授权转科&#10;并通知转诊方">
+    <bpmn:userTask id="Redirect" name="P2&#10;Record authorised redirect&#10;and notify referrer">
       <bpmn:documentation>Administrative staff carry out the Consultant-approved redirect and record its destination; they do not make the clinical decision.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -207,13 +208,13 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_31</bpmn:incoming>
       <bpmn:outgoing>Flow_32</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="EndReferral" name="转诊关闭">
+    <bpmn:endEvent id="EndReferral" name="Referral closed">
       <bpmn:incoming>Flow_32</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="EndRejected" name="转诊驳回">
+    <bpmn:endEvent id="EndRejected" name="Referral rejected">
       <bpmn:incoming>Flow_33</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="BookVisit" name="P3 / P4 / P12&#10;预约就诊；通知患者；&#10;记录到诊 / 联系">
+    <bpmn:userTask id="BookVisit" name="P3 / P4 / P12&#10;Book visit; notify patient;&#10;record attendance / contact">
       <bpmn:documentation>Outpatient Bookings: only after referral acceptance or a clinical follow-up request. Confirm a slot within the requested timeframe; if unavailable keep pending, flag to the pathway team and avoid duplicates. Send an appointment letter. If within two weeks ALSO phone and record each attempt/outcome, including failed contact or an alternative date. Record attendance, cancellation, decline or DNA. Classroom completion represents these actions and elapsed time.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -236,13 +237,13 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_60</bpmn:incoming>
       <bpmn:outgoing>Flow_06</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="VisitOutcome" name="就诊&#10;结果？" default="Flow_35">
+    <bpmn:exclusiveGateway id="VisitOutcome" name="Visit&#10;outcome?" default="Flow_35">
       <bpmn:incoming>Flow_06</bpmn:incoming>
       <bpmn:outgoing>Flow_07</bpmn:outgoing>
       <bpmn:outgoing>Flow_35</bpmn:outgoing>
       <bpmn:outgoing>Flow_36</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="ClinicalCare" name="P5 / P9 / P12&#10;会诊 / 治疗 / 复查；&#10;授权护理与门诊信件">
+    <bpmn:userTask id="ClinicalCare" name="P5 / P9 / P12&#10;Consult / treat / review;&#10;authorise care and clinic letter">
       <bpmn:documentation>Consultant / authorised clinician: record consultation, treatment and review as applicable. Before each subsequent chemotherapy cycle, review blood tests and fitness before giving treatment; only authorised clinicians decide whether to continue, delay or change the plan. Treatment requires patient consent and an authorised request with dates, cycles and resources. Decide further treatment, follow-up or discharge; prepare and approve the clinic letter and recipients after EVERY consultation. Give CNS contact information after the first visit. A returned letter is corrected and reapproved without repeating treatment. No administrative or finance user may make these clinical decisions.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -266,12 +267,12 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_43</bpmn:incoming>
       <bpmn:outgoing>Flow_08</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="UrgentFollowupNeeded" name="需紧急财务&#10;跟进？" default="Flow_09">
+    <bpmn:exclusiveGateway id="UrgentFollowupNeeded" name="Urgent finance&#10;follow-up?" default="Flow_09">
       <bpmn:incoming>Flow_08</bpmn:incoming>
       <bpmn:outgoing>Flow_09</bpmn:outgoing>
       <bpmn:outgoing>Flow_37</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="DispatchLetter" name="P9&#10;核对并寄送&#10;已批准门诊信件">
+    <bpmn:userTask id="DispatchLetter" name="P9&#10;Check and dispatch&#10;approved clinic letter">
       <bpmn:documentation>Medical Secretaries: check administration and Consultant-approved recipients, send the approved letter, and record all relevant dates and dispatch method. Do not change clinical meaning. Suspected clinical errors return to the Consultant. Complete/approve/send within seven days; recipients normally receive within about two weeks. External correspondence is simulated by recording the result.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -292,13 +293,13 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_38</bpmn:incoming>
       <bpmn:outgoing>Flow_10</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="LetterOutcome" name="信件&#10;状态？" default="Flow_40">
+    <bpmn:exclusiveGateway id="LetterOutcome" name="Letter&#10;status?" default="Flow_40">
       <bpmn:incoming>Flow_10</bpmn:incoming>
       <bpmn:outgoing>Flow_11</bpmn:outgoing>
       <bpmn:outgoing>Flow_39</bpmn:outgoing>
       <bpmn:outgoing>Flow_40</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="MonitorLetters" name="P9&#10;监控延误；催办&#10;逾期则升级">
+    <bpmn:userTask id="MonitorLetters" name="P9&#10;Monitor delay; remind&#10;and escalate if overdue">
       <bpmn:documentation>Patient Pathway Coordinators: after seven days mark delayed; send weekly reminders only while outstanding. Over one month escalate to Administrative Manager; over three months to higher management. Record reasons, reminders and responses; stop reminders after completion. Classroom demo records the applicable time band without a real multi-day timer.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -317,14 +318,14 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_40</bpmn:incoming>
       <bpmn:outgoing>Flow_41</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="CarePlan" name="临床&#10;计划？" default="Flow_43">
+    <bpmn:exclusiveGateway id="CarePlan" name="Clinical&#10;plan?" default="Flow_43">
       <bpmn:incoming>Flow_11</bpmn:incoming>
       <bpmn:outgoing>Flow_12</bpmn:outgoing>
       <bpmn:outgoing>Flow_17</bpmn:outgoing>
       <bpmn:outgoing>Flow_42</bpmn:outgoing>
       <bpmn:outgoing>Flow_43</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Funding" name="P7&#10;评估经费；记录&#10;支付 / 批准状态">
+    <bpmn:userTask id="Funding" name="P7&#10;Assess funding; record&#10;payment / approval status">
       <bpmn:documentation>Finance: establish hospital, insurer or patient funding before confirming treatment. Record insurer reference, amount and restrictions, or payment provider transaction reference/date/amount. Never store full card details. Advance payment needs verified success or an authorised funding/exemption/arrangement. Provider success with missing confirmation requires investigation, never an automatic second charge. Choose patient_payment_required to hand off to the request-payment worker; choose patient_paid only when payment is already verified without calling the provider.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -341,6 +342,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <zeebe:output source="= insurerReference" target="insurerReference" />
           <zeebe:output source="= notes" target="FundingNotes" />
           <zeebe:output source="= action" target="fundingStatus" />
+          <zeebe:output source="= patientId" target="case_reference" />
           <zeebe:output source="= false" target="payment_requested_once" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -350,27 +352,33 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_59</bpmn:incoming>
       <bpmn:outgoing>Flow_13</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="FundingOutcome" name="经费&#10;状态？" default="Flow_45">
+    <bpmn:exclusiveGateway id="FundingOutcome" name="Funding&#10;status?" default="Flow_45">
       <bpmn:incoming>Flow_13</bpmn:incoming>
       <bpmn:outgoing>Flow_14</bpmn:outgoing>
       <bpmn:outgoing>Flow_63</bpmn:outgoing>
       <bpmn:outgoing>Flow_44</bpmn:outgoing>
       <bpmn:outgoing>Flow_45</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="RequestPayment" name="P7&#10;向外部提供方&#10;发起支付请求">
-      <bpmn:documentation>Classroom Java worker type request-payment. Reads patientId (as case reference) and optional charge_amount; mocks the Payment Provider result inline and returns payment_status, transaction_reference, payment_date. On success also sets fundingStatus=patient_paid. Does not store card data. Idempotent when payment_requested_once is already true. No message catch event.</bpmn:documentation>
+    <bpmn:sendTask id="RequestPayment" name="P7&#10;Send payment request&#10;to external provider">
+      <bpmn:documentation>Classroom Java worker type request-payment (Est pattern). Mocks the Payment Provider, publishes BPMN message payment-result with correlation key case_reference (from patientId), then completes the job. Message variables: payment_status, transaction_reference, payment_date. Idempotent when payment_requested_once is already true. Does not store card data.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="request-payment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_63</bpmn:incoming>
       <bpmn:outgoing>Flow_64</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="PaymentResult" name="支付&#10;结果？" default="Flow_67">
+    </bpmn:sendTask>
+    <bpmn:intermediateCatchEvent id="PaymentReceived" name="P7&#10;Payment result&#10;received">
+      <bpmn:documentation>Waits for BPMN message payment-result (correlation key = case_reference). Published by the request-payment worker after mocking the external provider.</bpmn:documentation>
       <bpmn:incoming>Flow_64</bpmn:incoming>
+      <bpmn:outgoing>Flow_64b</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="PaymentMessageDefinition" messageRef="Message_PaymentResult" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:exclusiveGateway id="PaymentResult" name="Payment&#10;result?" default="Flow_67">
+      <bpmn:incoming>Flow_64b</bpmn:incoming>
       <bpmn:outgoing>Flow_65</bpmn:outgoing>
       <bpmn:outgoing>Flow_67</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="FundingIssue" name="P7&#10;处理经费问题 /&#10;核查缺失回执">
+    <bpmn:userTask id="FundingIssue" name="P7&#10;Resolve funding issue /&#10;investigate missing receipt">
       <bpmn:documentation>Notify patient and booking team of failed, incomplete or duplicated payments. Check existing transaction before retrying, and avoid duplicate charges/bookings. Where the provider may already have taken payment, investigate/reconcile first; never request payment automatically. Record result before reassessing funding. Also reached when the request-payment worker returns an unsuccessful result.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -390,7 +398,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_67</bpmn:incoming>
       <bpmn:outgoing>Flow_46</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="UrgentAuthorisation" name="P8&#10;临床医生授权&#10;紧急救治并说明理由">
+    <bpmn:userTask id="UrgentAuthorisation" name="P8&#10;Clinician authorises&#10;urgent care with reason">
       <bpmn:documentation>Only a clinician may authorise treatment before confirmed payment where delay risks the patient. Record clinician identity, clinical reason and the decision, and create a Finance follow-up obligation. Finance can request this review but cannot approve the clinical exception.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -411,7 +419,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_44</bpmn:incoming>
       <bpmn:outgoing>Flow_47</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="BookTreatment" name="P6&#10;确认已授权治疗&#10;与检查预约">
+    <bpmn:userTask id="BookTreatment" name="P6&#10;Confirm authorised treatment&#10;and investigation appointments">
       <bpmn:documentation>Treatment / Chemotherapy Bookings: use the authorised clinical request and confirmed funding or documented urgent exception. Coordinate cycles, resources, laboratory/imaging and external services. If unavailable, keep pending, notify responsible staff and log retry attempts without duplicate appointments. Confirm booking only after these checks; patient notification is handed to the send-booking-confirmation worker after resources are ready. Classroom task records scheduling outcomes.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -434,44 +442,24 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_50</bpmn:incoming>
       <bpmn:outgoing>Flow_15</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="TreatmentOutcome" name="资源&#10;就绪？" default="Flow_50">
+    <bpmn:exclusiveGateway id="TreatmentOutcome" name="Resources&#10;ready?" default="Flow_50">
       <bpmn:incoming>Flow_15</bpmn:incoming>
       <bpmn:outgoing>Flow_16</bpmn:outgoing>
       <bpmn:outgoing>Flow_50</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="SendBookingConfirmation" name="P6&#10;发送预约&#10;确认">
-      <bpmn:documentation>Classroom Java worker type send-booking-confirmation. After treatment resources are ready, notifies the patient via the mocked correspondence path and returns confirmation_sent=true. Uses patientId and optional booking_reference. Does not wait on an inbound message.</bpmn:documentation>
+    <bpmn:sendTask id="SendBookingConfirmation" name="P6&#10;Send booking&#10;confirmation">
+      <bpmn:documentation>BPMN send task (message to patient). Classroom Java worker type send-booking-confirmation. After treatment resources are ready, notifies the patient via the mocked correspondence path and returns confirmation_sent=true. Uses patientId and optional booking_reference. Behaves like a service task at runtime (job worker); does not wait on an inbound message catch.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="send-booking-confirmation" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_16</bpmn:incoming>
       <bpmn:outgoing>Flow_66</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="UrgentFinance" name="P8&#10;紧急救治后&#10;财务跟进">
-      <bpmn:documentation>After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="simple_record" />
-        <zeebe:assignmentDefinition assignee="demo" />
-        <zeebe:ioMapping>
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
-          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
-          <zeebe:input source="= null" target="action" />
-          <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:output source="= patientId" target="patientId" />
-          <zeebe:output source="= staffRole" target="staffRole" />
-          <zeebe:output source="= notes" target="UrgentFinanceNotes" />
-          <zeebe:output source="= false" target="urgentCase" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_37</bpmn:incoming>
-      <bpmn:outgoing>Flow_38</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:endEvent id="EndCare" name="本段诊疗结束">
+    </bpmn:sendTask>
+    <bpmn:endEvent id="EndCare" name="Care episode ended">
       <bpmn:incoming>Flow_17</bpmn:incoming>
       <bpmn:incoming>Flow_61</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="ClinicalChange" name="P11 / P12&#10;授权变更、&#10;随访或取消">
+    <bpmn:userTask id="ClinicalChange" name="P11 / P12&#10;Authorise modification,&#10;follow-up or cancellation">
       <bpmn:documentation>Consultant / authorised clinician: review formal treatment changes, DNA/cancellation or follow-up requests. Reject unapproved verbal/email changes. Urgent safety postponement must be promptly documented and authorised. Select the clinical plan and indicate whether existing charges/funding/payments are affected; this flags Finance review and does NOT authorise a refund.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -495,17 +483,17 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_62</bpmn:incoming>
       <bpmn:outgoing>Flow_51</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="ChangeValid" name="正式申请&#10;已授权？" default="Flow_52">
+    <bpmn:exclusiveGateway id="ChangeValid" name="Formal request&#10;authorised?" default="Flow_52">
       <bpmn:incoming>Flow_51</bpmn:incoming>
       <bpmn:outgoing>Flow_52</bpmn:outgoing>
       <bpmn:outgoing>Flow_53</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="MoneyAffected" name="是否涉及&#10;财务？" default="Flow_55">
+    <bpmn:exclusiveGateway id="MoneyAffected" name="Financial&#10;impact?" default="Flow_55">
       <bpmn:incoming>Flow_53</bpmn:incoming>
       <bpmn:outgoing>Flow_54</bpmn:outgoing>
       <bpmn:outgoing>Flow_55</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="FinanceAdjustment" name="P7 / P11 / P12&#10;批准并记录退款、&#10;转账或留存">
+    <bpmn:userTask id="FinanceAdjustment" name="P7 / P11 / P12&#10;Approve and record refund,&#10;payment transfer or retention">
       <bpmn:documentation>Only authorised Finance approves full/partial refunds or payment transfer/retention. Record decision, amount, reason and provider result linked to patient, appointment and original transaction. Clinical staff supply treatment facts but do not approve refunds. Pending provider results remain open for recorded follow-up.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -526,12 +514,12 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_58</bpmn:incoming>
       <bpmn:outgoing>Flow_56</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="AdjustmentOutcome" name="调整&#10;已记录？" default="Flow_58">
+    <bpmn:exclusiveGateway id="AdjustmentOutcome" name="Adjustment&#10;recorded?" default="Flow_58">
       <bpmn:incoming>Flow_56</bpmn:incoming>
       <bpmn:outgoing>Flow_57</bpmn:outgoing>
       <bpmn:outgoing>Flow_58</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="ChangeRoute" name="修订后的&#10;临床计划？" default="Flow_62">
+    <bpmn:exclusiveGateway id="ChangeRoute" name="Revised&#10;clinical plan?" default="Flow_62">
       <bpmn:incoming>Flow_55</bpmn:incoming>
       <bpmn:incoming>Flow_57</bpmn:incoming>
       <bpmn:outgoing>Flow_59</bpmn:outgoing>
@@ -539,7 +527,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:outgoing>Flow_61</bpmn:outgoing>
       <bpmn:outgoing>Flow_62</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="AdminEnquiry" name="P10&#10;处理行政问询；&#10;记录答复">
+    <bpmn:userTask id="AdminEnquiry" name="P10&#10;Resolve administrative&#10;enquiry; record response">
       <bpmn:documentation>Call Handling / relevant administrative team: answer only authorised administrative information. Record response, owner, priority and resolution. Reclassify and transfer financial/clinical matters; do not diagnose or give clinical advice.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -558,7 +546,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_18</bpmn:incoming>
       <bpmn:outgoing>Flow_25</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="ClinicalEnquiry" name="P10&#10;专科护士 / 医生答复&#10;并记录临床建议">
+    <bpmn:userTask id="ClinicalEnquiry" name="P10&#10;CNS / clinician responds&#10;and records clinical advice">
       <bpmn:documentation>Qualified CNS / clinician responds to clinical matters. Highlight urgent clinical concerns immediately; exact urgency rules remain a stakeholder clarification. Record response and resolution; significant care changes use a separate formal modification request.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -577,7 +565,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_20</bpmn:incoming>
       <bpmn:outgoing>Flow_26</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="FinanceEnquiry" name="P10&#10;财务答复&#10;支付 / 经费问询">
+    <bpmn:userTask id="FinanceEnquiry" name="P10&#10;Finance responds to&#10;payment / funding enquiry">
       <bpmn:documentation>Finance handles financial enquiries beyond information authorised for call handlers. Record response, owner, resolution and any separate follow-up case; do not make clinical decisions.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -596,16 +584,16 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_21</bpmn:incoming>
       <bpmn:outgoing>Flow_27</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="EndAdminEnquiry" name="问询已解决">
+    <bpmn:endEvent id="EndAdminEnquiry" name="Enquiry resolved">
       <bpmn:incoming>Flow_25</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="EndClinicalEnquiry" name="问询已解决">
+    <bpmn:endEvent id="EndClinicalEnquiry" name="Enquiry resolved">
       <bpmn:incoming>Flow_26</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="EndFinanceEnquiry" name="问询已解决">
+    <bpmn:endEvent id="EndFinanceEnquiry" name="Enquiry resolved">
       <bpmn:incoming>Flow_27</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="AuditReports" name="P13&#10;授权管理者审阅&#10;审计轨迹与路径报告">
+    <bpmn:userTask id="AuditReports" name="P13&#10;Authorised manager reviews&#10;audit trail and pathway reports">
       <bpmn:documentation>Authorised management views referrals, waits, failed contacts, letter delays, enquiries, booking delays, funding/payment exceptions and refunds. P13 controls apply to EVERY significant task: verified identity, role-limited access, secure exchange, user/time/action audit, linked records and downtime recovery. Ordinary users must not edit audit history. This model documents these requirements; demo assignment is not production RBAC.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -624,144 +612,170 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmn:incoming>Flow_23</bpmn:incoming>
       <bpmn:outgoing>Flow_28</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="EndReport" name="报告已审阅">
+    <bpmn:endEvent id="EndReport" name="Report reviewed">
       <bpmn:incoming>Flow_28</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_01" sourceRef="Start" targetRef="Register" />
-    <bpmn:sequenceFlow id="Flow_24" name="请选择类型" sourceRef="RequestType" targetRef="Register" />
-    <bpmn:sequenceFlow id="Flow_30" name="重新核验" sourceRef="GetDocuments" targetRef="Register" />
+    <bpmn:sequenceFlow id="Flow_24" name="Select type" sourceRef="RequestType" targetRef="Register" />
+    <bpmn:sequenceFlow id="Flow_30" name="Recheck" sourceRef="GetDocuments" targetRef="Register" />
     <bpmn:sequenceFlow id="Flow_02" sourceRef="Register" targetRef="RequestType" />
-    <bpmn:sequenceFlow id="Flow_03" name="转诊" sourceRef="RequestType" targetRef="ReviewReferral">
+    <bpmn:sequenceFlow id="Flow_03" name="Referral" sourceRef="RequestType" targetRef="ReviewReferral">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "referral"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_18" name="行政问询" sourceRef="RequestType" targetRef="AdminEnquiry">
+    <bpmn:sequenceFlow id="Flow_18" name="Admin enquiry" sourceRef="RequestType" targetRef="AdminEnquiry">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "enquiry_admin"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_19" name="材料缺失" sourceRef="RequestType" targetRef="GetDocuments">
+    <bpmn:sequenceFlow id="Flow_19" name="Missing documents" sourceRef="RequestType" targetRef="GetDocuments">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "referral_incomplete"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_20" name="临床问询" sourceRef="RequestType" targetRef="ClinicalEnquiry">
+    <bpmn:sequenceFlow id="Flow_20" name="Clinical enquiry" sourceRef="RequestType" targetRef="ClinicalEnquiry">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "enquiry_clinical"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_21" name="财务问询" sourceRef="RequestType" targetRef="FinanceEnquiry">
+    <bpmn:sequenceFlow id="Flow_21" name="Finance enquiry" sourceRef="RequestType" targetRef="FinanceEnquiry">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "enquiry_finance"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_22" name="变更 / 随访" sourceRef="RequestType" targetRef="ClinicalChange">
+    <bpmn:sequenceFlow id="Flow_22" name="Change / follow-up" sourceRef="RequestType" targetRef="ClinicalChange">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "change"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_23" name="报告审计" sourceRef="RequestType" targetRef="AuditReports">
+    <bpmn:sequenceFlow id="Flow_23" name="Reports" sourceRef="RequestType" targetRef="AuditReports">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "report"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_29" name="需补充信息" sourceRef="ReferralDecision" targetRef="GetDocuments">
+    <bpmn:sequenceFlow id="Flow_29" name="More info" sourceRef="ReferralDecision" targetRef="GetDocuments">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "more_information"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_52" name="缺失 / 无效" sourceRef="ChangeValid" targetRef="GetDocuments" />
-    <bpmn:sequenceFlow id="Flow_34" name="请选择决定" sourceRef="ReferralDecision" targetRef="ReviewReferral" />
+    <bpmn:sequenceFlow id="Flow_52" name="Missing / invalid" sourceRef="ChangeValid" targetRef="GetDocuments" />
+    <bpmn:sequenceFlow id="Flow_34" name="Select decision" sourceRef="ReferralDecision" targetRef="ReviewReferral" />
     <bpmn:sequenceFlow id="Flow_04" sourceRef="ReviewReferral" targetRef="ReferralDecision" />
-    <bpmn:sequenceFlow id="Flow_05" name="接受" sourceRef="ReferralDecision" targetRef="BookVisit">
+    <bpmn:sequenceFlow id="Flow_05" name="Accept" sourceRef="ReferralDecision" targetRef="BookVisit">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "accept"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_31" name="转科" sourceRef="ReferralDecision" targetRef="Redirect">
+    <bpmn:sequenceFlow id="Flow_31" name="Redirect" sourceRef="ReferralDecision" targetRef="Redirect">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "redirect"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_33" name="驳回" sourceRef="ReferralDecision" targetRef="EndRejected">
+    <bpmn:sequenceFlow id="Flow_33" name="Reject" sourceRef="ReferralDecision" targetRef="EndRejected">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "reject"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_32" sourceRef="Redirect" targetRef="EndReferral" />
-    <bpmn:sequenceFlow id="Flow_35" name="待办 / 重试" sourceRef="VisitOutcome" targetRef="BookVisit" />
-    <bpmn:sequenceFlow id="Flow_42" name="随访复诊" sourceRef="CarePlan" targetRef="BookVisit">
+    <bpmn:sequenceFlow id="Flow_35" name="Pending / retry" sourceRef="VisitOutcome" targetRef="BookVisit" />
+    <bpmn:sequenceFlow id="Flow_42" name="Follow-up" sourceRef="CarePlan" targetRef="BookVisit">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= careDecision = "follow_up"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_60" name="随访复诊" sourceRef="ChangeRoute" targetRef="BookVisit">
+    <bpmn:sequenceFlow id="Flow_60" name="Follow-up" sourceRef="ChangeRoute" targetRef="BookVisit">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "visit"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06" sourceRef="BookVisit" targetRef="VisitOutcome" />
-    <bpmn:sequenceFlow id="Flow_07" name="已到诊" sourceRef="VisitOutcome" targetRef="ClinicalCare">
+    <bpmn:sequenceFlow id="Flow_07" name="Attended" sourceRef="VisitOutcome" targetRef="ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "attended"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_36" name="取消 / 未到诊" sourceRef="VisitOutcome" targetRef="ClinicalChange">
+    <bpmn:sequenceFlow id="Flow_36" name="Cancel / DNA" sourceRef="VisitOutcome" targetRef="ClinicalChange">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "cancelled"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_16" name="资源就绪" sourceRef="TreatmentOutcome" targetRef="SendBookingConfirmation">
+    <bpmn:sequenceFlow id="Flow_16" name="Resources ready" sourceRef="TreatmentOutcome" targetRef="SendBookingConfirmation">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= treatmentSlotStatus = "ready"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_66" name="治疗 / 复查" sourceRef="SendBookingConfirmation" targetRef="ClinicalCare" />
-    <bpmn:sequenceFlow id="Flow_39" name="临床更正" sourceRef="LetterOutcome" targetRef="ClinicalCare">
+    <bpmn:sequenceFlow id="Flow_66" name="Treatment / review" sourceRef="SendBookingConfirmation" targetRef="ClinicalCare" />
+    <bpmn:sequenceFlow id="Flow_39" name="Clinical correction" sourceRef="LetterOutcome" targetRef="ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "revise"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_41" name="复核 / 批准" sourceRef="MonitorLetters" targetRef="ClinicalCare" />
-    <bpmn:sequenceFlow id="Flow_43" name="请选择护理计划" sourceRef="CarePlan" targetRef="ClinicalCare" />
+    <bpmn:sequenceFlow id="Flow_41" name="Review / approve" sourceRef="MonitorLetters" targetRef="ClinicalCare" />
+    <bpmn:sequenceFlow id="Flow_43" name="Select care plan" sourceRef="CarePlan" targetRef="ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_08" sourceRef="ClinicalCare" targetRef="UrgentFollowupNeeded" />
-    <bpmn:sequenceFlow id="Flow_09" name="否" sourceRef="UrgentFollowupNeeded" targetRef="DispatchLetter" />
-    <bpmn:sequenceFlow id="Flow_37" name="是" sourceRef="UrgentFollowupNeeded" targetRef="UrgentFinance">
+    <bpmn:sequenceFlow id="Flow_09" name="No" sourceRef="UrgentFollowupNeeded" targetRef="DispatchLetter" />
+    <bpmn:sequenceFlow id="Flow_37" name="Yes" sourceRef="UrgentFollowupNeeded" targetRef="UrgentFinance">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentCase = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_38" name="跟进已记录" sourceRef="UrgentFinance" targetRef="DispatchLetter" />
+    <bpmn:sequenceFlow id="Flow_38" name="Follow-up recorded" sourceRef="UrgentFinance" targetRef="DispatchLetter" />
     <bpmn:sequenceFlow id="Flow_10" sourceRef="DispatchLetter" targetRef="LetterOutcome" />
-    <bpmn:sequenceFlow id="Flow_11" name="已寄出" sourceRef="LetterOutcome" targetRef="CarePlan">
+    <bpmn:sequenceFlow id="Flow_11" name="Sent" sourceRef="LetterOutcome" targetRef="CarePlan">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "sent"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_40" name="延误 / 跟进" sourceRef="LetterOutcome" targetRef="MonitorLetters" />
-    <bpmn:sequenceFlow id="Flow_12" name="治疗" sourceRef="CarePlan" targetRef="Funding">
+    <bpmn:sequenceFlow id="Flow_40" name="Delay / follow-up" sourceRef="LetterOutcome" targetRef="MonitorLetters" />
+    <bpmn:sequenceFlow id="Flow_12" name="Treatment" sourceRef="CarePlan" targetRef="Funding">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= careDecision = "treatment"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_17" name="出院" sourceRef="CarePlan" targetRef="EndCare">
+    <bpmn:sequenceFlow id="Flow_17" name="Discharge" sourceRef="CarePlan" targetRef="EndCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= careDecision = "discharge"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_46" name="重新评估" sourceRef="FundingIssue" targetRef="Funding" />
-    <bpmn:sequenceFlow id="Flow_49" name="暂缓" sourceRef="UrgentDecision" targetRef="Funding" />
-    <bpmn:sequenceFlow id="Flow_59" name="治疗" sourceRef="ChangeRoute" targetRef="Funding">
+    <bpmn:sequenceFlow id="Flow_46" name="Reassess" sourceRef="FundingIssue" targetRef="Funding" />
+    <bpmn:sequenceFlow id="Flow_49" name="Hold" sourceRef="UrgentDecision" targetRef="Funding" />
+    <bpmn:sequenceFlow id="Flow_59" name="Treatment" sourceRef="ChangeRoute" targetRef="Funding">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "treatment"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_13" sourceRef="Funding" targetRef="FundingOutcome" />
-    <bpmn:sequenceFlow id="Flow_14" name="经费已通过" sourceRef="FundingOutcome" targetRef="BookTreatment">
+    <bpmn:sequenceFlow id="Flow_14" name="Cleared" sourceRef="FundingOutcome" targetRef="BookTreatment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "hospital_funded" or fundingStatus = "insurer_approved" or fundingStatus = "patient_paid" or fundingStatus = "arrangement"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_44" name="紧急临床复核" sourceRef="FundingOutcome" targetRef="UrgentAuthorisation">
+    <bpmn:sequenceFlow id="Flow_44" name="Urgent review" sourceRef="FundingOutcome" targetRef="UrgentAuthorisation">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "urgent_review"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_45" name="待处理 / 核查" sourceRef="FundingOutcome" targetRef="FundingIssue" />
-    <bpmn:sequenceFlow id="Flow_63" name="患者付费" sourceRef="FundingOutcome" targetRef="RequestPayment">
+    <bpmn:sequenceFlow id="Flow_45" name="Pending / investigate" sourceRef="FundingOutcome" targetRef="FundingIssue" />
+    <bpmn:sequenceFlow id="Flow_63" name="Patient payment" sourceRef="FundingOutcome" targetRef="RequestPayment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "patient_payment_required"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_64" sourceRef="RequestPayment" targetRef="PaymentResult" />
-    <bpmn:sequenceFlow id="Flow_65" name="已支付" sourceRef="PaymentResult" targetRef="BookTreatment">
+    <bpmn:sequenceFlow id="Flow_64" sourceRef="RequestPayment" targetRef="PaymentReceived" />
+    <bpmn:sequenceFlow id="Flow_64b" sourceRef="PaymentReceived" targetRef="PaymentResult" />
+    <bpmn:sequenceFlow id="Flow_65" name="Paid" sourceRef="PaymentResult" targetRef="BookTreatment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= payment_status = "successful"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_67" name="支付失败" sourceRef="PaymentResult" targetRef="FundingIssue" />
+    <bpmn:sequenceFlow id="Flow_67" name="Unsuccessful" sourceRef="PaymentResult" targetRef="FundingIssue" />
     <bpmn:sequenceFlow id="Flow_47" sourceRef="UrgentAuthorisation" targetRef="UrgentDecision" />
-    <bpmn:sequenceFlow id="Flow_48" name="已授权" sourceRef="UrgentDecision" targetRef="BookTreatment">
+    <bpmn:sequenceFlow id="Flow_48" name="Authorised" sourceRef="UrgentDecision" targetRef="BookTreatment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentDecision = "authorise"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_50" name="待办 / 重试" sourceRef="TreatmentOutcome" targetRef="BookTreatment" />
+    <bpmn:sequenceFlow id="Flow_50" name="Pending / retry" sourceRef="TreatmentOutcome" targetRef="BookTreatment" />
     <bpmn:sequenceFlow id="Flow_15" sourceRef="BookTreatment" targetRef="TreatmentOutcome" />
-    <bpmn:sequenceFlow id="Flow_61" name="出院" sourceRef="ChangeRoute" targetRef="EndCare">
+    <bpmn:sequenceFlow id="Flow_61" name="Discharge" sourceRef="ChangeRoute" targetRef="EndCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "discharge"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_62" name="复查计划" sourceRef="ChangeRoute" targetRef="ClinicalChange" />
+    <bpmn:sequenceFlow id="Flow_62" name="Review plan" sourceRef="ChangeRoute" targetRef="ClinicalChange" />
     <bpmn:sequenceFlow id="Flow_51" sourceRef="ClinicalChange" targetRef="ChangeValid" />
-    <bpmn:sequenceFlow id="Flow_53" name="已授权" sourceRef="ChangeValid" targetRef="MoneyAffected">
+    <bpmn:sequenceFlow id="Flow_53" name="Authorised" sourceRef="ChangeValid" targetRef="MoneyAffected">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget != "invalid"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_54" name="是" sourceRef="MoneyAffected" targetRef="FinanceAdjustment">
+    <bpmn:sequenceFlow id="Flow_54" name="Yes" sourceRef="MoneyAffected" targetRef="FinanceAdjustment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= moneyAffected = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_55" name="否" sourceRef="MoneyAffected" targetRef="ChangeRoute" />
-    <bpmn:sequenceFlow id="Flow_58" name="待办 / 重试" sourceRef="AdjustmentOutcome" targetRef="FinanceAdjustment" />
+    <bpmn:sequenceFlow id="Flow_55" name="No" sourceRef="MoneyAffected" targetRef="ChangeRoute" />
+    <bpmn:sequenceFlow id="Flow_58" name="Pending / retry" sourceRef="AdjustmentOutcome" targetRef="FinanceAdjustment" />
     <bpmn:sequenceFlow id="Flow_56" sourceRef="FinanceAdjustment" targetRef="AdjustmentOutcome" />
-    <bpmn:sequenceFlow id="Flow_57" name="已记录" sourceRef="AdjustmentOutcome" targetRef="ChangeRoute">
+    <bpmn:sequenceFlow id="Flow_57" name="Recorded" sourceRef="AdjustmentOutcome" targetRef="ChangeRoute">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= financeAdjustment = "resolved"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_25" sourceRef="AdminEnquiry" targetRef="EndAdminEnquiry" />
     <bpmn:sequenceFlow id="Flow_26" sourceRef="ClinicalEnquiry" targetRef="EndClinicalEnquiry" />
     <bpmn:sequenceFlow id="Flow_27" sourceRef="FinanceEnquiry" targetRef="EndFinanceEnquiry" />
     <bpmn:sequenceFlow id="Flow_28" sourceRef="AuditReports" targetRef="EndReport" />
-    <bpmn:exclusiveGateway id="UrgentDecision" name="紧急救治&#10;已授权？" default="Flow_49">
+    <bpmn:exclusiveGateway id="UrgentDecision" name="Urgent care&#10;authorised?" default="Flow_49">
       <bpmn:incoming>Flow_47</bpmn:incoming>
       <bpmn:outgoing>Flow_48</bpmn:outgoing>
       <bpmn:outgoing>Flow_49</bpmn:outgoing>
     </bpmn:exclusiveGateway>
+    <bpmn:userTask id="UrgentFinance" name="P8&#10;Finance follows up&#10;after urgent care">
+      <bpmn:documentation>After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="simple_record" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
+          <zeebe:output source="= notes" target="UrgentFinanceNotes" />
+          <zeebe:output source="= false" target="urgentCase" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_37</bpmn:incoming>
+      <bpmn:outgoing>Flow_38</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
+  <bpmn:message id="Message_PaymentResult" name="payment-result">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=case_reference" />
+    </bpmn:extensionElements>
+  </bpmn:message>
   <bpmndi:BPMNDiagram id="Diagram_Clean_Lines_C8">
     <bpmndi:BPMNPlane id="Plane_Clean_Lines_C8" bpmnElement="Collaboration_Hospital_Simple">
       <bpmndi:BPMNShape id="Hospital_di" bpmnElement="Hospital" isHorizontal="true" isExpanded="true">
@@ -833,7 +847,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmndi:BPMNShape id="UrgentFollowupNeeded_di" bpmnElement="UrgentFollowupNeeded" isMarkerVisible="true">
         <dc:Bounds x="1800" y="850" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1784" y="906" width="72" height="27" />
+          <dc:Bounds x="1850" y="856" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DispatchLetter_di" bpmnElement="DispatchLetter" bioc:stroke="#263746" bioc:fill="#edf5ff">
@@ -866,10 +880,16 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmndi:BPMNShape id="RequestPayment_di" bpmnElement="RequestPayment" bioc:stroke="#263746" bioc:fill="#fff3e5">
         <dc:Bounds x="3280" y="1380" width="200" height="100" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="PaymentResult_di" bpmnElement="PaymentResult" isMarkerVisible="true">
-        <dc:Bounds x="3560" y="1410" width="40" height="40" />
+      <bpmndi:BPMNShape id="PaymentReceived_di" bpmnElement="PaymentReceived">
+        <dc:Bounds x="3522" y="1412" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3558" y="1360" width="44" height="27" />
+          <dc:Bounds x="3495" y="1455" width="90" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PaymentResult_di" bpmnElement="PaymentResult" isMarkerVisible="true">
+        <dc:Bounds x="3640" y="1410" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3638" y="1360" width="44" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="FundingIssue_di" bpmnElement="FundingIssue" bioc:stroke="#263746" bioc:fill="#fff3e5">
@@ -890,13 +910,10 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmndi:BPMNShape id="SendBookingConfirmation_di" bpmnElement="SendBookingConfirmation" bioc:stroke="#263746" bioc:fill="#edf5ff">
         <dc:Bounds x="3280" y="330" width="200" height="100" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UrgentFinance_di" bpmnElement="UrgentFinance" bioc:stroke="#263746" bioc:fill="#fff3e5">
-        <dc:Bounds x="2080" y="1600" width="220" height="100" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndCare_di" bpmnElement="EndCare">
         <dc:Bounds x="2560" y="850" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2535" y="900" width="90" height="14" />
+          <dc:Bounds x="2547" y="812.5" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalChange_di" bpmnElement="ClinicalChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
@@ -971,11 +988,14 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="3248" y="840" width="58" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UrgentFinance_di" bpmnElement="UrgentFinance" bioc:stroke="#263746" bioc:fill="#fff3e5">
+        <dc:Bounds x="2090" y="1600" width="220" height="100" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01" bioc:stroke="#1768a6">
         <di:waypoint x="270" y="380" />
         <di:waypoint x="310" y="380" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_24_di" bpmnElement="Flow_24" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_24_di" bpmnElement="Flow_24" bioc:stroke="#667481">
         <di:waypoint x="610" y="360" />
         <di:waypoint x="610" y="300" />
         <di:waypoint x="420" y="300" />
@@ -984,7 +1004,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="462" y="283" width="55" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_30_di" bpmnElement="Flow_30" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_30_di" bpmnElement="Flow_30" bioc:stroke="#667481">
         <di:waypoint x="1150" y="520" />
         <di:waypoint x="1150" y="280" />
         <di:waypoint x="420" y="280" />
@@ -1005,7 +1025,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1020" y="436" width="40" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_18_di" bpmnElement="Flow_18" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_18_di" bpmnElement="Flow_18" bioc:stroke="#667481">
         <di:waypoint x="610" y="400" />
         <di:waypoint x="610" y="460" />
         <di:waypoint x="420" y="460" />
@@ -1014,7 +1034,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="450" y="436" width="71" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19_di" bpmnElement="Flow_19" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_19_di" bpmnElement="Flow_19" bioc:stroke="#667481">
         <di:waypoint x="630" y="380" />
         <di:waypoint x="1150" y="380" />
         <di:waypoint x="1150" y="520" />
@@ -1022,7 +1042,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="922" y="356" width="95" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_20_di" bpmnElement="Flow_20" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_20_di" bpmnElement="Flow_20" bioc:stroke="#667481">
         <di:waypoint x="610" y="400" />
         <di:waypoint x="610" y="480" />
         <di:waypoint x="300" y="480" />
@@ -1032,7 +1052,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="302" y="663" width="75" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_21_di" bpmnElement="Flow_21" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_21_di" bpmnElement="Flow_21" bioc:stroke="#667481">
         <di:waypoint x="610" y="400" />
         <di:waypoint x="610" y="500" />
         <di:waypoint x="220" y="500" />
@@ -1042,7 +1062,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="220" y="863" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_22_di" bpmnElement="Flow_22" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_22_di" bpmnElement="Flow_22" bioc:stroke="#667481">
         <di:waypoint x="630" y="380" />
         <di:waypoint x="640" y="380" />
         <di:waypoint x="640" y="1110" />
@@ -1051,7 +1071,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="697" y="1086" width="92" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_23_di" bpmnElement="Flow_23" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_23_di" bpmnElement="Flow_23" bioc:stroke="#667481">
         <di:waypoint x="630" y="380" />
         <di:waypoint x="660" y="380" />
         <di:waypoint x="660" y="570" />
@@ -1060,7 +1080,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="670" y="493" width="39" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_29_di" bpmnElement="Flow_29" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_29_di" bpmnElement="Flow_29" bioc:stroke="#667481">
         <di:waypoint x="1200" y="850" />
         <di:waypoint x="1200" y="760" />
         <di:waypoint x="1150" y="760" />
@@ -1069,7 +1089,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1155" y="713" width="46" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_52_di" bpmnElement="Flow_52" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_52_di" bpmnElement="Flow_52" bioc:stroke="#667481">
         <di:waypoint x="1200" y="1090" />
         <di:waypoint x="1200" y="1060" />
         <di:waypoint x="1130" y="1060" />
@@ -1078,7 +1098,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1085" y="1034" width="78" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_34_di" bpmnElement="Flow_34" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_34_di" bpmnElement="Flow_34" bioc:stroke="#667481">
         <di:waypoint x="1200" y="890" />
         <di:waypoint x="1200" y="940" />
         <di:waypoint x="990" y="940" />
@@ -1099,7 +1119,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1163" y="491" width="34" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_31_di" bpmnElement="Flow_31" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_31_di" bpmnElement="Flow_31" bioc:stroke="#667481">
         <di:waypoint x="1200" y="850" />
         <di:waypoint x="1200" y="780" />
         <di:waypoint x="1430" y="780" />
@@ -1108,18 +1128,18 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1260" y="756" width="41" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_33_di" bpmnElement="Flow_33" bioc:stroke="#b91c1c">
+      <bpmndi:BPMNEdge id="Flow_33_di" bpmnElement="Flow_33" bioc:stroke="#667481">
         <di:waypoint x="1220" y="870" />
         <di:waypoint x="1300" y="870" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1240" y="846" width="32" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_32_di" bpmnElement="Flow_32" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_32_di" bpmnElement="Flow_32" bioc:stroke="#667481">
         <di:waypoint x="1540" y="570" />
         <di:waypoint x="1590" y="570" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_35_di" bpmnElement="Flow_35" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_35_di" bpmnElement="Flow_35" bioc:stroke="#667481">
         <di:waypoint x="1800" y="360" />
         <di:waypoint x="1800" y="300" />
         <di:waypoint x="1590" y="300" />
@@ -1128,7 +1148,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1635" y="276" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_42_di" bpmnElement="Flow_42" bioc:stroke="#15803d">
+      <bpmndi:BPMNEdge id="Flow_42_di" bpmnElement="Flow_42" bioc:stroke="#667481">
         <di:waypoint x="2380" y="870" />
         <di:waypoint x="1960" y="870" />
         <di:waypoint x="1960" y="700" />
@@ -1138,7 +1158,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="2140" y="846" width="48" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_60_di" bpmnElement="Flow_60" bioc:stroke="#15803d">
+      <bpmndi:BPMNEdge id="Flow_60_di" bpmnElement="Flow_60" bioc:stroke="#667481">
         <di:waypoint x="2100" y="1090" />
         <di:waypoint x="2100" y="700" />
         <di:waypoint x="1590" y="700" />
@@ -1160,7 +1180,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1680" y="736" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_36_di" bpmnElement="Flow_36" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_36_di" bpmnElement="Flow_36" bioc:stroke="#667481">
         <di:waypoint x="1820" y="380" />
         <di:waypoint x="1860" y="380" />
         <di:waypoint x="1860" y="980" />
@@ -1186,26 +1206,27 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="2614" y="736" width="91" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_39_di" bpmnElement="Flow_39" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_39_di" bpmnElement="Flow_39" bioc:stroke="#667481">
         <di:waypoint x="2380" y="380" />
         <di:waypoint x="2340" y="380" />
         <di:waypoint x="2340" y="780" />
-        <di:waypoint x="1720" y="780" />
-        <di:waypoint x="1720" y="820" />
+        <di:waypoint x="1690" y="780" />
+        <di:waypoint x="1690" y="820" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2206" y="793" width="87" height="14" />
+          <dc:Bounds x="2202" y="793" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#667481">
         <di:waypoint x="2080" y="570" />
         <di:waypoint x="1900" y="570" />
-        <di:waypoint x="1900" y="870" />
-        <di:waypoint x="1720" y="870" />
+        <di:waypoint x="1900" y="960" />
+        <di:waypoint x="1600" y="960" />
+        <di:waypoint x="1600" y="920" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1907" y="583" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_43_di" bpmnElement="Flow_43" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_43_di" bpmnElement="Flow_43" bioc:stroke="#667481">
         <di:waypoint x="2400" y="890" />
         <di:waypoint x="2400" y="960" />
         <di:waypoint x="1720" y="960" />
@@ -1228,16 +1249,16 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1915" y="676" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_37_di" bpmnElement="Flow_37" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_37_di" bpmnElement="Flow_37" bioc:stroke="#667481">
         <di:waypoint x="1820" y="890" />
         <di:waypoint x="1820" y="1650" />
-        <di:waypoint x="2080" y="1650" />
+        <di:waypoint x="2090" y="1650" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1831" y="1373" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_38_di" bpmnElement="Flow_38" bioc:stroke="#1768a6">
-        <di:waypoint x="2080" y="1650" />
+      <bpmndi:BPMNEdge id="Flow_38_di" bpmnElement="Flow_38" bioc:stroke="#667481">
+        <di:waypoint x="2090" y="1650" />
         <di:waypoint x="2060" y="1650" />
         <di:waypoint x="2060" y="380" />
         <di:waypoint x="2080" y="380" />
@@ -1258,7 +1279,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="2440" y="609" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_40_di" bpmnElement="Flow_40" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_40_di" bpmnElement="Flow_40" bioc:stroke="#667481">
         <di:waypoint x="2400" y="400" />
         <di:waypoint x="2400" y="480" />
         <di:waypoint x="2210" y="480" />
@@ -1268,12 +1289,13 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12" bioc:stroke="#1768a6">
-        <di:waypoint x="2420" y="870" />
-        <di:waypoint x="2740" y="870" />
+        <di:waypoint x="2400" y="850" />
+        <di:waypoint x="2400" y="780" />
+        <di:waypoint x="2740" y="780" />
         <di:waypoint x="2740" y="1430" />
         <di:waypoint x="2860" y="1430" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2755" y="1140" width="50" height="14" />
+          <dc:Bounds x="2755" y="1095" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17_di" bpmnElement="Flow_17" bioc:stroke="#1768a6">
@@ -1283,7 +1305,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="2460" y="846" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_46_di" bpmnElement="Flow_46" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_46_di" bpmnElement="Flow_46" bioc:stroke="#667481">
         <di:waypoint x="2860" y="1650" />
         <di:waypoint x="2820" y="1650" />
         <di:waypoint x="2820" y="1430" />
@@ -1292,7 +1314,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="2770" y="1520" width="49" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_49_di" bpmnElement="Flow_49" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_49_di" bpmnElement="Flow_49" bioc:stroke="#667481">
         <di:waypoint x="3210" y="890" />
         <di:waypoint x="3210" y="1320" />
         <di:waypoint x="2970" y="1320" />
@@ -1301,7 +1323,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="3075" y="1296" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_59_di" bpmnElement="Flow_59" bioc:stroke="#15803d">
+      <bpmndi:BPMNEdge id="Flow_59_di" bpmnElement="Flow_59" bioc:stroke="#667481">
         <di:waypoint x="2120" y="1110" />
         <di:waypoint x="2740" y="1110" />
         <di:waypoint x="2740" y="1430" />
@@ -1323,7 +1345,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="3130" y="793" width="39" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_44_di" bpmnElement="Flow_44" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_44_di" bpmnElement="Flow_44" bioc:stroke="#667481">
         <di:waypoint x="3180" y="1410" />
         <di:waypoint x="3180" y="980" />
         <di:waypoint x="2970" y="980" />
@@ -1332,7 +1354,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="3050" y="956" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_45_di" bpmnElement="Flow_45" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_45_di" bpmnElement="Flow_45" bioc:stroke="#667481">
         <di:waypoint x="3180" y="1450" />
         <di:waypoint x="3180" y="1650" />
         <di:waypoint x="3080" y="1650" />
@@ -1349,31 +1371,35 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_64_di" bpmnElement="Flow_64" bioc:stroke="#1768a6">
         <di:waypoint x="3480" y="1430" />
-        <di:waypoint x="3560" y="1430" />
+        <di:waypoint x="3522" y="1430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_64b_di" bpmnElement="Flow_64b" bioc:stroke="#1768a6">
+        <di:waypoint x="3558" y="1430" />
+        <di:waypoint x="3640" y="1430" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_65_di" bpmnElement="Flow_65" bioc:stroke="#1768a6">
-        <di:waypoint x="3580" y="1410" />
-        <di:waypoint x="3580" y="680" />
+        <di:waypoint x="3660" y="1410" />
+        <di:waypoint x="3660" y="680" />
         <di:waypoint x="3000" y="680" />
         <di:waypoint x="3000" y="430" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3498" y="663" width="23" height="14" />
+          <dc:Bounds x="3578" y="663" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_67_di" bpmnElement="Flow_67" bioc:stroke="#b91c1c">
-        <di:waypoint x="3580" y="1450" />
-        <di:waypoint x="3580" y="1720" />
+      <bpmndi:BPMNEdge id="Flow_67_di" bpmnElement="Flow_67" bioc:stroke="#667481">
+        <di:waypoint x="3660" y="1450" />
+        <di:waypoint x="3660" y="1720" />
         <di:waypoint x="2970" y="1720" />
         <di:waypoint x="2970" y="1700" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3230" y="1696" width="68" height="14" />
+          <dc:Bounds x="3270" y="1696" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_47_di" bpmnElement="Flow_47" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_47_di" bpmnElement="Flow_47" bioc:stroke="#667481">
         <di:waypoint x="3080" y="870" />
         <di:waypoint x="3190" y="870" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_48_di" bpmnElement="Flow_48" bioc:stroke="#15803d">
+      <bpmndi:BPMNEdge id="Flow_48_di" bpmnElement="Flow_48" bioc:stroke="#667481">
         <di:waypoint x="3210" y="850" />
         <di:waypoint x="3210" y="720" />
         <di:waypoint x="3030" y="720" />
@@ -1382,7 +1408,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="3051" y="723" width="53" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_50_di" bpmnElement="Flow_50" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_50_di" bpmnElement="Flow_50" bioc:stroke="#667481">
         <di:waypoint x="3180" y="360" />
         <di:waypoint x="3180" y="300" />
         <di:waypoint x="2970" y="300" />
@@ -1395,7 +1421,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
         <di:waypoint x="3080" y="380" />
         <di:waypoint x="3160" y="380" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_61_di" bpmnElement="Flow_61" bioc:stroke="#15803d">
+      <bpmndi:BPMNEdge id="Flow_61_di" bpmnElement="Flow_61" bioc:stroke="#667481">
         <di:waypoint x="2120" y="1110" />
         <di:waypoint x="2580" y="1110" />
         <di:waypoint x="2580" y="890" />
@@ -1403,7 +1429,7 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="2310" y="1086" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_62_di" bpmnElement="Flow_62" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_62_di" bpmnElement="Flow_62" bioc:stroke="#667481">
         <di:waypoint x="2100" y="1130" />
         <di:waypoint x="2100" y="1180" />
         <di:waypoint x="1000" y="1180" />
@@ -1412,33 +1438,32 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1500" y="1156" width="60" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_51_di" bpmnElement="Flow_51" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_51_di" bpmnElement="Flow_51" bioc:stroke="#667481">
         <di:waypoint x="1120" y="1110" />
         <di:waypoint x="1180" y="1110" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_53_di" bpmnElement="Flow_53" bioc:stroke="#15803d">
+      <bpmndi:BPMNEdge id="Flow_53_di" bpmnElement="Flow_53" bioc:stroke="#667481">
         <di:waypoint x="1220" y="1110" />
         <di:waypoint x="1380" y="1110" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1265" y="1086" width="53" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_54_di" bpmnElement="Flow_54" bioc:stroke="#15803d">
+      <bpmndi:BPMNEdge id="Flow_54_di" bpmnElement="Flow_54" bioc:stroke="#667481">
         <di:waypoint x="1400" y="1130" />
-        <di:waypoint x="1400" y="1650" />
-        <di:waypoint x="1320" y="1650" />
+        <di:waypoint x="1400" y="1600" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1410" y="1380" width="18" height="14" />
+          <dc:Bounds x="1410" y="1355" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_55_di" bpmnElement="Flow_55" bioc:stroke="#15803d">
+      <bpmndi:BPMNEdge id="Flow_55_di" bpmnElement="Flow_55" bioc:stroke="#667481">
         <di:waypoint x="1420" y="1110" />
         <di:waypoint x="2080" y="1110" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1502" y="1086" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_58_di" bpmnElement="Flow_58" bioc:stroke="#c2410c">
+      <bpmndi:BPMNEdge id="Flow_58_di" bpmnElement="Flow_58" bioc:stroke="#667481">
         <di:waypoint x="1640" y="1630" />
         <di:waypoint x="1640" y="1560" />
         <di:waypoint x="1430" y="1560" />
@@ -1447,32 +1472,32 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
           <dc:Bounds x="1480" y="1536" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_56_di" bpmnElement="Flow_56" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_56_di" bpmnElement="Flow_56" bioc:stroke="#667481">
         <di:waypoint x="1540" y="1650" />
         <di:waypoint x="1620" y="1650" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_57_di" bpmnElement="Flow_57" bioc:stroke="#15803d">
-        <di:waypoint x="1660" y="1650" />
-        <di:waypoint x="1970" y="1650" />
+      <bpmndi:BPMNEdge id="Flow_57_di" bpmnElement="Flow_57" bioc:stroke="#667481">
+        <di:waypoint x="1650" y="1640" />
+        <di:waypoint x="1970" y="1640" />
         <di:waypoint x="1970" y="1110" />
         <di:waypoint x="2080" y="1110" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1916" y="1473" width="48" height="14" />
+          <dc:Bounds x="1916" y="1466" width="48" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_25_di" bpmnElement="Flow_25" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_25_di" bpmnElement="Flow_25" bioc:stroke="#667481">
         <di:waypoint x="530" y="570" />
         <di:waypoint x="570" y="570" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_26_di" bpmnElement="Flow_26" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_26_di" bpmnElement="Flow_26" bioc:stroke="#667481">
         <di:waypoint x="530" y="1110" />
         <di:waypoint x="570" y="1110" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_27_di" bpmnElement="Flow_27" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_27_di" bpmnElement="Flow_27" bioc:stroke="#667481">
         <di:waypoint x="530" y="1650" />
         <di:waypoint x="570" y="1650" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_28_di" bpmnElement="Flow_28" bioc:stroke="#6d28d9">
+      <bpmndi:BPMNEdge id="Flow_28_di" bpmnElement="Flow_28" bioc:stroke="#667481">
         <di:waypoint x="900" y="570" />
         <di:waypoint x="940" y="570" />
       </bpmndi:BPMNEdge>
@@ -1484,12 +1509,15 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Scheduling_di" bpmnElement="Scheduling" isHorizontal="true">
         <dc:Bounds x="150" y="1940" width="700" height="60" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Correspondence_di" bpmnElement="Correspondence" isHorizontal="true">
         <dc:Bounds x="920" y="1940" width="700" height="60" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Insurer_di" bpmnElement="Insurer" isHorizontal="true">
         <dc:Bounds x="1700" y="1940" width="700" height="60" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="PaymentProvider_di" bpmnElement="PaymentProvider" isHorizontal="true">
         <dc:Bounds x="2480" y="1940" width="1400" height="60" />
@@ -1515,60 +1543,60 @@ P11/P12：先正式临床变更；财务批准相关退款/转账。P13：身份
       <bpmndi:BPMNShape id="Guide_Rules_di" bpmnElement="Guide_Rules">
         <dc:Bounds x="200" y="2140" width="3700" height="90" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Msg_Referral_di" bpmnElement="Msg_Referral" bioc:stroke="#0f766e">
-        <di:waypoint x="400" y="120" />
-        <di:waypoint x="400" y="330" />
+      <bpmndi:BPMNEdge id="Msg_Referral_di" bpmnElement="Msg_Referral" bioc:stroke="#81909d">
+        <di:waypoint x="420" y="120" />
+        <di:waypoint x="420" y="330" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="436" y="210" width="44" height="14" />
+          <dc:Bounds x="430" y="210" width="96" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Msg_Contact_di" bpmnElement="Msg_Contact" bioc:stroke="#0f766e">
+      <bpmndi:BPMNEdge id="Msg_Contact_di" bpmnElement="Msg_Contact" bioc:stroke="#81909d">
         <di:waypoint x="1590" y="330" />
         <di:waypoint x="1590" y="120" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1605" y="210" width="107" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Msg_Treatment_di" bpmnElement="Msg_Treatment" bioc:stroke="#0f766e">
+      <bpmndi:BPMNEdge id="Msg_Treatment_di" bpmnElement="Msg_Treatment" bioc:stroke="#81909d">
         <di:waypoint x="3380" y="330" />
         <di:waypoint x="3380" y="120" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3395" y="210" width="121" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Msg_Slot_di" bpmnElement="Msg_Slot" bioc:stroke="#0f766e">
+      <bpmndi:BPMNEdge id="Msg_Slot_di" bpmnElement="Msg_Slot" bioc:stroke="#81909d">
         <di:waypoint x="500" y="1940" />
         <di:waypoint x="500" y="1920" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="520" y="1920" width="93" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Msg_Letter_di" bpmnElement="Msg_Letter" bioc:stroke="#0f766e">
+      <bpmndi:BPMNEdge id="Msg_Letter_di" bpmnElement="Msg_Letter" bioc:stroke="#81909d">
         <di:waypoint x="1270" y="1920" />
         <di:waypoint x="1270" y="1940" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1290" y="1920" width="135" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Msg_Funding_di" bpmnElement="Msg_Funding" bioc:stroke="#0f766e">
+      <bpmndi:BPMNEdge id="Msg_Funding_di" bpmnElement="Msg_Funding" bioc:stroke="#81909d">
         <di:waypoint x="2050" y="1940" />
         <di:waypoint x="2050" y="1920" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2070" y="1920" width="86" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Msg_PaymentRequest_di" bpmnElement="Msg_PaymentRequest" bioc:stroke="#0f766e">
+      <bpmndi:BPMNEdge id="Msg_PaymentRequest_di" bpmnElement="Msg_PaymentRequest" bioc:stroke="#81909d">
         <di:waypoint x="3380" y="1480" />
         <di:waypoint x="3380" y="1940" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3395" y="1700" width="84" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Msg_Payment_di" bpmnElement="Msg_Payment" bioc:stroke="#0f766e">
-        <di:waypoint x="3480" y="1940" />
-        <di:waypoint x="3480" y="1480" />
+      <bpmndi:BPMNEdge id="Msg_Payment_di" bpmnElement="Msg_Payment" bioc:stroke="#81909d">
+        <di:waypoint x="3540" y="1940" />
+        <di:waypoint x="3540" y="1448" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3495" y="1700" width="124" height="14" />
+          <dc:Bounds x="3555" y="1700" width="124" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

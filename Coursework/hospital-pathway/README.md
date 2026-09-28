@@ -1,6 +1,8 @@
 # Hospital Pathway
 
-Executable Camunda 8 pathway: BPMN + forms + two Java workers (payment / booking confirmation).
+Executable Camunda 8 pathway: BPMN + forms + two Java workers.
+
+Payment follows the Est / Message Example pattern: **send task** `request-payment` publishes BPMN message `payment-result` (correlation key `case_reference`); catch event **Payment result received** continues the path. Booking confirmation is a **send task** worker (no inbound message wait).
 
 ## How to run (same for every teammate)
 
@@ -39,9 +41,9 @@ Tasklist → Processes → start `Hospital_All_Processes_Simple_C8` (assignee `d
 | Situation | Need Java? |
 |-----------|------------|
 | Only user tasks | Optional, but recommended |
-| Reaching service tasks (gear): P7 payment or P6 booking confirmation | **Required** — otherwise the instance stays on that step |
+| Reaching P7 send payment / P6 send booking confirmation | **Required** — otherwise the instance stays on that job (or on the payment-result catch if the message was never published) |
 
-Closing Java stops the workers. Restart Java to resume waiting service-task jobs.
+Closing Java stops the workers. Restart Java to resume waiting jobs. Use a non-empty **Patient / case ID** on the funding form so `case_reference` can correlate `payment-result`.
 
 ## Notes
 
