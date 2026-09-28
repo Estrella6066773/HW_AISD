@@ -34,9 +34,9 @@
 | 入口类 | `HospitalPathwayApplication.java` |
 | 工作器类 | `HospitalPathwayWorkers.java` |
 | 已订阅的任务类型 | `request-payment`（发消息 `payment-result` 后完成作业）、`send-booking-confirmation`（写回 `confirmation_sent`） |
-| 全院图上的服务任务类型 | 与上表相同，仅这两处配置了 `zeebe:taskDefinition` |
-| 应用依赖 | Spring Boot + Camunda Client；**尚无** JDBC / JPA / 自建业务表 |
-| 业务状态存放处 | 几乎全在流程变量（如 `payment_requested_once`、`transaction_reference`）与控制台日志 |
+| 全院图上的服务任务类型 | 目前仅上述两处配置了 `zeebe:taskDefinition`；**A/B/C/D 新工作器上线时必须按第 4.4 节改 BPMN** |
+| 应用依赖 | Spring Boot + Camunda Client + **JPA/H2 领域库**（成员 B 已落地） |
+| 业务状态存放处 | 流程变量 + 领域库表（新工作器写入；既有两个 JobWorker 本阶段仍主要写变量） |
 | 本机 Camunda（c8run）自带库 | 只服务引擎（流程实例、作业、消息等），**不是**医院业务库 |
 
 概念阶段的治疗预约图与说明仍在 `Est/`；新能力以全院可执行包为准，旧文档中与全院包冲突的表述以全院包为准。
@@ -105,6 +105,34 @@ flowchart LR
 4. 若有外部副作用，先写领域库再完成作业（或按第 5 节幂等顺序）。  
 5. 一责走通成功与至少一条失败 / 重试路径；**二责**复核代码与证据。  
 6. 四人互相做一次交叉复核：每人至少复核另一人的一个工作器 PR / 提交。
+
+### 4.4 BPMN 必须随新工作器同步改进（硬性）
+
+**新内容（领域库契约 + A/B/C/D 新 JobWorker）落地后，全院可执行 BPMN 必须跟着改。**  
+只写 Java、不改图 → 引擎不会投递作业，演示与完成定义都不成立。
+
+| 规则 | 要求 |
+|------|------|
+| 同源双包 | 先改 `Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`；若保留中文学习包，同步改 `Ruby/hospital-pathway-zh-learn/bpmn/` 同名图 |
+| 类型一致 | 图上 `zeebe:taskDefinition type="..."` 与 `@JobWorker(type = "...")` 字符串完全一致 |
+| 改图方式 | 优先在用户任务**之后**插入 `serviceTask` / `sendTask`（保留人工填表，外发交给工作器）；不要删掉既有 `RequestPayment` / `SendBookingConfirmation` |
+| 完成门槛 | 某一责的工作器未在 BPMN 挂上类型并部署跑通前，不得标该工作项 Done |
+| 既有节点 | `request-payment`、`send-booking-confirmation` 已挂类型，本阶段不改其方法体；图上这两处保持 |
+
+**建议挂接位置（定稿类型名后由一责改图）：**
+
+| 成员 | 任务类型（建议） | BPMN 改法（相对现有节点） |
+|------|------------------|---------------------------|
+| A | `request-refund` | 在 `FinanceAdjustment`（同意退款/转账）**之后**增加 send/service 任务，再进入后续网关或结束 |
+| A | `mark-payment-investigate`（可选） | 在支付失败 / `FundingIssue` 路径上增加服务任务，或由 FundingIssue 完成后进入 |
+| B | `check-slot` / `reserve-appointment` | 在 `BookVisit` 填表**之后**、到诊网关**之前**（或与到诊结果分支配合）增加占号服务任务；治疗侧可在 `BookTreatment` 确认资源后、现有 `SendBookingConfirmation` **之前**增加 |
+| B | `flag-resource-unavailable` | 在 `BookTreatment` 选「资源不可用」出口后增加服务任务，写 `booking_slot` pending 并通知 |
+| C | `dispatch-clinic-letter` | 将对外发信从纯用户任务拆出：保留 `DispatchLetter` 人工核对，**之后**增加 send/service 任务对接 Correspondence 泳池 |
+| C | `notify-referrer` | 在 `Redirect`（及拒绝结束前若需通知）**之后**增加通知转诊方的服务任务 |
+| D | `notify-care-change` | 在 `ClinicalChange` 授权变更**之后**、分网关去财务/出院前，增加通知服务任务 |
+| D | `ack-enquiry-routed`（可选） | 在三条问询用户任务完成前或完成后增加 mock 回执服务任务 |
+
+改图时更新节点 `documentation`：写明任务类型、一责成员、读写哪些领域表。Operate / Tasklist 复测对应线路后再交证据。
 
 ---
 
@@ -181,7 +209,7 @@ flowchart LR
 
 1. **每人一责至少一个新工作器**：不得出现「只有 A/B 写 Java、C/D 只讲表单」的交付结构。  
 2. **交叉复核**：合并前由二责看代码、日志与（如有）表数据；复核人须在证据或 PR 说明里留名。  
-3. **一张图、一个工程**：新 `taskDefinition` 加在 `Coursework/hospital-pathway` 全院图；实现放同一 Spring Boot 进程（可用多个 `@Component` 类按成员拆分文件）。  
+3. **一张图、一个工程**：新 `taskDefinition` **必须**加进全院 BPMN（见第 4.4 节）；实现放同一 Spring Boot 进程（可用多个 `@Component` 类按成员拆分文件）。**禁止**「代码已合并、图未改」。  
 4. **一个领域库**：只使用 B 落地的 H2 文件库与契约；禁止四人各建各的库文件。  
 5. **与 Part 4 姓名对齐**：若 `docs/p4-work-breakdown.md` 中 T06/T09/T10 等仍写 Ender/Ryan 等真名，应标注其对应的演示代号（A/B/C/D），或改挂到本表一责，避免同一任务类型多人抢改。
 
@@ -191,7 +219,8 @@ flowchart LR
 |--------|------|
 | 领域库三表 + 仓储 + 审计只写（成员 B） | **已完成** |
 | 既有两个 JobWorker | 保持不动 |
-| A / B / C / D 各自新工作器 | **未开始**（先定类型名字符串，再改 BPMN，再写代码） |
+| A / B / C / D 各自新工作器 | **未开始** |
+| **全院 BPMN 按第 4.4 节挂接新任务类型** | **未开始（与新工作器绑定，不得遗漏）** |
 
 ---
 
@@ -202,13 +231,13 @@ flowchart LR
 | 切片 | 做什么 | 一责 | 完成时可见证据 |
 |------|--------|------|----------------|
 | 1 | 文件型领域库 + 三张表（**不**改既有 JobWorker） | B | 启动日志「领域库就绪」；`data/hospital-domain` 存在 |
-| 2 | 排班占号 + 资源不可用工作器 + BPMN 任务类型 | B（A 或 C 复核） | pending / 防重复占用可演示 |
-| 3 | 诊后信外发 + 转诊方通知工作器 + BPMN | C（B 或 D 复核） | 日志 SENT；审计可查 |
-| 4 | 变更通知（+ 可选问询回执）工作器 + BPMN | D（A 或 B 复核） | 变更后通知可演示 |
-| 5 | 退款（+ 可选待调查标记）工作器 + BPMN | A（C 或 D 复核） | 流水可追溯；无自动二次扣款 |
-| 6 | 各一责在本人工作器完成路径上调用 `AuditEventWriter` | A/B/C/D | 按病例号可查出四人写入的事件 |
+| 2 | **改 BPMN** + 实现排班占号 / 资源不可用 `@JobWorker` | B（A 或 C 复核） | 图上有 `taskDefinition`；pending / 防重复可演示 |
+| 3 | **改 BPMN** + 诊后信外发 / 转诊方通知工作器 | C（B 或 D 复核） | 图上有类型；日志 SENT；审计可查 |
+| 4 | **改 BPMN** + 变更通知（+ 可选问询回执）工作器 | D（A 或 B 复核） | 图上有类型；变更后通知可演示 |
+| 5 | **改 BPMN** + 退款（+ 可选待调查）工作器 | A（C 或 D 复核） | 图上有类型；流水可追溯 |
+| 6 | 各一责在本人工作器完成路径上调用 `AuditEventWriter` | A/B/C/D | 按病例号可查出写入事件 |
 
-切片 1 已完成。切片 2–5 可部分并行，但须先在全组冻结各自的 `taskDefinition` 字符串，再同时改图与写代码。
+切片 1 已完成。切片 2–5 **每一刀都包含 BPMN 改进**；先全组冻结 `taskDefinition` 字符串，再改图与写代码（可并行，但图与代码必须同一切片内一起交付）。
 
 ---
 
@@ -228,9 +257,9 @@ flowchart LR
 - 不把 Camunda 引擎自带库当作医院业务库直接改表、直接查账。  
 - 不在表单、日志或领域库中保存完整卡号、安全码或病历正文。  
 - 不把所有用户任务改成服务任务；行政填表、临床决策、财务人工调查仍以用户任务与表单为主。  
-- 不在未配置 `taskDefinition` 之前先写无法被引擎投递的工作器。  
+- 不在未配置 `taskDefinition` 之前先写无法被引擎投递的工作器；**也不允许**工作器已写完却不改 BPMN（见第 4.4 节）。  
 - 不引入与课堂范围无关的微服务拆分、云托管数据库或真实支付网关对接（除非课程另行要求）。  
-- **本阶段不回头修改**已实现的 `request-payment` / `send-booking-confirmation` 方法体；新需求用新工作器与领域库承接。
+- **本阶段不回头修改**已实现的 `request-payment` / `send-booking-confirmation` 方法体；新需求用新工作器与领域库承接，并同步改全院图。
 
 ---
 
@@ -252,7 +281,8 @@ flowchart LR
 
 - [ ] 说得出引擎库与领域库各自存什么  
 - [ ] 说得出 A / B / C / D 各自一责的新工作器（见第 6 节），且四人都有开发任务  
-- [ ] 每个拟新增的 `@JobWorker` 是否已在 BPMN 上有同名 `taskDefinition`  
+- [ ] 每个拟新增的 `@JobWorker` 是否已在 **BPMN** 上有同名 `taskDefinition`，且 Coursework（及若使用的 zh-learn）双包已对齐  
+- [ ] 切片 2–5 的证据是否同时包含「图上节点」+「Java 日志 / 表数据」  
 - [ ] 防重复是否落在数据库唯一约束，而不是只靠口头约定  
 - [ ] 表结构是否从设计起就没有卡号字段  
 - [ ] 已知：先启 Camunda，再启 Java；只开一套工程；库文件在 `Coursework/hospital-pathway/data/`  

@@ -129,7 +129,8 @@ A / B / C / D 各自一责的工作器按总指引第 6 节领取任务类型后
 2. 支付 / 退款（成员 A）：先 `findByIdempotencyKey`，有则复用，无则 `save` 后再对外交互。  
 3. 占号（成员 B）：先 `findByOccupancyKey`，无号写 `PENDING`，确认写 `CONFIRMED`。  
 4. 信件 / 转诊通知（成员 C）、变更 / 问询（成员 D）：完成外部 mock 后 `append` 审计。  
-5. **不要回头修改**已演示稳定的两个既有 JobWorker 方法体，除非全组另有决议。
+5. **不要回头修改**已演示稳定的两个既有 JobWorker 方法体，除非全组另有决议。  
+6. **改 Java 必改 BPMN**：在全院图对应位置增加 `serviceTask`/`sendTask` 与 `taskDefinition`（详见总指引第 4.4 节）；中文学习包若仍使用则同步改图。
 
 ---
 
