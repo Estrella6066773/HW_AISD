@@ -20,6 +20,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 		<!-- 领域库（成员B）：文件型 H2 + JPA；与 Camunda 引擎自带库分离，现有 JobWorker 本切片不改。 -->

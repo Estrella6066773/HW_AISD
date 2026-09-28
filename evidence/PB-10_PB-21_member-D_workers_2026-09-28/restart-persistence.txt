@@ -1,0 +1,5 @@
+2026-09-28T18:56:44.955+08:00  INFO 21364 --- [hospital-pathway] [           main] i.c.client.jobhandling.JobWorkerManager  : Starting job worker: memberDPathwayWorkers#acknowledgeEnquiry with type ack-enquiry-routed
+2026-09-28T18:56:44.956+08:00  INFO 21364 --- [hospital-pathway] [           main] i.c.client.jobhandling.JobWorkerManager  : Starting job worker: memberDPathwayWorkers#notifyCareChange with type notify-care-change
+2026-09-28T18:56:45.300+08:00  INFO 21364 --- [hospital-pathway] [           main] i.c.d.h.HospitalPathwayApplication       : 已部署 Hospital_All_Processes_Simple_C8，部署键 2251799813788961
+2026-09-28T18:56:45.300+08:00  INFO 21364 --- [hospital-pathway] [           main] i.c.d.h.HospitalPathwayApplication       : 已部署 11 个表单（硬编码下拉，无 valuesKey）
+2026-09-28T18:56:45.537+08:00  INFO 21364 --- [hospital-pathway] [           main] i.c.d.h.domain.DomainDatabaseConfig      : 领域库就绪（H2 文件 ./data/hospital-domain）：payment_ledger=0 行, booking_slot=1 行, audit_event=10 行

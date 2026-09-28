@@ -34,7 +34,7 @@
     <bpmn:textAnnotation id="Guide_Main">
       <bpmn:text>READING GUIDE | Blue = main care route (left to right by stage). Grey = side / exception paths kept on lane edges.
 Stages: 1 Referral review → 2 Visit &amp; clinical care → 3 Letter &amp; next step → 4 Funding &amp; treatment. Changes sit on the lower clinical band.
-All P1-P13 tasks remain visible. Payment uses a send task + payment-result message catch (Est pattern); booking confirmation uses a send task worker. Member B added check-slot, reserve-appointment, flag-resource-unavailable service tasks. Other members' workers are not in this diagram yet.</bpmn:text>
+All P1-P13 tasks remain visible. Payment uses a send task + payment-result message catch (Est pattern); booking confirmation uses a send task worker. Member B added check-slot, reserve-appointment, flag-resource-unavailable service tasks. Member D added notify-care-change and three ack-enquiry-routed service tasks with shared audit receipts.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Guide_Rules">
       <bpmn:text>BUSINESS CONTROLS | P4: within 2 weeks, also phone and record contact. P9: 7-day letter target; weekly reminders; escalate at 1 and 3 months.
@@ -45,6 +45,39 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
   <bpmn:process id="Hospital_All_Processes_Simple_C8" name="Hospital - All Business Processes (Simple Camunda 8)" isExecutable="true">
     <bpmn:documentation>Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Payment follows the Est / Message Example pattern: send task request-payment publishes BPMN message payment-result (correlation key case_reference); intermediate catch PaymentReceived consumes it. Booking confirmation is send task send-booking-confirmation (worker completes the job; no separate inbound message wait). There are no timers. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. User tasks use dedicated Camunda forms with hardcoded select options (no valuesKey). Task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving.</bpmn:documentation>
     <bpmn:laneSet id="Hospital_Lanes">
+      <bpmn:lane id="Finance" name="Finance">
+        <bpmn:flowNodeRef>Funding</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FundingOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RequestPayment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>PaymentReceived</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>PaymentResult</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FundingIssue</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FinanceAdjustment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AdjustmentOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FinanceEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndFinanceEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentFinance</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AckFinanceEnquiry</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Clinical" name="Clinical team">
+        <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ReferralDecision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndRejected</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ClinicalCare</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentFollowupNeeded</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CarePlan</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentAuthorisation</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndCare</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ClinicalChange</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ChangeValid</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>MoneyAffected</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ChangeRoute</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ClinicalEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndClinicalEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UrgentDecision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NotifyCareChange</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AckClinicalEnquiry</bpmn:flowNodeRef>
+      </bpmn:lane>
       <bpmn:lane id="Admin" name="Administration">
         <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Register</bpmn:flowNodeRef>
@@ -64,40 +97,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>EndAdminEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>AuditReports</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndReport</bpmn:flowNodeRef>
-      
         <bpmn:flowNodeRef>CheckVisitSlot</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ReserveTreatmentSlot</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FlagResourceUnavailable</bpmn:flowNodeRef>
-      </bpmn:lane>
-      <bpmn:lane id="Clinical" name="Clinical team">
-        <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ReferralDecision</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>EndRejected</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ClinicalCare</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>UrgentFollowupNeeded</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>CarePlan</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>UrgentAuthorisation</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>EndCare</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ClinicalChange</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ChangeValid</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>MoneyAffected</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ChangeRoute</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ClinicalEnquiry</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>EndClinicalEnquiry</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>UrgentDecision</bpmn:flowNodeRef>
-      </bpmn:lane>
-      <bpmn:lane id="Finance" name="Finance">
-        <bpmn:flowNodeRef>Funding</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>FundingOutcome</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>RequestPayment</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>PaymentReceived</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>PaymentResult</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>FundingIssue</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>FinanceAdjustment</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>AdjustmentOutcome</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>FinanceEnquiry</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>EndFinanceEnquiry</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>UrgentFinance</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AckAdminEnquiry</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Start" name="Start request">
@@ -488,7 +491,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_51</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="ChangeValid" name="Formal request&#10;authorised?" default="Flow_52">
-      <bpmn:incoming>Flow_51</bpmn:incoming>
+      <bpmn:incoming>Flow_51_D</bpmn:incoming>
       <bpmn:outgoing>Flow_52</bpmn:outgoing>
       <bpmn:outgoing>Flow_53</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -589,13 +592,13 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_27</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="EndAdminEnquiry" name="Enquiry resolved">
-      <bpmn:incoming>Flow_25</bpmn:incoming>
+      <bpmn:incoming>Flow_25_D</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="EndClinicalEnquiry" name="Enquiry resolved">
-      <bpmn:incoming>Flow_26</bpmn:incoming>
+      <bpmn:incoming>Flow_26_D</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="EndFinanceEnquiry" name="Enquiry resolved">
-      <bpmn:incoming>Flow_27</bpmn:incoming>
+      <bpmn:incoming>Flow_27_D</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:userTask id="AuditReports" name="P13&#10;Authorised manager reviews&#10;audit trail and pathway reports">
       <bpmn:documentation>Authorised management views referrals, waits, failed contacts, letter delays, enquiries, booking delays, funding/payment exceptions and refunds. P13 controls apply to EVERY significant task: verified identity, role-limited access, secure exchange, user/time/action audit, linked records and downtime recovery. Ordinary users must not edit audit history. This model documents these requirements; demo assignment is not production RBAC.</bpmn:documentation>
@@ -619,6 +622,87 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:endEvent id="EndReport" name="Report reviewed">
       <bpmn:incoming>Flow_28</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="UrgentDecision" name="Urgent care&#10;authorised?" default="Flow_49">
+      <bpmn:incoming>Flow_47</bpmn:incoming>
+      <bpmn:outgoing>Flow_48</bpmn:outgoing>
+      <bpmn:outgoing>Flow_49</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="UrgentFinance" name="P8&#10;Finance follows up&#10;after urgent care">
+      <bpmn:documentation>After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="simple_record" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
+          <zeebe:output source="= notes" target="UrgentFinanceNotes" />
+          <zeebe:output source="= false" target="urgentCase" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_37</bpmn:incoming>
+      <bpmn:outgoing>Flow_38</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="CheckVisitSlot" name="P3&#10;Check / reserve&#10;outpatient slot">
+      <bpmn:documentation>Member B worker type check-slot. After BookVisit form: mock external scheduling, write booking_slot; then VisitOutcome gateway.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="check-slot" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06</bpmn:incoming>
+      <bpmn:outgoing>Flow_06b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="ReserveTreatmentSlot" name="P6&#10;Reserve treatment&#10;slot / resources">
+      <bpmn:documentation>Member B worker type reserve-appointment. After resources-ready gateway, before send-booking-confirmation; writes booking_slot confirmed.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="reserve-appointment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_16b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="FlagResourceUnavailable" name="P6&#10;Flag resource&#10;unavailable">
+      <bpmn:documentation>Member B worker type flag-resource-unavailable. Pending/retry path: write booking_slot pending + retry, then back to BookTreatment.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="flag-resource-unavailable" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_50</bpmn:incoming>
+      <bpmn:outgoing>Flow_50b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="NotifyCareChange" name="P11 / P12&#10;Notify care change">
+      <bpmn:documentation>Member D (Ryan), type notify-care-change: mock external notification, append audit_event with a unique task receipt before completing. No real email/SMS. Care changes require formal authorisation; financial changes only read payment_ledger and request Finance review. Human forms and gateway decisions remain authoritative. No BPMN message catch is required for this synchronous mock job.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="notify-care-change" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_51</bpmn:incoming>
+      <bpmn:outgoing>Flow_51_D</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="AckAdminEnquiry" name="P10&#10;Send enquiry receipt">
+      <bpmn:documentation>Member D (Ryan), type ack-enquiry-routed: mock external notification, append audit_event with a unique task receipt before completing. No real email/SMS. Care changes require formal authorisation; financial changes only read payment_ledger and request Finance review. Human forms and gateway decisions remain authoritative. No BPMN message catch is required for this synchronous mock job.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ack-enquiry-routed" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_25</bpmn:incoming>
+      <bpmn:outgoing>Flow_25_D</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="AckClinicalEnquiry" name="P10&#10;Send enquiry receipt">
+      <bpmn:documentation>Member D (Ryan), type ack-enquiry-routed: mock external notification, append audit_event with a unique task receipt before completing. No real email/SMS. Care changes require formal authorisation; financial changes only read payment_ledger and request Finance review. Human forms and gateway decisions remain authoritative. No BPMN message catch is required for this synchronous mock job.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ack-enquiry-routed" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_26</bpmn:incoming>
+      <bpmn:outgoing>Flow_26_D</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="AckFinanceEnquiry" name="P10&#10;Send enquiry receipt">
+      <bpmn:documentation>Member D (Ryan), type ack-enquiry-routed: mock external notification, append audit_event with a unique task receipt before completing. No real email/SMS. Care changes require formal authorisation; financial changes only read payment_ledger and request Finance review. Human forms and gateway decisions remain authoritative. No BPMN message catch is required for this synchronous mock job.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ack-enquiry-routed" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_27</bpmn:incoming>
+      <bpmn:outgoing>Flow_27_D</bpmn:outgoing>
+    </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_01" sourceRef="Start" targetRef="Register" />
     <bpmn:sequenceFlow id="Flow_24" name="Select type" sourceRef="RequestType" targetRef="Register" />
     <bpmn:sequenceFlow id="Flow_30" name="Recheck" sourceRef="GetDocuments" targetRef="Register" />
@@ -675,10 +759,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_36" name="Cancel / DNA" sourceRef="VisitOutcome" targetRef="ClinicalChange">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "cancelled"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_16" name="Resources ready" sourceRef="TreatmentOutcome" targetRef="ReserveTreatmentSlot">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= treatmentSlotStatus = "ready"</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_16b" sourceRef="ReserveTreatmentSlot" targetRef="SendBookingConfirmation" />
     <bpmn:sequenceFlow id="Flow_66" name="Treatment / review" sourceRef="SendBookingConfirmation" targetRef="ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_39" name="Clinical correction" sourceRef="LetterOutcome" targetRef="ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "revise"</bpmn:conditionExpression>
@@ -728,14 +808,19 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_48" name="Authorised" sourceRef="UrgentDecision" targetRef="BookTreatment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentDecision = "authorise"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_50" name="Pending / retry" sourceRef="TreatmentOutcome" targetRef="FlagResourceUnavailable" />
     <bpmn:sequenceFlow id="Flow_50b" sourceRef="FlagResourceUnavailable" targetRef="BookTreatment" />
     <bpmn:sequenceFlow id="Flow_15" sourceRef="BookTreatment" targetRef="TreatmentOutcome" />
+    <bpmn:sequenceFlow id="Flow_16" name="Resources ready" sourceRef="TreatmentOutcome" targetRef="ReserveTreatmentSlot">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= treatmentSlotStatus = "ready"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_50" name="Pending / retry" sourceRef="TreatmentOutcome" targetRef="FlagResourceUnavailable" />
+    <bpmn:sequenceFlow id="Flow_16b" sourceRef="ReserveTreatmentSlot" targetRef="SendBookingConfirmation" />
     <bpmn:sequenceFlow id="Flow_61" name="Discharge" sourceRef="ChangeRoute" targetRef="EndCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "discharge"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_62" name="Review plan" sourceRef="ChangeRoute" targetRef="ClinicalChange" />
-    <bpmn:sequenceFlow id="Flow_51" sourceRef="ClinicalChange" targetRef="ChangeValid" />
+    <bpmn:sequenceFlow id="Flow_51" sourceRef="ClinicalChange" targetRef="NotifyCareChange" />
+    <bpmn:sequenceFlow id="Flow_51_D" sourceRef="NotifyCareChange" targetRef="ChangeValid" />
     <bpmn:sequenceFlow id="Flow_53" name="Authorised" sourceRef="ChangeValid" targetRef="MoneyAffected">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget != "invalid"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -748,61 +833,13 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_57" name="Recorded" sourceRef="AdjustmentOutcome" targetRef="ChangeRoute">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= financeAdjustment = "resolved"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_25" sourceRef="AdminEnquiry" targetRef="EndAdminEnquiry" />
-    <bpmn:sequenceFlow id="Flow_26" sourceRef="ClinicalEnquiry" targetRef="EndClinicalEnquiry" />
-    <bpmn:sequenceFlow id="Flow_27" sourceRef="FinanceEnquiry" targetRef="EndFinanceEnquiry" />
+    <bpmn:sequenceFlow id="Flow_25" sourceRef="AdminEnquiry" targetRef="AckAdminEnquiry" />
+    <bpmn:sequenceFlow id="Flow_26" sourceRef="ClinicalEnquiry" targetRef="AckClinicalEnquiry" />
+    <bpmn:sequenceFlow id="Flow_27" sourceRef="FinanceEnquiry" targetRef="AckFinanceEnquiry" />
+    <bpmn:sequenceFlow id="Flow_25_D" sourceRef="AckAdminEnquiry" targetRef="EndAdminEnquiry" />
+    <bpmn:sequenceFlow id="Flow_26_D" sourceRef="AckClinicalEnquiry" targetRef="EndClinicalEnquiry" />
+    <bpmn:sequenceFlow id="Flow_27_D" sourceRef="AckFinanceEnquiry" targetRef="EndFinanceEnquiry" />
     <bpmn:sequenceFlow id="Flow_28" sourceRef="AuditReports" targetRef="EndReport" />
-    <bpmn:exclusiveGateway id="UrgentDecision" name="Urgent care&#10;authorised?" default="Flow_49">
-      <bpmn:incoming>Flow_47</bpmn:incoming>
-      <bpmn:outgoing>Flow_48</bpmn:outgoing>
-      <bpmn:outgoing>Flow_49</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:userTask id="UrgentFinance" name="P8&#10;Finance follows up&#10;after urgent care">
-      <bpmn:documentation>After clinician-authorised urgent treatment, Finance records subsequent payment/funding investigation, responsible owner and next action. Clinical urgency does not waive the financial obligation. An unresolved balance remains visible in reports even if the clinical episode ends.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="simple_record" />
-        <zeebe:assignmentDefinition assignee="demo" />
-        <zeebe:ioMapping>
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
-          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
-          <zeebe:input source="= null" target="action" />
-          <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:output source="= patientId" target="patientId" />
-          <zeebe:output source="= staffRole" target="staffRole" />
-          <zeebe:output source="= notes" target="UrgentFinanceNotes" />
-          <zeebe:output source="= false" target="urgentCase" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_37</bpmn:incoming>
-      <bpmn:outgoing>Flow_38</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:serviceTask id="CheckVisitSlot" name="P3&#10;Check / reserve&#10;outpatient slot">
-      <bpmn:documentation>Member B worker type check-slot. After BookVisit form: mock external scheduling, write booking_slot; then VisitOutcome gateway.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="check-slot" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_06</bpmn:incoming>
-      <bpmn:outgoing>Flow_06b</bpmn:outgoing>
-    </bpmn:serviceTask>
-
-    <bpmn:serviceTask id="ReserveTreatmentSlot" name="P6&#10;Reserve treatment&#10;slot / resources">
-      <bpmn:documentation>Member B worker type reserve-appointment. After resources-ready gateway, before send-booking-confirmation; writes booking_slot confirmed.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="reserve-appointment" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_16</bpmn:incoming>
-      <bpmn:outgoing>Flow_16b</bpmn:outgoing>
-    </bpmn:serviceTask>
-
-    <bpmn:serviceTask id="FlagResourceUnavailable" name="P6&#10;Flag resource&#10;unavailable">
-      <bpmn:documentation>Member B worker type flag-resource-unavailable. Pending/retry path: write booking_slot pending + retry, then back to BookTreatment.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="flag-resource-unavailable" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_50</bpmn:incoming>
-      <bpmn:outgoing>Flow_50b</bpmn:outgoing>
-    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_PaymentResult" name="payment-result">
     <bpmn:extensionElements>
@@ -812,852 +849,874 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
   <bpmndi:BPMNDiagram id="Diagram_Clean_Lines_C8">
     <bpmndi:BPMNPlane id="Plane_Clean_Lines_C8" bpmnElement="Collaboration_Hospital_Simple">
       <bpmndi:BPMNShape id="Hospital_di" bpmnElement="Hospital" isHorizontal="true" isExpanded="true">
-        <dc:Bounds x="150" y="200" width="3920" height="1720" />
+        <dc:Bounds x="300" y="280" width="3920" height="1720" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Finance_di" bpmnElement="Finance" isHorizontal="true">
-        <dc:Bounds x="180" y="1240" width="3890" height="680" />
+        <dc:Bounds x="330" y="1320" width="3890" height="680" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Clinical_di" bpmnElement="Clinical" isHorizontal="true">
-        <dc:Bounds x="180" y="700" width="3890" height="540" />
+        <dc:Bounds x="330" y="780" width="3890" height="540" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Admin_di" bpmnElement="Admin" isHorizontal="true">
-        <dc:Bounds x="180" y="200" width="3890" height="500" />
+        <dc:Bounds x="330" y="280" width="3890" height="500" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Start_di" bpmnElement="Start">
-        <dc:Bounds x="230" y="360" width="40" height="40" />
+        <dc:Bounds x="380" y="440" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="217" y="407" width="66" height="14" />
+          <dc:Bounds x="369" y="487" width="63" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Register_di" bpmnElement="Register" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="310" y="330" width="220" height="100" />
+        <dc:Bounds x="460" y="410" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="RequestType_di" bpmnElement="RequestType" isMarkerVisible="true">
-        <dc:Bounds x="590" y="360" width="40" height="40" />
+        <dc:Bounds x="740" y="440" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="559" y="336" width="41" height="27" />
+          <dc:Bounds x="709" y="416" width="41" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GetDocuments_di" bpmnElement="GetDocuments" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="1040" y="520" width="220" height="100" />
+        <dc:Bounds x="1190" y="600" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ReviewReferral_di" bpmnElement="ReviewReferral" bioc:stroke="#263746" bioc:fill="#eaf8f0">
-        <dc:Bounds x="880" y="820" width="220" height="100" />
+        <dc:Bounds x="1030" y="900" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ReferralDecision_di" bpmnElement="ReferralDecision" isMarkerVisible="true">
-        <dc:Bounds x="1180" y="850" width="40" height="40" />
+        <dc:Bounds x="1330" y="930" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1177" y="826" width="47" height="27" />
+          <dc:Bounds x="1327" y="906" width="47" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Redirect_di" bpmnElement="Redirect" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="1320" y="520" width="220" height="100" />
+        <dc:Bounds x="1470" y="600" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndReferral_di" bpmnElement="EndReferral">
-        <dc:Bounds x="1590" y="550" width="40" height="40" />
+        <dc:Bounds x="1740" y="630" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1568" y="597" width="84" height="14" />
+          <dc:Bounds x="1723" y="677" width="74" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndRejected_di" bpmnElement="EndRejected">
-        <dc:Bounds x="1300" y="850" width="40" height="40" />
+        <dc:Bounds x="1450" y="930" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1278" y="900" width="84" height="14" />
+          <dc:Bounds x="1429" y="980" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BookVisit_di" bpmnElement="BookVisit" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="1480" y="330" width="220" height="100" />
+        <dc:Bounds x="1630" y="410" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="VisitOutcome_di" bpmnElement="VisitOutcome" isMarkerVisible="true">
-        <dc:Bounds x="1780" y="360" width="40" height="40" />
+        <dc:Bounds x="1930" y="440" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1770" y="310" width="60" height="27" />
+          <dc:Bounds x="1926" y="390" width="49" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalCare_di" bpmnElement="ClinicalCare" bioc:stroke="#263746" bioc:fill="#eaf8f0">
-        <dc:Bounds x="1480" y="820" width="240" height="100" />
+        <dc:Bounds x="1630" y="900" width="240" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UrgentFollowupNeeded_di" bpmnElement="UrgentFollowupNeeded" isMarkerVisible="true">
-        <dc:Bounds x="1800" y="850" width="40" height="40" />
+        <dc:Bounds x="1950" y="930" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1744" y="826" width="72" height="27" />
+          <dc:Bounds x="1894" y="906" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DispatchLetter_di" bpmnElement="DispatchLetter" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="2080" y="330" width="220" height="100" />
+        <dc:Bounds x="2230" y="410" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="LetterOutcome_di" bpmnElement="LetterOutcome" isMarkerVisible="true">
-        <dc:Bounds x="2380" y="360" width="40" height="40" />
+        <dc:Bounds x="2530" y="440" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2370" y="310" width="60" height="27" />
+          <dc:Bounds x="2532" y="390" width="36" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="MonitorLetters_di" bpmnElement="MonitorLetters" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="2080" y="520" width="220" height="100" />
+        <dc:Bounds x="2230" y="600" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="CarePlan_di" bpmnElement="CarePlan" isMarkerVisible="true">
-        <dc:Bounds x="2380" y="850" width="40" height="40" />
+        <dc:Bounds x="2530" y="930" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2382" y="812.5" width="36" height="27" />
+          <dc:Bounds x="2532" y="893" width="36" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Funding_di" bpmnElement="Funding" bioc:stroke="#263746" bioc:fill="#fff3e5">
-        <dc:Bounds x="2860" y="1380" width="220" height="100" />
+        <dc:Bounds x="3010" y="1460" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="FundingOutcome_di" bpmnElement="FundingOutcome" isMarkerVisible="true">
-        <dc:Bounds x="3160" y="1410" width="40" height="40" />
+        <dc:Bounds x="3310" y="1490" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3145" y="1360" width="70" height="27" />
+          <dc:Bounds x="3310" y="1440" width="40" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="RequestPayment_di" bpmnElement="RequestPayment" bioc:stroke="#263746" bioc:fill="#fff3e5">
-        <dc:Bounds x="3280" y="1380" width="200" height="100" />
+        <dc:Bounds x="3430" y="1460" width="200" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="PaymentReceived_di" bpmnElement="PaymentReceived">
-        <dc:Bounds x="3522" y="1412" width="36" height="36" />
+        <dc:Bounds x="3672" y="1492" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3495" y="1455" width="90" height="40" />
+          <dc:Bounds x="3653" y="1535" width="74" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="PaymentResult_di" bpmnElement="PaymentResult" isMarkerVisible="true">
-        <dc:Bounds x="3640" y="1410" width="40" height="40" />
+        <dc:Bounds x="3790" y="1490" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3638" y="1360" width="44" height="27" />
+          <dc:Bounds x="3788" y="1440" width="44" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="FundingIssue_di" bpmnElement="FundingIssue" bioc:stroke="#263746" bioc:fill="#fff3e5">
-        <dc:Bounds x="2860" y="1600" width="220" height="100" />
+        <dc:Bounds x="3010" y="1680" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UrgentAuthorisation_di" bpmnElement="UrgentAuthorisation" bioc:stroke="#263746" bioc:fill="#eaf8f0">
-        <dc:Bounds x="2860" y="820" width="220" height="100" />
+        <dc:Bounds x="3010" y="900" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BookTreatment_di" bpmnElement="BookTreatment" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="2860" y="330" width="220" height="100" />
+        <dc:Bounds x="3010" y="410" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TreatmentOutcome_di" bpmnElement="TreatmentOutcome" isMarkerVisible="true">
-        <dc:Bounds x="3160" y="360" width="40" height="40" />
+        <dc:Bounds x="3310" y="440" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3153" y="406" width="53" height="27" />
+          <dc:Bounds x="3303" y="486" width="53" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SendBookingConfirmation_di" bpmnElement="SendBookingConfirmation" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="3280" y="330" width="200" height="100" />
+        <dc:Bounds x="3430" y="410" width="200" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndCare_di" bpmnElement="EndCare">
-        <dc:Bounds x="2560" y="850" width="40" height="40" />
+        <dc:Bounds x="2710" y="930" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2547" y="812.5" width="66" height="27" />
+          <dc:Bounds x="2697" y="893" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalChange_di" bpmnElement="ClinicalChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
-        <dc:Bounds x="880" y="1060" width="240" height="100" />
+        <dc:Bounds x="940" y="1140" width="190" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ChangeValid_di" bpmnElement="ChangeValid" isMarkerVisible="true">
-        <dc:Bounds x="1180" y="1090" width="40" height="40" />
+        <dc:Bounds x="1330" y="1170" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1155" y="1140" width="90" height="27" />
+          <dc:Bounds x="1313" y="1220" width="74" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="MoneyAffected_di" bpmnElement="MoneyAffected" isMarkerVisible="true">
-        <dc:Bounds x="1380" y="1090" width="40" height="40" />
+        <dc:Bounds x="1530" y="1170" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1360" y="1040" width="80" height="27" />
+          <dc:Bounds x="1528" y="1120" width="45" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="FinanceAdjustment_di" bpmnElement="FinanceAdjustment" bioc:stroke="#263746" bioc:fill="#fff3e5">
-        <dc:Bounds x="1320" y="1600" width="220" height="100" />
+        <dc:Bounds x="1470" y="1680" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="AdjustmentOutcome_di" bpmnElement="AdjustmentOutcome" isMarkerVisible="true">
-        <dc:Bounds x="1620" y="1630" width="40" height="40" />
+        <dc:Bounds x="1770" y="1710" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1600" y="1680" width="80" height="27" />
+          <dc:Bounds x="1762" y="1760" width="56" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ChangeRoute_di" bpmnElement="ChangeRoute" isMarkerVisible="true">
-        <dc:Bounds x="2080" y="1090" width="40" height="40" />
+        <dc:Bounds x="2230" y="1170" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2055" y="1038" width="90" height="27" />
+          <dc:Bounds x="2219" y="1118" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="AdminEnquiry_di" bpmnElement="AdminEnquiry" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="310" y="520" width="220" height="100" />
+        <dc:Bounds x="460" y="600" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalEnquiry_di" bpmnElement="ClinicalEnquiry" bioc:stroke="#263746" bioc:fill="#eaf8f0">
-        <dc:Bounds x="310" y="1060" width="220" height="100" />
+        <dc:Bounds x="460" y="1140" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="FinanceEnquiry_di" bpmnElement="FinanceEnquiry" bioc:stroke="#263746" bioc:fill="#fff3e5">
-        <dc:Bounds x="310" y="1600" width="220" height="100" />
+        <dc:Bounds x="460" y="1680" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndAdminEnquiry_di" bpmnElement="EndAdminEnquiry">
-        <dc:Bounds x="570" y="550" width="40" height="40" />
+        <dc:Bounds x="740" y="720" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="548" y="597" width="84" height="14" />
+          <dc:Bounds x="714" y="765" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndClinicalEnquiry_di" bpmnElement="EndClinicalEnquiry">
-        <dc:Bounds x="570" y="1090" width="40" height="40" />
+        <dc:Bounds x="740" y="1260" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="548" y="1137" width="84" height="14" />
+          <dc:Bounds x="714" y="1305" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndFinanceEnquiry_di" bpmnElement="EndFinanceEnquiry">
-        <dc:Bounds x="570" y="1630" width="40" height="40" />
+        <dc:Bounds x="740" y="1825" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="548" y="1677" width="84" height="14" />
+          <dc:Bounds x="714" y="1870" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="AuditReports_di" bpmnElement="AuditReports" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="680" y="520" width="220" height="100" />
+        <dc:Bounds x="830" y="600" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndReport_di" bpmnElement="EndReport">
-        <dc:Bounds x="940" y="550" width="40" height="40" />
+        <dc:Bounds x="1090" y="630" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="920" y="597" width="80" height="14" />
+          <dc:Bounds x="1070" y="677" width="81" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UrgentDecision_di" bpmnElement="UrgentDecision" isMarkerVisible="true">
-        <dc:Bounds x="3190" y="850" width="40" height="40" />
+        <dc:Bounds x="3340" y="930" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3248" y="840" width="58" height="27" />
+          <dc:Bounds x="3398" y="920" width="58" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UrgentFinance_di" bpmnElement="UrgentFinance" bioc:stroke="#263746" bioc:fill="#fff3e5">
-        <dc:Bounds x="2090" y="1600" width="220" height="100" />
+        <dc:Bounds x="2240" y="1680" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckVisitSlot_di" bpmnElement="CheckVisitSlot" bioc:stroke="#263746" bioc:fill="#e8f5e9">
+        <dc:Bounds x="1330" y="360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReserveTreatmentSlot_di" bpmnElement="ReserveTreatmentSlot" bioc:stroke="#263746" bioc:fill="#e8f5e9">
+        <dc:Bounds x="2290" y="360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FlagResourceUnavailable_di" bpmnElement="FlagResourceUnavailable" bioc:stroke="#263746" bioc:fill="#e8f5e9">
+        <dc:Bounds x="2130" y="480" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="NotifyCareChange_di" bpmnElement="NotifyCareChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="1170" y="1140" width="140" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AckAdminEnquiry_di" bpmnElement="AckAdminEnquiry" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="460" y="710" width="220" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AckClinicalEnquiry_di" bpmnElement="AckClinicalEnquiry" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="460" y="1250" width="220" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AckFinanceEnquiry_di" bpmnElement="AckFinanceEnquiry" bioc:stroke="#263746" bioc:fill="#fff3e5">
+        <dc:Bounds x="460" y="1810" width="220" height="70" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01" bioc:stroke="#1768a6">
-        <di:waypoint x="270" y="380" />
-        <di:waypoint x="310" y="380" />
+        <di:waypoint x="420" y="460" />
+        <di:waypoint x="460" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_24_di" bpmnElement="Flow_24" bioc:stroke="#667481">
-        <di:waypoint x="610" y="360" />
-        <di:waypoint x="610" y="300" />
-        <di:waypoint x="420" y="300" />
-        <di:waypoint x="420" y="330" />
+        <di:waypoint x="760" y="440" />
+        <di:waypoint x="760" y="380" />
+        <di:waypoint x="570" y="380" />
+        <di:waypoint x="570" y="410" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="462" y="283" width="55" height="14" />
+          <dc:Bounds x="612" y="363" width="55" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_30_di" bpmnElement="Flow_30" bioc:stroke="#667481">
-        <di:waypoint x="1150" y="520" />
-        <di:waypoint x="1150" y="280" />
-        <di:waypoint x="420" y="280" />
-        <di:waypoint x="420" y="330" />
+        <di:waypoint x="1300" y="600" />
+        <di:waypoint x="1300" y="360" />
+        <di:waypoint x="570" y="360" />
+        <di:waypoint x="570" y="410" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="753" y="256" width="43" height="14" />
+          <dc:Bounds x="903" y="336" width="43" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02_di" bpmnElement="Flow_02" bioc:stroke="#1768a6">
-        <di:waypoint x="530" y="380" />
-        <di:waypoint x="590" y="380" />
+        <di:waypoint x="680" y="460" />
+        <di:waypoint x="740" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_di" bpmnElement="Flow_03" bioc:stroke="#1768a6">
-        <di:waypoint x="630" y="380" />
-        <di:waypoint x="1010" y="380" />
-        <di:waypoint x="1010" y="820" />
+        <di:waypoint x="780" y="460" />
+        <di:waypoint x="1160" y="460" />
+        <di:waypoint x="1160" y="900" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1020" y="436" width="40" height="14" />
+          <dc:Bounds x="1170" y="516" width="40" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18_di" bpmnElement="Flow_18" bioc:stroke="#667481">
-        <di:waypoint x="610" y="400" />
-        <di:waypoint x="610" y="460" />
-        <di:waypoint x="420" y="460" />
-        <di:waypoint x="420" y="520" />
+        <di:waypoint x="760" y="480" />
+        <di:waypoint x="760" y="540" />
+        <di:waypoint x="570" y="540" />
+        <di:waypoint x="570" y="600" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="450" y="436" width="71" height="14" />
+          <dc:Bounds x="600" y="516" width="71" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_19_di" bpmnElement="Flow_19" bioc:stroke="#667481">
-        <di:waypoint x="630" y="380" />
-        <di:waypoint x="1150" y="380" />
-        <di:waypoint x="1150" y="520" />
+        <di:waypoint x="780" y="460" />
+        <di:waypoint x="1300" y="460" />
+        <di:waypoint x="1300" y="600" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="922" y="356" width="95" height="14" />
+          <dc:Bounds x="1072" y="436" width="95" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_20_di" bpmnElement="Flow_20" bioc:stroke="#667481">
-        <di:waypoint x="610" y="400" />
-        <di:waypoint x="610" y="480" />
-        <di:waypoint x="300" y="480" />
-        <di:waypoint x="300" y="1110" />
-        <di:waypoint x="310" y="1110" />
+        <di:waypoint x="760" y="480" />
+        <di:waypoint x="760" y="560" />
+        <di:waypoint x="450" y="560" />
+        <di:waypoint x="450" y="1190" />
+        <di:waypoint x="460" y="1190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="302" y="663" width="75" height="14" />
+          <dc:Bounds x="452" y="743" width="75" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_21_di" bpmnElement="Flow_21" bioc:stroke="#667481">
-        <di:waypoint x="610" y="400" />
-        <di:waypoint x="610" y="500" />
-        <di:waypoint x="220" y="500" />
-        <di:waypoint x="220" y="1650" />
-        <di:waypoint x="310" y="1650" />
+        <di:waypoint x="760" y="480" />
+        <di:waypoint x="760" y="580" />
+        <di:waypoint x="370" y="580" />
+        <di:waypoint x="370" y="1730" />
+        <di:waypoint x="460" y="1730" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="220" y="863" width="79" height="14" />
+          <dc:Bounds x="370" y="943" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_22_di" bpmnElement="Flow_22" bioc:stroke="#667481">
-        <di:waypoint x="630" y="380" />
-        <di:waypoint x="640" y="380" />
-        <di:waypoint x="640" y="1110" />
-        <di:waypoint x="880" y="1110" />
+        <di:waypoint x="780" y="460" />
+        <di:waypoint x="790" y="460" />
+        <di:waypoint x="790" y="1190" />
+        <di:waypoint x="940" y="1190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="697" y="1086" width="92" height="14" />
+          <dc:Bounds x="847" y="1166" width="92" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_23_di" bpmnElement="Flow_23" bioc:stroke="#667481">
-        <di:waypoint x="630" y="380" />
-        <di:waypoint x="660" y="380" />
-        <di:waypoint x="660" y="570" />
-        <di:waypoint x="680" y="570" />
+        <di:waypoint x="780" y="460" />
+        <di:waypoint x="810" y="460" />
+        <di:waypoint x="810" y="650" />
+        <di:waypoint x="830" y="650" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="670" y="493" width="39" height="14" />
+          <dc:Bounds x="820" y="573" width="39" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_29_di" bpmnElement="Flow_29" bioc:stroke="#667481">
-        <di:waypoint x="1200" y="850" />
-        <di:waypoint x="1200" y="760" />
-        <di:waypoint x="1150" y="760" />
-        <di:waypoint x="1150" y="620" />
+        <di:waypoint x="1350" y="930" />
+        <di:waypoint x="1350" y="840" />
+        <di:waypoint x="1300" y="840" />
+        <di:waypoint x="1300" y="700" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1155" y="713" width="46" height="14" />
+          <dc:Bounds x="1305" y="793" width="46" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_52_di" bpmnElement="Flow_52" bioc:stroke="#667481">
-        <di:waypoint x="1200" y="1090" />
-        <di:waypoint x="1200" y="1060" />
-        <di:waypoint x="1130" y="1060" />
-        <di:waypoint x="1130" y="620" />
+        <di:waypoint x="1350" y="1170" />
+        <di:waypoint x="1350" y="1080" />
+        <di:waypoint x="1280" y="1080" />
+        <di:waypoint x="1280" y="700" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1085" y="1034" width="78" height="14" />
+          <dc:Bounds x="1296" y="1055" width="78" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_34_di" bpmnElement="Flow_34" bioc:stroke="#667481">
-        <di:waypoint x="1200" y="890" />
-        <di:waypoint x="1200" y="940" />
-        <di:waypoint x="990" y="940" />
-        <di:waypoint x="990" y="920" />
+        <di:waypoint x="1350" y="970" />
+        <di:waypoint x="1350" y="1020" />
+        <di:waypoint x="1140" y="1020" />
+        <di:waypoint x="1140" y="1000" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1003" y="923" width="74" height="14" />
+          <dc:Bounds x="1153" y="1003" width="74" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_di" bpmnElement="Flow_04" bioc:stroke="#1768a6">
-        <di:waypoint x="1100" y="870" />
-        <di:waypoint x="1180" y="870" />
+        <di:waypoint x="1250" y="950" />
+        <di:waypoint x="1330" y="950" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05_di" bpmnElement="Flow_05" bioc:stroke="#1768a6">
-        <di:waypoint x="1200" y="850" />
-        <di:waypoint x="1200" y="380" />
-        <di:waypoint x="1480" y="380" />
+        <di:waypoint x="1350" y="930" />
+        <di:waypoint x="1350" y="460" />
+        <di:waypoint x="1630" y="460" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1163" y="491" width="34" height="14" />
+          <dc:Bounds x="1313" y="571" width="34" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_31_di" bpmnElement="Flow_31" bioc:stroke="#667481">
-        <di:waypoint x="1200" y="850" />
-        <di:waypoint x="1200" y="780" />
-        <di:waypoint x="1430" y="780" />
-        <di:waypoint x="1430" y="620" />
+        <di:waypoint x="1350" y="930" />
+        <di:waypoint x="1350" y="860" />
+        <di:waypoint x="1580" y="860" />
+        <di:waypoint x="1580" y="700" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1260" y="756" width="41" height="14" />
+          <dc:Bounds x="1410" y="836" width="41" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_33_di" bpmnElement="Flow_33" bioc:stroke="#667481">
-        <di:waypoint x="1220" y="870" />
-        <di:waypoint x="1300" y="870" />
+        <di:waypoint x="1370" y="950" />
+        <di:waypoint x="1450" y="950" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1240" y="846" width="32" height="14" />
+          <dc:Bounds x="1390" y="926" width="32" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_32_di" bpmnElement="Flow_32" bioc:stroke="#667481">
-        <di:waypoint x="1540" y="570" />
-        <di:waypoint x="1590" y="570" />
+        <di:waypoint x="1690" y="650" />
+        <di:waypoint x="1740" y="650" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_35_di" bpmnElement="Flow_35" bioc:stroke="#667481">
-        <di:waypoint x="1800" y="360" />
-        <di:waypoint x="1800" y="300" />
-        <di:waypoint x="1590" y="300" />
-        <di:waypoint x="1590" y="330" />
+        <di:waypoint x="1950" y="440" />
+        <di:waypoint x="1950" y="380" />
+        <di:waypoint x="1740" y="380" />
+        <di:waypoint x="1740" y="410" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1635" y="276" width="72" height="14" />
+          <dc:Bounds x="1785" y="356" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_42_di" bpmnElement="Flow_42" bioc:stroke="#667481">
-        <di:waypoint x="2380" y="870" />
-        <di:waypoint x="1960" y="870" />
-        <di:waypoint x="1960" y="700" />
-        <di:waypoint x="1590" y="700" />
-        <di:waypoint x="1590" y="430" />
+        <di:waypoint x="2530" y="950" />
+        <di:waypoint x="2110" y="950" />
+        <di:waypoint x="2110" y="780" />
+        <di:waypoint x="1740" y="780" />
+        <di:waypoint x="1740" y="510" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2140" y="846" width="48" height="14" />
+          <dc:Bounds x="2290" y="926" width="48" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_60_di" bpmnElement="Flow_60" bioc:stroke="#667481">
-        <di:waypoint x="2100" y="1090" />
-        <di:waypoint x="2100" y="700" />
-        <di:waypoint x="1590" y="700" />
-        <di:waypoint x="1590" y="430" />
+        <di:waypoint x="2250" y="1170" />
+        <di:waypoint x="2250" y="780" />
+        <di:waypoint x="1740" y="780" />
+        <di:waypoint x="1740" y="510" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1800" y="676" width="48" height="14" />
+          <dc:Bounds x="1950" y="756" width="48" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06_di" bpmnElement="Flow_06" bioc:stroke="#1768a6">
-        <di:waypoint x="1700" y="380" />
-        <di:waypoint x="1780" y="380" />
+        <di:waypoint x="1850" y="460" />
+        <di:waypoint x="1930" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06b_di" bpmnElement="Flow_06b" bioc:stroke="#2e7d32">
+        <di:waypoint x="150" y="80" />
+        <di:waypoint x="150" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_07_di" bpmnElement="Flow_07" bioc:stroke="#1768a6">
-        <di:waypoint x="1800" y="400" />
-        <di:waypoint x="1800" y="760" />
-        <di:waypoint x="1600" y="760" />
-        <di:waypoint x="1600" y="820" />
+        <di:waypoint x="1950" y="480" />
+        <di:waypoint x="1950" y="840" />
+        <di:waypoint x="1750" y="840" />
+        <di:waypoint x="1750" y="900" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1680" y="736" width="45" height="14" />
+          <dc:Bounds x="1830" y="816" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_36_di" bpmnElement="Flow_36" bioc:stroke="#667481">
-        <di:waypoint x="1820" y="380" />
-        <di:waypoint x="1860" y="380" />
-        <di:waypoint x="1860" y="980" />
-        <di:waypoint x="1000" y="980" />
-        <di:waypoint x="1000" y="1060" />
+        <di:waypoint x="1970" y="460" />
+        <di:waypoint x="2010" y="460" />
+        <di:waypoint x="2010" y="1060" />
+        <di:waypoint x="1035" y="1060" />
+        <di:waypoint x="1035" y="1140" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1380" y="956" width="67" height="14" />
+          <dc:Bounds x="1530" y="1036" width="67" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16_di" bpmnElement="Flow_16" bioc:stroke="#1768a6">
-        <di:waypoint x="3200" y="380" />
-        <di:waypoint x="3280" y="380" />
+        <di:waypoint x="3350" y="460" />
+        <di:waypoint x="3430" y="460" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3188" y="356" width="84" height="14" />
+          <dc:Bounds x="3338" y="436" width="84" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16b_di" bpmnElement="Flow_16b" bioc:stroke="#2e7d32">
+        <di:waypoint x="150" y="80" />
+        <di:waypoint x="150" y="80" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_66_di" bpmnElement="Flow_66" bioc:stroke="#1768a6">
-        <di:waypoint x="3380" y="430" />
-        <di:waypoint x="3380" y="760" />
-        <di:waypoint x="1720" y="760" />
-        <di:waypoint x="1720" y="820" />
+        <di:waypoint x="3530" y="510" />
+        <di:waypoint x="3530" y="840" />
+        <di:waypoint x="1870" y="840" />
+        <di:waypoint x="1870" y="900" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2614" y="736" width="91" height="14" />
+          <dc:Bounds x="2764" y="816" width="91" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_39_di" bpmnElement="Flow_39" bioc:stroke="#667481">
-        <di:waypoint x="2420" y="380" />
-        <di:waypoint x="2460" y="380" />
-        <di:waypoint x="2460" y="780" />
-        <di:waypoint x="1690" y="780" />
-        <di:waypoint x="1690" y="820" />
+        <di:waypoint x="2570" y="460" />
+        <di:waypoint x="2610" y="460" />
+        <di:waypoint x="2610" y="860" />
+        <di:waypoint x="1840" y="860" />
+        <di:waypoint x="1840" y="900" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2305" y="793" width="87" height="14" />
+          <dc:Bounds x="2455" y="873" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#667481">
-        <di:waypoint x="2080" y="570" />
-        <di:waypoint x="1900" y="570" />
-        <di:waypoint x="1900" y="960" />
-        <di:waypoint x="1600" y="960" />
-        <di:waypoint x="1600" y="920" />
+        <di:waypoint x="2230" y="650" />
+        <di:waypoint x="2050" y="650" />
+        <di:waypoint x="2050" y="1040" />
+        <di:waypoint x="1750" y="1040" />
+        <di:waypoint x="1750" y="1000" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1907" y="583" width="85" height="14" />
+          <dc:Bounds x="2057" y="663" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_43_di" bpmnElement="Flow_43" bioc:stroke="#667481">
-        <di:waypoint x="2400" y="890" />
-        <di:waypoint x="2400" y="960" />
-        <di:waypoint x="1720" y="960" />
-        <di:waypoint x="1720" y="920" />
+        <di:waypoint x="2550" y="970" />
+        <di:waypoint x="2550" y="1040" />
+        <di:waypoint x="1870" y="1040" />
+        <di:waypoint x="1870" y="1000" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2150" y="933" width="79" height="14" />
+          <dc:Bounds x="2300" y="1013" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_di" bpmnElement="Flow_08" bioc:stroke="#1768a6">
-        <di:waypoint x="1720" y="870" />
-        <di:waypoint x="1800" y="870" />
+        <di:waypoint x="1870" y="950" />
+        <di:waypoint x="1950" y="950" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09_di" bpmnElement="Flow_09" bioc:stroke="#1768a6">
-        <di:waypoint x="1820" y="850" />
-        <di:waypoint x="1820" y="700" />
-        <di:waypoint x="2040" y="700" />
-        <di:waypoint x="2040" y="380" />
-        <di:waypoint x="2080" y="380" />
+        <di:waypoint x="1970" y="930" />
+        <di:waypoint x="1970" y="780" />
+        <di:waypoint x="2190" y="780" />
+        <di:waypoint x="2190" y="460" />
+        <di:waypoint x="2230" y="460" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1915" y="676" width="15" height="14" />
+          <dc:Bounds x="2065" y="756" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_37_di" bpmnElement="Flow_37" bioc:stroke="#667481">
-        <di:waypoint x="1820" y="890" />
-        <di:waypoint x="1820" y="1670" />
-        <di:waypoint x="2090" y="1670" />
+        <di:waypoint x="1970" y="970" />
+        <di:waypoint x="1970" y="1750" />
+        <di:waypoint x="2240" y="1750" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1831" y="1386" width="18" height="14" />
+          <dc:Bounds x="1981" y="1466" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_38_di" bpmnElement="Flow_38" bioc:stroke="#667481">
-        <di:waypoint x="2090" y="1650" />
-        <di:waypoint x="2060" y="1650" />
-        <di:waypoint x="2060" y="380" />
-        <di:waypoint x="2080" y="380" />
+        <di:waypoint x="2240" y="1730" />
+        <di:waypoint x="2210" y="1730" />
+        <di:waypoint x="2210" y="460" />
+        <di:waypoint x="2230" y="460" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1952" y="1003" width="95" height="14" />
+          <dc:Bounds x="2102" y="1083" width="95" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10" bioc:stroke="#1768a6">
-        <di:waypoint x="2300" y="380" />
-        <di:waypoint x="2380" y="380" />
+        <di:waypoint x="2450" y="460" />
+        <di:waypoint x="2530" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11" bioc:stroke="#1768a6">
-        <di:waypoint x="2400" y="400" />
-        <di:waypoint x="2400" y="850" />
+        <di:waypoint x="2550" y="480" />
+        <di:waypoint x="2550" y="930" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2410" y="610" width="23" height="14" />
+          <dc:Bounds x="2560" y="690" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_40_di" bpmnElement="Flow_40" bioc:stroke="#667481">
-        <di:waypoint x="2400" y="400" />
-        <di:waypoint x="2400" y="480" />
-        <di:waypoint x="2210" y="480" />
-        <di:waypoint x="2210" y="520" />
+        <di:waypoint x="2550" y="480" />
+        <di:waypoint x="2550" y="560" />
+        <di:waypoint x="2360" y="560" />
+        <di:waypoint x="2360" y="600" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2241" y="456" width="82" height="14" />
+          <dc:Bounds x="2391" y="536" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12" bioc:stroke="#1768a6">
-        <di:waypoint x="2420" y="870" />
-        <di:waypoint x="2490" y="870" />
-        <di:waypoint x="2490" y="790" />
-        <di:waypoint x="2740" y="790" />
-        <di:waypoint x="2740" y="1430" />
-        <di:waypoint x="2860" y="1430" />
+        <di:waypoint x="2570" y="950" />
+        <di:waypoint x="2640" y="950" />
+        <di:waypoint x="2640" y="870" />
+        <di:waypoint x="2890" y="870" />
+        <di:waypoint x="2890" y="1510" />
+        <di:waypoint x="3010" y="1510" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2755" y="1099" width="50" height="14" />
+          <dc:Bounds x="2905" y="1179" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17_di" bpmnElement="Flow_17" bioc:stroke="#1768a6">
-        <di:waypoint x="2420" y="870" />
-        <di:waypoint x="2560" y="870" />
+        <di:waypoint x="2570" y="950" />
+        <di:waypoint x="2710" y="950" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2460" y="846" width="50" height="14" />
+          <dc:Bounds x="2610" y="926" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_46_di" bpmnElement="Flow_46" bioc:stroke="#667481">
-        <di:waypoint x="2860" y="1650" />
-        <di:waypoint x="2820" y="1650" />
-        <di:waypoint x="2820" y="1450" />
-        <di:waypoint x="2860" y="1450" />
+        <di:waypoint x="3010" y="1730" />
+        <di:waypoint x="2970" y="1730" />
+        <di:waypoint x="2970" y="1530" />
+        <di:waypoint x="3010" y="1530" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2770" y="1531" width="49" height="14" />
+          <dc:Bounds x="2920" y="1611" width="49" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_49_di" bpmnElement="Flow_49" bioc:stroke="#667481">
-        <di:waypoint x="3210" y="890" />
-        <di:waypoint x="3210" y="1320" />
-        <di:waypoint x="2970" y="1320" />
-        <di:waypoint x="2970" y="1380" />
+        <di:waypoint x="3360" y="970" />
+        <di:waypoint x="3360" y="1400" />
+        <di:waypoint x="3120" y="1400" />
+        <di:waypoint x="3120" y="1460" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3075" y="1296" width="23" height="14" />
+          <dc:Bounds x="3225" y="1376" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_59_di" bpmnElement="Flow_59" bioc:stroke="#667481">
-        <di:waypoint x="2120" y="1110" />
-        <di:waypoint x="2740" y="1110" />
-        <di:waypoint x="2740" y="1430" />
-        <di:waypoint x="2860" y="1430" />
+        <di:waypoint x="2270" y="1190" />
+        <di:waypoint x="2890" y="1190" />
+        <di:waypoint x="2890" y="1510" />
+        <di:waypoint x="3010" y="1510" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2400" y="1086" width="50" height="14" />
+          <dc:Bounds x="2550" y="1166" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13_di" bpmnElement="Flow_13" bioc:stroke="#1768a6">
-        <di:waypoint x="3080" y="1430" />
-        <di:waypoint x="3160" y="1430" />
+        <di:waypoint x="3230" y="1510" />
+        <di:waypoint x="3310" y="1510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_14_di" bpmnElement="Flow_14" bioc:stroke="#1768a6">
-        <di:waypoint x="3180" y="1410" />
-        <di:waypoint x="3180" y="700" />
-        <di:waypoint x="2970" y="700" />
-        <di:waypoint x="2970" y="430" />
+        <di:waypoint x="3330" y="1490" />
+        <di:waypoint x="3330" y="780" />
+        <di:waypoint x="3120" y="780" />
+        <di:waypoint x="3120" y="510" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3130" y="793" width="39" height="14" />
+          <dc:Bounds x="3280" y="873" width="39" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_44_di" bpmnElement="Flow_44" bioc:stroke="#667481">
-        <di:waypoint x="3180" y="1410" />
-        <di:waypoint x="3180" y="980" />
-        <di:waypoint x="2970" y="980" />
-        <di:waypoint x="2970" y="920" />
+        <di:waypoint x="3330" y="1490" />
+        <di:waypoint x="3330" y="1060" />
+        <di:waypoint x="3120" y="1060" />
+        <di:waypoint x="3120" y="1000" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3050" y="956" width="68" height="14" />
+          <dc:Bounds x="3200" y="1036" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_45_di" bpmnElement="Flow_45" bioc:stroke="#667481">
-        <di:waypoint x="3180" y="1450" />
-        <di:waypoint x="3180" y="1650" />
-        <di:waypoint x="3080" y="1650" />
+        <di:waypoint x="3330" y="1530" />
+        <di:waypoint x="3330" y="1730" />
+        <di:waypoint x="3230" y="1730" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3068" y="1533" width="103" height="14" />
+          <dc:Bounds x="3218" y="1613" width="103" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_63_di" bpmnElement="Flow_63" bioc:stroke="#1768a6">
-        <di:waypoint x="3200" y="1430" />
-        <di:waypoint x="3280" y="1430" />
+        <di:waypoint x="3350" y="1510" />
+        <di:waypoint x="3430" y="1510" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3205" y="1406" width="79" height="14" />
+          <dc:Bounds x="3355" y="1486" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_64_di" bpmnElement="Flow_64" bioc:stroke="#1768a6">
-        <di:waypoint x="3480" y="1430" />
-        <di:waypoint x="3522" y="1430" />
+        <di:waypoint x="3630" y="1510" />
+        <di:waypoint x="3672" y="1510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_64b_di" bpmnElement="Flow_64b" bioc:stroke="#1768a6">
-        <di:waypoint x="3558" y="1430" />
-        <di:waypoint x="3640" y="1430" />
+        <di:waypoint x="3708" y="1510" />
+        <di:waypoint x="3790" y="1510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_65_di" bpmnElement="Flow_65" bioc:stroke="#1768a6">
-        <di:waypoint x="3660" y="1410" />
-        <di:waypoint x="3660" y="680" />
-        <di:waypoint x="3000" y="680" />
-        <di:waypoint x="3000" y="430" />
+        <di:waypoint x="3810" y="1490" />
+        <di:waypoint x="3810" y="760" />
+        <di:waypoint x="3150" y="760" />
+        <di:waypoint x="3150" y="510" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3578" y="663" width="23" height="14" />
+          <dc:Bounds x="3728" y="743" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_67_di" bpmnElement="Flow_67" bioc:stroke="#667481">
-        <di:waypoint x="3660" y="1450" />
-        <di:waypoint x="3660" y="1720" />
-        <di:waypoint x="2970" y="1720" />
-        <di:waypoint x="2970" y="1700" />
+        <di:waypoint x="3810" y="1530" />
+        <di:waypoint x="3810" y="1800" />
+        <di:waypoint x="3120" y="1800" />
+        <di:waypoint x="3120" y="1780" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3270" y="1696" width="68" height="14" />
+          <dc:Bounds x="3421" y="1776" width="66" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_47_di" bpmnElement="Flow_47" bioc:stroke="#667481">
-        <di:waypoint x="3080" y="870" />
-        <di:waypoint x="3190" y="870" />
+        <di:waypoint x="3230" y="950" />
+        <di:waypoint x="3340" y="950" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_48_di" bpmnElement="Flow_48" bioc:stroke="#667481">
-        <di:waypoint x="3210" y="850" />
-        <di:waypoint x="3210" y="720" />
-        <di:waypoint x="3030" y="720" />
-        <di:waypoint x="3030" y="430" />
+        <di:waypoint x="3360" y="930" />
+        <di:waypoint x="3360" y="800" />
+        <di:waypoint x="3180" y="800" />
+        <di:waypoint x="3180" y="510" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3051" y="723" width="53" height="14" />
+          <dc:Bounds x="3201" y="803" width="53" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_50_di" bpmnElement="Flow_50" bioc:stroke="#667481">
-        <di:waypoint x="3180" y="360" />
-        <di:waypoint x="3180" y="300" />
-        <di:waypoint x="2970" y="300" />
-        <di:waypoint x="2970" y="330" />
+        <di:waypoint x="3330" y="440" />
+        <di:waypoint x="3330" y="380" />
+        <di:waypoint x="3120" y="380" />
+        <di:waypoint x="3120" y="410" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3010" y="276" width="72" height="14" />
+          <dc:Bounds x="3160" y="356" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_50b_di" bpmnElement="Flow_50b" bioc:stroke="#2e7d32">
+        <di:waypoint x="150" y="80" />
+        <di:waypoint x="150" y="80" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_15_di" bpmnElement="Flow_15" bioc:stroke="#1768a6">
-        <di:waypoint x="3080" y="380" />
-        <di:waypoint x="3160" y="380" />
+        <di:waypoint x="3230" y="460" />
+        <di:waypoint x="3310" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_61_di" bpmnElement="Flow_61" bioc:stroke="#667481">
-        <di:waypoint x="2120" y="1110" />
-        <di:waypoint x="2580" y="1110" />
-        <di:waypoint x="2580" y="890" />
+        <di:waypoint x="2270" y="1190" />
+        <di:waypoint x="2730" y="1190" />
+        <di:waypoint x="2730" y="970" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2310" y="1086" width="50" height="14" />
+          <dc:Bounds x="2460" y="1166" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_62_di" bpmnElement="Flow_62" bioc:stroke="#667481">
-        <di:waypoint x="2100" y="1130" />
-        <di:waypoint x="2100" y="1180" />
-        <di:waypoint x="1000" y="1180" />
-        <di:waypoint x="1000" y="1160" />
+        <di:waypoint x="2250" y="1210" />
+        <di:waypoint x="2250" y="1260" />
+        <di:waypoint x="1035" y="1260" />
+        <di:waypoint x="1035" y="1240" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1500" y="1156" width="60" height="14" />
+          <dc:Bounds x="1650" y="1236" width="60" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_51_di" bpmnElement="Flow_51" bioc:stroke="#667481">
-        <di:waypoint x="1120" y="1110" />
-        <di:waypoint x="1180" y="1110" />
+        <di:waypoint x="1130" y="1190" />
+        <di:waypoint x="1170" y="1190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_51_D_di" bpmnElement="Flow_51_D" bioc:stroke="#667481">
+        <di:waypoint x="1310" y="1190" />
+        <di:waypoint x="1330" y="1190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_53_di" bpmnElement="Flow_53" bioc:stroke="#667481">
-        <di:waypoint x="1220" y="1110" />
-        <di:waypoint x="1380" y="1110" />
+        <di:waypoint x="1370" y="1190" />
+        <di:waypoint x="1530" y="1190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1265" y="1086" width="53" height="14" />
+          <dc:Bounds x="1415" y="1166" width="53" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_54_di" bpmnElement="Flow_54" bioc:stroke="#667481">
-        <di:waypoint x="1400" y="1130" />
-        <di:waypoint x="1400" y="1600" />
+        <di:waypoint x="1550" y="1210" />
+        <di:waypoint x="1550" y="1680" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1410" y="1355" width="18" height="14" />
+          <dc:Bounds x="1560" y="1435" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_55_di" bpmnElement="Flow_55" bioc:stroke="#667481">
-        <di:waypoint x="1420" y="1110" />
-        <di:waypoint x="2080" y="1110" />
+        <di:waypoint x="1570" y="1190" />
+        <di:waypoint x="2230" y="1190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1502" y="1086" width="15" height="14" />
+          <dc:Bounds x="1652" y="1166" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_58_di" bpmnElement="Flow_58" bioc:stroke="#667481">
-        <di:waypoint x="1640" y="1630" />
-        <di:waypoint x="1640" y="1560" />
-        <di:waypoint x="1430" y="1560" />
-        <di:waypoint x="1430" y="1600" />
+        <di:waypoint x="1790" y="1710" />
+        <di:waypoint x="1790" y="1640" />
+        <di:waypoint x="1580" y="1640" />
+        <di:waypoint x="1580" y="1680" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1480" y="1536" width="72" height="14" />
+          <dc:Bounds x="1630" y="1616" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_56_di" bpmnElement="Flow_56" bioc:stroke="#667481">
-        <di:waypoint x="1540" y="1650" />
-        <di:waypoint x="1620" y="1650" />
+        <di:waypoint x="1690" y="1730" />
+        <di:waypoint x="1770" y="1730" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_57_di" bpmnElement="Flow_57" bioc:stroke="#667481">
-        <di:waypoint x="1650" y="1640" />
-        <di:waypoint x="1970" y="1640" />
-        <di:waypoint x="1970" y="1110" />
-        <di:waypoint x="2080" y="1110" />
+        <di:waypoint x="1800" y="1720" />
+        <di:waypoint x="2120" y="1720" />
+        <di:waypoint x="2120" y="1190" />
+        <di:waypoint x="2230" y="1190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1916" y="1466" width="48" height="14" />
+          <dc:Bounds x="2066" y="1546" width="48" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_25_di" bpmnElement="Flow_25" bioc:stroke="#667481">
-        <di:waypoint x="530" y="570" />
-        <di:waypoint x="570" y="570" />
+        <di:waypoint x="570" y="700" />
+        <di:waypoint x="570" y="710" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_25_D_di" bpmnElement="Flow_25_D" bioc:stroke="#667481">
+        <di:waypoint x="680" y="740" />
+        <di:waypoint x="740" y="740" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_26_di" bpmnElement="Flow_26" bioc:stroke="#667481">
-        <di:waypoint x="530" y="1110" />
-        <di:waypoint x="570" y="1110" />
+        <di:waypoint x="570" y="1240" />
+        <di:waypoint x="570" y="1250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_26_D_di" bpmnElement="Flow_26_D" bioc:stroke="#667481">
+        <di:waypoint x="680" y="1280" />
+        <di:waypoint x="740" y="1280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_27_di" bpmnElement="Flow_27" bioc:stroke="#667481">
-        <di:waypoint x="530" y="1650" />
-        <di:waypoint x="570" y="1650" />
+        <di:waypoint x="570" y="1780" />
+        <di:waypoint x="570" y="1810" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_27_D_di" bpmnElement="Flow_27_D" bioc:stroke="#667481">
+        <di:waypoint x="680" y="1845" />
+        <di:waypoint x="740" y="1845" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_28_di" bpmnElement="Flow_28" bioc:stroke="#667481">
-        <di:waypoint x="900" y="570" />
-        <di:waypoint x="940" y="570" />
+        <di:waypoint x="1050" y="650" />
+        <di:waypoint x="1090" y="650" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Referrer_di" bpmnElement="Referrer" isHorizontal="true">
-        <dc:Bounds x="150" y="60" width="900" height="60" />
+        <dc:Bounds x="300" y="140" width="900" height="60" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Patient_di" bpmnElement="Patient" isHorizontal="true">
-        <dc:Bounds x="1200" y="60" width="2500" height="60" />
+        <dc:Bounds x="1350" y="140" width="2500" height="60" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Scheduling_di" bpmnElement="Scheduling" isHorizontal="true">
-        <dc:Bounds x="150" y="1940" width="700" height="60" />
+        <dc:Bounds x="300" y="2020" width="700" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Correspondence_di" bpmnElement="Correspondence" isHorizontal="true">
-        <dc:Bounds x="920" y="1940" width="700" height="60" />
+        <dc:Bounds x="1070" y="2020" width="700" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Insurer_di" bpmnElement="Insurer" isHorizontal="true">
-        <dc:Bounds x="1700" y="1940" width="700" height="60" />
+        <dc:Bounds x="1850" y="2020" width="700" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="PaymentProvider_di" bpmnElement="PaymentProvider" isHorizontal="true">
-        <dc:Bounds x="2480" y="1940" width="1400" height="60" />
+        <dc:Bounds x="2630" y="2020" width="1400" height="60" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Stage_1_di" bpmnElement="Stage_1">
-        <dc:Bounds x="860" y="220" width="420" height="40" />
+        <dc:Bounds x="1010" y="300" width="420" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Stage_2_di" bpmnElement="Stage_2">
-        <dc:Bounds x="1400" y="200" width="420" height="40" />
+        <dc:Bounds x="1550" y="280" width="420" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Stage_3_di" bpmnElement="Stage_3">
-        <dc:Bounds x="2060" y="220" width="420" height="40" />
+        <dc:Bounds x="2210" y="300" width="420" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Stage_4_di" bpmnElement="Stage_4">
-        <dc:Bounds x="2840" y="220" width="420" height="40" />
+        <dc:Bounds x="2990" y="300" width="420" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Change_Section_di" bpmnElement="Change_Section">
-        <dc:Bounds x="690" y="990" width="280" height="40" />
+        <dc:Bounds x="840" y="1070" width="280" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Guide_Main_di" bpmnElement="Guide_Main">
-        <dc:Bounds x="200" y="2040" width="3700" height="80" />
+        <dc:Bounds x="350" y="2120" width="3700" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Guide_Rules_di" bpmnElement="Guide_Rules">
-        <dc:Bounds x="200" y="2140" width="3700" height="90" />
+        <dc:Bounds x="350" y="2220" width="3700" height="90" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Msg_Referral_di" bpmnElement="Msg_Referral" bioc:stroke="#81909d">
-        <di:waypoint x="400" y="120" />
-        <di:waypoint x="400" y="330" />
+        <di:waypoint x="550" y="200" />
+        <di:waypoint x="550" y="410" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="410" y="210" width="96" height="14" />
+          <dc:Bounds x="560" y="290" width="96" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Msg_Contact_di" bpmnElement="Msg_Contact" bioc:stroke="#81909d">
-        <di:waypoint x="1590" y="330" />
-        <di:waypoint x="1590" y="120" />
+        <di:waypoint x="1740" y="410" />
+        <di:waypoint x="1740" y="200" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1605" y="210" width="107" height="14" />
+          <dc:Bounds x="1755" y="290" width="107" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Msg_Treatment_di" bpmnElement="Msg_Treatment" bioc:stroke="#81909d">
-        <di:waypoint x="3380" y="330" />
-        <di:waypoint x="3380" y="120" />
+        <di:waypoint x="3530" y="410" />
+        <di:waypoint x="3530" y="200" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3395" y="210" width="121" height="14" />
+          <dc:Bounds x="3545" y="290" width="121" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Msg_Slot_di" bpmnElement="Msg_Slot" bioc:stroke="#81909d">
-        <di:waypoint x="500" y="1940" />
-        <di:waypoint x="500" y="1920" />
+        <di:waypoint x="650" y="2020" />
+        <di:waypoint x="650" y="2000" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="520" y="1920" width="93" height="14" />
+          <dc:Bounds x="670" y="2000" width="93" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Msg_Letter_di" bpmnElement="Msg_Letter" bioc:stroke="#81909d">
-        <di:waypoint x="1270" y="1920" />
-        <di:waypoint x="1270" y="1940" />
+        <di:waypoint x="1420" y="2000" />
+        <di:waypoint x="1420" y="2020" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1290" y="1920" width="135" height="14" />
+          <dc:Bounds x="1440" y="2000" width="135" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Msg_Funding_di" bpmnElement="Msg_Funding" bioc:stroke="#81909d">
-        <di:waypoint x="2050" y="1940" />
-        <di:waypoint x="2050" y="1920" />
+        <di:waypoint x="2200" y="2020" />
+        <di:waypoint x="2200" y="2000" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2070" y="1920" width="86" height="14" />
+          <dc:Bounds x="2220" y="2000" width="86" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Msg_PaymentRequest_di" bpmnElement="Msg_PaymentRequest" bioc:stroke="#81909d">
-        <di:waypoint x="3380" y="1480" />
-        <di:waypoint x="3380" y="1940" />
+        <di:waypoint x="3530" y="1560" />
+        <di:waypoint x="3530" y="2020" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3395" y="1700" width="84" height="14" />
+          <dc:Bounds x="3545" y="1780" width="84" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Msg_Payment_di" bpmnElement="Msg_Payment" bioc:stroke="#81909d">
-        <di:waypoint x="3540" y="1940" />
-        <di:waypoint x="3540" y="1448" />
+        <di:waypoint x="3690" y="2020" />
+        <di:waypoint x="3690" y="1528" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3555" y="1700" width="124" height="14" />
+          <dc:Bounds x="3705" y="1780" width="124" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-          <bpmndi:BPMNShape id="CheckVisitSlot_di" bpmnElement="CheckVisitSlot" bioc:stroke="#263746" bioc:fill="#e8f5e9">
-        <dc:Bounds x="1180" y="280" width="100" height="80" />
-      </bpmndi:BPMNShape>
-
-      <bpmndi:BPMNShape id="ReserveTreatmentSlot_di" bpmnElement="ReserveTreatmentSlot" bioc:stroke="#263746" bioc:fill="#e8f5e9">
-        <dc:Bounds x="2140" y="280" width="100" height="80" />
-      </bpmndi:BPMNShape>
-
-      <bpmndi:BPMNShape id="FlagResourceUnavailable_di" bpmnElement="FlagResourceUnavailable" bioc:stroke="#263746" bioc:fill="#e8f5e9">
-        <dc:Bounds x="1980" y="400" width="100" height="80" />
-      </bpmndi:BPMNShape>
-
-      <bpmndi:BPMNEdge id="Flow_06b_di" bpmnElement="Flow_06b" bioc:stroke="#2e7d32">
-        <di:waypoint x="0" y="0" />
-        <di:waypoint x="0" y="0" />
-      </bpmndi:BPMNEdge>
-
-      <bpmndi:BPMNEdge id="Flow_16b_di" bpmnElement="Flow_16b" bioc:stroke="#2e7d32">
-        <di:waypoint x="0" y="0" />
-        <di:waypoint x="0" y="0" />
-      </bpmndi:BPMNEdge>
-
-      <bpmndi:BPMNEdge id="Flow_50b_di" bpmnElement="Flow_50b" bioc:stroke="#2e7d32">
-        <di:waypoint x="0" y="0" />
-        <di:waypoint x="0" y="0" />
-      </bpmndi:BPMNEdge>
-
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

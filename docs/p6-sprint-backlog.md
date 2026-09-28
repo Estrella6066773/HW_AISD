@@ -21,3 +21,9 @@
 | Sprint 1 | T20 | From PB-15: upload Product Backlog and this table; all members on GitHub; plan only | Hao Zheng | Geping Chen | 2h | Repo has PB and Sprint Backlog; four members added | GitHub; Parts 3 and 6 | In progress |
 
 本期只做规格与计划：不出图，不写代码。
+
+## 后续实现证据（2026-09-28，独立于上述 Sprint 1 计划）
+
+| 工作项 | 一责 | 二责 | Evidence | Status |
+|---|---|---|---|---|
+| D：PB-10 / PB-21 变更通知与问询回执切片 | Ryan / Guanyan He | A 或 B，待安排复核 | [代码、BPMN、运行与库表证据](../evidence/PB-10_PB-21_member-D_workers_2026-09-28/README.md) | In progress：本地实现验证通过，待复核与合并；不表示整项 PB 验收完成 |

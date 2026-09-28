@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 
 /**
@@ -17,7 +18,8 @@ import java.time.Instant;
  * <p>注意：摘要载荷勿写入卡号或病历正文；表无业务更新接口是有意设计（PB-11）。
  */
 @Entity
-@Table(name = "audit_event")
+@Table(name = "audit_event", uniqueConstraints =
+        @UniqueConstraint(name = "uk_audit_event_idempotency", columnNames = "idempotency_key"))
 public class AuditEvent {
 
 	@Id
@@ -38,6 +40,14 @@ public class AuditEvent {
 
 	@Column(name = "payload_summary", length = 512)
 	private String payloadSummary;
+
+	/** Optional: old append callers keep NULL; D receipts use one key per task occurrence. */
+	@Column(name = "idempotency_key", length = 256)
+	private String idempotencyKey;
+
+	public String getIdempotencyKey() { return idempotencyKey; }
+
+	public void setIdempotencyKey(String idempotencyKey) { this.idempotencyKey = idempotencyKey; }
 
 	public Long getId() {
 		return id;

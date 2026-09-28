@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: io.camunda.demo.hospital.MemberDPathwayWorkersTest
+-------------------------------------------------------------------------------
+Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.816 s -- in io.camunda.demo.hospital.MemberDPathwayWorkersTest

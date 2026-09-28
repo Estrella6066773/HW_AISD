@@ -48,7 +48,7 @@
 领域库就绪（H2 文件 ./data/hospital-domain）：payment_ledger=0 行, booking_slot=0 行, audit_event=0 行
 ```
 
-用 IDE Database 工具连接同一 JDBC URL 查看表（本模块使用文件库；端口与 Camunda Operate/Tasklist 分开）。
+用 IDE Database 工具连接同一文件查看表。当前配置 `AUTO_SERVER=FALSE`，先停止 Java 工作器释放文件锁，再用数据库文件的绝对路径连接，查完后重启 Java；加 `IFEXISTS=TRUE` 可避免路径写错时新建空库。
 
 ---
 
@@ -94,10 +94,13 @@ Java：`BookingSlot`、`BookingSlotStatus`、`BookingSlotRepository`。
 | `case_reference` | 病例号 | 可空 |
 | `occurred_at` | 发生时间 | 必填 |
 | `payload_summary` | 业务摘要 | 最长 512；只写短文本摘要 |
+| `idempotency_key` | D 通知任务执行键（2026-09-28 增补） | 可空、最长 256、唯一；既有调用继续为 NULL，D 重试沿用同一键 |
 
 写入：仅 `AuditEventWriter.append(...)`。  
 查询：`AuditEventRepository`。  
 业务层对外暴露追加与查询。
+
+**D 增补，待 B 复核**：`AuditEventWriter.append(actor, action, caseReference, idempotencyKey, mockSummary)` 在独立事务中先查唯一键、再追加并提交；并发重复插入读取已提交的同一回执。原四参数 `append` 保留。键由工作器类型、流程实例键和节点实例键构成，后续再次发生的合法变更有新键。仅本地 mock 元数据在事务内计算；接入真实邮件提供商需要另行设计可靠投递机制。详见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)。
 
 ---
 
@@ -141,5 +144,5 @@ Java：`BookingSlot`、`BookingSlotStatus`、`BookingSlotRepository`。
 2. `cd Coursework/hospital-pathway` → `mvn spring-boot:run`。  
 3. 确认日志中有「领域库就绪」。  
 4. 确认生成 `data/hospital-domain.mv.db`（或同前缀文件）。  
-5. （可选）用 IDE 连 `jdbc:h2:file:./data/hospital-domain`，用户 `sa`、空密码，查看三张表。  
+5. （可选）停止 Java 后用 IDE 连接同一文件的绝对路径，用户 `sa`、空密码，查看三张表，查完重启 Java。
 6. 走通含 `BookVisit` / `BookTreatment` 的线路，日志出现 `check-slot` / `reserve-appointment` 或 `flag-resource-unavailable`。

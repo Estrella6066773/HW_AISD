@@ -214,7 +214,8 @@ A、B、C、D 每人都开发 JobWorker（至少一责一个新类型，并交�
 | 领域库三表 + 仓储 + 审计只写（成员 B） | 已完成 |
 | 既有两个 JobWorker | 保持现状 |
 | 成员 B 新工作器 + BPMN | 已完成（`check-slot` / `reserve-appointment` / `flag-resource-unavailable`） |
-| 成员 A / C / D 新工作器 + BPMN | 由各自一责推进 |
+| 成员 A / C 新工作器 + BPMN | 由各自一责推进 |
+| 成员 D（Ryan）：变更通知 + 问询回执 | 已认领并完成英文包代码、BPMN 挂接及本地验证（20 项 Java 测试、4 项图结构检查、8 个实际流程结束）；见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)及[证据](../evidence/PB-10_PB-21_member-D_workers_2026-09-28/README.md)。二责 A／B 复核待完成，合并前保持 In progress |
 
 ---
 
