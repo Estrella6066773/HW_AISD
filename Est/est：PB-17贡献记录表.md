@@ -95,7 +95,7 @@
 | PB-11 | P0 | Ryan | Ruby | Not started |  |  |  |  |  |
 | PB-12 | P0 | Ruby | Estrella | Not started |  |  |  |  |  |
 | PB-13 | P1 | Estrella | Ruby | Not started |  |  |  |  |  |
-| PB-14 | P1 | Ryan | Ender | Not started |  |  |  |  |  |
+| PB-14 | P1 | Ryan | Ender | In progress | `Ryan/2026-09-26/PB-14_acceptance-test-plan_2026-09-29.md`；`Ryan/2026-09-26/PB-14_acceptance-run-log_2026-09-29.json` | AT-01/AT-02 均为 PASS；步骤按 Tasklist 表单写；待 Ender 二责 |  |  |  |
 | PB-15 | P0 | Ruby | Estrella | In progress |  |  |  |  |  |
 | PB-16 | P0 | Estrella | Ryan | Not started |  |  |  |  |  |
 | PB-17 | P0 | Estrella | Ender | In progress |  |  |  |  |  |

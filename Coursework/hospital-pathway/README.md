@@ -103,3 +103,13 @@ python scripts/test_member_d_bpmn.py
 ```
 
 The Java tests use a separate in-memory H2 database. After starting Camunda and the formal Java application, run `python scripts/smoke_member_d.py` for seven real-engine scenarios (four change cases and three enquiry regression checks). This creates labelled synthetic process instances and submits user tasks through the API; it does not exercise browser form validation. Evidence is written under `target/`. Running it again creates a new set of test cases.
+
+## Verify PB-14 acceptance (main path + reject)
+
+Official test procedure is Tasklist form steps in `Ryan/2026-09-26/PB-14_acceptance-test-plan_2026-09-29.md`. Optional repeat:
+
+```text
+python scripts/pb14_acceptance.py
+```
+
+AT-02 (reject) needs only Camunda; AT-01 also needs the Java `check-slot` worker. Archive any new JSON from `target/` as `Ryan/2026-09-26/PB-14_acceptance-run-log_<date>.json`.
