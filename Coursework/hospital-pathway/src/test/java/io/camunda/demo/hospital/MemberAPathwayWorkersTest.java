@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/** Real H2/JPA；Camunda job 用 mock。覆盖成员 A 退款与待调查。 */
+/** Real H2/JPA; Camunda job mocked. Covers Ruby refund / investigate workers. */
 @SpringJUnitConfig(MemberAPathwayWorkersTest.DatabaseConfig.class)
 class MemberAPathwayWorkersTest {
 
@@ -81,8 +81,10 @@ class MemberAPathwayWorkersTest {
 			assertThat(row.getAmount()).isEqualTo("25.50");
 			assertThat(row.getTransactionReference()).startsWith("RF-");
 		});
-		assertThat(audits.findAll()).singleElement().satisfies(e ->
-				assertThat(e.getAction()).isEqualTo("request-refund"));
+		assertThat(audits.findAll()).singleElement().satisfies(e -> {
+			assertThat(e.getAction()).isEqualTo("request-refund");
+			assertThat(e.getActor()).isEqualTo("ruby");
+		});
 	}
 
 	@Test

@@ -892,7 +892,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="VisitOutcome_di" bpmnElement="VisitOutcome" isMarkerVisible="true">
         <dc:Bounds x="1880" y="380" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1876" y="330" width="49" height="27" />
+          <dc:Bounds x="1915" y="356" width="49" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalCare_di" bpmnElement="ClinicalCare" bioc:stroke="#263746" bioc:fill="#eaf8f0">
@@ -910,7 +910,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="LetterOutcome_di" bpmnElement="LetterOutcome" isMarkerVisible="true">
         <dc:Bounds x="2380" y="380" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2382" y="330" width="36" height="27" />
+          <dc:Bounds x="2382" y="356" width="36" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="MonitorLetters_di" bpmnElement="MonitorLetters" bioc:stroke="#263746" bioc:fill="#edf5ff">
@@ -919,7 +919,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="CarePlan_di" bpmnElement="CarePlan" isMarkerVisible="true">
         <dc:Bounds x="2380" y="870" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2382" y="833" width="36" height="27" />
+          <dc:Bounds x="2352" y="846" width="36" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Funding_di" bpmnElement="Funding" bioc:stroke="#263746" bioc:fill="#fff3e5">
@@ -964,7 +964,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="EndCare_di" bpmnElement="EndCare">
         <dc:Bounds x="2560" y="870" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2547" y="833" width="66" height="27" />
+          <dc:Bounds x="2597" y="866" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalChange_di" bpmnElement="ClinicalChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
@@ -1036,7 +1036,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="UrgentDecision_di" bpmnElement="UrgentDecision" isMarkerVisible="true">
         <dc:Bounds x="3190" y="870" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3248" y="860" width="58" height="27" />
+          <dc:Bounds x="3231" y="860" width="58" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UrgentFinance_di" bpmnElement="UrgentFinance" bioc:stroke="#263746" bioc:fill="#fff3e5">
@@ -1282,7 +1282,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="1690" y="800" />
         <di:waypoint x="1690" y="840" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2305" y="813" width="87" height="14" />
+          <dc:Bounds x="2236" y="803" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#667481">

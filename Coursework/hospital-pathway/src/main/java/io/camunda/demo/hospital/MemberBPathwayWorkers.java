@@ -15,13 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * 成员 B 一责的 JobWorker：占号与资源不可用。
+ * Member B workers: slot hold and resource-unavailable flagging.
  *
- * <p>联动：订阅全院 BPMN 上 {@code check-slot}、{@code reserve-appointment}、
- * {@code flag-resource-unavailable}；写入 {@link BookingSlot} 并追加审计。
- * 与既有 {@link HospitalPathwayWorkers} 并行存在，各管各的任务类型。
- *
- * <p>注意：课堂 mock；占用键唯一；字段仅为病例号、占用键、状态与重试等业务必要项。
+ * <p>Job types: {@code check-slot}, {@code reserve-appointment}, {@code flag-resource-unavailable}.
+ * Writes {@link BookingSlot} and audit events.
  */
 @Component
 public class MemberBPathwayWorkers {
