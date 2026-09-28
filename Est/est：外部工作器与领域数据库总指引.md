@@ -219,8 +219,8 @@ flowchart LR
 |--------|------|
 | 领域库三表 + 仓储 + 审计只写（成员 B） | **已完成** |
 | 既有两个 JobWorker | 保持不动 |
-| A / B / C / D 各自新工作器 | **未开始** |
-| **全院 BPMN 按第 4.4 节挂接新任务类型** | **未开始（与新工作器绑定，不得遗漏）** |
+| A / B / C / D 各自新工作器 | **仅成员 B 已挂 BPMN + Java**（`check-slot` / `reserve-appointment` / `flag-resource-unavailable`）；A/C/D **未做** |
+| **全院 BPMN 按第 4.4 节挂接新任务类型** | **成员 B 部分已完成**；其余成员自行改图，禁止代写 |
 
 ---
 

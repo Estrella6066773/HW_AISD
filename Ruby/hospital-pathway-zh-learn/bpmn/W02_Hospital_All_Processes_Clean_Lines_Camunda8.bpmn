@@ -34,7 +34,7 @@
     <bpmn:textAnnotation id="Guide_Main">
       <bpmn:text>READING GUIDE | Blue = main care route (left to right by stage). Grey = side / exception paths kept on lane edges.
 Stages: 1 Referral review → 2 Visit &amp; clinical care → 3 Letter &amp; next step → 4 Funding &amp; treatment. Changes sit on the lower clinical band.
-All P1-P13 tasks remain visible. Payment uses a send task + payment-result message catch (Est pattern); booking confirmation uses a send task worker. Other external services / elapsed time stay simulated.</bpmn:text>
+All P1-P13 tasks remain visible. Payment uses a send task + payment-result message catch (Est pattern); booking confirmation uses a send task worker. Member B added check-slot, reserve-appointment, flag-resource-unavailable service tasks. Other members' workers are not in this diagram yet.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Guide_Rules">
       <bpmn:text>BUSINESS CONTROLS | P4: within 2 weeks, also phone and record contact. P9: 7-day letter target; weekly reminders; escalate at 1 and 3 months.
@@ -64,6 +64,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>EndAdminEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>AuditReports</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndReport</bpmn:flowNodeRef>
+      
+        <bpmn:flowNodeRef>CheckVisitSlot</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ReserveTreatmentSlot</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>FlagResourceUnavailable</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Clinical" name="Clinical team">
         <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
@@ -238,7 +242,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_06</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="VisitOutcome" name="Visit&#10;outcome?" default="Flow_35">
-      <bpmn:incoming>Flow_06</bpmn:incoming>
+      <bpmn:incoming>Flow_06b</bpmn:incoming>
       <bpmn:outgoing>Flow_07</bpmn:outgoing>
       <bpmn:outgoing>Flow_35</bpmn:outgoing>
       <bpmn:outgoing>Flow_36</bpmn:outgoing>
@@ -439,7 +443,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_14</bpmn:incoming>
       <bpmn:incoming>Flow_65</bpmn:incoming>
       <bpmn:incoming>Flow_48</bpmn:incoming>
-      <bpmn:incoming>Flow_50</bpmn:incoming>
+      <bpmn:incoming>Flow_50b</bpmn:incoming>
       <bpmn:outgoing>Flow_15</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="TreatmentOutcome" name="Resources&#10;ready?" default="Flow_50">
@@ -452,7 +456,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="send-booking-confirmation" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_16</bpmn:incoming>
+      <bpmn:incoming>Flow_16b</bpmn:incoming>
       <bpmn:outgoing>Flow_66</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:endEvent id="EndCare" name="Care episode ended">
@@ -663,16 +667,18 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_60" name="Follow-up" sourceRef="ChangeRoute" targetRef="BookVisit">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "visit"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06" sourceRef="BookVisit" targetRef="VisitOutcome" />
+    <bpmn:sequenceFlow id="Flow_06" sourceRef="BookVisit" targetRef="CheckVisitSlot" />
+    <bpmn:sequenceFlow id="Flow_06b" sourceRef="CheckVisitSlot" targetRef="VisitOutcome" />
     <bpmn:sequenceFlow id="Flow_07" name="Attended" sourceRef="VisitOutcome" targetRef="ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "attended"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_36" name="Cancel / DNA" sourceRef="VisitOutcome" targetRef="ClinicalChange">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "cancelled"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_16" name="Resources ready" sourceRef="TreatmentOutcome" targetRef="SendBookingConfirmation">
+    <bpmn:sequenceFlow id="Flow_16" name="Resources ready" sourceRef="TreatmentOutcome" targetRef="ReserveTreatmentSlot">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= treatmentSlotStatus = "ready"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_16b" sourceRef="ReserveTreatmentSlot" targetRef="SendBookingConfirmation" />
     <bpmn:sequenceFlow id="Flow_66" name="Treatment / review" sourceRef="SendBookingConfirmation" targetRef="ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_39" name="Clinical correction" sourceRef="LetterOutcome" targetRef="ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "revise"</bpmn:conditionExpression>
@@ -722,7 +728,8 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_48" name="Authorised" sourceRef="UrgentDecision" targetRef="BookTreatment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentDecision = "authorise"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_50" name="Pending / retry" sourceRef="TreatmentOutcome" targetRef="BookTreatment" />
+    <bpmn:sequenceFlow id="Flow_50" name="Pending / retry" sourceRef="TreatmentOutcome" targetRef="FlagResourceUnavailable" />
+    <bpmn:sequenceFlow id="Flow_50b" sourceRef="FlagResourceUnavailable" targetRef="BookTreatment" />
     <bpmn:sequenceFlow id="Flow_15" sourceRef="BookTreatment" targetRef="TreatmentOutcome" />
     <bpmn:sequenceFlow id="Flow_61" name="Discharge" sourceRef="ChangeRoute" targetRef="EndCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "discharge"</bpmn:conditionExpression>
@@ -770,6 +777,32 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_37</bpmn:incoming>
       <bpmn:outgoing>Flow_38</bpmn:outgoing>
     </bpmn:userTask>
+    <bpmn:serviceTask id="CheckVisitSlot" name="P3&#10;Check / reserve&#10;outpatient slot">
+      <bpmn:documentation>Member B worker type check-slot. After BookVisit form: mock external scheduling, write booking_slot; then VisitOutcome gateway.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="check-slot" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06</bpmn:incoming>
+      <bpmn:outgoing>Flow_06b</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:serviceTask id="ReserveTreatmentSlot" name="P6&#10;Reserve treatment&#10;slot / resources">
+      <bpmn:documentation>Member B worker type reserve-appointment. After resources-ready gateway, before send-booking-confirmation; writes booking_slot confirmed.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="reserve-appointment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_16b</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:serviceTask id="FlagResourceUnavailable" name="P6&#10;Flag resource&#10;unavailable">
+      <bpmn:documentation>Member B worker type flag-resource-unavailable. Pending/retry path: write booking_slot pending + retry, then back to BookTreatment.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="flag-resource-unavailable" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_50</bpmn:incoming>
+      <bpmn:outgoing>Flow_50b</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_PaymentResult" name="payment-result">
     <bpmn:extensionElements>
@@ -847,7 +880,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="UrgentFollowupNeeded_di" bpmnElement="UrgentFollowupNeeded" isMarkerVisible="true">
         <dc:Bounds x="1800" y="850" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1850" y="856" width="72" height="27" />
+          <dc:Bounds x="1744" y="826" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DispatchLetter_di" bpmnElement="DispatchLetter" bioc:stroke="#263746" bioc:fill="#edf5ff">
@@ -1207,13 +1240,13 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_39_di" bpmnElement="Flow_39" bioc:stroke="#667481">
-        <di:waypoint x="2380" y="380" />
-        <di:waypoint x="2340" y="380" />
-        <di:waypoint x="2340" y="780" />
+        <di:waypoint x="2420" y="380" />
+        <di:waypoint x="2460" y="380" />
+        <di:waypoint x="2460" y="780" />
         <di:waypoint x="1690" y="780" />
         <di:waypoint x="1690" y="820" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2202" y="793" width="87" height="14" />
+          <dc:Bounds x="2305" y="793" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#667481">
@@ -1251,10 +1284,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_37_di" bpmnElement="Flow_37" bioc:stroke="#667481">
         <di:waypoint x="1820" y="890" />
-        <di:waypoint x="1820" y="1650" />
-        <di:waypoint x="2090" y="1650" />
+        <di:waypoint x="1820" y="1670" />
+        <di:waypoint x="2090" y="1670" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1831" y="1373" width="18" height="14" />
+          <dc:Bounds x="1831" y="1386" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_38_di" bpmnElement="Flow_38" bioc:stroke="#667481">
@@ -1271,12 +1304,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="2380" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11" bioc:stroke="#1768a6">
-        <di:waypoint x="2420" y="380" />
-        <di:waypoint x="2430" y="380" />
-        <di:waypoint x="2430" y="870" />
-        <di:waypoint x="2420" y="870" />
+        <di:waypoint x="2400" y="400" />
+        <di:waypoint x="2400" y="850" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2440" y="609" width="23" height="14" />
+          <dc:Bounds x="2410" y="610" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_40_di" bpmnElement="Flow_40" bioc:stroke="#667481">
@@ -1289,13 +1320,14 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12" bioc:stroke="#1768a6">
-        <di:waypoint x="2400" y="850" />
-        <di:waypoint x="2400" y="780" />
-        <di:waypoint x="2740" y="780" />
+        <di:waypoint x="2420" y="870" />
+        <di:waypoint x="2490" y="870" />
+        <di:waypoint x="2490" y="790" />
+        <di:waypoint x="2740" y="790" />
         <di:waypoint x="2740" y="1430" />
         <di:waypoint x="2860" y="1430" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2755" y="1095" width="50" height="14" />
+          <dc:Bounds x="2755" y="1099" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17_di" bpmnElement="Flow_17" bioc:stroke="#1768a6">
@@ -1308,10 +1340,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Flow_46_di" bpmnElement="Flow_46" bioc:stroke="#667481">
         <di:waypoint x="2860" y="1650" />
         <di:waypoint x="2820" y="1650" />
-        <di:waypoint x="2820" y="1430" />
-        <di:waypoint x="2860" y="1430" />
+        <di:waypoint x="2820" y="1450" />
+        <di:waypoint x="2860" y="1450" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2770" y="1520" width="49" height="14" />
+          <dc:Bounds x="2770" y="1531" width="49" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_49_di" bpmnElement="Flow_49" bioc:stroke="#667481">
@@ -1544,10 +1576,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <dc:Bounds x="200" y="2140" width="3700" height="90" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Msg_Referral_di" bpmnElement="Msg_Referral" bioc:stroke="#81909d">
-        <di:waypoint x="420" y="120" />
-        <di:waypoint x="420" y="330" />
+        <di:waypoint x="400" y="120" />
+        <di:waypoint x="400" y="330" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="430" y="210" width="96" height="14" />
+          <dc:Bounds x="410" y="210" width="96" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Msg_Contact_di" bpmnElement="Msg_Contact" bioc:stroke="#81909d">
@@ -1599,6 +1631,33 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <dc:Bounds x="3555" y="1700" width="124" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+          <bpmndi:BPMNShape id="CheckVisitSlot_di" bpmnElement="CheckVisitSlot" bioc:stroke="#263746" bioc:fill="#e8f5e9">
+        <dc:Bounds x="1180" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="ReserveTreatmentSlot_di" bpmnElement="ReserveTreatmentSlot" bioc:stroke="#263746" bioc:fill="#e8f5e9">
+        <dc:Bounds x="2140" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="FlagResourceUnavailable_di" bpmnElement="FlagResourceUnavailable" bioc:stroke="#263746" bioc:fill="#e8f5e9">
+        <dc:Bounds x="1980" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_06b_di" bpmnElement="Flow_06b" bioc:stroke="#2e7d32">
+        <di:waypoint x="0" y="0" />
+        <di:waypoint x="0" y="0" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_16b_di" bpmnElement="Flow_16b" bioc:stroke="#2e7d32">
+        <di:waypoint x="0" y="0" />
+        <di:waypoint x="0" y="0" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_50b_di" bpmnElement="Flow_50b" bioc:stroke="#2e7d32">
+        <di:waypoint x="0" y="0" />
+        <di:waypoint x="0" y="0" />
+      </bpmndi:BPMNEdge>
+
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
