@@ -1,208 +1,211 @@
 {
-  "run": "D-SMOKE-20260928-185009",
+  "run": "D-SIMPLE-20260928-192223",
   "method": "real local Camunda REST; actual forms bound, task completions submitted by API",
   "instances": [
     {
       "scenario": "admin",
-      "case": "D-SMOKE-20260928-185009-admin",
-      "processInstanceKey": "2251799813788121",
+      "case": "D-SIMPLE-20260928-192223-admin",
+      "processInstanceKey": "2251799813790085",
       "tasks": [
         {
           "element": "Register",
-          "userTaskKey": "2251799813788134",
-          "formKey": "2251799813788045",
+          "userTaskKey": "2251799813790097",
+          "formKey": "2251799813790033",
           "action": "enquiry_admin"
         },
         {
           "element": "AdminEnquiry",
-          "userTaskKey": "2251799813788153",
-          "formKey": "2251799813788047",
+          "userTaskKey": "2251799813790116",
+          "formKey": "2251799813790035",
           "action": "recorded"
         }
       ],
       "state": "COMPLETED",
-      "notificationVariables": {
-        "enquiryAcknowledgementReference": "AUD-1",
-        "enquiryAcknowledgementSent": true
-      },
+      "notificationVariables": {},
       "activeIncidents": 0
     },
     {
       "scenario": "clinical",
-      "case": "D-SMOKE-20260928-185009-clinical",
-      "processInstanceKey": "2251799813788172",
+      "case": "D-SIMPLE-20260928-192223-clinical",
+      "processInstanceKey": "2251799813790133",
       "tasks": [
         {
           "element": "Register",
-          "userTaskKey": "2251799813788185",
-          "formKey": "2251799813788045",
+          "userTaskKey": "2251799813790145",
+          "formKey": "2251799813790033",
           "action": "enquiry_clinical"
         },
         {
           "element": "ClinicalEnquiry",
-          "userTaskKey": "2251799813788204",
-          "formKey": "2251799813788047",
+          "userTaskKey": "2251799813790164",
+          "formKey": "2251799813790035",
           "action": "recorded"
         }
       ],
       "state": "COMPLETED",
-      "notificationVariables": {
-        "enquiryAcknowledgementReference": "AUD-2",
-        "enquiryAcknowledgementSent": true
-      },
+      "notificationVariables": {},
       "activeIncidents": 0
     },
     {
       "scenario": "finance",
-      "case": "D-SMOKE-20260928-185009-finance",
-      "processInstanceKey": "2251799813788223",
+      "case": "D-SIMPLE-20260928-192223-finance",
+      "processInstanceKey": "2251799813790175",
       "tasks": [
         {
           "element": "Register",
-          "userTaskKey": "2251799813788236",
-          "formKey": "2251799813788045",
+          "userTaskKey": "2251799813790187",
+          "formKey": "2251799813790033",
           "action": "enquiry_finance"
         },
         {
           "element": "FinanceEnquiry",
-          "userTaskKey": "2251799813788255",
-          "formKey": "2251799813788047",
+          "userTaskKey": "2251799813790206",
+          "formKey": "2251799813790035",
           "action": "recorded"
         }
       ],
       "state": "COMPLETED",
-      "notificationVariables": {
-        "enquiryAcknowledgementReference": "AUD-3",
-        "enquiryAcknowledgementSent": true
-      },
+      "notificationVariables": {},
       "activeIncidents": 0
     },
     {
       "scenario": "change",
-      "case": "D-SMOKE-20260928-185009-change",
-      "processInstanceKey": "2251799813788274",
+      "case": "D-SIMPLE-20260928-192223-change",
+      "processInstanceKey": "2251799813790217",
       "tasks": [
         {
           "element": "Register",
-          "userTaskKey": "2251799813788287",
-          "formKey": "2251799813788045",
+          "userTaskKey": "2251799813790229",
+          "formKey": "2251799813790033",
           "action": "change"
         },
         {
           "element": "ClinicalChange",
-          "userTaskKey": "2251799813788306",
-          "formKey": "2251799813788041",
+          "userTaskKey": "2251799813790248",
+          "formKey": "2251799813790029",
           "action": "discharge_unpaid"
         }
       ],
       "state": "COMPLETED",
       "notificationVariables": {
-        "careChangeNotificationSent": true,
         "careChangeNotificationStatus": "SENT",
-        "careChangeNotificationReference": "AUD-4"
+        "careChangeNotificationReference": "AUD-33",
+        "careChangeNotificationSent": true
       },
       "activeIncidents": 0
     },
     {
       "scenario": "financial-change",
-      "case": "D-SMOKE-20260928-185009-financial-change",
-      "processInstanceKey": "2251799813788335",
+      "case": "D-SIMPLE-20260928-192223-financial-change",
+      "processInstanceKey": "2251799813790277",
       "tasks": [
         {
           "element": "Register",
-          "userTaskKey": "2251799813788348",
-          "formKey": "2251799813788045",
+          "userTaskKey": "2251799813790289",
+          "formKey": "2251799813790033",
           "action": "change"
         },
         {
           "element": "ClinicalChange",
-          "userTaskKey": "2251799813788368",
-          "formKey": "2251799813788041",
+          "userTaskKey": "2251799813790308",
+          "formKey": "2251799813790029",
           "action": "discharge_paid"
         },
         {
           "element": "FinanceAdjustment",
-          "userTaskKey": "2251799813788402",
-          "formKey": "2251799813788043",
+          "userTaskKey": "2251799813790343",
+          "formKey": "2251799813790031",
           "action": "resolved"
         }
       ],
       "state": "COMPLETED",
       "notificationVariables": {
-        "careChangeNotificationSent": true,
         "careChangeNotificationStatus": "SENT_FINANCE_REVIEW_REQUIRED",
-        "careChangeNotificationReference": "AUD-5"
+        "careChangeNotificationSent": true,
+        "careChangeNotificationReference": "AUD-34"
       },
       "activeIncidents": 0
     },
     {
       "scenario": "unapproved-then-corrected",
-      "case": "D-SMOKE-20260928-185009-unapproved-then-corrected",
-      "processInstanceKey": "2251799813788419",
+      "case": "D-SIMPLE-20260928-192223-unapproved-then-corrected",
+      "processInstanceKey": "2251799813790360",
       "tasks": [
         {
           "element": "Register",
-          "userTaskKey": "2251799813788432",
-          "formKey": "2251799813788045",
+          "userTaskKey": "2251799813790372",
+          "formKey": "2251799813790033",
           "action": "change"
         },
         {
           "element": "ClinicalChange",
-          "userTaskKey": "2251799813788451",
-          "formKey": "2251799813788041",
+          "userTaskKey": "2251799813790391",
+          "formKey": "2251799813790029",
           "action": "invalid"
         },
         {
           "element": "GetDocuments",
-          "userTaskKey": "2251799813788480",
-          "formKey": "2251799813788047",
+          "userTaskKey": "2251799813790420",
+          "formKey": "2251799813790035",
           "action": "recorded"
         },
         {
           "element": "Register",
-          "userTaskKey": "2251799813788497",
-          "formKey": "2251799813788045",
+          "userTaskKey": "2251799813790437",
+          "formKey": "2251799813790033",
           "action": "change"
         },
         {
           "element": "ClinicalChange",
-          "userTaskKey": "2251799813788510",
-          "formKey": "2251799813788041",
+          "userTaskKey": "2251799813790450",
+          "formKey": "2251799813790029",
           "action": "discharge_unpaid"
         }
       ],
       "unapprovedNotificationSkipped": true,
       "state": "COMPLETED",
       "notificationVariables": {
-        "careChangeNotificationReference": "AUD-7",
         "careChangeNotificationSent": true,
-        "careChangeNotificationStatus": "SENT"
+        "careChangeNotificationStatus": "SENT",
+        "careChangeNotificationReference": "AUD-36"
       },
       "activeIncidents": 0
     },
     {
-      "scenario": "retry-once",
-      "case": "D-SMOKE-20260928-185009-retry-once",
-      "processInstanceKey": "2251799813788532",
+      "scenario": "cancel-visit-change",
+      "case": "D-SIMPLE-20260928-192223-cancel-visit-change",
+      "processInstanceKey": "2251799813790471",
       "tasks": [
         {
           "element": "Register",
-          "userTaskKey": "2251799813788545",
-          "formKey": "2251799813788045",
-          "action": "change"
+          "userTaskKey": "2251799813790483",
+          "formKey": "2251799813790033",
+          "action": "referral"
+        },
+        {
+          "element": "ReviewReferral",
+          "userTaskKey": "2251799813790503",
+          "formKey": "2251799813790034",
+          "action": "accept"
+        },
+        {
+          "element": "BookVisit",
+          "userTaskKey": "2251799813790522",
+          "formKey": "2251799813790027",
+          "action": "cancelled"
         },
         {
           "element": "ClinicalChange",
-          "userTaskKey": "2251799813788564",
-          "formKey": "2251799813788041",
+          "userTaskKey": "2251799813790553",
+          "formKey": "2251799813790029",
           "action": "discharge_unpaid"
         }
       ],
       "state": "COMPLETED",
       "notificationVariables": {
-        "careChangeNotificationSent": true,
         "careChangeNotificationStatus": "SENT",
-        "careChangeNotificationReference": "AUD-8"
+        "careChangeNotificationReference": "AUD-38",
+        "careChangeNotificationSent": true
       },
       "activeIncidents": 0
     }
@@ -210,11 +213,11 @@
   "definition": {
     "name": "Hospital - All Business Processes (Simple Camunda 8)",
     "resourceName": "W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn",
-    "version": 4,
+    "version": 6,
     "versionTag": null,
     "processDefinitionId": "Hospital_All_Processes_Simple_C8",
     "tenantId": "<default>",
-    "processDefinitionKey": "2251799813788037",
+    "processDefinitionKey": "2251799813790025",
     "hasStartForm": false,
     "state": "ACTIVE"
   },

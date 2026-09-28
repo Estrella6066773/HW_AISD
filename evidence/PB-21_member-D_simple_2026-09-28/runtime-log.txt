@@ -1,0 +1,8 @@
+2026-09-28T19:20:51.550+08:00  INFO 21080 --- [hospital-pathway] [           main] i.c.client.jobhandling.JobWorkerManager  : Starting job worker: memberDPathwayWorkers#notifyCareChange with type notify-care-change
+2026-09-28T19:20:52.054+08:00  INFO 21080 --- [hospital-pathway] [           main] i.c.d.h.HospitalPathwayApplication       : 已部署 Hospital_All_Processes_Simple_C8，部署键 2251799813790024
+2026-09-28T19:20:52.056+08:00  INFO 21080 --- [hospital-pathway] [           main] i.c.d.h.HospitalPathwayApplication       : 已部署 11 个表单（硬编码下拉，无 valuesKey）
+2026-09-28T19:22:31.725+08:00  INFO 21080 --- [hospital-pathway] [pool-2-thread-1] i.c.demo.hospital.MemberDPathwayWorkers  : Care change: patient=D-SIMPLE-20260928-192223-change, status=SENT, receipt=33
+2026-09-28T19:22:35.223+08:00  INFO 21080 --- [hospital-pathway] [pool-2-thread-1] i.c.demo.hospital.MemberDPathwayWorkers  : Care change: patient=D-SIMPLE-20260928-192223-financial-change, status=SENT_FINANCE_REVIEW_REQUIRED, receipt=34
+2026-09-28T19:22:37.884+08:00  INFO 21080 --- [hospital-pathway] [pool-2-thread-1] i.c.demo.hospital.MemberDPathwayWorkers  : Care change: patient=D-SIMPLE-20260928-192223-unapproved-then-corrected, status=SKIPPED_UNAUTHORISED, receipt=35
+2026-09-28T19:22:41.024+08:00  INFO 21080 --- [hospital-pathway] [pool-2-thread-1] i.c.demo.hospital.MemberDPathwayWorkers  : Care change: patient=D-SIMPLE-20260928-192223-unapproved-then-corrected, status=SENT, receipt=36
+2026-09-28T19:22:46.761+08:00  INFO 21080 --- [hospital-pathway] [pool-2-thread-1] i.c.demo.hospital.MemberDPathwayWorkers  : Care change: patient=D-SIMPLE-20260928-192223-cancel-visit-change, status=SENT, receipt=38

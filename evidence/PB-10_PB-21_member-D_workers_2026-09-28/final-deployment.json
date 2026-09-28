@@ -1,9 +1,0 @@
-{
-  "result": "PASS",
-  "deploymentKey": "2251799813789435",
-  "processDefinitionKey": "2251799813789436",
-  "version": 5,
-  "formsDeployed": 11,
-  "bpmnSha256": "df26e735e18c790d0f0bce11260ec6e2f94c58c54e358963c5a361f8ac9c5bbc",
-  "verification": "Final deployed XML matches local BPMN. Executable process definition unchanged from eight completed version-4 scenarios; differences are diagram formatting and XML ordering."
-}

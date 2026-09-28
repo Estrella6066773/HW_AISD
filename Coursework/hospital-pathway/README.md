@@ -1,6 +1,6 @@
 # Hospital Pathway
 
-Executable Camunda 8 pathway: BPMN + 11 forms + seven Java job types (the original two, three owned by B, and two owned by D).
+Executable Camunda 8 pathway: BPMN + 11 forms + six Java job types (the original two, three owned by B, and one owned by D).
 
 Payment follows the Est / Message Example pattern: **send task** `request-payment` publishes BPMN message `payment-result` (correlation key `case_reference`); catch event **Payment result received** continues the path. Booking confirmation is a **send task** worker (no inbound message wait).
 
@@ -41,7 +41,7 @@ Tasklist → Processes → start `Hospital_All_Processes_Simple_C8` (assignee `d
 | Situation | Need Java? |
 |-----------|------------|
 | Editing BPMN / previewing forms without running a process | No |
-| Running enquiries, changes, booking, or payment | **Required** — otherwise the instance waits at its next worker job (or the payment-result catch) |
+| Running changes, booking, or payment | **Required** — otherwise the instance waits at its next worker job (or the payment-result catch) |
 
 Closing Java stops the workers. Restart Java to resume waiting jobs. Use a non-empty **Patient / case ID** on the funding form so `case_reference` can correlate `payment-result`.
 
@@ -51,17 +51,19 @@ Closing Java stops the workers. Restart Java to resume waiting jobs. Use a non-e
 - Coursework English package is the submission/demo copy; the Chinese learn folder is optional.
 - The 28 September member D changes are maintained in this English package only. The learning package has not received these workers, database changes, or BPMN nodes.
 
-## Member D: care-change notifications and enquiry receipts
+## Member D: one care-change notification worker
 
-`MemberDPathwayWorkers.java` subscribes to `notify-care-change` and `ack-enquiry-routed`. The BPMN inserts one service task after `ClinicalChange` and one after each of the three enquiry user tasks. Existing forms still collect human decisions; no extra form is required. Notifications are classroom mocks, recorded in the shared domain database.
+`MemberDPathwayWorkers.java` subscribes only to `notify-care-change`. One service task follows the human `ClinicalChange` task. It reads four mapped form variables, determines the notification status, saves a mock receipt in H2, and returns the result. The three enquiry routes finish after their human response. Existing forms still apply.
 
-See [D's explanation, variable contract and demonstration](../../Ryan/2026-09-28/D_外部工作器与数据库说明.md) and [verified evidence](../../evidence/PB-10_PB-21_member-D_workers_2026-09-28/README.md). A/B second-owner review is pending.
+The student version removes the optional enquiry worker, failure switches, payment statistics and custom transaction/concurrency handling. A regular transaction and unique receipt key retain basic retry protection.
+
+See [D's explanation, variable contract and demonstration](../../Ryan/2026-09-28/D_外部工作器与数据库说明.md) and [verified evidence](../../evidence/PB-21_member-D_simple_2026-09-28/README.md). A/B second-owner review is pending.
 
 ## Shared domain database
 
 Run Java from this module directory so the file is `data/hospital-domain.mv.db`. The file is ignored by Git and persists across restarts. The engine's database is separate.
 
-- `payment_ledger`: payment facts; D only reads it for financial changes.
+- `payment_ledger`: payment facts; D does not access this table.
 - `booking_slot`: B's appointment occupancy records.
 - `audit_event`: append-only business audit; D adds an optional unique `idempotency_key`. Old four-argument append callers remain compatible.
 
@@ -70,7 +72,7 @@ The configured H2 file uses `AUTO_SERVER=FALSE`. Stop the Java worker applicatio
 ```sql
 SELECT id, actor, action, case_reference, occurred_at, payload_summary
 FROM audit_event
-WHERE action IN ('notify-care-change', 'notify-care-change-skipped', 'ack-enquiry-routed')
+WHERE action IN ('notify-care-change', 'notify-care-change-skipped')
 ORDER BY id;
 ```
 
@@ -83,6 +85,4 @@ mvn test
 python scripts/test_member_d_bpmn.py
 ```
 
-The Java tests use a separate in-memory H2 database. After starting Camunda and the formal Java application, run `python scripts/smoke_member_d.py` for eight real-engine scenarios. This creates labelled synthetic process instances and submits user tasks through the API; it does not exercise browser form validation. Evidence is written under `target/`. Running it again creates a new set of test cases.
-
-The optional process variable `memberDNotificationFailure="once"` demonstrates a transient notification failure followed by a successful retry. Leave it absent for normal demonstrations. `"always"` exhausts retries and needs an operator to clear the variable and retry the incident. These switches affect only D's mocked notifications.
+The Java tests use a separate in-memory H2 database. After starting Camunda and the formal Java application, run `python scripts/smoke_member_d.py` for seven real-engine scenarios (four change cases and three enquiry regression checks). This creates labelled synthetic process instances and submits user tasks through the API; it does not exercise browser form validation. Evidence is written under `target/`. Running it again creates a new set of test cases.

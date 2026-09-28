@@ -34,7 +34,7 @@
     <bpmn:textAnnotation id="Guide_Main">
       <bpmn:text>READING GUIDE | Blue = main care route (left to right by stage). Grey = side / exception paths kept on lane edges.
 Stages: 1 Referral review → 2 Visit &amp; clinical care → 3 Letter &amp; next step → 4 Funding &amp; treatment. Changes sit on the lower clinical band.
-All P1-P13 tasks remain visible. Payment uses a send task + payment-result message catch (Est pattern); booking confirmation uses a send task worker. Member B added check-slot, reserve-appointment, flag-resource-unavailable service tasks. Member D added notify-care-change and three ack-enquiry-routed service tasks with shared audit receipts.</bpmn:text>
+All P1-P13 tasks remain visible. Payment uses a send task + payment-result message catch (Est pattern); booking confirmation uses a send task worker. Member B added check-slot, reserve-appointment, flag-resource-unavailable service tasks. Member D adds one notify-care-change service task with a database receipt. Enquiries end after the human response.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Guide_Rules">
       <bpmn:text>BUSINESS CONTROLS | P4: within 2 weeks, also phone and record contact. P9: 7-day letter target; weekly reminders; escalate at 1 and 3 months.
@@ -57,7 +57,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>FinanceEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndFinanceEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>UrgentFinance</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>AckFinanceEnquiry</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Clinical" name="Clinical team">
         <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
@@ -76,7 +75,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>EndClinicalEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>UrgentDecision</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>NotifyCareChange</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>AckClinicalEnquiry</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Admin" name="Administration">
         <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
@@ -100,7 +98,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>CheckVisitSlot</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ReserveTreatmentSlot</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FlagResourceUnavailable</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>AckAdminEnquiry</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Start" name="Start request">
@@ -592,13 +589,13 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_27</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="EndAdminEnquiry" name="Enquiry resolved">
-      <bpmn:incoming>Flow_25_D</bpmn:incoming>
+      <bpmn:incoming>Flow_25</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="EndClinicalEnquiry" name="Enquiry resolved">
-      <bpmn:incoming>Flow_26_D</bpmn:incoming>
+      <bpmn:incoming>Flow_26</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="EndFinanceEnquiry" name="Enquiry resolved">
-      <bpmn:incoming>Flow_27_D</bpmn:incoming>
+      <bpmn:incoming>Flow_27</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:userTask id="AuditReports" name="P13&#10;Authorised manager reviews&#10;audit trail and pathway reports">
       <bpmn:documentation>Authorised management views referrals, waits, failed contacts, letter delays, enquiries, booking delays, funding/payment exceptions and refunds. P13 controls apply to EVERY significant task: verified identity, role-limited access, secure exchange, user/time/action audit, linked records and downtime recovery. Ordinary users must not edit audit history. This model documents these requirements; demo assignment is not production RBAC.</bpmn:documentation>
@@ -672,37 +669,14 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_50b</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="NotifyCareChange" name="P11 / P12&#10;Notify care change">
-      <bpmn:documentation>Member D (Ryan), type notify-care-change: mock external notification, append audit_event with a unique task receipt before completing. No real email/SMS. Care changes require formal authorisation; financial changes only read payment_ledger and request Finance review. Human forms and gateway decisions remain authoritative. No BPMN message catch is required for this synchronous mock job.</bpmn:documentation>
+      <bpmn:documentation>Member D (Ryan), type notify-care-change: read the mapped form variables, record a mock notification in audit_event and return its result. Missing authorisation is skipped. Financial decisions remain in the existing Finance user task. Retries reuse the same receipt.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="notify-care-change" retries="3" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_51</bpmn:incoming>
       <bpmn:outgoing>Flow_51_D</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="AckAdminEnquiry" name="P10&#10;Send enquiry receipt">
-      <bpmn:documentation>Member D (Ryan), type ack-enquiry-routed: mock external notification, append audit_event with a unique task receipt before completing. No real email/SMS. Care changes require formal authorisation; financial changes only read payment_ledger and request Finance review. Human forms and gateway decisions remain authoritative. No BPMN message catch is required for this synchronous mock job.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="ack-enquiry-routed" retries="3" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_25</bpmn:incoming>
-      <bpmn:outgoing>Flow_25_D</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="AckClinicalEnquiry" name="P10&#10;Send enquiry receipt">
-      <bpmn:documentation>Member D (Ryan), type ack-enquiry-routed: mock external notification, append audit_event with a unique task receipt before completing. No real email/SMS. Care changes require formal authorisation; financial changes only read payment_ledger and request Finance review. Human forms and gateway decisions remain authoritative. No BPMN message catch is required for this synchronous mock job.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="ack-enquiry-routed" retries="3" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_26</bpmn:incoming>
-      <bpmn:outgoing>Flow_26_D</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="AckFinanceEnquiry" name="P10&#10;Send enquiry receipt">
-      <bpmn:documentation>Member D (Ryan), type ack-enquiry-routed: mock external notification, append audit_event with a unique task receipt before completing. No real email/SMS. Care changes require formal authorisation; financial changes only read payment_ledger and request Finance review. Human forms and gateway decisions remain authoritative. No BPMN message catch is required for this synchronous mock job.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="ack-enquiry-routed" retries="3" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_27</bpmn:incoming>
-      <bpmn:outgoing>Flow_27_D</bpmn:outgoing>
-    </bpmn:serviceTask>
+
     <bpmn:sequenceFlow id="Flow_01" sourceRef="Start" targetRef="Register" />
     <bpmn:sequenceFlow id="Flow_24" name="Select type" sourceRef="RequestType" targetRef="Register" />
     <bpmn:sequenceFlow id="Flow_30" name="Recheck" sourceRef="GetDocuments" targetRef="Register" />
@@ -833,12 +807,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_57" name="Recorded" sourceRef="AdjustmentOutcome" targetRef="ChangeRoute">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= financeAdjustment = "resolved"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_25" sourceRef="AdminEnquiry" targetRef="AckAdminEnquiry" />
-    <bpmn:sequenceFlow id="Flow_26" sourceRef="ClinicalEnquiry" targetRef="AckClinicalEnquiry" />
-    <bpmn:sequenceFlow id="Flow_27" sourceRef="FinanceEnquiry" targetRef="AckFinanceEnquiry" />
-    <bpmn:sequenceFlow id="Flow_25_D" sourceRef="AckAdminEnquiry" targetRef="EndAdminEnquiry" />
-    <bpmn:sequenceFlow id="Flow_26_D" sourceRef="AckClinicalEnquiry" targetRef="EndClinicalEnquiry" />
-    <bpmn:sequenceFlow id="Flow_27_D" sourceRef="AckFinanceEnquiry" targetRef="EndFinanceEnquiry" />
+    <bpmn:sequenceFlow id="Flow_25" sourceRef="AdminEnquiry" targetRef="EndAdminEnquiry" />
+    <bpmn:sequenceFlow id="Flow_26" sourceRef="ClinicalEnquiry" targetRef="EndClinicalEnquiry" />
+    <bpmn:sequenceFlow id="Flow_27" sourceRef="FinanceEnquiry" targetRef="EndFinanceEnquiry" />
     <bpmn:sequenceFlow id="Flow_28" sourceRef="AuditReports" targetRef="EndReport" />
   </bpmn:process>
   <bpmn:message id="Message_PaymentResult" name="payment-result">
@@ -1026,22 +997,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <dc:Bounds x="460" y="1680" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndAdminEnquiry_di" bpmnElement="EndAdminEnquiry">
-        <dc:Bounds x="740" y="720" width="40" height="40" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="714" y="765" width="82" height="14" />
-        </bpmndi:BPMNLabel>
+        <dc:Bounds x="740" y="630" width="40" height="40" />
+        <bpmndi:BPMNLabel><dc:Bounds x="715" y="680" width="90" height="28" /></bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndClinicalEnquiry_di" bpmnElement="EndClinicalEnquiry">
-        <dc:Bounds x="740" y="1260" width="40" height="40" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="714" y="1305" width="82" height="14" />
-        </bpmndi:BPMNLabel>
+        <dc:Bounds x="740" y="1170" width="40" height="40" />
+        <bpmndi:BPMNLabel><dc:Bounds x="715" y="1220" width="90" height="28" /></bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndFinanceEnquiry_di" bpmnElement="EndFinanceEnquiry">
-        <dc:Bounds x="740" y="1825" width="40" height="40" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="714" y="1870" width="82" height="14" />
-        </bpmndi:BPMNLabel>
+        <dc:Bounds x="740" y="1710" width="40" height="40" />
+        <bpmndi:BPMNLabel><dc:Bounds x="715" y="1760" width="90" height="28" /></bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="AuditReports_di" bpmnElement="AuditReports" bioc:stroke="#263746" bioc:fill="#edf5ff">
         <dc:Bounds x="830" y="600" width="220" height="100" />
@@ -1073,15 +1038,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="NotifyCareChange_di" bpmnElement="NotifyCareChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
         <dc:Bounds x="1170" y="1140" width="140" height="100" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="AckAdminEnquiry_di" bpmnElement="AckAdminEnquiry" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="460" y="710" width="220" height="60" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="AckClinicalEnquiry_di" bpmnElement="AckClinicalEnquiry" bioc:stroke="#263746" bioc:fill="#eaf8f0">
-        <dc:Bounds x="460" y="1250" width="220" height="60" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="AckFinanceEnquiry_di" bpmnElement="AckFinanceEnquiry" bioc:stroke="#263746" bioc:fill="#fff3e5">
-        <dc:Bounds x="460" y="1810" width="220" height="70" />
-      </bpmndi:BPMNShape>
+
       <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01" bioc:stroke="#1768a6">
         <di:waypoint x="420" y="460" />
         <di:waypoint x="460" y="460" />
@@ -1592,28 +1549,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_25_di" bpmnElement="Flow_25" bioc:stroke="#667481">
-        <di:waypoint x="570" y="700" />
-        <di:waypoint x="570" y="710" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_25_D_di" bpmnElement="Flow_25_D" bioc:stroke="#667481">
-        <di:waypoint x="680" y="740" />
-        <di:waypoint x="740" y="740" />
+        <di:waypoint x="680" y="650" />
+        <di:waypoint x="740" y="650" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_26_di" bpmnElement="Flow_26" bioc:stroke="#667481">
-        <di:waypoint x="570" y="1240" />
-        <di:waypoint x="570" y="1250" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_26_D_di" bpmnElement="Flow_26_D" bioc:stroke="#667481">
-        <di:waypoint x="680" y="1280" />
-        <di:waypoint x="740" y="1280" />
+        <di:waypoint x="680" y="1190" />
+        <di:waypoint x="740" y="1190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_27_di" bpmnElement="Flow_27" bioc:stroke="#667481">
-        <di:waypoint x="570" y="1780" />
-        <di:waypoint x="570" y="1810" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_27_D_di" bpmnElement="Flow_27_D" bioc:stroke="#667481">
-        <di:waypoint x="680" y="1845" />
-        <di:waypoint x="740" y="1845" />
+        <di:waypoint x="680" y="1730" />
+        <di:waypoint x="740" y="1730" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_28_di" bpmnElement="Flow_28" bioc:stroke="#667481">
         <di:waypoint x="1050" y="650" />

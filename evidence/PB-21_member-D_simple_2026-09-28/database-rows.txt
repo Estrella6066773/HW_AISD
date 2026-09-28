@@ -1,0 +1,38 @@
+ID             : 33
+ACTOR          : D-DEMO-CLINICIAN
+ACTION         : notify-care-change
+CASE_REFERENCE : D-SIMPLE-20260928-192223-change
+PAYLOAD_SUMMARY: Mock notification to pathway team; target=discharge; status=SENT
+
+ID             : 34
+ACTOR          : D-DEMO-CLINICIAN
+ACTION         : notify-care-change
+CASE_REFERENCE : D-SIMPLE-20260928-192223-financial-change
+PAYLOAD_SUMMARY: Mock notification to pathway team; target=discharge; status=SENT_FINANCE_REVIEW_REQUIRED
+
+ID             : 35
+ACTOR          : D-DEMO-CLINICIAN
+ACTION         : notify-care-change-skipped
+CASE_REFERENCE : D-SIMPLE-20260928-192223-unapproved-then-corrected
+PAYLOAD_SUMMARY: Mock notification to pathway team; target=invalid; status=SKIPPED_UNAUTHORISED
+
+ID             : 36
+ACTOR          : D-DEMO-CLINICIAN
+ACTION         : notify-care-change
+CASE_REFERENCE : D-SIMPLE-20260928-192223-unapproved-then-corrected
+PAYLOAD_SUMMARY: Mock notification to pathway team; target=discharge; status=SENT
+
+ID             : 37
+ACTOR          : member-B
+ACTION         : check-slot
+CASE_REFERENCE : D-SIMPLE-20260928-192223-cancel-visit-change
+PAYLOAD_SUMMARY: D-SIMPLE-20260928-192223-cancel-visit-change|visit|Demo agreed timeframe -> CONFIRMED
+
+ID             : 38
+ACTOR          : D-DEMO-CLINICIAN
+ACTION         : notify-care-change
+CASE_REFERENCE : D-SIMPLE-20260928-192223-cancel-visit-change
+PAYLOAD_SUMMARY: Mock notification to pathway team; target=discharge; status=SENT
+(6 rows, 11 ms)
+DUPLICATE_KEY_GROUPS: 0
+(1 row, 4 ms)

@@ -15,7 +15,7 @@
 | 成员 B | 设计并实现本库；一责占号 / 资源不可用工作器，写入 `booking_slot` |
 | 成员 A | 一责退款 / 待调查类工作器；按契约读写 `payment_ledger` |
 | 成员 C | 一责诊后信外发、转诊方通知等工作器；写入审计 |
-| 成员 D | 一责变更通知、问询回执等工作器；写入审计；涉钱变更时只读流水 |
+| 成员 D | 本次只做变更通知工作器；写入审计；财务判断由既有人工任务处理 |
 
 四人共用同一文件库与契约。
 
@@ -100,7 +100,7 @@ Java：`BookingSlot`、`BookingSlotStatus`、`BookingSlotRepository`。
 查询：`AuditEventRepository`。  
 业务层对外暴露追加与查询。
 
-**D 增补，待 B 复核**：`AuditEventWriter.append(actor, action, caseReference, idempotencyKey, mockSummary)` 在独立事务中先查唯一键、再追加并提交；并发重复插入读取已提交的同一回执。原四参数 `append` 保留。键由工作器类型、流程实例键和节点实例键构成，后续再次发生的合法变更有新键。仅本地 mock 元数据在事务内计算；接入真实邮件提供商需要另行设计可靠投递机制。详见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)。
+**D 增补，待 B 复核**：五参数 `append(actor, action, caseReference, idempotencyKey, payloadSummary)` 使用普通 `@Transactional`：先查键，已有记录就返回，否则追加。唯一约束防止重复保存；数据库异常交给 Camunda 的普通作业重试处理。原四参数接口保留。D 本次只做变更通知，不操作支付表。详见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)。
 
 ---
 
@@ -132,7 +132,7 @@ Java：`BookingSlot`、`BookingSlotStatus`、`BookingSlotRepository`。
 1. 注入对应 `Repository` 或 `AuditEventWriter`。  
 2. 支付 / 退款（成员 A）：先 `findByIdempotencyKey`，有则复用，无则 `save` 后再对外交互。  
 3. 占号（成员 B）：先 `findByOccupancyKey`；确认写 `CONFIRMED`，挂起写 `PENDING` 并累加重试。  
-4. 信件 / 转诊（成员 C）、变更 / 问询（成员 D）：外部 mock 完成后 `append` 审计。  
+4. 信件 / 转诊（成员 C）、变更（成员 D）：外部 mock 完成后 `append` 审计。
 5. 既有两类 JobWorker 保持现状；新能力用新类型承接。  
 6. 改 Java 时同步改全院 BPMN（总指引第 4.4 节）；若使用学习包则同步改图。
 

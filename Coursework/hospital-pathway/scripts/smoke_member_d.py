@@ -12,14 +12,13 @@ import os
 import time
 import urllib.error
 import urllib.request
-import xml.etree.ElementTree as ET
 
 BASE = os.environ.get('CAMUNDA_REST_URL', 'http://localhost:8080').rstrip('/')
 AUTH = base64.b64encode((os.environ.get('CAMUNDA_USERNAME','demo')+':'+os.environ.get('CAMUNDA_PASSWORD','demo')).encode()).decode()
 PROCESS = 'Hospital_All_Processes_Simple_C8'
 ROOT = Path(__file__).resolve().parents[1]
 STAMP = dt.datetime.now().strftime('%Y%m%d-%H%M%S')
-PREFIX = 'D-SMOKE-'+STAMP
+PREFIX = 'D-SIMPLE-'+STAMP
 EVIDENCE = {'run':PREFIX,'method':'real local Camunda REST; actual forms bound, task completions submitted by API','instances':[]}
 
 def api(method, path, body=None):
@@ -56,10 +55,10 @@ def complete(record, element, **variables):
     api('POST',f"/user-tasks/{item['userTaskKey']}/completion",{'variables':values})
     record['tasks'].append({'element':element,'userTaskKey':item['userTaskKey'],'formKey':item.get('formKey'),'action':values['action']})
 
-def start(definition, scenario, failure='none'):
+def start(definition, scenario):
     case=PREFIX+'-'+scenario
     instance=api('POST','/process-instances',{'processDefinitionKey':definition,
-            'variables':{'patientId':case,'memberDNotificationFailure':failure}})
+            'variables':{'patientId':case}})
     record={'scenario':scenario,'case':case,'processInstanceKey':instance['processInstanceKey'],'tasks':[]}
     EVIDENCE['instances'].append(record)
     return record
@@ -69,7 +68,10 @@ def finish(record, expected_variable, expected_value):
     state=wait_for(lambda:(p if (p:=api('GET','/process-instances/'+key))['state']=='COMPLETED' else None),'completed '+key)
     variables=api('POST','/variables/search',{'filter':{'processInstanceKey':key},'page':{'limit':100}})['items']
     decoded={v['name']:json.loads(v['value']) for v in variables if not v.get('isTruncated',False)}
-    assert decoded.get(expected_variable)==expected_value,(record['scenario'],decoded)
+    if expected_variable:
+        assert decoded.get(expected_variable)==expected_value,(record['scenario'],decoded)
+    else:
+        assert 'enquiryAcknowledgementSent' not in decoded, 'Optional Worker still ran'
     incidents=api('POST','/incidents/search',{'filter':{'processInstanceKey':key,'state':'ACTIVE'}})['items']
     assert not incidents,incidents
     record.update(state=state['state'],notificationVariables={k:v for k,v in decoded.items()
@@ -86,7 +88,7 @@ def main():
         record=start(key,kind)
         complete(record,'Register',action='enquiry_'+kind)
         complete(record,element)
-        finish(record,'enquiryAcknowledgementSent',True)
+        finish(record,None,None)
     for scenario,decision in [('change','discharge_unpaid'),('financial-change','discharge_paid')]:
         record=start(key,scenario)
         complete(record,'Register',action='change')
@@ -101,10 +103,6 @@ def main():
     assert values and all(json.loads(v['value']) is False for v in values)
     record['unapprovedNotificationSkipped']=True
     complete(record,'GetDocuments')
-    complete(record,'Register',action='change')
-    complete(record,'ClinicalChange',action='discharge_unpaid')
-    finish(record,'careChangeNotificationSent',True)
-    record=start(key,'retry-once','once')
     complete(record,'Register',action='change')
     complete(record,'ClinicalChange',action='discharge_unpaid')
     finish(record,'careChangeNotificationSent',True)

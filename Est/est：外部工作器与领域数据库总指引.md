@@ -92,7 +92,7 @@ flowchart LR
 | **A** | P5、P7、P8、P13 | `request-refund`；可选 `mark-payment-investigate` | PB-07 / PB-20 / T11；线 10、13 | `payment_ledger`、相关 `audit_event` |
 | **B** | P3、P4、P6 | `check-slot`；`reserve-appointment`；`flag-resource-unavailable` | PB-03 / PB-06 / T06 / T09；线 9–11、14 | `booking_slot`、相关 `audit_event` |
 | **C** | P1、P2、P9 | `dispatch-clinic-letter`；`notify-referrer` | PB-09；线 5–8 与寄信段 | `audit_event`（及可选通信记录） |
-| **D** | P10、P11、P12 | `notify-care-change`；可选 `ack-enquiry-routed` | PB-10 / PB-21；线 1–3、12、14 | `audit_event`；涉钱时只读 `payment_ledger` |
+| **D** | P10、P11、P12 | `notify-care-change`（D 本次只做必选） | PB-10 / PB-21；线 1–3、12、14 | `audit_event`；涉钱时只读 `payment_ledger` |
 
 **领域库表结构**由成员 B 主责（已完成）。A / C / D 注入 B 公布的 Repository / `AuditEventWriter`，共用同一文件库。
 
@@ -131,7 +131,6 @@ flowchart LR
 | C | `dispatch-clinic-letter` | `DispatchLetter` 人工核对之后 |
 | C | `notify-referrer` | `Redirect` 之后 |
 | D | `notify-care-change` | `ClinicalChange` 之后、进入后续网关之前 |
-| D | `ack-enquiry-routed`（可选） | 问询用户任务完成路径上 |
 
 改图时更新节点 `documentation`：任务类型、一责成员、读写哪些领域表。Operate / Tasklist 复测后再交证据。
 
@@ -197,7 +196,7 @@ A、B、C、D 每人都开发 JobWorker（至少一责一个新类型，并交�
 | **A** | P5、P7、P8、P13 | Java① `request-payment` | `request-refund`；可选 `mark-payment-investigate` | C 或 D | 读写 `payment_ledger`；写支付相关审计 |
 | **B** | P3、P4、P6 | Java② `send-booking-confirmation` | `check-slot`；`reserve-appointment`；`flag-resource-unavailable` | A 或 C | 设计并维护领域库；写 `booking_slot` |
 | **C** | P1、P2、P9 | 登记 / 转诊 / 寄信线 | `dispatch-clinic-letter`；`notify-referrer` | B 或 D | 写审计 |
-| **D** | P10、P11、P12 | 问询 / 变更线 | `notify-care-change`；可选 `ack-enquiry-routed` | A 或 B | 写审计；涉钱时只读流水 |
+| **D** | P10、P11、P12 | 问询 / 变更线 | `notify-care-change`（D 本次只做必选） | A 或 B | 写审计；涉钱时只读流水 |
 
 ### 6.2 协作规则
 
@@ -215,7 +214,7 @@ A、B、C、D 每人都开发 JobWorker（至少一责一个新类型，并交�
 | 既有两个 JobWorker | 保持现状 |
 | 成员 B 新工作器 + BPMN | 已完成（`check-slot` / `reserve-appointment` / `flag-resource-unavailable`） |
 | 成员 A / C 新工作器 + BPMN | 由各自一责推进 |
-| 成员 D（Ryan）：变更通知 + 问询回执 | 已认领并完成英文包代码、BPMN 挂接及本地验证（20 项 Java 测试、4 项图结构检查、8 个实际流程结束）；见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)及[证据](../evidence/PB-10_PB-21_member-D_workers_2026-09-28/README.md)。二责 A／B 复核待完成，合并前保持 In progress |
+| 成员 D（Ryan）：单一变更通知 | 按本人要求精简为一个 notify-care-change，保留数据库记录和基本重试保护；7 项 Java 测试、4 项图结构检查通过，7 个实际流程实例结束；见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)及[证据](../evidence/PB-21_member-D_simple_2026-09-28/README.md)。二责 A／B 复核待完成，合并前保持 In progress |
 
 ---
 
@@ -226,7 +225,7 @@ A、B、C、D 每人都开发 JobWorker（至少一责一个新类型，并交�
 | 1 | 文件型领域库 + 三张表 | B | 启动日志「领域库就绪」；`data/hospital-domain` 存在 |
 | 2 | BPMN + 排班占号 / 资源不可用工作器 | B（A 或 C 复核） | 图上有类型；pending / 占用可演示 |
 | 3 | BPMN + 诊后信外发 / 转诊方通知 | C（B 或 D 复核） | 图上有类型；日志 SENT；审计可查 |
-| 4 | BPMN + 变更通知（+ 可选问询回执） | D（A 或 B 复核） | 图上有类型；变更通知可演示 |
+| 4 | BPMN + 变更通知（精简版） | D（A 或 B 复核） | 图上有类型；变更通知可演示 |
 | 5 | BPMN + 退款（+ 可选待调查） | A（C 或 D 复核） | 图上有类型；流水可追溯 |
 | 6 | 各一责在完成路径上调用 `AuditEventWriter` | A/B/C/D | 按病例号可查出写入事件 |
 

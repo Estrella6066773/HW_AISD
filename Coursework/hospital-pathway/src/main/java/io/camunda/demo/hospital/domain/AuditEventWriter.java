@@ -2,12 +2,7 @@ package io.camunda.demo.hospital.domain;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.dao.DataIntegrityViolationException;
-import java.util.Objects;
-import java.util.function.Supplier;
+import java.util.Optional;
 
 /**
  * 审计事件只追加写入。
@@ -21,52 +16,27 @@ import java.util.function.Supplier;
 public class AuditEventWriter {
 
 	private final AuditEventRepository auditEventRepository;
-	private final TransactionTemplate receiptTransaction;
 
-	public AuditEventWriter(AuditEventRepository auditEventRepository, PlatformTransactionManager transactions) {
-		this.auditEventRepository = auditEventRepository;
-		this.receiptTransaction = new TransactionTemplate(transactions);
-		this.receiptTransaction.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-	}
+    public AuditEventWriter(AuditEventRepository auditEventRepository) {
+        this.auditEventRepository = auditEventRepository;
+    }
 
-	/**
-	 * Add one immutable mock receipt per task occurrence, committed before job completion.
-	 * The supplier computes local mock metadata only; it must not send real email or charge money.
-	 * A competing insert is rolled back before looking up the winning committed receipt.
-	 */
-	public AuditEvent append(String actor, String action, String caseReference,
-			String idempotencyKey, Supplier<String> mockSummary) {
-		String key = requireText(idempotencyKey, "idempotencyKey");
-		if (key.length() > 256) throw new IllegalArgumentException("idempotencyKey too long");
-		String safeActor = requireText(actor, "actor");
-		String safeAction = requireText(action, "action");
-		String safeCase = requireText(caseReference, "caseReference");
-		try {
-			return receiptTransaction.execute(status -> auditEventRepository.findByIdempotencyKey(key)
-					.map(event -> matching(event, safeActor, safeAction, safeCase))
-					.orElseGet(() -> {
-						AuditEvent event = new AuditEvent();
-						event.setActor(safeActor);
-						event.setAction(safeAction);
-						event.setCaseReference(safeCase);
-						event.setIdempotencyKey(key);
-						event.setPayloadSummary(trimToMax(mockSummary.get(), 512));
-						return auditEventRepository.saveAndFlush(event);
-					}));
-		} catch (DataIntegrityViolationException duplicateOrInvalidData) {
-			return auditEventRepository.findByIdempotencyKey(key)
-					.map(event -> matching(event, safeActor, safeAction, safeCase))
-					.orElseThrow(() -> duplicateOrInvalidData);
-		}
-	}
-
-	private static AuditEvent matching(AuditEvent event, String actor, String action, String caseReference) {
-		if (!Objects.equals(event.getActor(), actor) || !Objects.equals(event.getAction(), action)
-				|| !Objects.equals(event.getCaseReference(), caseReference)) {
-			throw new IllegalArgumentException("Receipt key reused for a different case, actor or action");
-		}
-		return event;
-	}
+    /** D：任务重试时返回已有回执；没有记录才新增。 */
+    @Transactional
+    public AuditEvent append(String actor, String action, String caseReference,
+            String idempotencyKey, String payloadSummary) {
+        Optional<AuditEvent> existing = auditEventRepository.findByIdempotencyKey(idempotencyKey);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+        AuditEvent event = new AuditEvent();
+        event.setActor(requireText(actor, "actor"));
+        event.setAction(requireText(action, "action"));
+        event.setCaseReference(requireText(caseReference, "caseReference"));
+        event.setIdempotencyKey(requireText(idempotencyKey, "idempotencyKey"));
+        event.setPayloadSummary(trimToMax(payloadSummary, 512));
+        return auditEventRepository.saveAndFlush(event);
+    }
 
 	@Transactional
 	public AuditEvent append(String actor, String action, String caseReference, String payloadSummary) {
