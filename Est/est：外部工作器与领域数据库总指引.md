@@ -34,8 +34,9 @@
 | 可执行工程 | 提交与演示用 `Coursework/hospital-pathway/`；可选学习镜像 `Ruby/hospital-pathway-zh-learn/`。同一时刻只启动其中一套 |
 | 入口类 | `HospitalPathwayApplication.java` |
 | 既有工作器类 | `HospitalPathwayWorkers.java`（`request-payment`、`send-booking-confirmation`） |
+| 成员 A 工作器类 | `MemberAPathwayWorkers.java`（`request-refund`、`mark-payment-investigate`） |
 | 成员 B 工作器类 | `MemberBPathwayWorkers.java`（`check-slot`、`reserve-appointment`、`flag-resource-unavailable`） |
-| 全院图上已挂 `taskDefinition` | 上述五类（既有两类 + 成员 B 三类） |
+| 全院图上已挂 `taskDefinition` | 既有两类 + 成员 A 两类 + 成员 B 三类 + 成员 D 一类 |
 | 应用依赖 | Spring Boot + Camunda Client + JPA/H2 领域库（成员 B 已落地） |
 | 业务状态存放处 | 流程变量 + 领域库表（成员 B 占号路径写 `booking_slot`；既有两类工作器仍以流程变量写回为主） |
 | 本机 Camunda（c8run）自带库 | 存放引擎侧流程实例、作业与消息关联数据 |
@@ -123,8 +124,8 @@ flowchart LR
 
 | 成员 | 任务类型 | BPMN 挂接 |
 |------|----------|-----------|
-| A | `request-refund` | `FinanceAdjustment` 记录完成后进入 send/service，再进后续网关 |
-| A | `mark-payment-investigate`（可选） | `FundingIssue` 路径上增加服务任务 |
+| A | `request-refund` | `FinanceAdjustment` 之后、`AdjustmentOutcome` 之前（**已挂**） |
+| A | `mark-payment-investigate` | 支付失败 / 经费 pending 进入 `FundingIssue` 之前（**已挂**） |
 | B | `check-slot` | `BookVisit` 之后、`VisitOutcome` 之前（**已挂**） |
 | B | `reserve-appointment` | 资源就绪出口与 `SendBookingConfirmation` 之间（**已挂**） |
 | B | `flag-resource-unavailable` | 资源 pending 出口与回到 `BookTreatment` 之间（**已挂**） |
@@ -213,7 +214,8 @@ A、B、C、D 每人都开发 JobWorker（至少一责一个新类型，并交�
 | 领域库三表 + 仓储 + 审计只写（成员 B） | 已完成 |
 | 既有两个 JobWorker | 保持现状 |
 | 成员 B 新工作器 + BPMN | 已完成（`check-slot` / `reserve-appointment` / `flag-resource-unavailable`） |
-| 成员 A / C 新工作器 + BPMN | 由各自一责推进 |
+| 成员 A 新工作器 + BPMN | 已完成（`request-refund` / `mark-payment-investigate`） |
+| 成员 C 新工作器 + BPMN | 由各自一责推进 |
 | 成员 D（Ryan）：单一变更通知 | 按本人要求精简为一个 notify-care-change，保留数据库记录和基本重试保护；7 项 Java 测试、4 项图结构检查通过，7 个实际流程实例结束；见 [D 说明](../Ryan/2026-09-28/D_外部工作器与数据库说明.md)。二责 A／B 复核待完成，保持 In progress |
 
 ---

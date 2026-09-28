@@ -1,6 +1,6 @@
 # Hospital Pathway
 
-Executable Camunda 8 pathway: BPMN + 11 forms + six Java job types (the original two, three owned by B, and one owned by D).
+Executable Camunda 8 pathway: BPMN + 11 forms + Java job types (original two; member A refund/investigate; member B slots; member D care-change).
 
 Payment follows the Est / Message Example pattern: **send task** `request-payment` publishes BPMN message `payment-result` (correlation key `case_reference`); catch event **Payment result received** continues the path. Booking confirmation is a **send task** worker (no inbound message wait).
 
@@ -51,6 +51,23 @@ Closing Java stops the workers. Restart Java to resume waiting jobs. Use a non-e
 - Coursework English package is the submission/demo copy; the Chinese learn folder is optional.
 - The 28 September member D changes are maintained in this English package only. The learning package has not received these workers, database changes, or BPMN nodes.
 
+## Member A: refund and payment-investigate workers
+
+`MemberAPathwayWorkers.java` owns:
+
+| Type | BPMN hang point | Writes |
+|------|-----------------|--------|
+| `request-refund` | After `FinanceAdjustment`, before `AdjustmentOutcome` | `payment_ledger` + `audit_event` |
+| `mark-payment-investigate` | Before `FundingIssue` (unpaid / funding pending) | `payment_ledger` (INVESTIGATE) + `audit_event` |
+
+Resolved finance adjustments record a successful refund row; pending keeps INVESTIGATE. Retries reuse the same idempotency key. Existing `request-payment` is unchanged.
+
+```sql
+SELECT id, case_reference, idempotency_key, amount, status, transaction_reference, payment_date
+FROM payment_ledger
+ORDER BY id;
+```
+
 ## Member D: one care-change notification worker
 
 `MemberDPathwayWorkers.java` subscribes only to `notify-care-change`. One service task follows the human `ClinicalChange` task. It reads four mapped form variables, determines the notification status, saves a mock receipt in H2, and returns the result. The three enquiry routes finish after their human response. Existing forms still apply.
@@ -63,9 +80,9 @@ See [D's explanation, variable contract and demonstration](../../Ryan/2026-09-28
 
 Run Java from this module directory so the file is `data/hospital-domain.mv.db`. The file is ignored by Git and persists across restarts. The engine's database is separate.
 
-- `payment_ledger`: payment facts; D does not access this table.
+- `payment_ledger`: payment / refund / investigate facts (member A writes refund and investigate rows).
 - `booking_slot`: B's appointment occupancy records.
-- `audit_event`: append-only business audit; D adds an optional unique `idempotency_key`. Old four-argument append callers remain compatible.
+- `audit_event`: append-only business audit; A/B/D append; D may use an optional unique `idempotency_key`. Old four-argument append callers remain compatible.
 
 The configured H2 file uses `AUTO_SERVER=FALSE`. Stop the Java worker application before opening this same file in an IDE database tool, then restart Java after inspection. Use JDBC URL `jdbc:h2:file:<absolute-path-to-module>/data/hospital-domain;IFEXISTS=TRUE`, user `sa`, empty password. `IFEXISTS=TRUE` prevents silently creating a new database at the wrong path.
 

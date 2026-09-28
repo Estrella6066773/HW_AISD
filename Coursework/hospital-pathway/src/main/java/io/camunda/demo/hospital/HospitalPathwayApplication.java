@@ -49,8 +49,9 @@ public class HospitalPathwayApplication {
 			LOG.info("已部署 Hospital_All_Processes_Simple_C8，部署键 {}", deployment.getKey());
 			LOG.info("已部署 {} 个表单（硬编码下拉，无 valuesKey）", formFiles.length);
 			LOG.info(
-					"Workers: request-payment, send-booking-confirmation; member B: check-slot, "
-							+ "reserve-appointment, flag-resource-unavailable");
+					"Workers: request-payment, send-booking-confirmation; member A: request-refund, "
+							+ "mark-payment-investigate; member B: check-slot, reserve-appointment, "
+							+ "flag-resource-unavailable; member D: notify-care-change");
 		};
 	}
 
