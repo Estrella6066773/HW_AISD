@@ -26,13 +26,23 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 
 ## Current status
 
-16 September 2026 is the first standup. It is checked against three things:
+29 September 2026 is the submission date. The shared executable pathway is in `Coursework/hospital-pathway/`. Java tests and one final-model self-pay route to `COMPLETED` are recorded against commit `fc6293e`. Current `main` is `91a02c9`. Commit `7be65b4` added the strategic BPMN and the i\* models. The 16 September Sprint 1 table in `docs/p6-sprint-backlog.md` remains the historical planning record.
 
-1. A complete product backlog — `docs/p3-product-backlog.md`
-2. The Sprint 1 backlog — `docs/p6-sprint-backlog.md`
-3. All four members added to the repository, with both tables uploaded
+Present:
 
-Sprint 1 covers planning only: no models and no code. The first slice under specification is referral check → doctor decision → first clinic booking, with outside scheduling mocked. Payment, clinic letters and enquiry routing come in later sprints, toward the initial release on 28 September 2026.
+- Executable Camunda 8 BPMN, eleven forms, Java workers and configuration
+- Strategic BPMN and abstraction note in `docs/strategic-bpmn/`
+- i\* SD/SR in `docs/istar/` (second-owner checklist still unsigned)
+- Requirements traceability matrix, with 12 supported, 26 partial and 4 unsupported business rules
+- Course indexes in `submissions/BPMEA/` and `submissions/AISD/`
+- The group has given the presentation
+
+Still open:
+
+- Second-owner review of the submission documents
+- Role-permission test AT-03 remains FAIL
+- Exception routes without a final-model run stay unevidenced; the local c8run environment does not start, so they are not being rerun
+- Contribution record `Est/est：PB-17贡献记录表.md` is still a blank template
 
 ## Deliverables
 
@@ -53,7 +63,7 @@ Supporting documents, not tied to a single part:
 
 | File | Content |
 |------|---------|
-| `docs/requirements-traceability-matrix.md` | PB-28 traceability for BR-01 to BR-42: operational BPMN, forms, workers and acceptance tests, plus the second-release gap plan |
+| `docs/requirements-traceability-matrix.md` | PB-28 traceability for BR-01 to BR-42 across the strategic BPMN, operational BPMN, forms, workers and acceptance tests, plus the second-release gap plan |
 | `docs/istar/PB-16_istar-sd-sr.md` | PB-16 i* SD/SR notes, with diagrams in `PB-16_sd.md` and `PB-16_sr.md`. Second-owner review is still unsigned. |
 | `docs/definition-of-done.md` | Definition of Done and the minimum delivery evidence, across BPMN, workers, forms, code quality and documentation |
 | `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn` | PB-12 strategic BPMN for the initial release. Not executable. |
