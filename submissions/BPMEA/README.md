@@ -11,7 +11,7 @@ The 29 September announcement asks for operational BPMN, external-worker source/
 | Editable Forms and bindings | [11 forms](../../Coursework/hospital-pathway/forms/) · bindings in the shared BPMN |
 | Planning sources | [Product backlog](../../docs/p3-product-backlog.md) · [Sprint backlog](../../docs/p6-sprint-backlog.md) · [work breakdown](../../docs/p4-work-breakdown.md) · [Definition of Done](../../docs/definition-of-done.md) |
 | Test results/evidence | [Shared test logs and live final-model G07 JSON](../../Coursework/hospital-pathway/evidence/) · historical PB-14/PB-18 logs described in the Project and Test Plan |
-| Repository | `https://github.com/Estrella6066773/HW_AISD` — final documentation revision still local, not pushed |
+| Repository | `https://github.com/Estrella6066773/HW_AISD` — submission pack initially uploaded to `main` in `e8a6861`; group review remains open |
 | Presentation slides | [Eight-slide editable BPM&EA deck](Hospital_Pathway_BPMEA_Presentation_2026-09-29.pptx) |
 
 The earlier assessment notes also mention strategic BPMN and i* SD/SR for BPM&EA. No clearly named final versions were verified in this repository review; check the definitive brief and add them if required. The project's current full-process acceptance gaps are listed in the [BPM&EA plan](Group_Project_and_Test_Plan_2026-09-29.md) and the [AISD detailed results](../AISD/Group_Acceptance_Test_Plan_and_Results_2026-09-29.md).

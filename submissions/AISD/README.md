@@ -10,4 +10,4 @@ The 29 September announcement requests a detailed operational BPMN, an Acceptanc
 
 The [shared evidence](../../Coursework/hospital-pathway/evidence/) contains twelve current Java tests (A/D), four BPMN structural checks and a live final-model G07 run to `COMPLETED` ([JSON](../../Coursework/hospital-pathway/evidence/Group_Final_E2E_20260929-135729.json)). The acceptance record distinguishes this selected self-pay route from unverified B/C exception branches, D's live change route and the known role-access failure. The BPMN PDF contains one zoomable overview and eight detail views.
 
-These files are local additions until committed and pushed. The G07 run proves one route, not full acceptance of every business rule or browser-side form validation.
+These files were initially uploaded to the repository's `main` branch in `e8a6861`. The G07 run proves one route, not full acceptance of every business rule or browser-side form validation. Group second-owner review remains open.
