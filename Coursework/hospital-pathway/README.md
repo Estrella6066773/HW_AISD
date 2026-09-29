@@ -1,6 +1,8 @@
 # Hospital Pathway
 
-Executable Camunda 8 pathway: BPMN + 11 forms + Java job types (original two; member A refund/investigate; member B slots; member D care-change).
+Executable Camunda 8 pathway: BPMN + 11 forms + Java job types (shared payment/booking communication; member A refund/investigate; member B slots; member C letters/referrer notification; member D care-change).
+
+This module is the shared implementation for both courses. The course-specific written submission indexes are in [BPM&EA](../../submissions/BPMEA/README.md) and [AISD](../../submissions/AISD/README.md); the same BPMN, forms and worker source are not duplicated there.
 
 Payment follows the Est / Message Example pattern: **send task** `request-payment` publishes BPMN message `payment-result` (correlation key `case_reference`); catch event **Payment result received** continues the path. Booking confirmation is a **send task** worker (no inbound message wait).
 
