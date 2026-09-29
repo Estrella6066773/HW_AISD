@@ -34,8 +34,8 @@
 | 可执行工程 | 提交与演示用 `Coursework/hospital-pathway/`；可选学习镜像 `Ruby/hospital-pathway-zh-learn/`。同一时刻只启动其中一套 |
 | 入口类 | `HospitalPathwayApplication.java` |
 | 既有工作器类 | `HospitalPathwayWorkers.java`（`request-payment`、`send-booking-confirmation`） |
-| 成员 A 工作器类 | `MemberAPathwayWorkers.java`（`request-refund`、`mark-payment-investigate`） |
-| 成员 B 工作器类 | `MemberBPathwayWorkers.java`（`check-slot`、`reserve-appointment`、`flag-resource-unavailable`） |
+| 成员 A 工作器类 | `RefundWorkers.java`（`request-refund`、`mark-payment-investigate`） |
+| 成员 B 工作器类 | `BookingWorkers.java`（`check-slot`、`reserve-appointment`、`flag-resource-unavailable`） |
 | 全院图上已挂 `taskDefinition` | 既有两类 + 成员 A 两类 + 成员 B 三类 + 成员 D 一类 |
 | 应用依赖 | Spring Boot + Camunda Client + JPA/H2 领域库（成员 B 已落地） |
 | 业务状态存放处 | 流程变量 + 领域库表（成员 B 占号路径写 `booking_slot`；既有两类工作器仍以流程变量写回为主） |
@@ -103,7 +103,7 @@ flowchart LR
 
 1. 在设计说明中写清：读取哪些流程变量、写回哪些变量、失败时用 `fail` 还是业务错误码、是否发布 BPMN 消息。  
 2. 在可执行 BPMN 上配置 `zeebe:taskDefinition`（与代码注解一致）。  
-3. 在对应 `@Component`（如 `MemberBPathwayWorkers`）中增加 `@JobWorker(type = "...")`。  
+3. 在对应 `@Component`（如 `BookingWorkers`）中增加 `@JobWorker(type = "...")`。  
 4. 有外部副作用时，先写领域库再完成作业（见第 5.2 节）。  
 5. 一责走通成功路径与至少一条失败 / 重试路径；二责复核代码与证据。  
 6. 每人至少交叉复核另一人的一个工作器提交。

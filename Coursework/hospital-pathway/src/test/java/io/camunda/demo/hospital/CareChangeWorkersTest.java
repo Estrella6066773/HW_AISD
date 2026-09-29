@@ -19,15 +19,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /** Real H2/JPA integration; only Camunda's incoming job is a test double. */
-@SpringJUnitConfig(MemberDPathwayWorkersTest.DatabaseConfig.class)
-class MemberDPathwayWorkersTest {
+@SpringJUnitConfig(CareChangeWorkersTest.DatabaseConfig.class)
+class CareChangeWorkersTest {
     @Configuration
     @EnableTransactionManagement
     @EnableJpaRepositories(basePackageClasses = AuditEventRepository.class)
-    @Import({AuditEventWriter.class, MemberDPathwayWorkers.class})
+    @Import({AuditEventWriter.class, CareChangeWorkers.class})
     static class DatabaseConfig {
         @Bean DataSource dataSource() {
-            return new DriverManagerDataSource("jdbc:h2:mem:member_d_test;DB_CLOSE_DELAY=-1", "sa", "");
+            return new DriverManagerDataSource("jdbc:h2:mem:care_change_workers_test;DB_CLOSE_DELAY=-1", "sa", "");
         }
         @Bean LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource source) {
             var factory = new LocalContainerEntityManagerFactoryBean();
@@ -42,7 +42,7 @@ class MemberDPathwayWorkersTest {
         }
     }
 
-    @Autowired MemberDPathwayWorkers workers;
+    @Autowired CareChangeWorkers workers;
     @Autowired AuditEventRepository audits;
     @Autowired AuditEventWriter writer;
 

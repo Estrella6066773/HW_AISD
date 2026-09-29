@@ -15,7 +15,7 @@ P2：Redirect（人填表）      → NotifyReferrer（Java, notify-referrer） 
 
 ## 只需要理解几步
 
-打开 [MemberCPathwayWorkers.java](../../Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/MemberCPathwayWorkers.java)。整个类 92 行，含导入、空行与中文注释。
+打开 [LetterWorkers.java](../../Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/LetterWorkers.java)。整个类含导入、空行与中文注释。
 
 ### dispatch-clinic-letter（P9）
 
@@ -77,7 +77,7 @@ ORDER BY occurred_at DESC;
 ## 今日（2026-09-28）完成记录
 
 - 从组长指引 `Est/est：外部工作器与领域数据库总指引.md` 认领 C 的两个 Worker：`dispatch-clinic-letter`（P9）、`notify-referrer`（P2）。
-- 新建 `Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/MemberCPathwayWorkers.java`（92 行，两个 `@JobWorker`，仅写 `audit_event`）。
+- 类文件为 `Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/LetterWorkers.java`（两个 `@JobWorker`，仅写 `audit_event`）。
 - 修改 `Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`：在 `DispatchLetter→LetterOutcome` 间插入 `DispatchClinicLetter`，在 `Redirect→EndReferral` 间插入 `NotifyReferrer`；两个 serviceTask 的 `zeebe:taskDefinition type` 与 Java 注解一致，`retries=3`，diagram 同步更新，XML 校验通过。
 - 未新增测试（按本人要求），未动 A／B／D 代码、未改表单、未新建数据表；推送前确认本地 `main` 与远端 `main` 同为 `ddeaaa7`，即其余部分均为仓库最新。
 - 提交并推送：commit `943d935`（基于 `ddeaaa7`），已 `push origin main`，远端 `main` 现指向 `943d935`。

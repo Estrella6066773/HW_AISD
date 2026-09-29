@@ -18,18 +18,18 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/** Real H2/JPA；Camunda job 用 mock。覆盖成员 A 退款与待调查。 */
-@SpringJUnitConfig(MemberAPathwayWorkersTest.DatabaseConfig.class)
-class MemberAPathwayWorkersTest {
+/** Real H2/JPA; Camunda job mocked. Covers Ruby refund / investigate workers. */
+@SpringJUnitConfig(RefundWorkersTest.DatabaseConfig.class)
+class RefundWorkersTest {
 
 	@Configuration
 	@EnableTransactionManagement
 	@EnableJpaRepositories(basePackageClasses = PaymentLedgerRepository.class)
-	@Import({AuditEventWriter.class, MemberAPathwayWorkers.class})
+	@Import({AuditEventWriter.class, RefundWorkers.class})
 	static class DatabaseConfig {
 		@Bean
 		DataSource dataSource() {
-			return new DriverManagerDataSource("jdbc:h2:mem:member_a_test;DB_CLOSE_DELAY=-1", "sa", "");
+			return new DriverManagerDataSource("jdbc:h2:mem:refund_workers_test;DB_CLOSE_DELAY=-1", "sa", "");
 		}
 
 		@Bean
@@ -48,7 +48,7 @@ class MemberAPathwayWorkersTest {
 		}
 	}
 
-	@Autowired MemberAPathwayWorkers workers;
+	@Autowired RefundWorkers workers;
 	@Autowired PaymentLedgerRepository ledgers;
 	@Autowired AuditEventRepository audits;
 
@@ -81,8 +81,10 @@ class MemberAPathwayWorkersTest {
 			assertThat(row.getAmount()).isEqualTo("25.50");
 			assertThat(row.getTransactionReference()).startsWith("RF-");
 		});
-		assertThat(audits.findAll()).singleElement().satisfies(e ->
-				assertThat(e.getAction()).isEqualTo("request-refund"));
+		assertThat(audits.findAll()).singleElement().satisfies(e -> {
+			assertThat(e.getAction()).isEqualTo("request-refund");
+			assertThat(e.getActor()).isEqualTo("ruby");
+		});
 	}
 
 	@Test

@@ -1372,10 +1372,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="2300" y="400" />
         <di:waypoint x="2335" y="400" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_10b_di" bpmnElement="Flow_10b" bioc:stroke="#1768a6">
-        <di:waypoint x="2485" y="400" />
-        <di:waypoint x="2540" y="400" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11" bioc:stroke="#1768a6">
         <di:waypoint x="2560" y="420" />
         <di:waypoint x="2560" y="630" />
@@ -1633,6 +1629,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Flow_28_di" bpmnElement="Flow_28" bioc:stroke="#667481">
         <di:waypoint x="900" y="590" />
         <di:waypoint x="940" y="590" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10b_di" bpmnElement="Flow_10b" bioc:stroke="#1768a6">
+        <di:waypoint x="2485" y="400" />
+        <di:waypoint x="2540" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Referrer_di" bpmnElement="Referrer" isHorizontal="true">
         <dc:Bounds x="150" y="80" width="900" height="60" />

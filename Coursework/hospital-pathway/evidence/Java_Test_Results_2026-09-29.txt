@@ -1,0 +1,66 @@
+Hospital pathway Java test execution evidence
+Repository commit: fc6293e
+Command: mvn clean test -q
+Working directory: Coursework/hospital-pathway
+
+13:08:57.858 [main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+13:08:57.905 [main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 38 ms. Found 3 JPA repository interfaces.
+13:08:58.072 [main] INFO org.hibernate.orm.jpa -- HHH008540: Processing PersistenceUnitInfo [name: default]
+13:08:58.108 [main] INFO org.hibernate.orm.core -- HHH000001: Hibernate ORM core version 7.2.7.Final
+13:08:58.451 [main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo -- No LoadTimeWeaver setup: ignoring JPA class transformer
+13:08:58.636 [main] INFO org.hibernate.orm.connections.pooling -- HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:mem:care_change_workers_test]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.4.240
+	Default catalog/schema: CARE_CHANGE_WORKERS_TEST/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+13:08:59.465 [main] INFO org.hibernate.orm.core -- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+13:08:59.505 [main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default'
+13:08:59.600 [main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactories -- Hibernate is in classpath; If applicable, HQL parser will be used.
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (D:\apache-maven-3.9.10\repo\net\bytebuddy\byte-buddy-agent\1.17.8\byte-buddy-agent-1.17.8.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+13:09:01.317 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=1
+13:09:01.322 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=1
+13:09:01.387 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=2
+13:09:01.428 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=3
+13:09:01.457 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=4
+13:09:01.471 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT_FINANCE_REVIEW_REQUIRED, receipt=5
+13:09:01.482 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SKIPPED_UNAUTHORISED, receipt=6
+13:09:01.519 [main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+13:09:01.530 [main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 9 ms. Found 3 JPA repository interfaces.
+13:09:01.552 [main] INFO org.hibernate.orm.jpa -- HHH008540: Processing PersistenceUnitInfo [name: default]
+13:09:01.573 [main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo -- No LoadTimeWeaver setup: ignoring JPA class transformer
+13:09:01.577 [main] INFO org.hibernate.orm.connections.pooling -- HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:mem:refund_workers_test]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.4.240
+	Default catalog/schema: REFUND_WORKERS_TEST/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+13:09:01.613 [main] INFO org.hibernate.orm.core -- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+13:09:01.620 [main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default'
+13:09:01.726 [main] INFO io.camunda.demo.hospital.RefundWorkers -- mark-payment-investigate case=A-INV-001 status=INVESTIGATE tx=TX-DEMO01 key=A-INV-001|investigate|TX-DEMO01
+13:09:01.752 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-002 decision=pending status=INVESTIGATE tx=RF-CEA459FC key=A-REF-002|refund|pending|10.01
+13:09:01.778 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-003 decision=resolved status=SUCCESSFUL tx=RF-00847D78 key=A-REF-003|refund|resolved|12.00
+13:09:01.781 [main] INFO io.camunda.demo.hospital.RefundWorkers -- payment_ledger reuse key=A-REF-003|refund|resolved|12.00 status=SUCCESSFUL tx=RF-00847D78
+13:09:01.783 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-003 decision=resolved status=SUCCESSFUL tx=RF-00847D78 key=A-REF-003|refund|resolved|12.00
+13:09:01.805 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-001 decision=resolved status=SUCCESSFUL tx=RF-FC2A6F1B key=A-REF-001|refund|resolved|25.50
+Exit code: 0
+Report: io.camunda.demo.hospital.CareChangeWorkersTest.txt
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.916 s -- in io.camunda.demo.hospital.CareChangeWorkersTest
+Report: io.camunda.demo.hospital.RefundWorkersTest.txt
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.308 s -- in io.camunda.demo.hospital.RefundWorkersTest

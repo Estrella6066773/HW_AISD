@@ -1,0 +1,146 @@
+{
+  "testId": "G07",
+  "caseReference": "GROUP-E2E-20260929-135729",
+  "startedAt": "2026-09-29T05:57:29.147949+00:00",
+  "method": "Camunda 8 REST /v2 with live Java worker application; fictional classroom data",
+  "repositoryCommitBeforeDocumentation": "fc6293ef976e2ebab5838c0c705638385d0e416b",
+  "bpmnSha256": "d599a8bdfaebeeb22edcdad70eccd8f711edd5e2ecd01a24f966a88b509a2ecc",
+  "tasks": [
+    {
+      "elementId": "Register",
+      "userTaskKey": "2251799813685470",
+      "formKey": "2251799813685332",
+      "submittedAction": "referral",
+      "submittedFields": {}
+    },
+    {
+      "elementId": "ReviewReferral",
+      "userTaskKey": "2251799813685491",
+      "formKey": "2251799813685333",
+      "submittedAction": "accept",
+      "submittedFields": {}
+    },
+    {
+      "elementId": "BookVisit",
+      "userTaskKey": "2251799813685510",
+      "formKey": "2251799813685326",
+      "submittedAction": "attended",
+      "submittedFields": {}
+    },
+    {
+      "elementId": "ClinicalCare",
+      "userTaskKey": "2251799813685538",
+      "formKey": "2251799813685327",
+      "submittedAction": "treatment",
+      "submittedFields": {}
+    },
+    {
+      "elementId": "DispatchLetter",
+      "userTaskKey": "2251799813685556",
+      "formKey": "2251799813685329",
+      "submittedAction": "sent",
+      "submittedFields": {}
+    },
+    {
+      "elementId": "Funding",
+      "userTaskKey": "2251799813685584",
+      "formKey": "2251799813685331",
+      "submittedAction": "patient_payment_required",
+      "submittedFields": {
+        "charge_amount": "10.01",
+        "insurerReference": ""
+      }
+    },
+    {
+      "elementId": "BookTreatment",
+      "userTaskKey": "2251799813685623",
+      "formKey": "2251799813685325",
+      "submittedAction": "ready",
+      "submittedFields": {}
+    },
+    {
+      "elementId": "ClinicalCare",
+      "userTaskKey": "2251799813685655",
+      "formKey": "2251799813685327",
+      "submittedAction": "discharge",
+      "submittedFields": {}
+    },
+    {
+      "elementId": "DispatchLetter",
+      "userTaskKey": "2251799813685672",
+      "formKey": "2251799813685329",
+      "submittedAction": "sent",
+      "submittedFields": {}
+    }
+  ],
+  "result": "PASS",
+  "definition": {
+    "processDefinitionId": "Hospital_All_Processes_Simple_C8",
+    "processDefinitionKey": "2251799813685324",
+    "version": 1
+  },
+  "processInstanceKey": "2251799813685458",
+  "finalState": "COMPLETED",
+  "variables": {
+    "patientId": "GROUP-E2E-20260929-135729",
+    "timeframe": "within two weeks",
+    "notes": "Synthetic group acceptance case; no real patient data",
+    "specialty": "general medicine",
+    "priority": "routine",
+    "action": "sent",
+    "decisionReason": "Synthetic teaching scenario",
+    "staffRole": "demo authorised classroom staff",
+    "clinicianId": "DEMO-CLINICIAN",
+    "requestKind": "referral",
+    "RegisterNotes": "Synthetic group acceptance case; no real patient data",
+    "urgentCase": false,
+    "referralDecision": "accept",
+    "ReviewReferralNotes": "Synthetic group acceptance case; no real patient data",
+    "visitOutcome": "attended",
+    "BookVisitNotes": "Synthetic group acceptance case; no real patient data",
+    "booking_occupancy_key": "GROUP-E2E-20260929-135729|treatment|within two weeks",
+    "booking_slot_status": "CONFIRMED",
+    "case_reference": "GROUP-E2E-20260929-135729",
+    "ClinicalCareNotes": "Synthetic group acceptance case; no real patient data",
+    "careDecision": "discharge",
+    "DispatchLetterNotes": "Synthetic group acceptance case; no real patient data",
+    "letterStatus": "sent",
+    "clinicLetterDispatchReference": "C-DISPATCH-GROUP-E2E-20260929-135729",
+    "clinicLetterDispatchStatus": "dispatched",
+    "insurerReference": "",
+    "charge_amount": "10.01",
+    "fundingStatus": "patient_paid",
+    "FundingNotes": "Synthetic group acceptance case; no real patient data",
+    "payment_requested_once": true,
+    "payment_date": "2026-09-29",
+    "transaction_reference": "TX-F1C2DD80",
+    "payment_status": "successful",
+    "treatmentSlotStatus": "ready",
+    "BookTreatmentNotes": "Synthetic group acceptance case; no real patient data",
+    "confirmation_sent": true,
+    "booking_reference": "BK-GROUP-E2E-20260929-135729"
+  },
+  "activeIncidents": [],
+  "assertions": {
+    "referralDecision": true,
+    "visitOutcome": true,
+    "careDecision": true,
+    "letterStatus": true,
+    "fundingStatus": true,
+    "payment_status": true,
+    "confirmation_sent": true,
+    "booking_slot_status": true,
+    "clinicLetterDispatchStatus": true,
+    "noActiveIncident": true
+  },
+  "workerLogFile": "Coursework/hospital-pathway/target/spring-boot-run-20260929.log",
+  "workerLogEvidence": [
+    "2026-09-29T13:57:31.740+08:00  INFO 29752 --- [hospital-pathway] [pool-2-thread-1] i.camunda.demo.hospital.BookingWorkers   : check-slot NEW occupancy=GROUP-E2E-20260929-135729|visit|within two weeks status=CONFIRMED",
+    "2026-09-29T13:57:33.792+08:00  INFO 29752 --- [hospital-pathway] [pool-2-thread-1] io.camunda.demo.hospital.LetterWorkers   : dispatch-clinic-letter case=GROUP-E2E-20260929-135729 status=sent ref=C-DISPATCH-GROUP-E2E-20260929-135729",
+    "2026-09-29T13:57:35.378+08:00  INFO 29752 --- [hospital-pathway] [pool-2-thread-1] i.c.d.hospital.HospitalPathwayWorkers    : request-payment SUCCESS case=GROUP-E2E-20260929-135729 amount=10.01 tx=TX-F1C2DD80 date=2026-09-29 (publishing payment-result)",
+    "2026-09-29T13:57:35.915+08:00  INFO 29752 --- [hospital-pathway] [pool-2-thread-1] i.camunda.demo.hospital.BookingWorkers   : reserve-appointment NEW occupancy=GROUP-E2E-20260929-135729|treatment|within two weeks status=CONFIRMED",
+    "2026-09-29T13:57:35.946+08:00  INFO 29752 --- [hospital-pathway] [pool-2-thread-1] i.c.d.hospital.HospitalPathwayWorkers    : send-booking-confirmation SENT case=GROUP-E2E-20260929-135729 booking=BK-GROUP-E2E-20260929-135729 (mocked correspondence)",
+    "2026-09-29T13:57:36.973+08:00  INFO 29752 --- [hospital-pathway] [pool-2-thread-1] io.camunda.demo.hospital.LetterWorkers   : dispatch-clinic-letter case=GROUP-E2E-20260929-135729 status=sent ref=C-DISPATCH-GROUP-E2E-20260929-135729"
+  ],
+  "finishedAt": "2026-09-29T05:57:38.038251+00:00"
+}

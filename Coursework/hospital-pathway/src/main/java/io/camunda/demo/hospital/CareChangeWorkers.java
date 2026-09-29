@@ -10,19 +10,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-/** D / Ryan：课堂演示，记录治疗变更的模拟通知。 */
+/** 护理变更通知。订阅 {@code notify-care-change}，把回执写入审计。 */
 @Component
-public class MemberDPathwayWorkers {
-    private static final Logger LOG = LoggerFactory.getLogger(MemberDPathwayWorkers.class);
+public class CareChangeWorkers {
+    private static final Logger LOG = LoggerFactory.getLogger(CareChangeWorkers.class);
     private final AuditEventWriter audit;
 
-    public MemberDPathwayWorkers(AuditEventWriter audit) {
+    public CareChangeWorkers(AuditEventWriter audit) {
         this.audit = audit;
     }
 
     @JobWorker(type = "notify-care-change")
     public Map<String, Object> notifyCareChange(ActivatedJob job) {
-        // 1. 读取表单经 BPMN 映射后的变量。
         Map<String, Object> variables = job.getVariablesAsMap();
         String patientId = (String) variables.get("patientId");
         String clinicianId = (String) variables.get("clinicianId");
@@ -33,7 +32,6 @@ public class MemberDPathwayWorkers {
             throw new IllegalArgumentException("Patient, clinician, change target and financial impact are required");
         }
 
-        // 2. 缺少正式授权就跳过；涉钱变更仍交给 Finance 人工审核。
         boolean sent = !target.equals("invalid");
         String status = "SENT";
         if (!sent) {
@@ -42,14 +40,12 @@ public class MemberDPathwayWorkers {
             status = "SENT_FINANCE_REVIEW_REQUIRED";
         }
 
-        // 3. 保存模拟通知。同一个节点重试时使用相同的键，复用原记录。
         String key = "member-D|notify-care-change|" + job.getProcessInstanceKey() + "|" + job.getElementInstanceKey();
         String action = sent ? "notify-care-change" : "notify-care-change-skipped";
         AuditEvent receipt = audit.append(clinicianId, action, patientId, key,
                 "Mock notification to pathway team; target=" + target + "; status=" + status);
         LOG.info("Care change: patient={}, status={}, receipt={}", patientId, status, receipt.getId());
 
-        // 4. 返回结果，Camunda 自动完成此服务任务，再继续走原来的网关。
         return Map.of("careChangeNotificationSent", sent,
                 "careChangeNotificationStatus", status,
                 "careChangeNotificationReference", "AUD-" + receipt.getId());

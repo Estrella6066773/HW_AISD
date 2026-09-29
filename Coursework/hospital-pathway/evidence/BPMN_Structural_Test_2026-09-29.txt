@@ -1,0 +1,11 @@
+Hospital pathway BPMN structural test evidence
+Repository commit: fc6293e
+Command: python scripts/test_member_d_bpmn.py
+Working directory: Coursework/hospital-pathway
+
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.009s
+
+OK
+Exit code: 0

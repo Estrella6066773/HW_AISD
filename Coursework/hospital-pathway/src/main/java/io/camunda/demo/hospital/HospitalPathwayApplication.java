@@ -48,8 +48,9 @@ public class HospitalPathwayApplication {
 			DeploymentEvent deployment = command.send().join();
 			LOG.info("已部署 Hospital_All_Processes_Simple_C8，部署键 {}", deployment.getKey());
 			LOG.info("已部署 {} 个表单（硬编码下拉，无 valuesKey）", formFiles.length);
+			// Ruby：request-refund、mark-payment-investigate（另主讲既有 request-payment）
 			LOG.info(
-					"Workers: request-payment, send-booking-confirmation; member A: request-refund, "
+					"Workers: request-payment, send-booking-confirmation; Ruby: request-refund, "
 							+ "mark-payment-investigate; member B: check-slot, reserve-appointment, "
 							+ "flag-resource-unavailable; member D: notify-care-change");
 		};

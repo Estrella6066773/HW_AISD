@@ -14,7 +14,7 @@
 
 ## 只需要理解四步
 
-打开 [MemberDPathwayWorkers.java](../../Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/MemberDPathwayWorkers.java)。整个类 57 行，包含导入、空行和中文注释。
+打开 [CareChangeWorkers.java](../../Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/CareChangeWorkers.java)。整个类包含导入、空行和中文注释。
 
 | 行号 | 做什么 | 讲解重点 |
 |---|---|---|
