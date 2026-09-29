@@ -26,7 +26,7 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 
 ## Current status
 
-29 September 2026 is the submission date. The identifiable submission version is git tag `submission-2026-09-29` on `main`. The shared executable pathway is in `Coursework/hospital-pathway/`. Java tests and one final-model self-pay route to `COMPLETED` are recorded against commit `fc6293e`. Commit `7be65b4` added the strategic BPMN and the i\* models. The 16 September Sprint 1 table in `docs/p6-sprint-backlog.md` remains the historical planning record.
+29 September 2026 is the submission date. The shared executable pathway is in `Coursework/hospital-pathway/`. Java tests and one final-model self-pay route to `COMPLETED` are recorded against commit `fc6293e`. Current `main` is `91a02c9`. Commit `7be65b4` added the strategic BPMN and the i\* models. The 16 September Sprint 1 table in `docs/p6-sprint-backlog.md` remains the historical planning record.
 
 Present:
 

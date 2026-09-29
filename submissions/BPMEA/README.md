@@ -14,7 +14,7 @@ The 29 September announcement asks for operational BPMN, external-worker source/
 | i\* SD/SR | [Notes](../../docs/istar/PB-16_istar-sd-sr.md) · [SD](../../docs/istar/PB-16_sd.md) · [SR](../../docs/istar/PB-16_sr.md). Added in `7be65b4`. Second-owner checklist is still unsigned. |
 | Alignment evaluation | [Traceability matrix](../../docs/requirements-traceability-matrix.md): BR-01 to BR-42, 12 supported, 26 partial, 4 unsupported, with the second-release plan in section 3 |
 | Test results/evidence | [Shared test logs and live final-model G07 JSON](../../Coursework/hospital-pathway/evidence/) · historical PB-14/PB-18 logs described in the Project and Test Plan. Executable evidence baseline remains `fc6293e`. |
-| Repository | `https://github.com/Estrella6066773/HW_AISD` — identifiable submission version is git tag `submission-2026-09-29`. The submission pack was first uploaded in `e8a6861`. Executable evidence baseline remains `fc6293e`. Group second-owner review remains open. |
+| Repository | `https://github.com/Estrella6066773/HW_AISD` — current `main` is `91a02c9`. The submission pack was first uploaded in `e8a6861`. Group second-owner review remains open. There is no final release tag. |
 | Presentation slides | [Eight-slide editable BPM&EA deck](Hospital_Pathway_BPMEA_Presentation_2026-09-29.pptx). The group has given the presentation. |
 
 The strategic BPMN and the i\* models are separate from the executable Camunda model. Acceptance gaps that the recorded tests still leave open are listed in the [BPM&EA plan](Group_Project_and_Test_Plan_2026-09-29.md) and the [AISD detailed results](../AISD/Group_Acceptance_Test_Plan_and_Results_2026-09-29.md).
