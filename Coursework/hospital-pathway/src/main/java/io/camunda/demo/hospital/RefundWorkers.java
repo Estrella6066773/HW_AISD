@@ -43,6 +43,7 @@ public class RefundWorkers {
 	 * 线 13：财务表填完后自动跑。
 	 * financeAdjustment=resolved → 流水 SUCCESSFUL；否则 INVESTIGATE。
 	 */
+	// 线 13。服务任务，不发消息，返回变量即可。
 	@JobWorker(type = "request-refund")
 	public Map<String, Object> requestRefund(final ActivatedJob job) {
 		Map<String, Object> vars = job.getVariablesAsMap();
@@ -60,11 +61,12 @@ public class RefundWorkers {
 		if (decision.isBlank()) {
 			decision = "pending";
 		}
+		// resolved → SUCCESSFUL；其余（含 pending）→ INVESTIGATE。
 		PaymentLedgerStatus status =
 				"resolved".equalsIgnoreCase(decision)
 						? PaymentLedgerStatus.SUCCESSFUL
 						: PaymentLedgerStatus.INVESTIGATE;
-		// 幂等键：同一病例+决定+金额重试时复用原行，不插第二笔
+		// 幂等键：同一病例、决定、金额重试时复用原行。
 		String idempotencyKey = caseReference + "|refund|" + decision + "|" + amount;
 		PaymentLedger row =
 				upsertLedger(
@@ -100,6 +102,7 @@ public class RefundWorkers {
 	 * 线 10 失败支：支付失败后、FundingIssue 人工之前。
 	 * 先标 INVESTIGATE，避免自动再扣款。
 	 */
+	// 线 10 失败支。只把账本标成 INVESTIGATE，不发布消息。
 	@JobWorker(type = "mark-payment-investigate")
 	public Map<String, Object> markPaymentInvestigate(final ActivatedJob job) {
 		Map<String, Object> vars = job.getVariablesAsMap();

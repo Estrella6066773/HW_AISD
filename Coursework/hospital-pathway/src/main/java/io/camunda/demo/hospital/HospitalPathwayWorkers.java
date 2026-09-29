@@ -36,8 +36,9 @@ public class HospitalPathwayWorkers {
 	public HospitalPathwayWorkers(CamundaClient camundaClient) {
 		this.camundaClient = camundaClient;
 	}
-
+	// autoComplete=false：先发布 payment-result，再 complete。只 complete 的话 Catch 不会继续。
 	@JobWorker(type = "request-payment", autoComplete = false)
+
 	public void requestPayment(final JobClient jobClient, final ActivatedJob job) {
 		Map<String, Object> vars = job.getVariablesAsMap();
 		String caseReference = text(vars.get("case_reference"));
@@ -64,6 +65,7 @@ public class HospitalPathwayWorkers {
 			out.put("case_reference", caseReference);
 			out.put("charge_amount", amount);
 
+			// 已请求过则复用上次状态，不再发布消息。
 			if (Boolean.TRUE.equals(vars.get("payment_requested_once"))) {
 				LOG.info(
 						"request-payment idempotent reuse for case={} status={} ref={}",
@@ -79,6 +81,7 @@ public class HospitalPathwayWorkers {
 				return;
 			}
 
+			// 演示规则：金额以 0 结尾为失败（10.00），否则成功（10.01）。
 			boolean successful = !amount.trim().endsWith("0");
 			Map<String, Object> messageVars = new HashMap<>();
 			if (successful) {
@@ -105,6 +108,7 @@ public class HospitalPathwayWorkers {
 						amount);
 			}
 
+			// 消息名 payment-result，关联键为病例号，Catch 靠这两项唤醒。
 			camundaClient
 					.newPublishMessageCommand()
 					.messageName("payment-result")

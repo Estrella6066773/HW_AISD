@@ -20,6 +20,7 @@ import java.time.LocalDate;
  *
  * <p>注意：表结构禁止卡号、安全码、病历正文；幂等键必须库内唯一。
  */
+// 领域账本。退款与待调查写入；request-payment 只发消息，不写本表。
 @Entity
 @Table(
 		name = "payment_ledger",

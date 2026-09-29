@@ -21,7 +21,7 @@ public class AuditEventWriter {
         this.auditEventRepository = auditEventRepository;
     }
 
-    /** D：任务重试时返回已有回执；没有记录才新增。 */
+    /** 同一幂等键已有记录则返回旧行，不更新。 */
     @Transactional
     public AuditEvent append(String actor, String action, String caseReference,
             String idempotencyKey, String payloadSummary) {
