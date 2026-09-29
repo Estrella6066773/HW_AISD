@@ -51,9 +51,9 @@ Closing Java stops the workers. Restart Java to resume waiting jobs. Use a non-e
 - Coursework English package is the submission/demo copy; the Chinese learn folder is optional.
 - The 28 September member D changes are maintained in this English package only. The learning package has not received these workers, database changes, or BPMN nodes.
 
-## Member A: refund and payment-investigate workers
+## Refund workers
 
-`MemberAPathwayWorkers.java` owns:
+`RefundWorkers.java` owns:
 
 | Type | BPMN hang point | Writes |
 |------|-----------------|--------|
@@ -68,9 +68,9 @@ FROM payment_ledger
 ORDER BY id;
 ```
 
-## Member D: one care-change notification worker
+## Care-change workers
 
-`MemberDPathwayWorkers.java` subscribes only to `notify-care-change`. One service task follows the human `ClinicalChange` task. It reads four mapped form variables, determines the notification status, saves a mock receipt in H2, and returns the result. The three enquiry routes finish after their human response. Existing forms still apply.
+`CareChangeWorkers.java` subscribes only to `notify-care-change`. One service task follows the human `ClinicalChange` task. It reads four mapped form variables, determines the notification status, saves a mock receipt in H2, and returns the result. The three enquiry routes finish after their human response. Existing forms still apply.
 
 The student version removes the optional enquiry worker, failure switches, payment statistics and custom transaction/concurrency handling. A regular transaction and unique receipt key retain basic retry protection.
 

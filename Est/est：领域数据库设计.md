@@ -112,7 +112,7 @@ Java：`BookingSlot`、`BookingSlotStatus`、`BookingSlotRepository`。
 | `PaymentLedgerRepository` / `BookingSlotRepository` / `AuditEventRepository` | 查询与持久化 |
 | `AuditEventWriter` | 审计只追加 |
 | `DomainDatabaseConfig` | 启动探测日志 |
-| `MemberBPathwayWorkers` | 成员 B：`check-slot` / `reserve-appointment` / `flag-resource-unavailable` |
+| `BookingWorkers` | 成员 B：`check-slot` / `reserve-appointment` / `flag-resource-unavailable` |
 
 既有 `HospitalPathwayWorkers` 中两类 `@JobWorker` 保持现状。
 

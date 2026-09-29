@@ -10,13 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-/** Member D / Ryan: mock care-change notification for the classroom demo. */
+/** 护理变更通知。订阅 {@code notify-care-change}，把回执写入审计。 */
 @Component
-public class MemberDPathwayWorkers {
-    private static final Logger LOG = LoggerFactory.getLogger(MemberDPathwayWorkers.class);
+public class CareChangeWorkers {
+    private static final Logger LOG = LoggerFactory.getLogger(CareChangeWorkers.class);
     private final AuditEventWriter audit;
 
-    public MemberDPathwayWorkers(AuditEventWriter audit) {
+    public CareChangeWorkers(AuditEventWriter audit) {
         this.audit = audit;
     }
 

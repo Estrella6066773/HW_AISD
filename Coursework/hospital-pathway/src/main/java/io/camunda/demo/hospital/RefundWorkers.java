@@ -17,23 +17,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * Ruby 一责 JobWorker：退款 + 支付待调查。
+ * 退款工作器。线 13 写退款；线 10 支付失败时把账本标成待调查。
  *
  * <p>图上挂点：{@code request-refund} 在 FinanceAdjustment 之后；
  * {@code mark-payment-investigate} 在进入 FundingIssue 之前。
  * 读写 {@link PaymentLedger}，并写 {@code audit_event}。既有 {@code request-payment} 不在本类。
  */
 @Component
-public class MemberAPathwayWorkers {
+public class RefundWorkers {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MemberAPathwayWorkers.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RefundWorkers.class);
 
 	/** 支付/退款流水表 */
 	private final PaymentLedgerRepository paymentLedgerRepository;
 	/** 审计只追加写入 */
 	private final AuditEventWriter auditEventWriter;
 
-	public MemberAPathwayWorkers(
+	public RefundWorkers(
 			PaymentLedgerRepository paymentLedgerRepository, AuditEventWriter auditEventWriter) {
 		this.paymentLedgerRepository = paymentLedgerRepository;
 		this.auditEventWriter = auditEventWriter;

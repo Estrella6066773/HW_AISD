@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * 成员 C（Ender）的 JobWorker：诊后信外发与转诊方通知。
+ * 信件工作器：发出诊后信，并通知转诊方。
  *
  * <p>联动：订阅全院 BPMN 上 {@code dispatch-clinic-letter} 与 {@code notify-referrer}；
  * 仅向 {@link AuditEventWriter} 追加审计事件，不新建领域表、不修改他人工作器。
@@ -21,13 +21,13 @@ import org.springframework.stereotype.Component;
  * <p>注意：课堂 mock；不真正发送信件或邮件，仅记录外发结果，且绝不写入卡号或病历正文。
  */
 @Component
-public class MemberCPathwayWorkers {
+public class LetterWorkers {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MemberCPathwayWorkers.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LetterWorkers.class);
 
 	private final AuditEventWriter auditEventWriter;
 
-	public MemberCPathwayWorkers(AuditEventWriter auditEventWriter) {
+	public LetterWorkers(AuditEventWriter auditEventWriter) {
 		this.auditEventWriter = auditEventWriter;
 	}
 

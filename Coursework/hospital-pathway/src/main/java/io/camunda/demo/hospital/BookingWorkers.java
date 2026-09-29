@@ -15,20 +15,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * Member B workers: slot hold and resource-unavailable flagging.
+ * 预约工作器：查号、占治疗号、资源不可用时挂起。
  *
  * <p>Job types: {@code check-slot}, {@code reserve-appointment}, {@code flag-resource-unavailable}.
  * Writes {@link BookingSlot} and audit events.
  */
 @Component
-public class MemberBPathwayWorkers {
+public class BookingWorkers {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MemberBPathwayWorkers.class);
+	private static final Logger LOG = LoggerFactory.getLogger(BookingWorkers.class);
 
 	private final BookingSlotRepository bookingSlotRepository;
 	private final AuditEventWriter auditEventWriter;
 
-	public MemberBPathwayWorkers(
+	public BookingWorkers(
 			BookingSlotRepository bookingSlotRepository, AuditEventWriter auditEventWriter) {
 		this.bookingSlotRepository = bookingSlotRepository;
 		this.auditEventWriter = auditEventWriter;

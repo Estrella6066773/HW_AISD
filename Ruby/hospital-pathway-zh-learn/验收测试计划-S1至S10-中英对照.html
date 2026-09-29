@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>验收测试计划 S1–S10 中英对照</title>
+<style>
+  @page { size: A3 landscape; margin: 9mm 8mm 8mm 8mm; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    color: #1a1a1a;
+    background: #fff;
+  }
+  .slide { break-after: page; }
+  .slide:last-child { break-after: auto; }
+  .banner {
+    background: #3b92c4;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 5px 12px;
+  }
+  .banner .zh { font-weight: 500; opacity: 0.95; margin-left: 10px; letter-spacing: 0; }
+  h1 {
+    margin: 8px 2px 2px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c1c1c;
+    line-height: 1.25;
+  }
+  h1 .zh {
+    display: block;
+    margin-top: 2px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a5270;
+  }
+  .sub {
+    margin: 4px 2px 8px;
+    font-size: 11px;
+    color: #5c6770;
+    line-height: 1.45;
+  }
+  .sub .zh { display: block; color: #3d6d82; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  th {
+    background: #1f6ea5;
+    color: #fff;
+    font-weight: 700;
+    text-align: left;
+    vertical-align: bottom;
+    padding: 5px 6px 6px;
+    border: 1px solid #18567f;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+  th .zh {
+    display: block;
+    margin-top: 1px;
+    font-weight: 500;
+    font-size: 10px;
+    color: #d6ecf8;
+  }
+  td {
+    vertical-align: top;
+    border: 1px solid #d5dde3;
+    padding: 5px 6px 6px;
+    background: #fff;
+  }
+  tr.data:nth-child(even) td { background: #f4f9fc; }
+  td.id {
+    font-weight: 700;
+    color: #1f6ea5;
+    text-align: center;
+    font-size: 12px;
+    width: 4%;
+  }
+  .en { font-size: 9px; line-height: 1.35; color: #1c1c1c; }
+  .zh {
+    margin-top: 4px;
+    padding-top: 3px;
+    border-top: 1px dashed #b7c9d4;
+    font-size: 9px;
+    line-height: 1.4;
+    color: #0c5c72;
+  }
+  code, .mono { font-family: Consolas, "Cascadia Mono", "Microsoft YaHei", monospace; font-size: 8.5px; }
+  .note {
+    margin: 6px 2px 0;
+    font-size: 10px;
+    line-height: 1.45;
+    color: #4a5560;
+  }
+  .note .zh { display: block; color: #0c5c72; border: 0; margin: 0; padding: 0; font-size: 10px; }
+  col.c-id { width: 4%; }
+  col.c-sc { width: 15%; }
+  col.c-pre { width: 13%; }
+  col.c-data { width: 14%; }
+  col.c-act { width: 20%; }
+  col.c-exp { width: 20%; }
+  col.c-pf { width: 14%; }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="banner">TASK 02 · ACCEPTANCE TEST PLAN (1 OF 2)<span class="zh">任务 02 · 验收测试计划（1 / 2）</span></div>
+  <h1>Measurable acceptance criteria — process scenarios<span class="zh">可度量的验收标准 — 流程场景</span></h1>
+  <p class="sub">Each row carries all six required elements: scenario · preconditions · test data · actions · expected outcome · pass / fail.
+    <span class="zh">每一行都包含全部六个必需要素：场景 · 前置条件 · 测试数据 · 操作步骤 · 预期结果 · 通过 / 失败判定。格内英文在上，中文在下。</span>
+  </p>
+  <table>
+    <colgroup>
+      <col class="c-id" /><col class="c-sc" /><col class="c-pre" /><col class="c-data" /><col class="c-act" /><col class="c-exp" /><col class="c-pf" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Test scenario<span class="zh">测试场景</span></th>
+        <th>Preconditions<span class="zh">前置条件</span></th>
+        <th>Test data<span class="zh">测试数据</span></th>
+        <th>Actions<span class="zh">操作步骤</span></th>
+        <th>Expected outcome<span class="zh">预期结果</span></th>
+        <th>Pass / fail criteria<span class="zh">通过 / 失败判定</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="data">
+        <td class="id">S1</td>
+        <td>
+          <div class="en">Normal path — self-pay patient pays, is treated and discharged</div>
+          <div class="zh">正常路径 — 自费患者完成付款、接受治疗并出院</div>
+        </td>
+        <td>
+          <div class="en">Camunda 8 running; Java workers started; no ledger row exists for the case</div>
+          <div class="zh">Camunda 8 已运行；Java 工作器已启动；该病例在账本中尚无记录</div>
+        </td>
+        <td>
+          <div class="en"><span class="mono">case DEMO-JAVA-01</span><br><span class="mono">charge_amount "10.01"</span><br><span class="mono">fundingStatus</span><br><span class="mono">patient_payment_required</span></div>
+          <div class="zh">病例 DEMO-JAVA-01；金额 10.01；经费状态为患者需自付</div>
+        </td>
+        <td>
+          <div class="en">Start process → register as referral → referral accepted → visit attended → P5 authorise treatment → letter → P7 patient payment required + 10.01 → P6 resources available → P5 authorise discharge</div>
+          <div class="zh">启动流程 → 按转诊登记 → 转诊被接受 → 到诊 → P5 授权治疗 → 发信 → P7 患者需付款且金额 10.01 → P6 资源可用 → P5 授权出院</div>
+        </td>
+        <td>
+          <div class="en">Logs: request-payment SUCCESS … publishing payment-result, then send-booking-confirmation SENT. Instance COMPLETED at end event Care episode ended. payment_ledger = 1 row, status SUCCESSFUL</div>
+          <div class="zh">日志：request-payment 为 SUCCESS，并发布 payment-result，随后 send-booking-confirmation 为 SENT。实例在结束事件 Care episode ended 处 COMPLETED。payment_ledger 恰好 1 行，状态 SUCCESSFUL</div>
+        </td>
+        <td>
+          <div class="en">PASS = all four observations. FAIL = any log missing, or the instance is still ACTIVE.</div>
+          <div class="zh">通过 = 上述四项观察全部成立。失败 = 任一日志缺失，或实例仍为 ACTIVE。</div>
+        </td>
+      </tr>
+      <tr class="data">
+        <td class="id">S2</td>
+        <td>
+          <div class="en">Exception — payment is unsuccessful (demo rule: amount ends in 0)</div>
+          <div class="zh">异常路径 — 付款未成功（演示规则：金额以 0 结尾）</div>
+        </td>
+        <td>
+          <div class="en">Same as S1</div>
+          <div class="zh">与 S1 相同</div>
+        </td>
+        <td>
+          <div class="en"><span class="mono">case DEMO-JAVA-01</span><br><span class="mono">charge_amount "10.00"</span></div>
+          <div class="zh">病例 DEMO-JAVA-01；金额 10.00</div>
+        </td>
+        <td>
+          <div class="en">Same as S1 up to and including P7</div>
+          <div class="zh">与 S1 相同，做到 P7（含）为止</div>
+        </td>
+        <td>
+          <div class="en">Log request-payment UNSUCCESSFUL. mark-payment-investigate writes payment_ledger status INVESTIGATE. Token waits at the human task Resolve funding issue. No second charge is issued</div>
+          <div class="zh">日志 request-payment 为 UNSUCCESSFUL。mark-payment-investigate 把 payment_ledger 写成 INVESTIGATE。令牌停在人工任务 Resolve funding issue。不会发起第二次扣款</div>
+        </td>
+        <td>
+          <div class="en">PASS = token is NOT at BookTreatment and the ledger holds exactly 1 INVESTIGATE row. FAIL = booking reached, or more than 1 ledger row.</div>
+          <div class="zh">通过 = 令牌不在 BookTreatment，且账本恰好 1 行 INVESTIGATE。失败 = 已走到预约，或账本超过 1 行。</div>
+        </td>
+      </tr>
+      <tr class="data">
+        <td class="id">S3</td>
+        <td>
+          <div class="en">Alternative — funding already settled, provider is not called</div>
+          <div class="zh">替代路径 — 经费已经落实，不调用支付提供方</div>
+        </td>
+        <td>
+          <div class="en">Case has reached P7</div>
+          <div class="zh">病例已到达 P7</div>
+        </td>
+        <td>
+          <div class="en"><span class="mono">fundingStatus "hospital_funded"</span><br>(also insurer_approved / patient_paid / arrangement)<br><span class="mono">charge_amount</span> empty</div>
+          <div class="zh">经费状态为 hospital_funded（也可为 insurer_approved / patient_paid / arrangement）；金额为空</div>
+        </td>
+        <td>
+          <div class="en">Complete P7 with that funding outcome</div>
+          <div class="zh">用该经费结果完成 P7</div>
+        </td>
+        <td>
+          <div class="en">No request-payment log line at all. Token goes straight to P6 Confirm treatment booking. payment_ledger has 0 rows for the case</div>
+          <div class="zh">完全没有 request-payment 日志。令牌直接进入 P6 Confirm treatment booking。该病例的 payment_ledger 为 0 行</div>
+        </td>
+        <td>
+          <div class="en">PASS = zero payment logs and zero ledger rows. FAIL = any provider call recorded.</div>
+          <div class="zh">通过 = 支付日志为零，且账本行为零。失败 = 记录到任何一次提供方调用。</div>
+        </td>
+      </tr>
+      <tr class="data">
+        <td class="id">S4</td>
+        <td>
+          <div class="en">Exception — a clinical change that moves money, refund recorded</div>
+          <div class="zh">异常路径 — 涉及金额变动的临床变更，并记录退款</div>
+        </td>
+        <td>
+          <div class="en">An active case has reached the clinical-change step (P11/P12)</div>
+          <div class="zh">一个进行中的病例已到达临床变更步骤（P11/P12）</div>
+        </td>
+        <td>
+          <div class="en"><span class="mono">case DEMO-001</span><br><span class="mono">financeAdjustment "resolved"</span><br><span class="mono">charge_amount "25.50"</span></div>
+          <div class="zh">病例 DEMO-001；财务调整为 resolved；金额 25.50</div>
+        </td>
+        <td>
+          <div class="en">P11/P12 authorise modification → moneyAffected = true → P7/P11/P12 approve and record refund</div>
+          <div class="zh">P11/P12 授权修改 → moneyAffected = true → P7/P11/P12 批准并记录退款</div>
+        </td>
+        <td>
+          <div class="en">request-refund returns refund_status SUCCESSFUL, refund_recorded true, refund_transaction_reference starting RF-. Ledger amount 25.50. audit_event action request-refund. Process continues to the revised clinical plan</div>
+          <div class="zh">request-refund 返回：refund_status 为 SUCCESSFUL，refund_recorded 为 true，退款参考号以 RF- 开头。账本金额 25.50。audit_event 的 action 为 request-refund。流程继续进入修订后的临床计划</div>
+        </td>
+        <td>
+          <div class="en">PASS = all four returned values match and there is exactly 1 ledger row. FAIL = missing audit row, or status ≠ SUCCESSFUL.</div>
+          <div class="zh">通过 = 四项返回值全部相符，且账本恰好 1 行。失败 = 缺少审计行，或状态不是 SUCCESSFUL。</div>
+        </td>
+      </tr>
+      <tr class="data">
+        <td class="id">S5</td>
+        <td>
+          <div class="en">Alternative — urgent care requires clinician authorisation</div>
+          <div class="zh">替代路径 — 紧急治疗需要临床医生授权</div>
+        </td>
+        <td>
+          <div class="en">Case has reached P7</div>
+          <div class="zh">病例已到达 P7</div>
+        </td>
+        <td>
+          <div class="en"><span class="mono">fundingStatus "urgent_review"</span><br>then urgentDecision<br><span class="mono">authorise | hold</span></div>
+          <div class="zh">经费状态为 urgent_review；随后 urgentDecision 取 authorise 或 hold</div>
+        </td>
+        <td>
+          <div class="en">Complete P7 with urgent_review → P8 clinician authorises urgent care with reason</div>
+          <div class="zh">用 urgent_review 完成 P7 → P8 临床医生附理由授权紧急治疗</div>
+        </td>
+        <td>
+          <div class="en">authorise → urgentCase true and the token reaches P6 booking. hold → the token returns to P7 Funding and never reaches booking</div>
+          <div class="zh">authorise → urgentCase 为 true，令牌到达 P6 预约。hold → 令牌回到 P7 Funding，不会到达预约</div>
+        </td>
+        <td>
+          <div class="en">PASS = routing matches the decision. FAIL = booking is reached after hold.</div>
+          <div class="zh">通过 = 路由与决定一致。失败 = hold 之后仍然到达预约。</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">S1–S3 are demonstrated live in Camunda Tasklist; S4–S5 are demonstrated by the console log and the Operate variable view.
+    <span class="zh">S1–S3 在 Camunda Tasklist 里现场演示；S4–S5 用控制台日志和 Operate 的变量视图演示。</span>
+  </p>
+</section>
+
+<section class="slide">
+  <div class="banner">TASK 02 · ACCEPTANCE TEST PLAN (2 OF 2)<span class="zh">任务 02 · 验收测试计划（2 / 2）</span></div>
+  <h1>Measurable acceptance criteria — worker-level and negative scenarios<span class="zh">可度量的验收标准 — 工作器级别与反向场景</span></h1>
+  <p class="sub">These are the checks that prove the external workers are safe to retry and safe to fail.
+    <span class="zh">这些检查用来证明外部工作器在重试时是安全的，在失败时也是安全的。格内英文在上，中文在下。</span>
+  </p>
+  <table>
+    <colgroup>
+      <col class="c-id" /><col class="c-sc" /><col class="c-pre" /><col class="c-data" /><col class="c-act" /><col class="c-exp" /><col class="c-pf" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Test scenario<span class="zh">测试场景</span></th>
+        <th>Preconditions<span class="zh">前置条件</span></th>
+        <th>Test data<span class="zh">测试数据</span></th>
+        <th>Actions<span class="zh">操作步骤</span></th>
+        <th>Expected outcome<span class="zh">预期结果</span></th>
+        <th>Pass / fail criteria<span class="zh">通过 / 失败判定</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="data">
+        <td class="id">S6</td>
+        <td>
+          <div class="en">Worker idempotency — the same payment is requested twice</div>
+          <div class="zh">工作器幂等 — 同一笔付款被请求两次</div>
+        </td>
+        <td>
+          <div class="en">S1 has already completed once for this case</div>
+          <div class="zh">该病例的 S1 已经完成过一次</div>
+        </td>
+        <td>
+          <div class="en"><span class="mono">case DEMO-JAVA-01</span><br><span class="mono">payment_requested_once = true</span></div>
+          <div class="zh">病例 DEMO-JAVA-01；payment_requested_once = true</div>
+        </td>
+        <td>
+          <div class="en">Trigger request-payment again with the same case reference</div>
+          <div class="zh">用同一病例号再次触发 request-payment</div>
+        </td>
+        <td>
+          <div class="en">Log: request-payment idempotent reuse. Returned payment_status and transaction_reference are unchanged. payment_ledger row count stays 1</div>
+          <div class="zh">日志：request-payment idempotent reuse。返回的 payment_status 与 transaction_reference 不变。payment_ledger 行数仍为 1</div>
+        </td>
+        <td>
+          <div class="en">PASS = identical values and 1 row. FAIL = a new row, or a new transaction reference.</div>
+          <div class="zh">通过 = 返回值相同且只有 1 行。失败 = 出现新行，或出现新的交易参考号。</div>
+        </td>
+      </tr>
+      <tr class="data">
+        <td class="id">S7</td>
+        <td>
+          <div class="en">Worker idempotency — the same refund is requested twice</div>
+          <div class="zh">工作器幂等 — 同一笔退款被请求两次</div>
+        </td>
+        <td>
+          <div class="en">Clean ledger and audit table</div>
+          <div class="zh">账本表与审计表均为空</div>
+        </td>
+        <td>
+          <div class="en"><span class="mono">case A-REF-003</span><br><span class="mono">financeAdjustment "resolved"</span><br><span class="mono">charge_amount "12.00"</span></div>
+          <div class="zh">病例 A-REF-003；财务调整为 resolved；金额 12.00</div>
+        </td>
+        <td>
+          <div class="en">Call request-refund twice with exactly the same variables</div>
+          <div class="zh">用完全相同的变量调用 request-refund 两次</div>
+        </td>
+        <td>
+          <div class="en">The second call returns exactly the same map as the first. Ledger count = 1. Audit count = 1</div>
+          <div class="zh">第二次调用返回的映射与第一次完全相同。账本行数 = 1。审计行数 = 1</div>
+        </td>
+        <td>
+          <div class="en">PASS = both counts are exactly 1. FAIL = any duplicate row in either table.</div>
+          <div class="zh">通过 = 两个计数都恰好为 1。失败 = 任一表中出现重复行。</div>
+        </td>
+      </tr>
+      <tr class="data">
+        <td class="id">S8</td>
+        <td>
+          <div class="en">Negative — invalid payment input must write nothing</div>
+          <div class="zh">反向测试 — 无效的付款输入不得写入任何数据</div>
+        </td>
+        <td>
+          <div class="en">Clean ledger and audit table</div>
+          <div class="zh">账本表与审计表均为空</div>
+        </td>
+        <td>
+          <div class="en">variables with no case_reference and no patientId</div>
+          <div class="zh">变量中没有 case_reference，也没有 patientId</div>
+        </td>
+        <td>
+          <div class="en">Call request-payment</div>
+          <div class="zh">调用 request-payment</div>
+        </td>
+        <td>
+          <div class="en">The job fails with error code payment-input-invalid. No message is published. payment_ledger count = 0. audit_event count = 0</div>
+          <div class="zh">作业以错误码 payment-input-invalid 失败。不发布任何消息。payment_ledger 行数 = 0。audit_event 行数 = 0</div>
+        </td>
+        <td>
+          <div class="en">PASS = both counts are 0. FAIL = any row written despite the failure.</div>
+          <div class="zh">通过 = 两个计数都为 0。失败 = 失败之后仍写入了任何一行。</div>
+        </td>
+      </tr>
+      <tr class="data">
+        <td class="id">S9</td>
+        <td>
+          <div class="en">Negative — a money-affected change is never auto-refunded</div>
+          <div class="zh">反向测试 — 涉及金额的变更绝不会自动退款</div>
+        </td>
+        <td>
+          <div class="en">Clean audit table</div>
+          <div class="zh">审计表为空</div>
+        </td>
+        <td>
+          <div class="en"><span class="mono">changeTarget "discharge"</span><br><span class="mono">moneyAffected = true</span></div>
+          <div class="zh">changeTarget 为 discharge；moneyAffected = true</div>
+        </td>
+        <td>
+          <div class="en">Call notify-care-change</div>
+          <div class="zh">调用 notify-care-change</div>
+        </td>
+        <td>
+          <div class="en">careChangeNotificationStatus = SENT_FINANCE_REVIEW_REQUIRED. The result contains no financeAdjustment or fundingStatus key. The token still waits at Finance</div>
+          <div class="zh">careChangeNotificationStatus = SENT_FINANCE_REVIEW_REQUIRED。结果中不含 financeAdjustment 或 fundingStatus。令牌仍停在 Finance</div>
+        </td>
+        <td>
+          <div class="en">PASS = status is exactly SENT_FINANCE_REVIEW_REQUIRED. FAIL = the worker issues a refund by itself.</div>
+          <div class="zh">通过 = 状态恰好是 SENT_FINANCE_REVIEW_REQUIRED。失败 = 工作器自行发起了退款。</div>
+        </td>
+      </tr>
+      <tr class="data">
+        <td class="id">S10</td>
+        <td>
+          <div class="en">Deployability — model and code cannot drift apart</div>
+          <div class="zh">可部署性 — 模型与代码不能各走各的</div>
+        </td>
+        <td>
+          <div class="en">Repository checked out; Python 3 available</div>
+          <div class="zh">仓库已检出；本机有 Python 3</div>
+        </td>
+        <td>
+          <div class="en">Coursework/hospital-pathway<br>(all sources)</div>
+          <div class="zh">Coursework/hospital-pathway（全部源码）</div>
+        </td>
+        <td>
+          <div class="en">Run: python scripts/test_member_d_bpmn.py</div>
+          <div class="zh">运行：python scripts/test_member_d_bpmn.py</div>
+        </td>
+        <td>
+          <div class="en">Every zeebe:taskDefinition type in the BPMN has a matching @JobWorker(type=…) in Java, and every sequence-flow reference agrees</div>
+          <div class="zh">BPMN 中每一个 zeebe:taskDefinition 的 type，在 Java 里都有对应的 @JobWorker(type=…)，且每一条顺序流引用都一致</div>
+        </td>
+        <td>
+          <div class="en">PASS = the unittest run reports OK. FAIL = any job type without a worker.</div>
+          <div class="zh">通过 = 单元测试运行结果为 OK。失败 = 存在没有工作器的作业类型。</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">S6–S9 are automated JUnit tests (MemberAPathwayWorkersTest, MemberDPathwayWorkersTest) against a real H2 database; S10 is a Python test over the BPMN XML.
+    <span class="zh">S6–S9 是对着真实 H2 数据库跑的自动化 JUnit 测试（MemberAPathwayWorkersTest、MemberDPathwayWorkersTest）；S10 是针对 BPMN XML 的 Python 测试。</span>
+  </p>
+</section>
+
+</body>
+</html>
