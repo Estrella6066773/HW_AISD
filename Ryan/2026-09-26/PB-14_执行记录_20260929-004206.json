@@ -1,0 +1,81 @@
+{
+  "run": "PB14-20260929-004206",
+  "item": "PB-14",
+  "method": "Camunda REST /v2; labelled synthetic instances",
+  "tests": [
+    {
+      "id": "AT-02",
+      "scenario": "REJECT",
+      "case": "PB14-20260929-004206-REJECT",
+      "processInstanceKey": "2251799813925262",
+      "tasks": [
+        {
+          "element": "Register",
+          "userTaskKey": "2251799813925274",
+          "formKey": "2251799813925252",
+          "action": "referral",
+          "decisionReason": "PB-14 recorded reason"
+        },
+        {
+          "element": "ReviewReferral",
+          "userTaskKey": "2251799813925300",
+          "formKey": "2251799813925253",
+          "action": "reject",
+          "decisionReason": "Referral not appropriate for this specialty"
+        }
+      ],
+      "checks": {
+        "R1_state": "COMPLETED",
+        "R2_referralDecision": "reject",
+        "R2_decisionReason": "Referral not appropriate for this specialty",
+        "R3_BookVisit_created": false,
+        "R4_activeIncidents": 0
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "AT-01",
+      "scenario": "MAIN",
+      "case": "PB14-20260929-004206-MAIN",
+      "processInstanceKey": "2251799813925318",
+      "tasks": [
+        {
+          "element": "Register",
+          "userTaskKey": "2251799813925330",
+          "formKey": "2251799813925252",
+          "action": "referral",
+          "decisionReason": "PB-14 recorded reason"
+        },
+        {
+          "element": "ReviewReferral",
+          "userTaskKey": "2251799813925351",
+          "formKey": "2251799813925253",
+          "action": "accept",
+          "decisionReason": "Clinically appropriate for new-patient clinic"
+        },
+        {
+          "element": "BookVisit",
+          "userTaskKey": "2251799813925371",
+          "formKey": "2251799813925246",
+          "action": "attended",
+          "decisionReason": "PB-14 recorded reason"
+        }
+      ],
+      "checks": {
+        "E1_BookVisit_after_accept": true,
+        "E2_referralDecision": "accept",
+        "E2_decisionReason": "Clinically appropriate for new-patient clinic",
+        "E3_ClinicalCare_after_slot": true,
+        "E4_not_EndRejected": true,
+        "E5_activeIncidents": 0
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "definition": {
+    "processDefinitionId": "Hospital_All_Processes_Simple_C8",
+    "processDefinitionKey": "2251799813925244",
+    "version": 6
+  },
+  "result": "PASS"
+}

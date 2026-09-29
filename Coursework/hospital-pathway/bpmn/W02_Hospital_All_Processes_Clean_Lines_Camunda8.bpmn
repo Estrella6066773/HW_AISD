@@ -47,12 +47,12 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>PaymentResult</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FundingIssue</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FinanceAdjustment</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>RequestRefund</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>AdjustmentOutcome</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>MarkPaymentInvestigate</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>FinanceEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndFinanceEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>UrgentFinance</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RequestRefund</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>MarkPaymentInvestigate</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Clinical" name="Clinical team">
         <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
@@ -62,7 +62,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>UrgentFollowupNeeded</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>CarePlan</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>UrgentAuthorisation</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>EndCare</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ClinicalChange</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ChangeValid</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>MoneyAffected</bpmn:flowNodeRef>
@@ -71,6 +70,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>EndClinicalEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>UrgentDecision</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>NotifyCareChange</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndCare</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Admin" name="Administration">
         <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
@@ -78,11 +78,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>RequestType</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GetDocuments</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Redirect</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>EndReferral</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>BookVisit</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>VisitOutcome</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>DispatchLetter</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>LetterOutcome</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>MonitorLetters</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>BookTreatment</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>TreatmentOutcome</bpmn:flowNodeRef>
@@ -94,6 +92,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>FlagResourceUnavailable</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>SendBookingConfirmation</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ReserveTreatmentSlot</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NotifyReferrer</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndReferral</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>DispatchClinicLetter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>LetterOutcome</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Start" name="Start request">
@@ -208,9 +210,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_31</bpmn:incoming>
       <bpmn:outgoing>Flow_32</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="EndReferral" name="Referral closed">
-      <bpmn:incoming>Flow_32</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:endEvent id="EndRejected" name="Referral rejected">
       <bpmn:incoming>Flow_33</bpmn:incoming>
     </bpmn:endEvent>
@@ -293,12 +292,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_38</bpmn:incoming>
       <bpmn:outgoing>Flow_10</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="LetterOutcome" name="Letter&#10;status?" default="Flow_40">
-      <bpmn:incoming>Flow_10</bpmn:incoming>
-      <bpmn:outgoing>Flow_11</bpmn:outgoing>
-      <bpmn:outgoing>Flow_39</bpmn:outgoing>
-      <bpmn:outgoing>Flow_40</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:userTask id="MonitorLetters" name="P9&#10;Monitor delay; remind&#10;and escalate if overdue">
       <bpmn:documentation>Patient Pathway Coordinators: after seven days mark delayed; send weekly reminders only while outstanding. Over one month escalate to Administrative Manager; over three months to higher management. Record reasons, reminders and responses; stop reminders after completion. Classroom demo records the applicable time band without a real multi-day timer.</bpmn:documentation>
       <bpmn:extensionElements>
@@ -446,10 +439,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_16</bpmn:outgoing>
       <bpmn:outgoing>Flow_50</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="EndCare" name="Care episode ended">
-      <bpmn:incoming>Flow_17</bpmn:incoming>
-      <bpmn:incoming>Flow_61</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:userTask id="ClinicalChange" name="P11 / P12&#10;Authorise modification,&#10;follow-up or cancellation">
       <bpmn:documentation>Consultant / authorised clinician: review formal treatment changes, DNA/cancellation or follow-up requests. Reject unapproved verbal/email changes. Urgent safety postponement must be promptly documented and authorised. Select the clinical plan and indicate whether existing charges/funding/payments are affected; this flags Finance review and does NOT authorise a refund.</bpmn:documentation>
       <bpmn:extensionElements>
@@ -712,7 +701,8 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_33" name="Reject" sourceRef="ReferralDecision" targetRef="EndRejected">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "reject"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_32" sourceRef="Redirect" targetRef="EndReferral" />
+    <bpmn:sequenceFlow id="Flow_32" sourceRef="Redirect" targetRef="NotifyReferrer" />
+    <bpmn:sequenceFlow id="Flow_32b" sourceRef="NotifyReferrer" targetRef="EndReferral" />
     <bpmn:sequenceFlow id="Flow_35" name="Pending / retry" sourceRef="VisitOutcome" targetRef="BookVisit" />
     <bpmn:sequenceFlow id="Flow_42" name="Follow-up" sourceRef="CarePlan" targetRef="BookVisit">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= careDecision = "follow_up"</bpmn:conditionExpression>
@@ -740,7 +730,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentCase = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_38" name="Follow-up recorded" sourceRef="UrgentFinance" targetRef="DispatchLetter" />
-    <bpmn:sequenceFlow id="Flow_10" sourceRef="DispatchLetter" targetRef="LetterOutcome" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="DispatchLetter" targetRef="DispatchClinicLetter" />
     <bpmn:sequenceFlow id="Flow_11" name="Sent" sourceRef="LetterOutcome" targetRef="CarePlan">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "sent"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -824,6 +814,36 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_16</bpmn:incoming>
       <bpmn:outgoing>Flow_16b</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:serviceTask id="NotifyReferrer" name="P2&#10;Notify referrer">
+      <bpmn:documentation>Member C (Ender) worker type notify-referrer. After the Redirect user task: record a mock referral notification in audit_event (idempotency key reuses on retry) and return its status/reference. Only writes audit_event.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="notify-referrer" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_32</bpmn:incoming>
+      <bpmn:outgoing>Flow_32b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndReferral" name="Referral closed">
+      <bpmn:incoming>Flow_32b</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="DispatchClinicLetter" name="P9&#10;Dispatch clinic&#10;letter">
+      <bpmn:documentation>Member C (Ender) worker type dispatch-clinic-letter. After the DispatchLetter user task: record the dispatched clinic letter in audit_event (idempotency key reuses on retry) and return its status/reference. Only writes audit_event; clinical content is unchanged.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="dispatch-clinic-letter" retries="3" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_10b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndCare" name="Care episode ended">
+      <bpmn:incoming>Flow_17</bpmn:incoming>
+      <bpmn:incoming>Flow_61</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="LetterOutcome" name="Letter&#10;status?" default="Flow_40">
+      <bpmn:incoming>Flow_10b</bpmn:incoming>
+      <bpmn:outgoing>Flow_11</bpmn:outgoing>
+      <bpmn:outgoing>Flow_39</bpmn:outgoing>
+      <bpmn:outgoing>Flow_40</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_10b" sourceRef="DispatchClinicLetter" targetRef="LetterOutcome" />
   </bpmn:process>
   <bpmn:message id="Message_PaymentResult" name="payment-result">
     <bpmn:extensionElements>
@@ -874,12 +894,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="Redirect_di" bpmnElement="Redirect" bioc:stroke="#263746" bioc:fill="#edf5ff">
         <dc:Bounds x="1320" y="540" width="220" height="100" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndReferral_di" bpmnElement="EndReferral">
-        <dc:Bounds x="1590" y="570" width="40" height="40" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1573" y="617" width="74" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndRejected_di" bpmnElement="EndRejected">
         <dc:Bounds x="1300" y="870" width="40" height="40" />
         <bpmndi:BPMNLabel>
@@ -892,7 +906,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="VisitOutcome_di" bpmnElement="VisitOutcome" isMarkerVisible="true">
         <dc:Bounds x="1880" y="380" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1915" y="356" width="49" height="27" />
+          <dc:Bounds x="1876" y="330" width="49" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalCare_di" bpmnElement="ClinicalCare" bioc:stroke="#263746" bioc:fill="#eaf8f0">
@@ -907,19 +921,13 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="DispatchLetter_di" bpmnElement="DispatchLetter" bioc:stroke="#263746" bioc:fill="#edf5ff">
         <dc:Bounds x="2080" y="350" width="220" height="100" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="LetterOutcome_di" bpmnElement="LetterOutcome" isMarkerVisible="true">
-        <dc:Bounds x="2380" y="380" width="40" height="40" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2382" y="356" width="36" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="MonitorLetters_di" bpmnElement="MonitorLetters" bioc:stroke="#263746" bioc:fill="#edf5ff">
         <dc:Bounds x="2080" y="540" width="220" height="100" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="CarePlan_di" bpmnElement="CarePlan" isMarkerVisible="true">
         <dc:Bounds x="2380" y="870" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2352" y="846" width="36" height="27" />
+          <dc:Bounds x="2382" y="833" width="36" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Funding_di" bpmnElement="Funding" bioc:stroke="#263746" bioc:fill="#fff3e5">
@@ -959,12 +967,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <dc:Bounds x="3160" y="380" width="40" height="40" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3113" y="356" width="53" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndCare_di" bpmnElement="EndCare">
-        <dc:Bounds x="2560" y="870" width="40" height="40" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2597" y="866" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalChange_di" bpmnElement="ClinicalChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
@@ -1036,7 +1038,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="UrgentDecision_di" bpmnElement="UrgentDecision" isMarkerVisible="true">
         <dc:Bounds x="3190" y="870" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3231" y="860" width="58" height="27" />
+          <dc:Bounds x="3248" y="860" width="58" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UrgentFinance_di" bpmnElement="UrgentFinance" bioc:stroke="#263746" bioc:fill="#fff3e5">
@@ -1044,6 +1046,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="CheckVisitSlot_di" bpmnElement="CheckVisitSlot" bioc:stroke="#263746" bioc:fill="#e8f5e9">
         <dc:Bounds x="1720" y="360" width="110" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="NotifyCareChange_di" bpmnElement="NotifyCareChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
         <dc:Bounds x="1020" y="1080" width="140" height="100" />
@@ -1062,6 +1065,32 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ReserveTreatmentSlot_di" bpmnElement="ReserveTreatmentSlot" bioc:stroke="#263746" bioc:fill="#e8f5e9">
         <dc:Bounds x="3355" y="360" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="NotifyReferrer_di" bpmnElement="NotifyReferrer" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="1610" y="555" width="140" height="70" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndReferral_di" bpmnElement="EndReferral">
+        <dc:Bounds x="1800" y="570" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1783" y="617" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DispatchClinicLetter_di" bpmnElement="DispatchClinicLetter" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="2335" y="360" width="150" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndCare_di" bpmnElement="EndCare">
+        <dc:Bounds x="2640" y="870" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2627" y="833" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LetterOutcome_di" bpmnElement="LetterOutcome" isMarkerVisible="true">
+        <dc:Bounds x="2540" y="380" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2542" y="330" width="36" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01" bioc:stroke="#1768a6">
         <di:waypoint x="270" y="400" />
@@ -1209,7 +1238,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_32_di" bpmnElement="Flow_32" bioc:stroke="#667481">
         <di:waypoint x="1540" y="590" />
-        <di:waypoint x="1590" y="590" />
+        <di:waypoint x="1610" y="590" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_32b_di" bpmnElement="Flow_32b" bioc:stroke="#667481">
+        <di:waypoint x="1750" y="590" />
+        <di:waypoint x="1800" y="590" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_35_di" bpmnElement="Flow_35" bioc:stroke="#667481">
         <di:waypoint x="1900" y="380" />
@@ -1276,13 +1309,13 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_39_di" bpmnElement="Flow_39" bioc:stroke="#667481">
-        <di:waypoint x="2420" y="400" />
-        <di:waypoint x="2460" y="400" />
-        <di:waypoint x="2460" y="800" />
+        <di:waypoint x="2580" y="400" />
+        <di:waypoint x="2590" y="400" />
+        <di:waypoint x="2590" y="800" />
         <di:waypoint x="1690" y="800" />
         <di:waypoint x="1690" y="840" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2236" y="803" width="87" height="14" />
+          <dc:Bounds x="2417" y="813" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#667481">
@@ -1337,22 +1370,28 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10" bioc:stroke="#1768a6">
         <di:waypoint x="2300" y="400" />
-        <di:waypoint x="2380" y="400" />
+        <di:waypoint x="2335" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10b_di" bpmnElement="Flow_10b" bioc:stroke="#1768a6">
+        <di:waypoint x="2485" y="400" />
+        <di:waypoint x="2540" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11" bioc:stroke="#1768a6">
-        <di:waypoint x="2400" y="420" />
+        <di:waypoint x="2560" y="420" />
+        <di:waypoint x="2560" y="630" />
+        <di:waypoint x="2400" y="630" />
         <di:waypoint x="2400" y="870" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2410" y="630" width="23" height="14" />
+          <dc:Bounds x="2270" y="738" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_40_di" bpmnElement="Flow_40" bioc:stroke="#667481">
-        <di:waypoint x="2400" y="420" />
-        <di:waypoint x="2400" y="500" />
+        <di:waypoint x="2560" y="420" />
+        <di:waypoint x="2560" y="500" />
         <di:waypoint x="2210" y="500" />
         <di:waypoint x="2210" y="540" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2241" y="476" width="82" height="14" />
+          <dc:Bounds x="2246" y="476" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12" bioc:stroke="#1768a6">
@@ -1368,9 +1407,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17_di" bpmnElement="Flow_17" bioc:stroke="#1768a6">
         <di:waypoint x="2420" y="890" />
-        <di:waypoint x="2560" y="890" />
+        <di:waypoint x="2640" y="890" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2460" y="866" width="50" height="14" />
+          <dc:Bounds x="2497" y="866" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_46_di" bpmnElement="Flow_46" bioc:stroke="#667481">
@@ -1509,10 +1548,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_61_di" bpmnElement="Flow_61" bioc:stroke="#667481">
         <di:waypoint x="2120" y="1130" />
-        <di:waypoint x="2580" y="1130" />
-        <di:waypoint x="2580" y="910" />
+        <di:waypoint x="2660" y="1130" />
+        <di:waypoint x="2660" y="910" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2310" y="1106" width="50" height="14" />
+          <dc:Bounds x="2347" y="1106" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_62_di" bpmnElement="Flow_62" bioc:stroke="#667481">
