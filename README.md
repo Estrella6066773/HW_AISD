@@ -80,7 +80,6 @@ Supporting documents, not tied to a single part:
 
 ## Reference
 
-- Agile Workshop workbook: `Coursework/Agile Workshop.md`, with Word copies at `Coursework/Agile Workshop-ZH.docx` and `Coursework/Agile Workshop-EN.docx`
+- Agile Workshop workbook: `W01/Agile Workshop.docx`; English copy: `Coursework/Agile Workshop-EN.docx`
 - Defence notes on the case study: `Ruby/2026-09-15/正式作答-答辩批注.md`, `Ruby/2026-09-15/Case Study-批注.docx`
-- Session notes: `W01/notes/`
 - Case study: `W01/Case Study - Hospital Patient Referral, Treatment and Administration System.docx`
