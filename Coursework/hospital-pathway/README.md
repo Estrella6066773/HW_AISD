@@ -4,6 +4,8 @@ Executable Camunda 8 pathway: BPMN + 11 forms + Java job types (shared payment/b
 
 This module is the shared implementation for both courses. The course-specific written submission indexes are in [BPM&EA](../../submissions/BPMEA/README.md) and [AISD](../../submissions/AISD/README.md); the same BPMN, forms and worker source are not duplicated there.
 
+The runnable classroom configuration is [`src/main/resources/application.yaml`](src/main/resources/application.yaml). A separate [configuration template](config/application.example.yaml) shows which connection and database settings can be supplied through environment variables. Start the application from this module directory so `./data/hospital-domain` resolves to the intended H2 file.
+
 Payment follows the Est / Message Example pattern: **send task** `request-payment` publishes BPMN message `payment-result` (correlation key `case_reference`); catch event **Payment result received** continues the path. Booking confirmation is a **send task** worker (no inbound message wait).
 
 ## How to run (same for every teammate)

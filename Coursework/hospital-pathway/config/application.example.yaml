@@ -1,0 +1,35 @@
+# Local classroom configuration template for hospital-pathway.
+# Run Maven from Coursework/hospital-pathway so the relative H2 data path is stable.
+# The existing src/main/resources/application.yaml is the checked-in runnable demo config.
+# To use this template instead, copy it to that path and set the environment variables below.
+spring:
+  application:
+    name: hospital-pathway
+  datasource:
+    url: "${HOSPITAL_DB_URL:jdbc:h2:file:./data/hospital-domain;DB_CLOSE_DELAY=-1;AUTO_SERVER=FALSE}"
+    driver-class-name: org.h2.Driver
+    username: "${HOSPITAL_DB_USERNAME:sa}"
+    password: "${HOSPITAL_DB_PASSWORD:}"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+camunda:
+  client:
+    mode: self-managed
+    auth:
+      method: basic
+      username: "${CAMUNDA_USERNAME:demo}"
+      password: "${CAMUNDA_PASSWORD:demo}"
+    grpc-address: "${CAMUNDA_GRPC_ADDRESS:http://127.0.0.1:26500}"
+    rest-address: "${CAMUNDA_REST_ADDRESS:http://127.0.0.1:8080}"
+    prefer-rest-over-grpc: false
+
+logging:
+  level:
+    io.camunda.demo.hospital: INFO
