@@ -17,7 +17,7 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 
 | Path | Content |
 |------|---------|
-| `docs/` | Group-level deliverables: product backlog, task breakdown, sprint backlog, requirements traceability matrix, definition of done |
+| `docs/` | Group-level deliverables: product backlog, task breakdown, sprint backlog, requirements traceability matrix, definition of done, i* models in `docs/istar/` |
 | `Ruby/`, `Est/`, `Ender/`, `Ryan/` | Individual workspaces: drafts, part-level documents, meeting notes |
 | `Coursework/` | Workbook Word copies; executable pathway package in `hospital-pathway/` (BPMN + form + Java workers) |
 | `W01/` | Course materials: session slides, case study, assessment specifications |
@@ -51,8 +51,11 @@ Supporting documents, not tied to a single part:
 
 | File | Content |
 |------|---------|
-| `docs/requirements-traceability-matrix.md` | BR-01 to BR-42 with case paragraph sources, and the matrix to fill per release |
+| `docs/requirements-traceability-matrix.md` | PB-28 traceability for BR-01 to BR-42: operational BPMN, forms, workers and acceptance tests, plus the second-release gap plan |
+| `docs/istar/PB-16_istar-sd-sr.md` | PB-16 i* SD/SR notes, with diagrams in `PB-16_sd.md` and `PB-16_sr.md`. Second-owner review is still unsigned. |
 | `docs/definition-of-done.md` | Definition of Done and the minimum delivery evidence, across BPMN, workers, forms, code quality and documentation |
+| `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn` | PB-12 strategic BPMN for the initial release. Not executable. |
+| `docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md` | Abstraction level, mapping to the operational model, and gaps |
 
 ## Conventions
 

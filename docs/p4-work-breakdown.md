@@ -20,7 +20,7 @@
 | T14 | PB-09 | 信件超 7 天标延迟；约 1 月 / 3 月升级；完成后停止催办 | Ryan | Estrella | 3h | T13 | 升级层级与案例一致 | 监控规则说明 | Not started |
 | T15 | PB-10 | 咨询分流：行政 / 财务 / 临床分类、优先级、指派；接线员禁止临床建议 | Estrella | Ender | 3h | T01 | 临床类必须转到 CNS/临床 | 分流表单 | Not started |
 | T16 | PB-11 | 审计点：转诊决策、治疗授权、信件批准、支付/退款、治疗修改；普通用户不可改审计 | Ryan | Ruby | 3h | T03, T08, T10 | 记录含用户、时间、动作 | 审计字段表 | Not started |
-| T17 | PB-12 | 起草战略 BPMN 主图并与运营模型对齐 | Ruby | Estrella | 4h | T02–T08 | 高层路径完整、门禁可见 | .bpmn 文件 | Not started |
+| T17 | PB-12 | 起草战略 BPMN 主图并与运营模型对齐 | Ruby | Estrella | 4h | T02–T08 | 高层路径完整、门禁可见 | `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn`；`docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md`；待 Estrella 复核 | In progress |
 | T18 | PB-13 | 绑定转诊核验与 Consultant 决策的 Camunda Form | Estrella | Ruby | 4h | T03, T17 | 必填校验生效 | 表单 + 截图 | Not started |
 | T19 | PB-14 | 编写主路径与拒绝转诊两条验收测试 | Ryan | Ender | 3h | T03, T06 | 有预期结果与实际结果栏 | `Ryan/2026-09-26/PB-14_acceptance-test-plan_2026-09-29.md`；待二责签字 | In progress |
 | T20 | PB-15 | 准备第一次站会：上传产品待办与本表，四人入仓 | Ruby | Estrella | 2h | 当前增量 | 仓库内有产品待办与本表，四人已加入 | GitHub 链接 + Part 3 与 Part 6 文件 | In progress |
