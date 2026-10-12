@@ -23,6 +23,8 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 | [`submissions/BPMEA/`](submissions/BPMEA/README.md) | BPM&EA-specific Project and Test Plan and submission index |
 | [`submissions/AISD/`](submissions/AISD/README.md) | AISD-specific Design Decisions and Acceptance Test Plan/Results |
 | `W01/` | Course materials: session slides, case study, assessment specifications |
+| `W02/` | Week 2 slides and Camunda class examples |
+| `W03/` | October 2026 slides and the piStar i* tool. The decks do not print a week number |
 
 ## Current status
 
