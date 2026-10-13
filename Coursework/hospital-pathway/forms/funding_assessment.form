@@ -3,7 +3,7 @@
     {
       "id": "Text_Title",
       "type": "text",
-      "text": "## P7 — Funding assessment\n\nTo call Java payment worker: choose **Patient payment required**. Amount `10.01` = success, `10.00` = fail.\n\n_Never enter a full card number._",
+      "text": "## P7 — Funding assessment\n\nChoose **Patient payment required** to call the payment worker. Amount is mandatory on that path: two decimal places, from 0.01 to 99999.99. Demo rule after a valid amount: `10.01` succeeds, `10.00` fails. A missing amount is rejected.\n\nChoose **Insurer approval recorded** only with an insurer reference.\n\n_Never enter a full card number._",
       "layout": {
         "row": "Row_Title",
         "columns": null
@@ -71,13 +71,21 @@
     },
     {
       "id": "Field_charge_amount",
-      "type": "textfield",
+      "type": "number",
       "key": "charge_amount",
-      "label": "Charge amount (patient payment path)",
+      "label": "Charge amount",
+      "decimalDigits": 2,
+      "increment": "0.01",
+      "serializeToString": true,
       "validate": {
-        "required": false
+        "required": true,
+        "min": 0.01,
+        "max": 99999.99
       },
-      "description": "Demo: 10.01 success, 10.00 fail",
+      "description": "Required only for patient payment. Two decimal places, 0.01 to 99999.99. Demo: 10.01 success, 10.00 fail.",
+      "conditional": {
+        "hide": "=action != \"patient_payment_required\""
+      },
       "layout": {
         "row": "Row_2",
         "columns": null
@@ -89,7 +97,12 @@
       "key": "insurerReference",
       "label": "Insurer / funding reference",
       "validate": {
-        "required": false
+        "required": true,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9\\-_/]{1,39}$"
+      },
+      "description": "Required only when insurer approval is recorded. Letters, digits, hyphen, underscore or slash.",
+      "conditional": {
+        "hide": "=action != \"insurer_approved\""
       },
       "layout": {
         "row": "Row_3",
