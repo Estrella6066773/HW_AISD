@@ -1,0 +1,93 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P3 — Appointment booked\n\nThe slot is booked. Record what happened next. Choosing attended continues to clinical care. Choosing booked again keeps this waiting task.\n\n_Demo only._",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "Patient / case ID",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "What happened after booking",
+      "values": [
+        {
+          "label": "Patient attended",
+          "value": "attended"
+        },
+        {
+          "label": "Patient cancelled",
+          "value": "patient_cancelled"
+        },
+        {
+          "label": "Patient declined",
+          "value": "declined"
+        },
+        {
+          "label": "Did not attend",
+          "value": "dna"
+        },
+        {
+          "label": "Still booked / not yet attended",
+          "value": "booked"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Attendance notes",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "Record attendance update",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "await_attendance",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

@@ -73,6 +73,8 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>NotifyCareChange</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndCare</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_ClinicalCare</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RecordDecline</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RecordDna</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Admin" name="Administration">
         <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
@@ -82,6 +84,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>Redirect</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>BookVisit</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>VisitOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AwaitAttendance</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>DispatchLetter</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>MonitorLetters</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>BookTreatment</bpmn:flowNodeRef>
@@ -115,13 +118,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:input source="= if is defined(specialty) then specialty else null" target="specialty" />
           <zeebe:input source="= if is defined(priority) then priority else null" target="priority" />
-          <zeebe:input source="= if is defined(timeframe) then timeframe else &#34;&#34;" target="timeframe" />
+          <zeebe:input source="= if is defined(timeframeAmount) then timeframeAmount else &#34;&#34;" target="timeframeAmount" />
+          <zeebe:input source="= if is defined(timeframeUnit) then timeframeUnit else &#34;&#34;" target="timeframeUnit" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
           <zeebe:output source="= patientId" target="patientId" />
           <zeebe:output source="= specialty" target="specialty" />
           <zeebe:output source="= priority" target="priority" />
-          <zeebe:output source="= timeframe" target="timeframe" />
+          <zeebe:output source="= timeframeAmount" target="timeframeAmount" />
+          <zeebe:output source="= timeframeUnit" target="timeframeUnit" />
+          <zeebe:output source="= string(timeframeAmount) + &#34; &#34; + timeframeUnit" target="timeframe" />
           <zeebe:output source="= notes" target="RegisterNotes" />
           <zeebe:output source="= action" target="requestKind" />
           <zeebe:output source="= false" target="urgentCase" />
@@ -236,10 +242,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(appointmentDate) then appointmentDate else &#34;&#34;" target="appointmentDate" />
+          <zeebe:input source="= if is defined(appointmentTime) then appointmentTime else &#34;&#34;" target="appointmentTime" />
+          <zeebe:input source="= if is defined(waitReason) then waitReason else &#34;&#34;" target="waitReason" />
           <zeebe:output source="= patientId" target="patientId" />
           <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="BookVisitNotes" />
           <zeebe:output source="= action" target="visitOutcome" />
+          <zeebe:output source="= appointmentDate" target="appointmentDate" />
+          <zeebe:output source="= appointmentTime" target="appointmentTime" />
+          <zeebe:output source="= waitReason" target="waitReason" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_Join_BookVisit</bpmn:incoming>
@@ -247,10 +259,70 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="VisitOutcome" name="Visit&#10;outcome?" default="Flow_35">
       <bpmn:incoming>Flow_06b</bpmn:incoming>
+      <bpmn:incoming>Flow_AwaitReturn</bpmn:incoming>
       <bpmn:outgoing>Flow_07</bpmn:outgoing>
       <bpmn:outgoing>Flow_35</bpmn:outgoing>
       <bpmn:outgoing>Flow_36</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Booked</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Declined</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Dna</bpmn:outgoing>
     </bpmn:exclusiveGateway>
+    <bpmn:userTask id="AwaitAttendance" name="P3&#10;Appointment booked;&#10;await attendance">
+      <bpmn:documentation>Reached only when BookVisit records visitOutcome=booked. The patient has a slot and has not attended. Completing this task writes a new visitOutcome and returns to VisitOutcome, so attended, cancellation, decline and DNA do not share the booking path.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="await_attendance" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="AwaitAttendanceNotes" />
+          <zeebe:output source="= action" target="visitOutcome" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Booked</bpmn:incoming>
+      <bpmn:outgoing>Flow_AwaitReturn</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="RecordDecline" name="P4&#10;Record declined&#10;appointment">
+      <bpmn:documentation>Reached only when visitOutcome=declined. Records the decline, then the clinician decides the pathway at ClinicalChange. This is not the patient-cancelled path and not DNA.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="simple_record" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
+          <zeebe:output source="= notes" target="DeclineNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Declined</bpmn:incoming>
+      <bpmn:outgoing>Flow_DeclineToChange</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="RecordDna" name="P4&#10;Record did not&#10;attend">
+      <bpmn:documentation>Reached only when visitOutcome=dna. Records the missed appointment, then the clinician decides the pathway at ClinicalChange.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="simple_record" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
+          <zeebe:output source="= notes" target="DnaNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Dna</bpmn:incoming>
+      <bpmn:outgoing>Flow_DnaToChange</bpmn:outgoing>
+    </bpmn:userTask>
     <bpmn:exclusiveGateway id="Join_ClinicalCare" gatewayDirection="Converging">
       <bpmn:documentation>Exclusive merge of existing alternative and retry paths before ClinicalCare. Pass-through only: no condition, default, synchronization or deduplication. Added in response to Group 10 feedback on merging gateways.</bpmn:documentation>
       <bpmn:incoming>Flow_07</bpmn:incoming>
@@ -485,6 +557,8 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_22</bpmn:incoming>
       <bpmn:incoming>Flow_36</bpmn:incoming>
       <bpmn:incoming>Flow_62</bpmn:incoming>
+      <bpmn:incoming>Flow_DeclineToChange</bpmn:incoming>
+      <bpmn:incoming>Flow_DnaToChange</bpmn:incoming>
       <bpmn:outgoing>Flow_51</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="ChangeValid" name="Formal request&#10;authorised?" default="Flow_52">
@@ -508,9 +582,12 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(adjustmentAmount) then adjustmentAmount else &#34;&#34;" target="adjustmentAmount" />
           <zeebe:output source="= patientId" target="patientId" />
           <zeebe:output source="= staffRole" target="staffRole" />
+          <zeebe:output source="= notes" target="adjustmentReason" />
           <zeebe:output source="= notes" target="FinanceAdjustmentNotes" />
+          <zeebe:output source="= adjustmentAmount" target="adjustmentAmount" />
           <zeebe:output source="= action" target="financeAdjustment" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -739,9 +816,21 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_07" name="Attended" sourceRef="VisitOutcome" targetRef="Join_ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "attended"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_36" name="Cancel / DNA" sourceRef="VisitOutcome" targetRef="ClinicalChange">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "cancelled"</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="Flow_36" name="Patient cancelled" sourceRef="VisitOutcome" targetRef="ClinicalChange">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "patient_cancelled" or visitOutcome = "cancelled"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Booked" name="Booked" sourceRef="VisitOutcome" targetRef="AwaitAttendance">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "booked"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_AwaitReturn" sourceRef="AwaitAttendance" targetRef="VisitOutcome" />
+    <bpmn:sequenceFlow id="Flow_Declined" name="Declined" sourceRef="VisitOutcome" targetRef="RecordDecline">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "declined"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_DeclineToChange" sourceRef="RecordDecline" targetRef="ClinicalChange" />
+    <bpmn:sequenceFlow id="Flow_Dna" name="Did not attend" sourceRef="VisitOutcome" targetRef="RecordDna">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "dna"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_DnaToChange" sourceRef="RecordDna" targetRef="ClinicalChange" />
     <bpmn:sequenceFlow id="Flow_66" name="Treatment / review" sourceRef="SendBookingConfirmation" targetRef="Join_ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_39" name="Clinical correction" sourceRef="LetterOutcome" targetRef="Join_ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "revise"</bpmn:conditionExpression>
@@ -816,7 +905,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_56" sourceRef="FinanceAdjustment" targetRef="RequestRefund" />
     <bpmn:sequenceFlow id="Flow_56b" sourceRef="RequestRefund" targetRef="AdjustmentOutcome" />
     <bpmn:sequenceFlow id="Flow_57" name="Recorded" sourceRef="AdjustmentOutcome" targetRef="ChangeRoute">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= financeAdjustment = "resolved"</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= financeAdjustment = "refund_full" or financeAdjustment = "refund_partial" or financeAdjustment = "transfer" or financeAdjustment = "retain" or financeAdjustment = "resolved"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_25" sourceRef="AdminEnquiry" targetRef="EndAdminEnquiry" />
     <bpmn:sequenceFlow id="Flow_26" sourceRef="ClinicalEnquiry" targetRef="EndClinicalEnquiry" />
@@ -939,6 +1028,15 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1876" y="330" width="49" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AwaitAttendance_di" bpmnElement="AwaitAttendance" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="3760" y="260" width="200" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RecordDecline_di" bpmnElement="RecordDecline" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="3760" y="760" width="200" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RecordDna_di" bpmnElement="RecordDna" bioc:stroke="#263746" bioc:fill="#eaf8f0">
+        <dc:Bounds x="3760" y="980" width="200" height="90" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Join_ClinicalCare" bpmnElement="Join_ClinicalCare" isMarkerVisible="true">
         <dc:Bounds x="1390" y="870" width="40" height="40" />
@@ -1340,8 +1438,47 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="885" y="1000" />
         <di:waypoint x="885" y="1080" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1430" y="976" width="67" height="14" />
+          <dc:Bounds x="1400" y="976" width="90" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Booked_di" bpmnElement="Flow_Booked" bioc:stroke="#1768a6">
+        <di:waypoint x="1920" y="390" />
+        <di:waypoint x="3760" y="305" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2700" y="280" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AwaitReturn_di" bpmnElement="Flow_AwaitReturn" bioc:stroke="#1768a6">
+        <di:waypoint x="3860" y="350" />
+        <di:waypoint x="3860" y="680" />
+        <di:waypoint x="1900" y="680" />
+        <di:waypoint x="1900" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Declined_di" bpmnElement="Flow_Declined" bioc:stroke="#667481">
+        <di:waypoint x="1910" y="420" />
+        <di:waypoint x="1910" y="805" />
+        <di:waypoint x="3760" y="805" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2700" y="780" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_DeclineToChange_di" bpmnElement="Flow_DeclineToChange" bioc:stroke="#667481">
+        <di:waypoint x="3860" y="850" />
+        <di:waypoint x="3860" y="1130" />
+        <di:waypoint x="980" y="1130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Dna_di" bpmnElement="Flow_Dna" bioc:stroke="#667481">
+        <di:waypoint x="1890" y="420" />
+        <di:waypoint x="1890" y="1025" />
+        <di:waypoint x="3760" y="1025" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2700" y="1000" width="72" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_DnaToChange_di" bpmnElement="Flow_DnaToChange" bioc:stroke="#667481">
+        <di:waypoint x="3860" y="1070" />
+        <di:waypoint x="3860" y="1160" />
+        <di:waypoint x="980" y="1160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_66_di" bpmnElement="Flow_66" bioc:stroke="#1768a6">
         <di:waypoint x="3640" y="450" />
