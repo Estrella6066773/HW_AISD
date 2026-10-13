@@ -38,7 +38,7 @@ Keep the process running after `Started HospitalPathwayApplication`.
 
 ### 3. Start a process
 
-Tasklist → Processes → start `Hospital_All_Processes_Simple_C8` (assignee `demo`).
+Tasklist → Processes → start `Hospital_All_Processes_V2_C8` (assignee `demo`). This is the full pathway diagram with the exclusive merge gateways. The earlier `Hospital_All_Processes_Simple_C8` file is the previous diagram and does not contain the split visit outcomes.
 
 ## Do you need Java every time?
 
@@ -64,7 +64,7 @@ Closing Java stops the workers. Restart Java to resume waiting jobs. Use a non-e
 | `request-refund` | After `FinanceAdjustment`, before `AdjustmentOutcome` | `payment_ledger` + `audit_event` |
 | `mark-payment-investigate` | Before `FundingIssue` (unpaid / funding pending) | `payment_ledger` (INVESTIGATE) + `audit_event` |
 
-Resolved finance adjustments record a successful refund row; pending keeps INVESTIGATE. Retries reuse the same idempotency key. Existing `request-payment` is unchanged.
+`request-refund` records a full or partial refund as SUCCESSFUL, a transfer as TRANSFERRED, and a retained fee as RETAINED. Pending stays INVESTIGATE and does not invent an amount. Retries reuse the same idempotency key. `request-payment` rejects a missing or wrongly scaled `charge_amount` instead of substituting `10.01`. A valid amount that ends in 0, such as `10.00`, is still the classroom unsuccessful payment. Funding-pending investigation with no amount records `unspecified`.
 
 ```sql
 SELECT id, case_reference, idempotency_key, amount, status, transaction_reference, payment_date

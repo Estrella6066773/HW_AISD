@@ -23,8 +23,9 @@ import org.springframework.stereotype.Component;
  *   <li>{@code send-booking-confirmation} — mock patient notification; no inbound message wait.
  * </ul>
  *
- * Demo rule for payment: if {@code charge_amount} (default {@code 10.01}) ends with {@code 0},
- * the payment is {@code unsuccessful}; otherwise {@code successful}. Never stores card data.
+ * Demo rule for payment: a valid {@code charge_amount} that ends with {@code 0} is
+ * {@code unsuccessful}; otherwise {@code successful}. A missing or invalid amount fails the job.
+ * Never stores card data and never substitutes a demo amount.
  */
 @Component
 public class HospitalPathwayWorkers {
@@ -45,9 +46,18 @@ public class HospitalPathwayWorkers {
 		if (caseReference.isBlank()) {
 			caseReference = text(vars.get("patientId"));
 		}
-		String amount = text(vars.get("charge_amount"));
-		if (amount.isBlank()) {
-			amount = "10.01";
+		String amount;
+		try {
+			// 患者付款才会进这个工作器。金额必须已由资金表单提交，禁止再补 10.01。
+			amount = ChargeAmountRules.require(vars.get("charge_amount"));
+		} catch (IllegalArgumentException invalidAmount) {
+			jobClient
+					.newFailCommand(job)
+					.retries(0)
+					.errorMessage(invalidAmount.getMessage())
+					.send()
+					.join();
+			return;
 		}
 
 		if (caseReference.isBlank()) {

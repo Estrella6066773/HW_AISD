@@ -40,8 +40,8 @@ public class RefundWorkers {
 	}
 
 	/**
-	 * 线 13：财务表填完后自动跑。
-	 * financeAdjustment=resolved → 流水 SUCCESSFUL；否则 INVESTIGATE。
+	 * 线 13：财务表填完后，由 V2 图上的 {@code AdjustmentOutcome} 读取 {@code financeAdjustment}。
+	 * 全额/部分退款、转款、保留费用各自写不同账本状态；{@code pending} 留在调查，不补 10.01。
 	 */
 	// 线 13。服务任务，不发消息，返回变量即可。
 	@JobWorker(type = "request-refund")
@@ -51,52 +51,105 @@ public class RefundWorkers {
 		if (caseReference.isBlank()) {
 			throw new IllegalArgumentException("case_reference / patientId required for request-refund");
 		}
-		// 金额：表单未填则用演示默认值
-		String amount = text(vars.get("charge_amount"));
-		if (amount.isBlank()) {
-			amount = "10.01";
-		}
-		// 来自 finance_adjustment 表单的 outcome
 		String decision = text(vars.get("financeAdjustment"));
 		if (decision.isBlank()) {
 			decision = "pending";
 		}
-		// resolved → SUCCESSFUL；其余（含 pending）→ INVESTIGATE。
-		PaymentLedgerStatus status =
-				"resolved".equalsIgnoreCase(decision)
-						? PaymentLedgerStatus.SUCCESSFUL
-						: PaymentLedgerStatus.INVESTIGATE;
-		// 幂等键：同一病例、决定、金额重试时复用原行。
-		String idempotencyKey = caseReference + "|refund|" + decision + "|" + amount;
+		// 未知取值直接失败，避免再掉进同一个“已解决”分支。
+		AdjustmentOutcome outcome = resolveAdjustment(decision, vars);
+		String idempotencyKey = caseReference + "|refund|" + decision + "|" + outcome.amount();
 		PaymentLedger row =
 				upsertLedger(
 						caseReference,
 						idempotencyKey,
-						amount,
-						status,
-						"RF-" + shortId(),
-						status == PaymentLedgerStatus.SUCCESSFUL ? LocalDate.now() : null);
+						outcome.amount(),
+						outcome.status(),
+						outcome.referencePrefix() + shortId(),
+						outcome.dated() ? LocalDate.now() : null);
 		auditEventWriter.append(
 				"ruby",
 				"request-refund",
 				caseReference,
 				idempotencyKey,
-				"Refund / adjustment mock; decision=" + decision + "; status=" + status);
+				"Refund / adjustment mock; decision="
+						+ decision
+						+ "; status="
+						+ outcome.status());
 		LOG.info(
 				"request-refund case={} decision={} status={} tx={} key={}",
 				caseReference,
 				decision,
-				status,
+				outcome.status(),
 				row.getTransactionReference(),
 				idempotencyKey);
-		// 写回流程变量，供后续网关/演示查看
+		// 写回流程变量。网关看 financeAdjustment，不看 refund_recorded。
 		Map<String, Object> out = new HashMap<>();
 		out.put("case_reference", caseReference);
-		out.put("refund_status", status.name());
+		out.put("financeAdjustment", decision);
+		out.put("refund_status", outcome.status().name());
 		out.put("refund_transaction_reference", row.getTransactionReference());
-		out.put("refund_recorded", status == PaymentLedgerStatus.SUCCESSFUL);
+		out.put("refund_recorded", outcome.status() == PaymentLedgerStatus.SUCCESSFUL);
 		return out;
 	}
+
+	/**
+	 * 财务决定和账本的对应关系。{@code resolved} 只保留给已经在跑的旧实例，和新表单的全额退款同等处理。
+	 * 部分退款必须低于原收费；转款和保留费用不记成退款成功。
+	 */
+	private static AdjustmentOutcome resolveAdjustment(String decision, Map<String, Object> vars) {
+		return switch (decision) {
+			case "refund_full", "resolved" ->
+					new AdjustmentOutcome(
+							requireAdjustmentAmount(vars), PaymentLedgerStatus.SUCCESSFUL, "RF-", true);
+			case "refund_partial" ->
+					new AdjustmentOutcome(
+							requirePartialAmount(vars), PaymentLedgerStatus.SUCCESSFUL, "RF-", true);
+			case "transfer" ->
+					new AdjustmentOutcome(
+							requireAdjustmentAmount(vars), PaymentLedgerStatus.TRANSFERRED, "TR-", true);
+			case "retain" ->
+					new AdjustmentOutcome(
+							requireAdjustmentAmount(vars), PaymentLedgerStatus.RETAINED, "RT-", true);
+			case "pending" ->
+					new AdjustmentOutcome(
+							statedOrUnspecified(firstAmount(vars)), PaymentLedgerStatus.INVESTIGATE, "RF-", false);
+			default ->
+					throw new IllegalArgumentException(
+							"financeAdjustment not recognised: " + decision);
+		};
+	}
+
+	/** 全额退款、转款、保留费用都要有两位小数金额。优先用本次填写的调整金额。 */
+	private static String requireAdjustmentAmount(Map<String, Object> vars) {
+		return ChargeAmountRules.require(firstAmount(vars));
+	}
+
+	/**
+	 * 部分退款使用 adjustmentAmount。原 charge_amount 存在时，部分金额必须更小，避免把全额退款标成部分退款。
+	 */
+	private static String requirePartialAmount(Map<String, Object> vars) {
+		String partial = ChargeAmountRules.require(vars.get("adjustmentAmount"));
+		String originalText = text(vars.get("charge_amount"));
+		if (!originalText.isEmpty()) {
+			String original = ChargeAmountRules.require(originalText);
+			if (new java.math.BigDecimal(partial).compareTo(new java.math.BigDecimal(original)) >= 0) {
+				throw new IllegalArgumentException(
+						"adjustmentAmount must be lower than charge_amount for a partial refund");
+			}
+		}
+		return partial;
+	}
+
+	private static Object firstAmount(Map<String, Object> vars) {
+		String adjustment = text(vars.get("adjustmentAmount"));
+		if (!adjustment.isEmpty()) {
+			return vars.get("adjustmentAmount");
+		}
+		return vars.get("charge_amount");
+	}
+
+	private record AdjustmentOutcome(
+			String amount, PaymentLedgerStatus status, String referencePrefix, boolean dated) {}
 
 	/**
 	 * 线 10 失败支：支付失败后、FundingIssue 人工之前。
@@ -111,10 +164,8 @@ public class RefundWorkers {
 			throw new IllegalArgumentException(
 					"case_reference / patientId required for mark-payment-investigate");
 		}
-		String amount = text(vars.get("charge_amount"));
-		if (amount.isBlank()) {
-			amount = "10.01";
-		}
+		// 待调查路径可能还没有收费金额（资助待定）。有金额就校验；没有就记账为未提供，不补 10.01。
+		String amount = statedOrUnspecified(vars.get("charge_amount"));
 		String priorTx = text(vars.get("transaction_reference"));
 		String idempotencyKey =
 				caseReference + "|investigate|" + (priorTx.isBlank() ? amount : priorTx);
@@ -181,6 +232,17 @@ public class RefundWorkers {
 			caseReference = text(vars.get("patientId"));
 		}
 		return caseReference;
+	}
+
+	/**
+	 * 支付失败后的调查必须沿用真实金额。资助待定、表单上没有金额时，记 {@code unspecified}，避免账本出现假的 10.01。
+	 */
+	private static String statedOrUnspecified(Object raw) {
+		String text = raw == null ? "" : String.valueOf(raw).trim();
+		if (text.isEmpty()) {
+			return "unspecified";
+		}
+		return ChargeAmountRules.require(raw);
 	}
 
 	private static String text(Object value) {

@@ -129,6 +129,73 @@ class RefundWorkersTest {
 	}
 
 	@Test
+	void missingAmountFailsWithoutWritingOrDefaulting() {
+		assertThatThrownBy(() -> workers.requestRefund(job(Map.of("patientId", "A-REF-004", "financeAdjustment", "resolved"))))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessageContaining("charge_amount required");
+		assertThat(ledgers.count()).isZero();
+	}
+
+	@Test
+	void wrongPrecisionFailsWithoutWriting() {
+		assertThatThrownBy(() -> workers.requestRefund(job(Map.of(
+				"patientId", "A-REF-005", "financeAdjustment", "resolved", "charge_amount", "10.001"))))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessageContaining("precision");
+		assertThat(ledgers.count()).isZero();
+	}
+
+	@Test
+	void investigateWithoutAmountDoesNotInventDemoCharge() {
+		var vars = new HashMap<String, Object>();
+		vars.put("patientId", "A-INV-002");
+		assertThat(workers.markPaymentInvestigate(job(vars)))
+				.containsEntry("payment_status", "investigate");
+		assertThat(ledgers.findAll()).singleElement().satisfies(row ->
+				assertThat(row.getAmount()).isEqualTo("unspecified"));
+	}
+
+	@Test
+	void partialRefundMustBeLowerThanTheOriginalCharge() {
+		var vars = new HashMap<String, Object>();
+		vars.put("patientId", "A-REF-006");
+		vars.put("financeAdjustment", "refund_partial");
+		vars.put("charge_amount", "25.50");
+		vars.put("adjustmentAmount", "10.00");
+		assertThat(workers.requestRefund(job(vars)))
+				.containsEntry("refund_recorded", true)
+				.containsEntry("refund_status", "SUCCESSFUL");
+		assertThat(ledgers.findAll()).singleElement().satisfies(row ->
+				assertThat(row.getAmount()).isEqualTo("10.00"));
+
+		vars.put("patientId", "A-REF-007");
+		vars.put("adjustmentAmount", "25.50");
+		assertThatThrownBy(() -> workers.requestRefund(job(vars)))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessageContaining("lower than charge_amount");
+	}
+
+	@Test
+	void transferAndRetainDoNotCountAsRefunds() {
+		var transfer = new HashMap<String, Object>();
+		transfer.put("patientId", "A-REF-008");
+		transfer.put("financeAdjustment", "transfer");
+		transfer.put("adjustmentAmount", "18.00");
+		assertThat(workers.requestRefund(job(transfer)))
+				.containsEntry("refund_recorded", false)
+				.containsEntry("refund_status", "TRANSFERRED");
+
+		var retain = new HashMap<String, Object>();
+		retain.put("patientId", "A-REF-009");
+		retain.put("financeAdjustment", "retain");
+		retain.put("adjustmentAmount", "18.00");
+		assertThat(workers.requestRefund(job(retain)))
+				.containsEntry("refund_status", "RETAINED");
+		assertThat(ledgers.findAll()).extracting(PaymentLedger::getStatus)
+				.containsExactlyInAnyOrder(PaymentLedgerStatus.TRANSFERRED, PaymentLedgerStatus.RETAINED);
+	}
+
+	@Test
 	void missingCaseIdFailsWithoutWriting() {
 		assertThatThrownBy(() -> workers.requestRefund(job(Map.of("financeAdjustment", "resolved"))))
 				.isInstanceOf(IllegalArgumentException.class);
