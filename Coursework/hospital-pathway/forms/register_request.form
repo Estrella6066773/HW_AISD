@@ -82,16 +82,43 @@
       }
     },
     {
-      "id": "Field_timeframe",
-      "type": "textfield",
-      "key": "timeframe",
-      "label": "Requested timeframe",
+      "id": "Field_timeframeAmount",
+      "type": "number",
+      "key": "timeframeAmount",
+      "label": "Requested period",
+      "decimalDigits": 0,
+      "serializeToString": true,
+      "validate": {
+        "required": true,
+        "min": 1,
+        "max": 365
+      },
+      "description": "Whole number. Days can be 1 to 365. Weeks should be 1 to 52.",
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_timeframeUnit",
+      "type": "select",
+      "key": "timeframeUnit",
+      "label": "Period unit",
+      "values": [
+        {
+          "label": "Days",
+          "value": "days"
+        },
+        {
+          "label": "Weeks",
+          "value": "weeks"
+        }
+      ],
       "validate": {
         "required": true
       },
-      "description": "e.g. within 2 weeks",
       "layout": {
-        "row": "Row_3",
+        "row": "Row_3b",
         "columns": null
       }
     },
