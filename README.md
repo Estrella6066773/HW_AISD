@@ -66,7 +66,7 @@ Supporting documents, not tied to a single part:
 | File | Content |
 |------|---------|
 | `docs/requirements-traceability-matrix.md` | PB-28 traceability for BR-01 to BR-42 across the strategic BPMN, operational BPMN, forms, workers and acceptance tests, plus the second-release gap plan |
-| `docs/istar/PB-16_istar-sd-sr.md` | PB-16 i* SD/SR notes, with diagrams in `PB-16_sd.md` and `PB-16_sr.md`. Second-owner review is still unsigned. |
+| `docs/istar/PB-16_istar-sd-sr.md` | PB-16 i* SD/SR notes, with diagrams in `PB-16_sd.md`, `PB-16_sd-overview.png` and `PB-16_sr.md`. Second-owner review is still unsigned. |
 | `docs/definition-of-done.md` | Definition of Done and the minimum delivery evidence, across BPMN, workers, forms, code quality and documentation |
 | `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn` | PB-12 strategic BPMN for the initial release. Not executable. |
 | `docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md` | Abstraction level, mapping to the operational model, and gaps |

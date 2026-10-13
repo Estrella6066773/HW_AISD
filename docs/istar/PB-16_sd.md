@@ -1,6 +1,6 @@
 # PB-16 · i\* SD (Strategic Dependency) diagram
 
-Companion notes: [`PB-16_istar-sd-sr.md`](PB-16_istar-sd-sr.md) · SR diagrams: [`PB-16_sr.md`](PB-16_sr.md)
+Companion notes: [`PB-16_istar-sd-sr.md`](PB-16_istar-sd-sr.md) · SR diagrams: [`PB-16_sr.md`](PB-16_sr.md) · Presentation figure: [`PB-16_sd-overview.png`](PB-16_sd-overview.png)
 
 ## Legend (Mermaid substitution for i\* notation)
 
@@ -11,6 +11,12 @@ Companion notes: [`PB-16_istar-sd-sr.md`](PB-16_istar-sd-sr.md) · SR diagrams: 
 | Edge label `Dn type: dependum` | Dependency identifier, dependum type (`goal` / `softgoal` / `task` / `resource`), and the dependum name |
 
 i\* has no native Mermaid shapes; this legend is the mapping used throughout.
+
+## Presentation figure
+
+![Strategic dependency overview](PB-16_sd-overview.png)
+
+This figure draws the dependencies used in the presentation: D1, D2, D4, D5, D7, D9, D10, D12, D14, D15, D16, D18 and D20. The model below remains the complete set of 24 dependencies, including referrer notification, consent, refund handling, correspondence and the system softgoals.
 
 ## Strategic Dependency model (initial release)
 
