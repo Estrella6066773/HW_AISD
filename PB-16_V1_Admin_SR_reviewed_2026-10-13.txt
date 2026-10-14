@@ -94,7 +94,7 @@
           "x": 564,
           "y": 477,
           "customProperties": {
-            "Evidence": "D9; check-slot writes local BookingSlot. No live external scheduling.",
+            "Evidence": "D9. When a slot is required, VisitNeedsSlot calls check-slot and writes a local booking slot. Decline, patient cancellation and did-not-attend do not use a slot. The slot helps visit arrangement and is not required for every recorded outcome. There is no live external scheduling.",
             "V1 status": "V1 mock"
           }
         },
@@ -322,7 +322,7 @@
     },
     {
       "id": "7ea66ccb-d2f8-49a6-b396-56fed11def3c",
-      "text": "D5 Acceptance recorded before booking (if accepted)",
+      "text": "D5 Authorised acceptance before a new patient appointment",
       "type": "istar.Goal",
       "x": 520,
       "y": 20,
@@ -347,12 +347,12 @@
         "Evidence": "ClinicalCare → DispatchLetter → dispatch-clinic-letter；ClinicalCareNotes 为自由备注。LetterWorkers 只写模拟外发记录。",
         "Qualification": "依赖目录里 D7 是目标：顾问批准诊后信之后，秘书才能分发，并且不能改动临床含义。框内的「已批准的诊后信」仍是分发任务需要的资源。第一版缺少结构化正文、批准人和批准日期，也没有在分发前检查批准，所以还不能称为已经提供。"
       },
-      "source": "7d106e08-232f-4dfb-9da2-d1bfc5c3872e",
+      "source": "0a037a3d-e23a-48eb-9e14-b5a01d73d400",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     },
     {
       "id": "7bf4ff82-3c16-4402-9a2b-cd9e88553036",
-      "text": "D9 Available appointment slot (V1 mock)",
+      "text": "D9 Available appointment slot",
       "type": "istar.Resource",
       "x": 128,
       "y": 477,
@@ -367,7 +367,7 @@
     },
     {
       "id": "499d6740-9fa4-4228-ae58-7df99d2742d4",
-      "text": "D10 Treatment resource availability (V1 mock/manual)",
+      "text": "D10 External treatment, laboratory or imaging availability",
       "type": "istar.Resource",
       "x": 1210,
       "y": 520,
@@ -493,8 +493,9 @@
     {
       "id": "6bc041bc-6f67-45b1-908c-4721f2f25c90",
       "source": "ed04f306-e70f-4afe-a50a-122a87dfe374",
-      "target": "eb020f4c-e650-40a3-97a1-8d3a79f99b40",
-      "type": "istar.NeededByLink"
+      "target": "1b6eb390-977f-4a6f-a5a2-4d9478d70c22",
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "6d762773-b96a-4c56-b541-2f4ec9519541",
@@ -574,7 +575,7 @@
     },
     {
       "id": "b2018676-d6c4-457e-98a4-bb1516cce9ed",
-      "source": "7d106e08-232f-4dfb-9da2-d1bfc5c3872e",
+      "source": "0a037a3d-e23a-48eb-9e14-b5a01d73d400",
       "target": "218e63f8-fffb-40ee-92e4-f6d73587b5b0",
       "type": "istar.DependencyLink"
     },
@@ -890,7 +891,7 @@
       "vertices": [
         {
           "x": 1211,
-          "y": 399.0
+          "y": 215.0
         },
         {
           "x": 1211,
@@ -919,7 +920,7 @@
     "width": 1520,
     "height": 760,
     "customProperties": {
-      "Description": "Admin-team rationale checked against the case and Hospital_All_Processes_V2. The five pathway goals help Patient pathway coordinated; a rejected referral can still be coordinated without treatment, a letter or a patient notification. Initial-referral acceptance helps visit arrangement and applies only to a new patient appointment. Normal-route funding clearance helps treatment coordination and applies before confirmation, not to every pending or urgent outcome. D7 is the clinical-approval goal from the dependency catalogue. D20 keeps the appointment letter and recorded contact attempts, including the two-week telephone, and does not assign clinical explanation to Admin. M=manual; P=partial support; X=mock integration. A dependency states a business need, not verified fulfilment. User tasks still use the demo assignee. Enquiries, changes, refunds and management escalation stay on other views. Clinical judgement and urgent authorisation do not belong to Admin."
+      "Description": "Admin-team rationale checked against the case and Hospital_All_Processes_V2. The five pathway goals help Patient pathway coordinated; a rejected referral can still be coordinated without treatment, a letter or a patient notification. Initial-referral acceptance helps visit arrangement and applies only to a new patient appointment. An appointment slot helps that same visit goal only when a slot is required; decline, patient cancellation and did-not-attend do not use one. Normal-route funding clearance helps treatment coordination and applies before confirmation, not to every pending or urgent outcome. D7 is the clinical-approval goal, and the depender is the letter-processing goal rather than the already-approved letter resource. D20 keeps the appointment letter and recorded contact attempts, including the two-week telephone, and does not assign clinical explanation to Admin. M=manual; P=partial support; X=mock integration. A dependency states a business need, not verified fulfilment, so the dependum name does not carry the mock status. User tasks still use the demo assignee. Enquiries, changes, refunds and management escalation stay on other views. Clinical judgement and urgent authorisation do not belong to Admin."
     }
   }
 }
