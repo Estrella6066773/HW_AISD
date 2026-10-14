@@ -106,6 +106,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>Join_BookVisit</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_BookTreatment</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_VisitOutcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VisitNeedsSlot</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Start" name="Start request">
@@ -263,9 +264,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_Join_BookVisit</bpmn:incoming>
       <bpmn:outgoing>Flow_06</bpmn:outgoing>
     </bpmn:userTask>
+    <bpmn:exclusiveGateway id="VisitNeedsSlot" name="Reserve a&#10;slot?" default="Flow_06_check">
+      <bpmn:documentation>V2 routing after BookVisit. Member B's check-slot worker is unchanged. Booked, attended and pending visits still enter that worker. Decline, patient cancellation and did-not-attend skip it and go to Join_VisitOutcome. Ryan's Join_BookVisit stays in front of BookVisit.</bpmn:documentation>
+      <bpmn:incoming>Flow_06</bpmn:incoming>
+      <bpmn:outgoing>Flow_06_check</bpmn:outgoing>
+      <bpmn:outgoing>Flow_SkipSlot</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Join_VisitOutcome" gatewayDirection="Converging">
-      <bpmn:documentation>Exclusive merge before the visit-outcome decision on the V2 diagram. CheckVisitSlot and AwaitAttendance both enter here. Pass-through only: no condition and no change to visitOutcome. Ryan's Join_BookVisit stays upstream of BookVisit.</bpmn:documentation>
+      <bpmn:documentation>Exclusive merge before the visit-outcome decision on the V2 diagram. CheckVisitSlot, the skip-slot path and AwaitAttendance enter here. Pass-through only: no condition and no change to visitOutcome. Ryan's Join_BookVisit stays upstream of BookVisit.</bpmn:documentation>
       <bpmn:incoming>Flow_06b</bpmn:incoming>
+      <bpmn:incoming>Flow_SkipSlot</bpmn:incoming>
       <bpmn:incoming>Flow_AwaitReturn</bpmn:incoming>
       <bpmn:outgoing>Flow_Join_VisitOutcome</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -739,11 +747,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_38</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:serviceTask id="CheckVisitSlot" name="P3&#10;Check / reserve&#10;outpatient slot">
-      <bpmn:documentation>Member B worker type check-slot. After BookVisit form: mock external scheduling, write booking_slot; then VisitOutcome gateway.</bpmn:documentation>
+      <bpmn:documentation>Member B worker type check-slot. On the V2 diagram this task runs only after VisitNeedsSlot, for a booked, attended or pending visit. Decline, cancellation and did-not-attend do not enter it. The worker writes booking_slot, then the flow joins VisitOutcome.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="check-slot" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_06</bpmn:incoming>
+      <bpmn:incoming>Flow_06_check</bpmn:incoming>
       <bpmn:outgoing>Flow_06b</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="NotifyCareChange" name="P11 / P12&#10;Notify care change">
@@ -833,7 +841,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_60" name="Follow-up" sourceRef="ChangeRoute" targetRef="Join_BookVisit">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "visit"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06" sourceRef="BookVisit" targetRef="CheckVisitSlot" />
+    <bpmn:sequenceFlow id="Flow_06" sourceRef="BookVisit" targetRef="VisitNeedsSlot" />
+    <bpmn:sequenceFlow id="Flow_06_check" name="Booked, attended or waiting" sourceRef="VisitNeedsSlot" targetRef="CheckVisitSlot" />
+    <bpmn:sequenceFlow id="Flow_SkipSlot" name="Declined, cancelled or DNA" sourceRef="VisitNeedsSlot" targetRef="Join_VisitOutcome">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "declined" or visitOutcome = "patient_cancelled" or visitOutcome = "dna" or visitOutcome = "cancelled"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06b" sourceRef="CheckVisitSlot" targetRef="Join_VisitOutcome" />
     <bpmn:sequenceFlow id="Flow_07" name="Attended" sourceRef="VisitOutcome" targetRef="Join_ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "attended"</bpmn:conditionExpression>
@@ -1047,6 +1059,12 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BookVisit_di" bpmnElement="BookVisit" bioc:stroke="#263746" bioc:fill="#edf5ff">
         <dc:Bounds x="1480" y="350" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_VisitNeedsSlot" bpmnElement="VisitNeedsSlot" isMarkerVisible="true">
+        <dc:Bounds x="1648" y="292" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1644" y="262" width="48" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Join_VisitOutcome" bpmnElement="Join_VisitOutcome" isMarkerVisible="true">
         <dc:Bounds x="1836" y="292" width="40" height="40" />
@@ -1449,12 +1467,23 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06_di" bpmnElement="Flow_06" bioc:stroke="#1768a6">
-        <di:waypoint x="1700" y="400" />
-        <di:waypoint x="1720" y="400" />
+        <di:waypoint x="1590" y="350" />
+        <di:waypoint x="1590" y="312" />
+        <di:waypoint x="1648" y="312" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06_check_di" bpmnElement="Flow_06_check" bioc:stroke="#1768a6">
+        <di:waypoint x="1668" y="332" />
+        <di:waypoint x="1668" y="360" />
+        <di:waypoint x="1720" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SkipSlot_di" bpmnElement="Flow_SkipSlot" bioc:stroke="#1768a6">
+        <di:waypoint x="1688" y="312" />
+        <di:waypoint x="1836" y="312" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06b_di" bpmnElement="Flow_06b" bioc:stroke="#1768a6">
         <di:waypoint x="1830" y="400" />
-        <di:waypoint x="1880" y="400" />
+        <di:waypoint x="1856" y="400" />
+        <di:waypoint x="1856" y="332" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_07_di" bpmnElement="Flow_07" bioc:stroke="#1768a6">
         <di:waypoint x="1900" y="420" />
