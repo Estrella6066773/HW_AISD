@@ -112,7 +112,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_01</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:userTask id="Register" name="P1 / P10 / P13&#10;Register request;&#10;check documents and ID">
-      <bpmn:documentation>Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. Demo only; enter no real patient or card data.</bpmn:documentation>
+      <bpmn:documentation>Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. The requested period is either 1 to 365 days or 1 to 52 weeks; V2 stores timeframe as that number followed by the unit. Demo only; enter no real patient or card data.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="register_request" />
@@ -121,16 +121,19 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:input source="= if is defined(specialty) then specialty else null" target="specialty" />
           <zeebe:input source="= if is defined(priority) then priority else null" target="priority" />
-          <zeebe:input source="= if is defined(timeframeAmount) then timeframeAmount else &#34;&#34;" target="timeframeAmount" />
           <zeebe:input source="= if is defined(timeframeUnit) then timeframeUnit else &#34;&#34;" target="timeframeUnit" />
+          <zeebe:input source="= if is defined(timeframeDays) then timeframeDays else &#34;&#34;" target="timeframeDays" />
+          <zeebe:input source="= if is defined(timeframeWeeks) then timeframeWeeks else &#34;&#34;" target="timeframeWeeks" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
           <zeebe:output source="= patientId" target="patientId" />
           <zeebe:output source="= specialty" target="specialty" />
           <zeebe:output source="= priority" target="priority" />
-          <zeebe:output source="= timeframeAmount" target="timeframeAmount" />
           <zeebe:output source="= timeframeUnit" target="timeframeUnit" />
-          <zeebe:output source="= string(timeframeAmount) + &#34; &#34; + timeframeUnit" target="timeframe" />
+          <zeebe:output source="= timeframeDays" target="timeframeDays" />
+          <zeebe:output source="= timeframeWeeks" target="timeframeWeeks" />
+          <zeebe:output source="= if timeframeUnit = &#34;weeks&#34; then timeframeWeeks else timeframeDays" target="timeframeAmount" />
+          <zeebe:output source="= if timeframeUnit = &#34;weeks&#34; then string(timeframeWeeks) + &#34; weeks&#34; else string(timeframeDays) + &#34; days&#34;" target="timeframe" />
           <zeebe:output source="= notes" target="RegisterNotes" />
           <zeebe:output source="= action" target="requestKind" />
           <zeebe:output source="= false" target="urgentCase" />
@@ -235,7 +238,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_Join_BookVisit</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="BookVisit" name="P3 / P4 / P12&#10;Book visit; notify patient;&#10;record attendance / contact">
-      <bpmn:documentation>Outpatient Bookings: only after referral acceptance or a clinical follow-up request. Confirm a slot within the requested timeframe; if unavailable keep pending, flag to the pathway team and avoid duplicates. Send an appointment letter. If within two weeks ALSO phone and record each attempt/outcome, including failed contact or an alternative date. Record attendance, cancellation, decline or DNA. Classroom completion represents these actions and elapsed time.</bpmn:documentation>
+      <bpmn:documentation>Outpatient Bookings: only after referral acceptance or a clinical follow-up request. Confirm a slot within the requested timeframe; if unavailable keep pending, flag to the pathway team and avoid duplicates. Send an appointment letter. If within two weeks ALSO phone and record each attempt/outcome, including failed contact or an alternative date. Record attendance, cancellation, decline or DNA. The V2 booking form rejects an appointment date in the past; a pending booking hides the date and time and requires a wait reason. Classroom completion represents these actions and elapsed time.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="book_visit" />

@@ -80,6 +80,7 @@
       "subtype": "date",
       "key": "appointmentDate",
       "label": "Appointment date",
+      "disallowPassedDates": true,
       "validate": {
         "required": true
       },

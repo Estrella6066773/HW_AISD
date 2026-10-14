@@ -82,24 +82,6 @@
       }
     },
     {
-      "id": "Field_timeframeAmount",
-      "type": "number",
-      "key": "timeframeAmount",
-      "label": "Requested period",
-      "decimalDigits": 0,
-      "serializeToString": true,
-      "validate": {
-        "required": true,
-        "min": 1,
-        "max": 365
-      },
-      "description": "Whole number. Days can be 1 to 365. Weeks should be 1 to 52.",
-      "layout": {
-        "row": "Row_3",
-        "columns": null
-      }
-    },
-    {
       "id": "Field_timeframeUnit",
       "type": "select",
       "key": "timeframeUnit",
@@ -117,8 +99,51 @@
       "validate": {
         "required": true
       },
+      "description": "Choose the unit first. Days allow 1 to 365. Weeks allow 1 to 52.",
       "layout": {
         "row": "Row_3b",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_timeframeDays",
+      "type": "number",
+      "key": "timeframeDays",
+      "label": "Requested period in days",
+      "decimalDigits": 0,
+      "serializeToString": true,
+      "validate": {
+        "required": true,
+        "min": 1,
+        "max": 365
+      },
+      "description": "Whole number from 1 to 365. Shown only when the unit is days.",
+      "conditional": {
+        "hide": "=timeframeUnit != \"days\""
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_timeframeWeeks",
+      "type": "number",
+      "key": "timeframeWeeks",
+      "label": "Requested period in weeks",
+      "decimalDigits": 0,
+      "serializeToString": true,
+      "validate": {
+        "required": true,
+        "min": 1,
+        "max": 52
+      },
+      "description": "Whole number from 1 to 52. Shown only when the unit is weeks.",
+      "conditional": {
+        "hide": "=timeframeUnit != \"weeks\""
+      },
+      "layout": {
+        "row": "Row_3w",
         "columns": null
       }
     },

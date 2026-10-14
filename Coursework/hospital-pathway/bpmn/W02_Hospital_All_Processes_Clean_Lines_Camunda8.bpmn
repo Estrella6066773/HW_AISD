@@ -111,13 +111,18 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
           <zeebe:input source="= if is defined(specialty) then specialty else null" target="specialty" />
           <zeebe:input source="= if is defined(priority) then priority else null" target="priority" />
-          <zeebe:input source="= if is defined(timeframe) then timeframe else &#34;&#34;" target="timeframe" />
+          <zeebe:input source="= if is defined(timeframeUnit) then timeframeUnit else &#34;&#34;" target="timeframeUnit" />
+          <zeebe:input source="= if is defined(timeframeDays) then timeframeDays else &#34;&#34;" target="timeframeDays" />
+          <zeebe:input source="= if is defined(timeframeWeeks) then timeframeWeeks else &#34;&#34;" target="timeframeWeeks" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
           <zeebe:output source="= patientId" target="patientId" />
           <zeebe:output source="= specialty" target="specialty" />
           <zeebe:output source="= priority" target="priority" />
-          <zeebe:output source="= timeframe" target="timeframe" />
+          <zeebe:output source="= timeframeUnit" target="timeframeUnit" />
+          <zeebe:output source="= timeframeDays" target="timeframeDays" />
+          <zeebe:output source="= timeframeWeeks" target="timeframeWeeks" />
+          <zeebe:output source="= if timeframeUnit = &#34;weeks&#34; then string(timeframeWeeks) + &#34; weeks&#34; else string(timeframeDays) + &#34; days&#34;" target="timeframe" />
           <zeebe:output source="= notes" target="RegisterNotes" />
           <zeebe:output source="= action" target="requestKind" />
           <zeebe:output source="= false" target="urgentCase" />
