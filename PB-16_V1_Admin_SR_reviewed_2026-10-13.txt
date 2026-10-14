@@ -72,7 +72,7 @@
           "x": 564,
           "y": 274,
           "customProperties": {
-            "Evidence": "BookVisit action and notes, then check-slot. No complete per-attempt contact log.",
+            "Evidence": "BookVisit records the outcome. On Hospital_All_Processes_V2, VisitNeedsSlot calls check-slot only for booked, attended and pending visits. Decline, patient cancellation and did-not-attend do not reserve a slot. There is still no complete per-attempt contact log.",
             "V1 status": "V1 manual/partial"
           }
         },
@@ -83,8 +83,8 @@
           "x": 564,
           "y": 364,
           "customProperties": {
-            "Evidence": "D5; ReviewReferral accept branch gates initial booking. Follow-up uses clinical request.",
-            "V1 status": "External dependency; conditional initial-referral acceptance"
+            "Evidence": "D5; ReviewReferral accept branch gates a new-patient booking. Follow-up uses a clinical request and does not need a new acceptance. This goal helps visit arrangement. It is not an AND part of every booking.",
+            "V1 status": "External dependency; initial referral only"
           }
         },
         {
@@ -127,8 +127,8 @@
           "x": 1020,
           "y": 445,
           "customProperties": {
-            "Evidence": "D14; cleared normal funding statuses or authorised arrangement. Urgent clinical exception is separate.",
-            "V1 status": "External dependency; normal route only"
+            "Evidence": "D14; a normal-route treatment appointment is confirmed only after hospital funding, insurer approval, verified payment or an authorised arrangement. Urgent care can proceed on a recorded clinical exception. Recording a pending outcome does not itself require clearance. This goal helps treatment coordination. It is not an AND part of every booking outcome.",
+            "V1 status": "External dependency; normal-route confirmation only"
           }
         },
         {
@@ -188,12 +188,12 @@
         },
         {
           "id": "f003fd6c-e3c6-445f-9e90-73f80b4dba00",
-          "text": "Notify patient of appointment [M/X]",
+          "text": "Notify patient and record contact attempts [M/P]",
           "type": "istar.Task",
           "x": 1037,
           "y": 625,
           "customProperties": {
-            "Evidence": "D20; BookVisit simulated contact; send-booking-confirmation mock for treatment. Telephone within 2 weeks is not automatically enforced.",
+            "Evidence": "D20; the case requires an appointment letter and, when the appointment is within two weeks, a telephone attempt, with each attempt and its outcome recorded. BookVisit notes and send-booking-confirmation cover only part of that. The two-week rule is not enforced by the process. Admin does not explain clinical results.",
             "V1 status": "V1 manual/partial"
           }
         },
@@ -330,22 +330,22 @@
         "Case paragraphs": "4",
         "V1 status": "符合案例；分支逻辑已有支持",
         "Evidence": "ReviewReferral → ReferralDecision；accept → BookVisit。",
-        "Qualification": "仅适用于接受分支；拒绝、补资料、转诊也是合法结果。所有任务 assignee=demo，未验证真正的 Consultant 权限。"
+        "Qualification": "案例只限制新患者预约：顾问接受之后才能安排。拒绝、补材料、转专科也是合法决定，不产生新患者预约。复诊依据临床提出的复查请求，不依赖一次新的接受。所有任务仍分给演示账号，没有验证真正的顾问权限。"
       },
       "source": "4d0e8ca4-2865-4114-932a-15705c2331bc",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     },
     {
       "id": "218e63f8-fffb-40ee-92e4-f6d73587b5b0",
-      "text": "D7 Approved clinic letter (required; V1 partial)",
-      "type": "istar.Resource",
+      "text": "D7 Clinic letter clinically approved",
+      "type": "istar.Goal",
       "x": 1037,
       "y": 67,
       "customProperties": {
         "Case paragraphs": "19–23",
         "V1 status": "案例要求正确；V1 有明显缺口",
         "Evidence": "ClinicalCare → DispatchLetter → dispatch-clinic-letter；ClinicalCareNotes 为自由备注。LetterWorkers 只写模拟外发记录。",
-        "Qualification": "保留业务上需要的已批准信件；V1 缺结构化正文、审批人/日期及分发前审批检查，不能称为已完整提供。"
+        "Qualification": "依赖目录里 D7 是目标：顾问批准诊后信之后，秘书才能分发，并且不能改动临床含义。框内的「已批准的诊后信」仍是分发任务需要的资源。第一版缺少结构化正文、批准人和批准日期，也没有在分发前检查批准，所以还不能称为已经提供。"
       },
       "source": "7d106e08-232f-4dfb-9da2-d1bfc5c3872e",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
@@ -359,8 +359,8 @@
       "customProperties": {
         "Case paragraphs": "5–6, 24",
         "V1 status": "符合案例；外部服务为模拟",
-        "Evidence": "BookVisit 后 check-slot；本地 booking_slot 写入。",
-        "Qualification": "V1 没有真实外部排期查询；不能据模拟确认断言符合指定临床时限。"
+        "Evidence": "需要号源时，BookVisit 之后由 VisitNeedsSlot 进入 check-slot，并在本地写入 booking_slot。已预约、已到诊、仍在等待会占号；拒绝、患者取消、未到诊不占号。",
+        "Qualification": "D9 在需要预约号源时成立。第一版没有真实外部排班查询，不能用模拟结果断言已经符合顾问要求的期限。"
       },
       "source": "ed04f306-e70f-4afe-a50a-122a87dfe374",
       "target": "d4d74b8d-fdb7-4784-ba89-d7837e0afb2e"
@@ -390,14 +390,14 @@
         "Case paragraphs": "9, 11–12",
         "V1 status": "符合案例；正常/紧急分支已有支持",
         "Evidence": "FundingOutcome：hospital_funded / insurer_approved / patient_paid / arrangement；urgent_review → UrgentAuthorisation。",
-        "Qualification": "不是所有治疗都要患者付款；正常路径可资金覆盖或授权安排，临床授权的紧急例外可以先治疗。"
+        "Qualification": "案例要求在确认治疗预约之前确定经费。多数患者由医院或保险覆盖，不直接付款。紧急情况下临床可以先治疗，再把原因交给财务。把经费放行写成每次记录预约结果都必须完成的与关系，会把待定和紧急例外也算进去，所以这里只作为对治疗协调的帮助。"
       },
       "source": "931f1222-13e1-40bd-9619-37d23276f79d",
       "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
     },
     {
       "id": "d865bd51-94e2-4942-8fbe-02b3032ab388",
-      "text": "D20 Notify patient of appointment",
+      "text": "D20 Recorded appointment notification and contact attempts",
       "type": "istar.Task",
       "x": 1210,
       "y": 640,
@@ -405,7 +405,7 @@
         "Case paragraphs": "5–6, 24",
         "V1 status": "符合案例；V1 人工/模拟支持",
         "Evidence": "BookVisit 及 send-booking-confirmation；电话/通知细节在备注中。",
-        "Qualification": "由“appointment and outcome”收窄为预约通知，避免暗示 Admin 负责解释临床结果。两周内电话规则和逐次联系记录未完整自动支持。"
+        "Qualification": "依赖目录里的 D20 包括预约信，以及两周内的电话和每一次联系结果。行政团队不负责解释临床结果。第一版把联系细节写在备注里，没有强制执行两周内电话，也没有逐次联系记录。"
       },
       "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
       "target": "f003fd6c-e3c6-445f-9e90-73f80b4dba00"
@@ -416,31 +416,36 @@
       "id": "88edf638-ee35-47fe-93cb-28b06755e727",
       "source": "02c53f81-dee9-4446-9e23-24f378139030",
       "target": "6561325b-1749-4c29-8586-d0a4a3dc1bbf",
-      "type": "istar.AndRefinementLink"
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "de2f4776-7534-480b-a504-a798aef7282a",
       "source": "1b6eb390-977f-4a6f-a5a2-4d9478d70c22",
       "target": "6561325b-1749-4c29-8586-d0a4a3dc1bbf",
-      "type": "istar.AndRefinementLink"
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "b23ada4b-fc7c-4442-a6ce-aee17be65b8e",
       "source": "cdcc382f-4f3a-4903-bcd6-b8e3bb264acf",
       "target": "6561325b-1749-4c29-8586-d0a4a3dc1bbf",
-      "type": "istar.AndRefinementLink"
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "e4598583-1789-4ddc-b6ef-a5dc64bc3ad1",
       "source": "0a037a3d-e23a-48eb-9e14-b5a01d73d400",
       "target": "6561325b-1749-4c29-8586-d0a4a3dc1bbf",
-      "type": "istar.AndRefinementLink"
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "b121805a-67ad-46ce-b1fc-590e3e6b9f07",
       "source": "f4076069-f15b-4579-a047-38739036f539",
       "target": "6561325b-1749-4c29-8586-d0a4a3dc1bbf",
-      "type": "istar.AndRefinementLink"
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "cbf9a281-16e1-4ed1-9572-de5169757f38",
@@ -481,8 +486,9 @@
     {
       "id": "33885831-f592-4a5d-bd0d-0069be403f9f",
       "source": "4d0e8ca4-2865-4114-932a-15705c2331bc",
-      "target": "eb020f4c-e650-40a3-97a1-8d3a79f99b40",
-      "type": "istar.AndRefinementLink"
+      "target": "1b6eb390-977f-4a6f-a5a2-4d9478d70c22",
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "6bc041bc-6f67-45b1-908c-4721f2f25c90",
@@ -493,8 +499,9 @@
     {
       "id": "6d762773-b96a-4c56-b541-2f4ec9519541",
       "source": "931f1222-13e1-40bd-9619-37d23276f79d",
-      "target": "77e388ce-2830-4165-88b0-30ed4894caf1",
-      "type": "istar.AndRefinementLink"
+      "target": "cdcc382f-4f3a-4903-bcd6-b8e3bb264acf",
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "49cf4816-e0be-4289-8fe3-ce095cc56579",
@@ -912,7 +919,7 @@
     "width": 1520,
     "height": 760,
     "customProperties": {
-      "Description": "Main-pathway actor rationale view, consistent with reviewed SD and original operational V1 (d599a8bd...). AND expresses responsibilities within scope, not mandatory sequential steps for every patient. Conditional/alternative branches remain conditional. M=manual; P=partial V1 support; X=mock integration. Dependencies represent business needs, not verified fulfilment. User tasks use demo: real role authorisation remains a gap. Enquiries, changes, refund processes and management escalation require additional views for full-case coverage. Clinical judgement/urgent authorisation does not belong to Admin or Finance. See the dependency audit for case paragraphs and implementation evidence."
+      "Description": "Admin-team rationale checked against the case and Hospital_All_Processes_V2. The five pathway goals help Patient pathway coordinated; a rejected referral can still be coordinated without treatment, a letter or a patient notification. Initial-referral acceptance helps visit arrangement and applies only to a new patient appointment. Normal-route funding clearance helps treatment coordination and applies before confirmation, not to every pending or urgent outcome. D7 is the clinical-approval goal from the dependency catalogue. D20 keeps the appointment letter and recorded contact attempts, including the two-week telephone, and does not assign clinical explanation to Admin. M=manual; P=partial support; X=mock integration. A dependency states a business need, not verified fulfilment. User tasks still use the demo assignee. Enquiries, changes, refunds and management escalation stay on other views. Clinical judgement and urgent authorisation do not belong to Admin."
     }
   }
 }
