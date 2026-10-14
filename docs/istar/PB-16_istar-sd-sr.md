@@ -76,19 +76,19 @@ Reading rule: **Depender** depends on **Dependee** for the **dependum**. Every r
 | D2 | ReferringOrganisation | ClinicalTeam | goal | Referral decision recorded | Consultant accepts, rejects, requests further information or redirects; reason and identity are recorded |
 | D3 | ReferringOrganisation | AdministrativeTeam | task | Communicate pathway outcome to referrer when required | Reject, redirect, DNA or discharge pathways may require the referrer to be informed |
 | D4 | ClinicalTeam | AdministrativeTeam | resource | Checked referral package | Clinical review starts after administrative document checking |
-| D5 | AdministrativeTeam | ClinicalTeam | goal | Authorised referral acceptance | New Patient Appointment may be arranged only after authorised acceptance |
+| D5 | AdministrativeTeam | ClinicalTeam | goal | Authorised acceptance before a new patient appointment | A new patient appointment is arranged only after an authorised consultant has accepted the referral. A later follow-up appointment is requested by a clinician and is not this dependency |
 | D6 | AdministrativeTeam | ClinicalTeam | resource | Authorised treatment booking request | Administrative staff must not process an unauthorised treatment request |
 | D7 | AdministrativeTeam | ClinicalTeam | goal | Clinic letter clinically approved | Secretaries distribute only after consultant approval; they must not change clinical meaning |
 | D8 | ClinicalTeam | AdministrativeTeam | task | Arrange clinic and treatment appointments | Bookings teams use scheduling and external clinical services after clinical authorisation |
 | D9 | AdministrativeTeam | ExternalSchedulingService | resource | Available appointment slot | Outpatient and follow-up bookings use the external scheduling service |
-| D10 | AdministrativeTeam | ExternalClinicalServices | resource | External treatment, laboratory or imaging availability | Some treatment appointments depend on external providers; outages leave bookings pending without duplicates |
-| D11 | AdministrativeTeam | ExternalCorrespondenceService | task | Send outbound patient correspondence | Appointment letters and approved clinic letters go through approved channels |
+| D10 | AdministrativeTeam | ExternalClinicalServices | resource | External treatment, laboratory or imaging availability | Some treatment appointments depend on an external provider. If that provider is unavailable, the booking stays pending and is not duplicated. Assumption A7 keeps treatment, laboratory and imaging as one dependee. Scheduling is D9 |
+| D11 | AdministrativeTeam | ExternalCorrespondenceService | task | Send appointment letters and approved clinic letters | The correspondence service sends the appointment letter to the patient, and sends an approved clinic letter to the recipients the consultant named. Those recipients may include the patient, the GP, another hospital or another professional |
 | D12 | Patient | ClinicalTeam | goal | Appropriate clinical assessment and care | Consultation, diagnosis, treatment options, CNS advice and fitness-to-continue decisions |
 | D13 | ClinicalTeam | Patient | goal | Informed consent to treatment | Treatment proceeds only when the patient agrees and consent is recorded |
-| D14 | AdministrativeTeam | FinanceTeam | goal | Funding or payment cleared before confirmation | Treatment appointments that need advance payment are not normally confirmed until funding, payment, exemption or arrangement is recorded |
+| D14 | AdministrativeTeam | FinanceTeam | goal | Normal-route clearance before treatment confirmation | Before a treatment appointment is confirmed on the normal route, Finance records hospital funding, insurer approval, verified patient payment, an exemption, or another authorised arrangement. Urgent treatment that a clinician authorises despite missing payment is D18, not a failure of D14 |
 | D15 | FinanceTeam | FundingOrganisation | resource | Funding approval record | Finance records organisation, authorisation reference, amount and limitations |
 | D16 | FinanceTeam | PaymentServiceProvider | resource | Verified payment or refund result | Provider returns status, transaction reference, date and amount; missing confirmation is investigated, not auto-retried as a new charge |
-| D17 | Patient | FinanceTeam | goal | Fair charging and refund handling | Patient is notified of failed or incomplete payment; refunds follow authorised finance decisions |
+| D17 | Patient | FinanceTeam | goal | Charging and refunds follow the recorded rules | The patient is told when a payment fails or remains incomplete. Another attempt must not create a second charge for the same booking. A refund is made only after an authorised finance decision |
 | D18 | ClinicalTeam | FinanceTeam | softgoal | Urgent care not blocked solely by payment delay | Clinicians may authorise urgent treatment with a recorded reason; Finance resolves afterwards |
 | D19 | FinanceTeam | ClinicalTeam | resource | Treatment and modification context for charges | Finance needs the clinical treatment or modification facts to decide funding, payment or refund |
 | D20 | Patient | AdministrativeTeam | task | Recorded appointment notification and contact attempts | Letters plus telephone contact within two weeks; each attempt and outcome is recorded |
@@ -128,7 +128,7 @@ Elements below are the SR vocabulary. Softgoals that the initial release does **
 | Kind | Name | Links |
 |------|------|-------|
 | Goal | Receive appropriate specialist care | Depends on D12 |
-| Goal | Fair and clear charging | Depends on D17 |
+| Goal | Charging and refunds follow the recorded rules | Depends on D17 |
 | Task | Attend or respond to appointment contacts | Supports D20 |
 | Goal | Give or withhold informed consent | Provides D13 |
 | Softgoal | Timely, understandable communication | Partially via D11, D20; preferences deferred (Section 8) |
@@ -158,7 +158,7 @@ Elements below are the SR vocabulary. Softgoals that the initial release does **
 | Task | Notify patient and record contact attempts | Provides D20; uses D11 |
 | Task | Distribute approved clinic letters | Uses D7, D11 |
 | Task | Route enquiries; escalate clinical matters | Uses D21 |
-| Resource | Authorised referral acceptance | From D5 |
+| Resource | Authorised acceptance before a new patient appointment | From D5 |
 | Resource | Authorised treatment booking request | From D6 |
 | Resource | Available appointment slot | From D9 |
 | Resource | External clinical service availability | From D10 |
@@ -234,7 +234,7 @@ Every SD dependency must appear in the SR. The table maps each dependency to the
 | D2 | ReferringOrganisation goal “Patient accepted onto an appropriate specialist pathway” ↔ ClinicalTeam task “Review referral and record decision” |
 | D3 | ReferringOrganisation softgoal “Timely feedback…” ↔ AdministrativeTeam pathway-outcome communication tasks |
 | D4 | ClinicalTeam resource “Checked referral package” ↔ AdministrativeTeam task “Check referral documents…” |
-| D5 | AdministrativeTeam resource “Authorised referral acceptance” ↔ ClinicalTeam goal/task for referral acceptance |
+| D5 | AdministrativeTeam resource “Authorised acceptance before a new patient appointment” ↔ ClinicalTeam task “Review referral and record decision”, and only the acceptance result |
 | D6 | AdministrativeTeam resource “Authorised treatment booking request” ↔ ClinicalTeam task “Authorise treatment booking request” |
 | D7 | AdministrativeTeam letter-distribution task ↔ ClinicalTeam task “Approve clinic letter content” |
 | D8 | ClinicalTeam care goals ↔ AdministrativeTeam task “Book clinic and treatment appointments” |
@@ -246,10 +246,10 @@ Every SD dependency must appear in the SR. The table maps each dependency to the
 | D14 | AdministrativeTeam goal “Keep the patient pathway moving…” ↔ FinanceTeam goal “Determine funding before treatment confirmation” |
 | D15 | FinanceTeam resource “Funding approval record” ↔ FundingOrganisation resource of the same name |
 | D16 | FinanceTeam resource “Verified payment or refund result” ↔ PaymentServiceProvider resource/task |
-| D17 | Patient goal “Fair and clear charging” ↔ FinanceTeam goal “Collect or refund money correctly” |
+| D17 | Patient goal “Charging and refunds follow the recorded rules” ↔ FinanceTeam goal “Collect or refund money correctly” |
 | D18 | ClinicalTeam softgoal “Clinical work not delayed solely by payment…” ↔ FinanceTeam separation-of-duties softgoal and urgent-care follow-up |
 | D19 | FinanceTeam resource “Treatment and modification context” ↔ ClinicalTeam authorisation/modification tasks |
-| D20 | Patient softgoal for timely communication ↔ AdministrativeTeam task “Notify patient and record contact attempts” |
+| D20 | Patient depends on AdministrativeTeam task “Notify patient and record contact attempts”; the patient softgoal “Timely, understandable communication” is only partly carried by this task |
 | D21 | AdministrativeTeam task “Route enquiries…” ↔ ClinicalTeam task “Respond to escalated clinical enquiries” |
 | D22 | AdministrativeTeam softgoal “No duplicate bookings…” ↔ HospitalPatientAdministrationSystem softgoal “Traceable pathway without duplicate bookings” |
 | D23 | FinanceTeam softgoal “Auditable payments without storing full card data” ↔ HospitalPatientAdministrationSystem softgoal of the same intent |

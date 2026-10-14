@@ -38,19 +38,19 @@ flowchart LR
   RO -->|D2 goal: Referral decision recorded| CL
   RO -->|D3 task: Communicate pathway outcome to referrer| AD
   CL -->|D4 resource: Checked referral package| AD
-  AD -->|D5 goal: Authorised referral acceptance| CL
+  AD -->|D5 goal: Authorised acceptance before a new patient appointment| CL
   AD -->|D6 resource: Authorised treatment booking request| CL
   AD -->|D7 goal: Clinic letter clinically approved| CL
   CL -->|D8 task: Arrange clinic and treatment appointments| AD
   AD -->|D9 resource: Available appointment slot| ESS
   AD -->|D10 resource: External treatment lab or imaging availability| ECS
-  AD -->|D11 task: Send outbound patient correspondence| ECSND
+  AD -->|D11 task: Send appointment letters and approved clinic letters| ECSND
   PT -->|D12 goal: Appropriate clinical assessment and care| CL
   CL -->|D13 goal: Informed consent to treatment| PT
-  AD -->|D14 goal: Funding or payment cleared before confirmation| FI
+  AD -->|D14 goal: Normal-route clearance before treatment confirmation| FI
   FI -->|D15 resource: Funding approval record| FO
   FI -->|D16 resource: Verified payment or refund result| PSP
-  PT -->|D17 goal: Fair charging and refund handling| FI
+  PT -->|D17 goal: Charging and refunds follow the recorded rules| FI
   CL -->|D18 softgoal: Urgent care not blocked solely by payment delay| FI
   FI -->|D19 resource: Treatment and modification context for charges| CL
   PT -->|D20 task: Recorded appointment notification and contact attempts| AD

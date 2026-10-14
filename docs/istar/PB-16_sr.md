@@ -48,7 +48,7 @@ flowchart TB
   PT([Patient])
   subgraph PT_boundary[Patient rationale]
     PT_G1[goal: Receive appropriate specialist care]
-    PT_G2[goal: Fair and clear charging]
+    PT_G2[goal: Charging and refunds follow the recorded rules]
     PT_G3[goal: Give or withhold informed consent]
     PT_T1[task: Attend or respond to appointment contacts]
     PT_SG1[softgoal: Timely understandable communication]
@@ -133,7 +133,7 @@ flowchart TB
     AD_T4[task: Distribute approved clinic letters]
     AD_T5[task: Route enquiries and escalate clinical matters]
     AD_T6[task: Communicate pathway outcome to referrer when required]
-    AD_R1[resource: Authorised referral acceptance]
+    AD_R1[resource: Authorised acceptance before a new patient appointment]
     AD_R2[resource: Authorised treatment booking request]
     AD_R3[resource: Available appointment slot]
     AD_R4[resource: External clinical service availability]
