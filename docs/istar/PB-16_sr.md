@@ -23,7 +23,7 @@ SD links: **D1** (provides), **D2**, **D3**.
 flowchart TB
   RO([ReferringOrganisation])
   subgraph RO_boundary[ReferringOrganisation rationale]
-    RO_G1[goal: Patient accepted onto appropriate specialist pathway]
+    RO_G1[goal: Referral decision recorded]
     RO_T1[task: Submit referral with supporting documents]
     RO_SG1[softgoal: Timely feedback on rejection redirect or DNA]
     RO_T1 --> RO_G1
@@ -78,6 +78,7 @@ flowchart TB
   subgraph CL_boundary[ClinicalTeam rationale]
     CL_G1[goal: Make safe referral and treatment decisions]
     CL_G2[goal: Obtain informed consent before treatment]
+    CL_G3[goal: Clinic and treatment appointments arranged after authorisation]
     CL_T1[task: Review referral and record decision]
     CL_T2[task: Authorise treatment booking request]
     CL_T3[task: Approve clinic letter content]
@@ -88,7 +89,9 @@ flowchart TB
     CL_SG2[softgoal: Clinical authorisations recorded and protected]
     CL_R1 --> CL_T1
     CL_T1 --> CL_G1
+    CL_T1 -->|when a visit is authorised| CL_G3
     CL_T2 --> CL_G1
+    CL_T2 --> CL_G3
     CL_T3 --> CL_G1
     CL_T4 --> CL_G1
     CL_T5 --> CL_G1
@@ -104,10 +107,10 @@ flowchart TB
   RO([ReferringOrganisation])
   CL_T1 -.->|D2 goal to ReferringOrganisation| RO
   CL_R1 -.->|D4 resource from AdministrativeTeam| AD
-  CL_T1 -.->|D5 goal to AdministrativeTeam| AD
+  CL_T1 -.->|D5 goal to AdministrativeTeam when accepted| AD
   CL_T2 -.->|D6 resource to AdministrativeTeam| AD
   CL_T3 -.->|D7 goal to AdministrativeTeam| AD
-  CL_G1 -.->|D8 task on AdministrativeTeam| AD
+  CL_G3 -.->|D8 task on AdministrativeTeam| AD
   CL_G1 -.->|D12 goal to Patient| PT
   CL_G2 -.->|D13 goal on Patient| PT
   CL_SG1 -.->|D18 softgoal on FinanceTeam| FI
@@ -133,16 +136,16 @@ flowchart TB
     AD_T4[task: Distribute approved clinic letters]
     AD_T5[task: Route enquiries and escalate clinical matters]
     AD_T6[task: Communicate pathway outcome to referrer when required]
-    AD_R1[resource: Authorised acceptance before a new patient appointment]
+    AD_G2[goal: Authorised acceptance before a new patient appointment]
     AD_R2[resource: Authorised treatment booking request]
     AD_R3[resource: Available appointment slot]
-    AD_R4[resource: External clinical service availability]
+    AD_R4[resource: External treatment laboratory or imaging availability]
     AD_SG1[softgoal: No duplicate bookings when external services fail]
     AD_T1 --> AD_G1
-    AD_R1 --> AD_T2
-    AD_R2 --> AD_T2
-    AD_R3 --> AD_T2
-    AD_R4 --> AD_T2
+    AD_G2 -->|new patient appointment only| AD_T2
+    AD_R2 -->|treatment booking| AD_T2
+    AD_R3 -->|clinic booking| AD_T2
+    AD_R4 -->|treatment booking| AD_T2
     AD_T2 --> AD_G1
     AD_T3 --> AD_G1
     AD_T4 --> AD_G1
@@ -162,7 +165,7 @@ flowchart TB
   AD_T1 -.->|D1 resource on ReferringOrganisation| RO
   AD_T6 -.->|D3 task to ReferringOrganisation| RO
   AD_T1 -.->|D4 resource to ClinicalTeam| CL
-  AD_R1 -.->|D5 goal on ClinicalTeam| CL
+  AD_G2 -.->|D5 goal on ClinicalTeam| CL
   AD_R2 -.->|D6 resource on ClinicalTeam| CL
   AD_T4 -.->|D7 goal on ClinicalTeam| CL
   AD_T2 -.->|D8 task to ClinicalTeam| CL
@@ -170,7 +173,7 @@ flowchart TB
   AD_R4 -.->|D10 resource on ExternalClinicalServices| ECS
   AD_T3 -.->|D11 task on ExternalCorrespondenceService| ECSND
   AD_T4 -.->|D11 task on ExternalCorrespondenceService| ECSND
-  AD_G1 -.->|D14 goal on FinanceTeam| FI
+  AD_T2 -.->|D14 goal on FinanceTeam for treatment confirmation| FI
   AD_T3 -.->|D20 task to Patient| PT
   AD_T5 -.->|D21 task on ClinicalTeam| CL
   AD_SG1 -.->|D22 softgoal on HospitalPatientAdministrationSystem| HPAS
@@ -186,7 +189,7 @@ SD links: **D14** (provides), **D15**, **D16**, **D17** (provides), **D18** (sup
 flowchart TB
   FI([FinanceTeam])
   subgraph FI_boundary[FinanceTeam rationale]
-    FI_G1[goal: Determine funding before treatment confirmation]
+    FI_G1[goal: Record normal-route clearance before treatment confirmation]
     FI_G2[goal: Collect or refund money correctly]
     FI_T1[task: Record funding approval details]
     FI_T2[task: Request payment or refund via provider]
@@ -202,7 +205,6 @@ flowchart TB
     FI_R3 --> FI_G2
     FI_T2 --> FI_G2
     FI_T3 --> FI_G2
-    FI_SG1 --> FI_G1
     FI_SG2 --> FI_G2
   end
   FI --- FI_boundary
@@ -287,7 +289,7 @@ flowchart TB
   PSP([PaymentServiceProvider])
   subgraph PSP_boundary[PaymentServiceProvider rationale]
     PSP_T1[task: Process payment or refund]
-    PSP_R1[resource: Verified transaction result]
+    PSP_R1[resource: Verified payment or refund result]
     PSP_T1 --> PSP_R1
   end
   PSP --- PSP_boundary

@@ -43,7 +43,7 @@ flowchart LR
   AD -->|D7 goal: Clinic letter clinically approved| CL
   CL -->|D8 task: Arrange clinic and treatment appointments| AD
   AD -->|D9 resource: Available appointment slot| ESS
-  AD -->|D10 resource: External treatment lab or imaging availability| ECS
+  AD -->|D10 resource: External treatment, laboratory or imaging availability| ECS
   AD -->|D11 task: Send appointment letters and approved clinic letters| ECSND
   PT -->|D12 goal: Appropriate clinical assessment and care| CL
   CL -->|D13 goal: Informed consent to treatment| PT

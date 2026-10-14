@@ -10,7 +10,7 @@
 
 - Assessment Task 02 in `W01/S03 - Assessment Introduction(1).pptx`
 - Case study: `W01/Case Study - Hospital Patient Referral, Treatment and Administration System.docx`
-- Executable-scope reference only: `Coursework/hospital-pathway/README.md` and `Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`
+- Executable-scope reference only: `Coursework/hospital-pathway/README.md` and `Coursework/hospital-pathway/bpmn/Hospital_All_Processes_V2.bpmn`
 - Diagram files: [`PB-16_sd.md`](PB-16_sd.md), [`PB-16_sr.md`](PB-16_sr.md), presentation figure [`PB-16_sd-overview.png`](PB-16_sd-overview.png)
 
 ---
@@ -119,7 +119,7 @@ Elements below are the SR vocabulary. Softgoals that the initial release does **
 
 | Kind | Name | Links |
 |------|------|-------|
-| Goal | Patient accepted onto an appropriate specialist pathway | Contributes to D2 |
+| Goal | Referral decision recorded | Depends on D2. The decision may be acceptance, rejection, a request for more information, or a redirect |
 | Task | Submit referral with supporting documents | Provides D1 |
 | Softgoal | Timely feedback on rejection, redirect or DNA | Supported via D3 |
 
@@ -129,17 +129,18 @@ Elements below are the SR vocabulary. Softgoals that the initial release does **
 |------|------|-------|
 | Goal | Receive appropriate specialist care | Depends on D12 |
 | Goal | Charging and refunds follow the recorded rules | Depends on D17 |
-| Task | Attend or respond to appointment contacts | Supports D20 |
+| Task | Attend or respond to appointment contacts | The patient's own response after a contact |
 | Goal | Give or withhold informed consent | Provides D13 |
-| Softgoal | Timely, understandable communication | Partially via D11, D20; preferences deferred (Section 8) |
+| Softgoal | Timely, understandable communication | Depends on D20. D11 is AdministrativeTeam's dependency on the correspondence service, not the patient's. Preferences stay in Section 8 |
 
 ### 6.3 ClinicalTeam
 
 | Kind | Name | Links |
 |------|------|-------|
-| Goal | Make safe referral and treatment decisions | Uses D4; provides D2, D5, D6, D7 |
+| Goal | Make safe referral and treatment decisions | Uses D4; provides D2, D6 and D7. Provides D5 only when the recorded decision accepts a new patient referral |
+| Goal | Clinic and treatment appointments arranged after authorisation | Depends on D8 |
 | Goal | Obtain informed consent before treatment | Depends on D13 |
-| Task | Review referral and record decision | Provides D2, D5 |
+| Task | Review referral and record decision | Provides D2. Provides D5 only when the decision is acceptance |
 | Task | Authorise treatment booking request | Provides D6 |
 | Task | Approve clinic letter content | Provides D7 |
 | Task | Respond to escalated clinical enquiries | Provides D21 |
@@ -152,23 +153,24 @@ Elements below are the SR vocabulary. Softgoals that the initial release does **
 
 | Kind | Name | Links |
 |------|------|-------|
-| Goal | Keep the patient pathway moving within clinical authorisations | Uses D5, D6, D7, D14 |
+| Goal | Keep the patient pathway moving within clinical authorisations | Uses D6 and D7 on the routes those dependencies cover |
+| Goal | Authorised acceptance before a new patient appointment | From D5. Applies when the booking is a new patient appointment, not to a later follow-up |
 | Task | Check referral documents and request missing items | Consumes D1; provides D4 |
-| Task | Book clinic and treatment appointments | Provides D8; uses D9, D10 |
-| Task | Notify patient and record contact attempts | Provides D20; uses D11 |
-| Task | Distribute approved clinic letters | Uses D7, D11 |
+| Task | Book clinic and treatment appointments | Provides D8. Clinic bookings use D9. Treatment bookings use D10. A new patient appointment also uses D5. Normal-route treatment confirmation uses D14 |
+| Task | Notify patient and record contact attempts | Provides D20; uses D11 for the appointment letter |
+| Task | Distribute approved clinic letters | Uses D7, and uses D11 for the clinic letter |
 | Task | Route enquiries; escalate clinical matters | Uses D21 |
-| Resource | Authorised acceptance before a new patient appointment | From D5 |
+| Task | Communicate pathway outcome to the referrer when required | Provides D3 |
 | Resource | Authorised treatment booking request | From D6 |
 | Resource | Available appointment slot | From D9 |
-| Resource | External clinical service availability | From D10 |
+| Resource | External treatment, laboratory or imaging availability | From D10 |
 | Softgoal | No duplicate bookings when external services fail | Depends on D22 |
 
 ### 6.5 FinanceTeam
 
 | Kind | Name | Links |
 |------|------|-------|
-| Goal | Determine funding before treatment confirmation | Provides D14; uses D15, D19 |
+| Goal | Record normal-route clearance before treatment confirmation | Provides D14; uses D15 and D19. Urgent treatment despite missing payment is D18 |
 | Goal | Collect or refund money correctly | Uses D16; provides D17 |
 | Task | Record funding approval details | Uses D15 |
 | Task | Request payment or refund via the provider | Uses D16 |
@@ -176,7 +178,7 @@ Elements below are the SR vocabulary. Softgoals that the initial release does **
 | Resource | Treatment and modification context | From D19 |
 | Resource | Funding approval record | From D15 |
 | Resource | Verified payment or refund result | From D16 |
-| Softgoal | Separate financial authority from clinical necessity decisions | Aligns with A6 |
+| Softgoal | Separate financial authority from clinical necessity decisions | Supports D18 and aligns with A6. This softgoal is not a means of the normal-route clearance goal |
 | Softgoal | Auditable payments without storing full card data | Depends on D23 |
 
 ### 6.6 ExternalSchedulingService
@@ -204,7 +206,7 @@ Elements below are the SR vocabulary. Softgoals that the initial release does **
 | Kind | Name | Links |
 |------|------|-------|
 | Task | Process payment or refund | Supports D16 |
-| Resource | Verified transaction result | Provides D16 |
+| Resource | Verified payment or refund result | Provides D16 |
 
 ### 6.10 FundingOrganisation
 
@@ -231,23 +233,23 @@ Every SD dependency must appear in the SR. The table maps each dependency to the
 | SD ID | SR location (actor internal element ↔ dependum) |
 |-------|--------------------------------------------------|
 | D1 | AdministrativeTeam task “Check referral documents…” ↔ ReferringOrganisation task “Submit referral with supporting documents” |
-| D2 | ReferringOrganisation goal “Patient accepted onto an appropriate specialist pathway” ↔ ClinicalTeam task “Review referral and record decision” |
-| D3 | ReferringOrganisation softgoal “Timely feedback…” ↔ AdministrativeTeam pathway-outcome communication tasks |
+| D2 | ReferringOrganisation goal “Referral decision recorded” ↔ ClinicalTeam task “Review referral and record decision” |
+| D3 | ReferringOrganisation softgoal “Timely feedback…” ↔ AdministrativeTeam task “Communicate pathway outcome to the referrer when required” |
 | D4 | ClinicalTeam resource “Checked referral package” ↔ AdministrativeTeam task “Check referral documents…” |
-| D5 | AdministrativeTeam resource “Authorised acceptance before a new patient appointment” ↔ ClinicalTeam task “Review referral and record decision”, and only the acceptance result |
+| D5 | AdministrativeTeam goal “Authorised acceptance before a new patient appointment” ↔ ClinicalTeam task “Review referral and record decision”, only when that decision is acceptance |
 | D6 | AdministrativeTeam resource “Authorised treatment booking request” ↔ ClinicalTeam task “Authorise treatment booking request” |
 | D7 | AdministrativeTeam letter-distribution task ↔ ClinicalTeam task “Approve clinic letter content” |
-| D8 | ClinicalTeam care goals ↔ AdministrativeTeam task “Book clinic and treatment appointments” |
+| D8 | ClinicalTeam goal “Clinic and treatment appointments arranged after authorisation” ↔ AdministrativeTeam task “Book clinic and treatment appointments” |
 | D9 | AdministrativeTeam resource “Available appointment slot” ↔ ExternalSchedulingService resource of the same name |
-| D10 | AdministrativeTeam resource “External clinical service availability” ↔ ExternalClinicalServices resource |
+| D10 | AdministrativeTeam resource “External treatment, laboratory or imaging availability” ↔ ExternalClinicalServices resource of the same name |
 | D11 | AdministrativeTeam notification/letter tasks ↔ ExternalCorrespondenceService task “Deliver outbound correspondence” |
 | D12 | Patient goal “Receive appropriate specialist care” ↔ ClinicalTeam goal “Make safe referral and treatment decisions” |
 | D13 | ClinicalTeam goal “Obtain informed consent…” ↔ Patient goal “Give or withhold informed consent” |
-| D14 | AdministrativeTeam goal “Keep the patient pathway moving…” ↔ FinanceTeam goal “Determine funding before treatment confirmation” |
+| D14 | AdministrativeTeam task “Book clinic and treatment appointments” ↔ FinanceTeam goal “Record normal-route clearance before treatment confirmation” |
 | D15 | FinanceTeam resource “Funding approval record” ↔ FundingOrganisation resource of the same name |
-| D16 | FinanceTeam resource “Verified payment or refund result” ↔ PaymentServiceProvider resource/task |
+| D16 | FinanceTeam resource “Verified payment or refund result” ↔ PaymentServiceProvider resource of the same name. The provider task “Process payment or refund” produces that resource |
 | D17 | Patient goal “Charging and refunds follow the recorded rules” ↔ FinanceTeam goal “Collect or refund money correctly” |
-| D18 | ClinicalTeam softgoal “Clinical work not delayed solely by payment…” ↔ FinanceTeam separation-of-duties softgoal and urgent-care follow-up |
+| D18 | ClinicalTeam softgoal “Clinical work not delayed solely by payment…” ↔ FinanceTeam softgoal “Separate financial authority from clinical necessity decisions” |
 | D19 | FinanceTeam resource “Treatment and modification context” ↔ ClinicalTeam authorisation/modification tasks |
 | D20 | Patient depends on AdministrativeTeam task “Notify patient and record contact attempts”; the patient softgoal “Timely, understandable communication” is only partly carried by this task |
 | D21 | AdministrativeTeam task “Route enquiries…” ↔ ClinicalTeam task “Respond to escalated clinical enquiries” |
