@@ -588,7 +588,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_55</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="FinanceAdjustment" name="P7 / P11 / P12&#10;Approve and record refund,&#10;payment transfer or retention">
-      <bpmn:documentation>Only authorised Finance approves full/partial refunds or payment transfer/retention. Record decision, amount, reason and provider result linked to patient, appointment and original transaction. Clinical staff supply treatment facts but do not approve refunds. Pending provider results remain open for recorded follow-up.</bpmn:documentation>
+      <bpmn:documentation>Only authorised Finance approves full/partial refunds or payment transfer/retention. Record decision, amount, reason and provider result linked to patient, appointment and original transaction. Clinical staff supply treatment facts but do not approve refunds. Pending provider results remain open for recorded follow-up. The V2 form shows the original charge and does not write it back. A partial refund lower than that charge, or any other invalid amount, fails request-refund once.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="finance_adjustment" />
@@ -599,6 +599,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
           <zeebe:input source="= if is defined(adjustmentAmount) then adjustmentAmount else &#34;&#34;" target="adjustmentAmount" />
+          <zeebe:input source="= if is defined(charge_amount) then charge_amount else &#34;&#34;" target="charge_amount" />
           <zeebe:output source="= patientId" target="patientId" />
           <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="adjustmentReason" />
@@ -762,7 +763,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_50b</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="RequestRefund" name="P7 / P11 / P12&#10;Request refund /&#10;record adjustment">
-      <bpmn:documentation>Member A worker type request-refund. After FinanceAdjustment form: write payment_ledger (SUCCESSFUL if resolved, INVESTIGATE if pending) and audit_event; then AdjustmentOutcome gateway.</bpmn:documentation>
+      <bpmn:documentation>Member A worker type request-refund. After FinanceAdjustment on the V2 diagram: write payment_ledger and audit_event, then AdjustmentOutcome. An invalid amount or decision fails this job once, with retries left at 0. A technical failure can still use the retries declared here.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="request-refund" retries="3" />
       </bpmn:extensionElements>

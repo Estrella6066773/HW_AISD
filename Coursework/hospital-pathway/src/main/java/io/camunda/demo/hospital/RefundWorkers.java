@@ -2,6 +2,7 @@ package io.camunda.demo.hospital;
 
 import io.camunda.client.annotation.JobWorker;
 import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.JobClient;
 import io.camunda.demo.hospital.domain.AuditEventWriter;
 import io.camunda.demo.hospital.domain.PaymentLedger;
 import io.camunda.demo.hospital.domain.PaymentLedgerRepository;
@@ -40,11 +41,26 @@ public class RefundWorkers {
 	}
 
 	/**
+	 * V2 图上 {@code FinanceAdjustment} 完成后的作业入口。
+	 * 表单只展示原收费，部分退款是否低于原收费由 {@link #requestRefund(ActivatedJob)} 判断。
+	 * 判断失败时立刻把作业标成失败并且剩余重试次数为 0，不再按图上的 {@code retries="3"} 把同一句错误重复三次。
+	 * 技术性异常仍交给 Camunda 按剩余次数重试。
+	 */
+	@JobWorker(type = "request-refund", autoComplete = false)
+	public void completeRefundJob(final JobClient jobClient, final ActivatedJob job) {
+		try {
+			Map<String, Object> out = requestRefund(job);
+			jobClient.newCompleteCommand(job).variables(out).send().join();
+		} catch (IllegalArgumentException rejected) {
+			jobClient.newFailCommand(job).retries(0).errorMessage(rejected.getMessage()).send().join();
+		}
+	}
+
+	/**
 	 * 线 13：财务表填完后，由 V2 图上的 {@code AdjustmentOutcome} 读取 {@code financeAdjustment}。
 	 * 全额/部分退款、转款、保留费用各自写不同账本状态；{@code pending} 留在调查，不补 10.01。
+	 * 测试直接调用本方法。金额或决定不合法时抛出 {@link IllegalArgumentException}，由 {@link #completeRefundJob} 转成一次失败。
 	 */
-	// 线 13。服务任务，不发消息，返回变量即可。
-	@JobWorker(type = "request-refund")
 	public Map<String, Object> requestRefund(final ActivatedJob job) {
 		Map<String, Object> vars = job.getVariablesAsMap();
 		String caseReference = caseRef(vars);

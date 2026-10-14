@@ -489,6 +489,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
           <zeebe:input source="= null" target="action" />
           <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:input source="= if is defined(charge_amount) then charge_amount else &#34;&#34;" target="charge_amount" />
           <zeebe:output source="= patientId" target="patientId" />
           <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="FinanceAdjustmentNotes" />
