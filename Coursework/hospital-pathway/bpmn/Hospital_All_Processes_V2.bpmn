@@ -37,7 +37,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     </bpmn:textAnnotation>
   </bpmn:collaboration>
   <bpmn:process id="Hospital_All_Processes_V2_C8" name="Hospital - Version 2 (Merging Gateway Improvement)" isExecutable="true">
-    <bpmn:documentation>Release 2 working model, separate from the preserved Release 1 file. Current change: four explicit exclusive merges before BookVisit, ClinicalCare, Funding and BookTreatment. This is the first V2 improvement, not a claim that all later-release work is finished. Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Payment follows the Est / Message Example pattern: send task request-payment publishes BPMN message payment-result (correlation key case_reference); intermediate catch PaymentReceived consumes it. Booking confirmation is send task send-booking-confirmation (worker completes the job; no separate inbound message wait). There are no timers. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. User tasks use dedicated Camunda forms with hardcoded select options (no valuesKey). Task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving.</bpmn:documentation>
+    <bpmn:documentation>Release 2 working model, separate from the preserved Release 1 file. Current change: four explicit exclusive merges before BookVisit, ClinicalCare, Funding and BookTreatment. This is the first V2 improvement, not a claim that all later-release work is finished. A later V2 change adds exclusive merges before VisitOutcome, ClinicalChange and MarkPaymentInvestigate. Ryan's four merges stay in place. Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Payment follows the Est / Message Example pattern: send task request-payment publishes BPMN message payment-result (correlation key case_reference); intermediate catch PaymentReceived consumes it. Booking confirmation is send task send-booking-confirmation (worker completes the job; no separate inbound message wait). There are no timers. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. User tasks use dedicated Camunda forms with hardcoded select options (no valuesKey). Task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving.</bpmn:documentation>
     <bpmn:laneSet id="Hospital_Lanes">
       <bpmn:lane id="Finance" name="Finance">
         <bpmn:flowNodeRef>Funding</bpmn:flowNodeRef>
@@ -54,6 +54,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>RequestRefund</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>MarkPaymentInvestigate</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_Funding</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_MarkPaymentInvestigate</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Clinical" name="Clinical team">
         <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
@@ -73,6 +74,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>NotifyCareChange</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndCare</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_ClinicalCare</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_ClinicalChange</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>RecordDecline</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>RecordDna</bpmn:flowNodeRef>
       </bpmn:lane>
@@ -103,6 +105,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>LetterOutcome</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_BookVisit</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_BookTreatment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_VisitOutcome</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Start" name="Start request">
@@ -257,9 +260,14 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_Join_BookVisit</bpmn:incoming>
       <bpmn:outgoing>Flow_06</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="VisitOutcome" name="Visit&#10;outcome?" default="Flow_35">
+    <bpmn:exclusiveGateway id="Join_VisitOutcome" gatewayDirection="Converging">
+      <bpmn:documentation>Exclusive merge before the visit-outcome decision on the V2 diagram. CheckVisitSlot and AwaitAttendance both enter here. Pass-through only: no condition and no change to visitOutcome. Ryan's Join_BookVisit stays upstream of BookVisit.</bpmn:documentation>
       <bpmn:incoming>Flow_06b</bpmn:incoming>
       <bpmn:incoming>Flow_AwaitReturn</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_VisitOutcome</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="VisitOutcome" name="Visit&#10;outcome?" default="Flow_35">
+      <bpmn:incoming>Flow_Join_VisitOutcome</bpmn:incoming>
       <bpmn:outgoing>Flow_07</bpmn:outgoing>
       <bpmn:outgoing>Flow_35</bpmn:outgoing>
       <bpmn:outgoing>Flow_36</bpmn:outgoing>
@@ -535,6 +543,15 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_16</bpmn:outgoing>
       <bpmn:outgoing>Flow_50</bpmn:outgoing>
     </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Join_ClinicalChange" gatewayDirection="Converging">
+      <bpmn:documentation>Exclusive merge before ClinicalChange on the V2 diagram. RequestType, patient cancellation, the review-plan loop, RecordDecline and RecordDna enter here. Pass-through only. Ryan's Join_ClinicalCare stays in front of ClinicalCare and is not reused for this task.</bpmn:documentation>
+      <bpmn:incoming>Flow_22</bpmn:incoming>
+      <bpmn:incoming>Flow_36</bpmn:incoming>
+      <bpmn:incoming>Flow_62</bpmn:incoming>
+      <bpmn:incoming>Flow_DeclineToChange</bpmn:incoming>
+      <bpmn:incoming>Flow_DnaToChange</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_ClinicalChange</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:userTask id="ClinicalChange" name="P11 / P12&#10;Authorise modification,&#10;follow-up or cancellation">
       <bpmn:documentation>Consultant / authorised clinician: review formal treatment changes, DNA/cancellation or follow-up requests. Reject unapproved verbal/email changes. Urgent safety postponement must be promptly documented and authorised. Select the clinical plan and indicate whether existing charges/funding/payments are affected; this flags Finance review and does NOT authorise a refund.</bpmn:documentation>
       <bpmn:extensionElements>
@@ -554,11 +571,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:output source="= if action = &#34;reschedule_paid&#34; or action = &#34;reschedule_unpaid&#34; then &#34;treatment&#34; else if action = &#34;follow_up_paid&#34; or action = &#34;follow_up_unpaid&#34; then &#34;visit&#34; else if action = &#34;discharge_paid&#34; or action = &#34;discharge_unpaid&#34; then &#34;discharge&#34; else &#34;invalid&#34;" target="changeTarget" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_22</bpmn:incoming>
-      <bpmn:incoming>Flow_36</bpmn:incoming>
-      <bpmn:incoming>Flow_62</bpmn:incoming>
-      <bpmn:incoming>Flow_DeclineToChange</bpmn:incoming>
-      <bpmn:incoming>Flow_DnaToChange</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_ClinicalChange</bpmn:incoming>
       <bpmn:outgoing>Flow_51</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="ChangeValid" name="Formal request&#10;authorised?" default="Flow_52">
@@ -753,13 +766,18 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_56</bpmn:incoming>
       <bpmn:outgoing>Flow_56b</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Join_MarkPaymentInvestigate" gatewayDirection="Converging">
+      <bpmn:documentation>Exclusive merge before MarkPaymentInvestigate on the V2 diagram. The funding-pending path and the unsuccessful payment path enter here. Pass-through only. Ryan's Join_Funding stays in front of the Funding task.</bpmn:documentation>
+      <bpmn:incoming>Flow_45</bpmn:incoming>
+      <bpmn:incoming>Flow_67</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_MarkPaymentInvestigate</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="MarkPaymentInvestigate" name="P7&#10;Mark payment&#10;investigate">
       <bpmn:documentation>Member A worker type mark-payment-investigate. On unpaid / funding-issue path before FundingIssue user task: write payment_ledger INVESTIGATE and audit_event so the case is not auto-charged again.</bpmn:documentation>
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="mark-payment-investigate" retries="3" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_45</bpmn:incoming>
-      <bpmn:incoming>Flow_67</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_MarkPaymentInvestigate</bpmn:incoming>
       <bpmn:outgoing>Flow_67b</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_01" sourceRef="Start" targetRef="Register" />
@@ -781,7 +799,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_21" name="Finance enquiry" sourceRef="RequestType" targetRef="FinanceEnquiry">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "enquiry_finance"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_22" name="Change / follow-up" sourceRef="RequestType" targetRef="ClinicalChange">
+    <bpmn:sequenceFlow id="Flow_22" name="Change / follow-up" sourceRef="RequestType" targetRef="Join_ClinicalChange">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "change"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_23" name="Reports" sourceRef="RequestType" targetRef="AuditReports">
@@ -812,25 +830,25 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "visit"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06" sourceRef="BookVisit" targetRef="CheckVisitSlot" />
-    <bpmn:sequenceFlow id="Flow_06b" sourceRef="CheckVisitSlot" targetRef="VisitOutcome" />
+    <bpmn:sequenceFlow id="Flow_06b" sourceRef="CheckVisitSlot" targetRef="Join_VisitOutcome" />
     <bpmn:sequenceFlow id="Flow_07" name="Attended" sourceRef="VisitOutcome" targetRef="Join_ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "attended"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_36" name="Patient cancelled" sourceRef="VisitOutcome" targetRef="ClinicalChange">
+    <bpmn:sequenceFlow id="Flow_36" name="Patient cancelled" sourceRef="VisitOutcome" targetRef="Join_ClinicalChange">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "patient_cancelled" or visitOutcome = "cancelled"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_Booked" name="Booked" sourceRef="VisitOutcome" targetRef="AwaitAttendance">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "booked"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_AwaitReturn" sourceRef="AwaitAttendance" targetRef="VisitOutcome" />
+    <bpmn:sequenceFlow id="Flow_AwaitReturn" sourceRef="AwaitAttendance" targetRef="Join_VisitOutcome" />
     <bpmn:sequenceFlow id="Flow_Declined" name="Declined" sourceRef="VisitOutcome" targetRef="RecordDecline">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "declined"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_DeclineToChange" sourceRef="RecordDecline" targetRef="ClinicalChange" />
+    <bpmn:sequenceFlow id="Flow_DeclineToChange" sourceRef="RecordDecline" targetRef="Join_ClinicalChange" />
     <bpmn:sequenceFlow id="Flow_Dna" name="Did not attend" sourceRef="VisitOutcome" targetRef="RecordDna">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= visitOutcome = "dna"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_DnaToChange" sourceRef="RecordDna" targetRef="ClinicalChange" />
+    <bpmn:sequenceFlow id="Flow_DnaToChange" sourceRef="RecordDna" targetRef="Join_ClinicalChange" />
     <bpmn:sequenceFlow id="Flow_66" name="Treatment / review" sourceRef="SendBookingConfirmation" targetRef="Join_ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_39" name="Clinical correction" sourceRef="LetterOutcome" targetRef="Join_ClinicalCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "revise"</bpmn:conditionExpression>
@@ -866,7 +884,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_44" name="Urgent review" sourceRef="FundingOutcome" targetRef="UrgentAuthorisation">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "urgent_review"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_45" name="Pending / investigate" sourceRef="FundingOutcome" targetRef="MarkPaymentInvestigate" />
+    <bpmn:sequenceFlow id="Flow_45" name="Pending / investigate" sourceRef="FundingOutcome" targetRef="Join_MarkPaymentInvestigate" />
     <bpmn:sequenceFlow id="Flow_63" name="Patient payment" sourceRef="FundingOutcome" targetRef="RequestPayment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= fundingStatus = "patient_payment_required"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -875,7 +893,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_65" name="Paid" sourceRef="PaymentResult" targetRef="Join_BookTreatment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= payment_status = "successful"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_67" name="Unsuccessful" sourceRef="PaymentResult" targetRef="MarkPaymentInvestigate" />
+    <bpmn:sequenceFlow id="Flow_67" name="Unsuccessful" sourceRef="PaymentResult" targetRef="Join_MarkPaymentInvestigate" />
     <bpmn:sequenceFlow id="Flow_67b" sourceRef="MarkPaymentInvestigate" targetRef="FundingIssue" />
     <bpmn:sequenceFlow id="Flow_47" sourceRef="UrgentAuthorisation" targetRef="UrgentDecision" />
     <bpmn:sequenceFlow id="Flow_48" name="Authorised" sourceRef="UrgentDecision" targetRef="Join_BookTreatment">
@@ -891,7 +909,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_61" name="Discharge" sourceRef="ChangeRoute" targetRef="EndCare">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget = "discharge"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_62" name="Review plan" sourceRef="ChangeRoute" targetRef="ClinicalChange" />
+    <bpmn:sequenceFlow id="Flow_62" name="Review plan" sourceRef="ChangeRoute" targetRef="Join_ClinicalChange" />
     <bpmn:sequenceFlow id="Flow_51" sourceRef="ClinicalChange" targetRef="NotifyCareChange" />
     <bpmn:sequenceFlow id="Flow_51_D" sourceRef="NotifyCareChange" targetRef="ChangeValid" />
     <bpmn:sequenceFlow id="Flow_53" name="Authorised" sourceRef="ChangeValid" targetRef="MoneyAffected">
@@ -961,6 +979,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_Join_ClinicalCare" sourceRef="Join_ClinicalCare" targetRef="ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_Join_Funding" sourceRef="Join_Funding" targetRef="Funding" />
     <bpmn:sequenceFlow id="Flow_Join_BookTreatment" sourceRef="Join_BookTreatment" targetRef="BookTreatment" />
+    <bpmn:sequenceFlow id="Flow_Join_VisitOutcome" sourceRef="Join_VisitOutcome" targetRef="VisitOutcome" />
+    <bpmn:sequenceFlow id="Flow_Join_ClinicalChange" sourceRef="Join_ClinicalChange" targetRef="ClinicalChange" />
+    <bpmn:sequenceFlow id="Flow_Join_MarkPaymentInvestigate" sourceRef="Join_MarkPaymentInvestigate" targetRef="MarkPaymentInvestigate" />
   </bpmn:process>
   <bpmn:message id="Message_PaymentResult" name="payment-result">
     <bpmn:extensionElements>
@@ -1022,6 +1043,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BookVisit_di" bpmnElement="BookVisit" bioc:stroke="#263746" bioc:fill="#edf5ff">
         <dc:Bounds x="1480" y="350" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Join_VisitOutcome" bpmnElement="Join_VisitOutcome" isMarkerVisible="true">
+        <dc:Bounds x="1836" y="292" width="40" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="VisitOutcome_di" bpmnElement="VisitOutcome" isMarkerVisible="true">
         <dc:Bounds x="1880" y="380" width="40" height="40" />
@@ -1106,6 +1130,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3113" y="356" width="53" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Join_ClinicalChange" bpmnElement="Join_ClinicalChange" isMarkerVisible="true">
+        <dc:Bounds x="730" y="1110" width="40" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ClinicalChange_di" bpmnElement="ClinicalChange" bioc:stroke="#263746" bioc:fill="#eaf8f0">
         <dc:Bounds x="790" y="1080" width="190" height="100" />
@@ -1194,6 +1221,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="RequestRefund_di" bpmnElement="RequestRefund" bioc:stroke="#263746" bioc:fill="#fff8e1">
         <dc:Bounds x="1570" y="1630" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Join_MarkPaymentInvestigate" bpmnElement="Join_MarkPaymentInvestigate" isMarkerVisible="true">
+        <dc:Bounds x="3175" y="1575" width="40" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="MarkPaymentInvestigate_di" bpmnElement="MarkPaymentInvestigate" bioc:stroke="#263746" bioc:fill="#fff8e1">
         <dc:Bounds x="3140" y="1630" width="110" height="80" />
@@ -1830,6 +1860,19 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Edge_Flow_Join_BookTreatment" bpmnElement="Flow_Join_BookTreatment">
         <di:waypoint x="2810" y="400" />
         <di:waypoint x="2860" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Join_VisitOutcome" bpmnElement="Flow_Join_VisitOutcome">
+        <di:waypoint x="1856" y="332" />
+        <di:waypoint x="1856" y="400" />
+        <di:waypoint x="1880" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Join_ClinicalChange" bpmnElement="Flow_Join_ClinicalChange">
+        <di:waypoint x="770" y="1130" />
+        <di:waypoint x="790" y="1130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Join_MarkPaymentInvestigate" bpmnElement="Flow_Join_MarkPaymentInvestigate">
+        <di:waypoint x="3195" y="1615" />
+        <di:waypoint x="3195" y="1630" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Referrer_di" bpmnElement="Referrer" isHorizontal="true">
         <dc:Bounds x="150" y="80" width="900" height="60" />
