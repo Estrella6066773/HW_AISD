@@ -72,7 +72,7 @@
           "x": 362,
           "y": 164,
           "customProperties": {
-            "Evidence": "ReviewReferral: decision, reason, clinicianId; case 4.",
+            "Evidence": "ReviewReferral: decision, reason, clinicianId; case 4. Decision may be accept, reject, more info, or redirect.",
             "V1 status": "V1 manual/partial"
           }
         },
@@ -84,6 +84,17 @@
           "y": 164,
           "customProperties": {
             "Evidence": "ClinicalCare; case 7, 14–15, 25.",
+            "V1 status": "V1 manual/partial"
+          }
+        },
+        {
+          "id": "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8",
+          "text": "Clinic and treatment appointments arranged after authorisation",
+          "type": "istar.Goal",
+          "x": 740,
+          "y": 83,
+          "customProperties": {
+            "Evidence": "D8; BookVisit / BookTreatment after clinical authorisation. Case 4–8.",
             "V1 status": "V1 manual/partial"
           }
         },
@@ -105,7 +116,7 @@
           "x": 362,
           "y": 254,
           "customProperties": {
-            "Evidence": "ReviewReferral: accept/reject/more info/redirect. Acceptance is conditional, not every referral must be accepted.",
+            "Evidence": "ReviewReferral: accept/reject/more info/redirect. Provides D2 always; provides D5 only when accepted for a new patient appointment.",
             "V1 status": "V1 manual/partial"
           }
         },
@@ -133,45 +144,12 @@
         },
         {
           "id": "f1efc27d-3654-4d9c-9879-0cd65873f6ed",
-          "text": "Care outcome selected",
-          "type": "istar.Goal",
+          "text": "Record care decision [M] (treatment / follow-up / discharge)",
+          "type": "istar.Task",
           "x": 614,
           "y": 344,
           "customProperties": {
-            "Evidence": "ClinicalCare.careDecision and CarePlan gateway; case 7, 24–25.",
-            "V1 status": "V1 manual/partial"
-          }
-        },
-        {
-          "id": "c10a2a77-793c-4c29-ac6e-fb17f7b1fd09",
-          "text": "Record treatment plan [P]",
-          "type": "istar.Task",
-          "x": 470,
-          "y": 434,
-          "customProperties": {
-            "Evidence": "ClinicalCare action=treatment. Full authorised request/cycles/consent not structured.",
-            "V1 status": "Case required; V1 partial"
-          }
-        },
-        {
-          "id": "6ecc80b8-3a75-4ca4-8f55-d2adbc9aca0c",
-          "text": "Record follow-up plan [M]",
-          "type": "istar.Task",
-          "x": 640,
-          "y": 434,
-          "customProperties": {
-            "Evidence": "ClinicalCare action=follow_up; routes to BookVisit.",
-            "V1 status": "V1 manual/partial"
-          }
-        },
-        {
-          "id": "4dbe4269-cdb6-4766-b870-f8afe978c7b4",
-          "text": "Record discharge decision [M]",
-          "type": "istar.Task",
-          "x": 810,
-          "y": 434,
-          "customProperties": {
-            "Evidence": "ClinicalCare action=discharge; clinical decision, not Admin decision.",
+            "Evidence": "ClinicalCare.careDecision; case 7, 24–25. One recorded decision per encounter; exclusive choice is stated in the task text, not as OR-refinement alternatives across the pathway.",
             "V1 status": "V1 manual/partial"
           }
         },
@@ -204,19 +182,19 @@
           "x": 862,
           "y": 254,
           "customProperties": {
-            "Evidence": "UrgentAuthorisation: urgentDecision, urgentCase, notes; authorise vs hold.",
+            "Evidence": "UrgentAuthorisation: urgentDecision, urgentCase, notes; authorise vs hold. Finance follow-up is D18 softgoal, not a clinical payment approval.",
             "V1 status": "V1 manual/partial"
           }
         },
         {
-          "id": "59133617-e228-45ac-a336-128698695913",
-          "text": "Obtain later finance follow-up",
-          "type": "istar.Task",
+          "id": "9e8d7c6b-5a49-4837-9210-fedcba098765",
+          "text": "Clinical work not delayed solely by payment confirmation gaps",
+          "type": "istar.Quality",
           "x": 862,
           "y": 344,
           "customProperties": {
-            "Evidence": "Depends on Finance.UrgentFinance, after urgent care. Not clinical approval of payment.",
-            "V1 status": "V1 manual/partial"
+            "Evidence": "Case 12; aligns with D18. Urgent care may proceed with recorded clinical reason; Finance resolves afterwards.",
+            "V1 status": "Business quality"
           }
         },
         {
@@ -256,7 +234,7 @@
         "Case paragraphs": "4, 25",
         "V1 status": "合理建模推论；记录已有支持",
         "Evidence": "ReviewReferral：referralDecision、decisionReason、clinicianId；Redirect / notify-referrer。",
-        "Qualification": "案例明确要求临床决定和记录；将 Referrer 设为依赖者是分析推论，不代表 V1 会把每一种决定实际发送给转诊方。"
+        "Qualification": "决定可为接受、拒绝、补材料或转专科，不等于接受。接受新患者转诊才另提供 D5。"
       },
       "source": "ca384f60-b9fa-4af6-83c8-af2e532fbdf3",
       "target": "ccbb20da-125b-4154-b694-b5af248ed6d5"
@@ -278,62 +256,77 @@
     },
     {
       "id": "7ea66ccb-d2f8-49a6-b396-56fed11def3c",
-      "text": "D5 Acceptance recorded before booking (if accepted)",
+      "text": "D5 Authorised acceptance before a new patient appointment",
       "type": "istar.Goal",
       "x": 128,
       "y": 254,
       "customProperties": {
         "Case paragraphs": "4",
         "V1 status": "符合案例；分支逻辑已有支持",
-        "Evidence": "ReviewReferral → ReferralDecision；accept → BookVisit。",
-        "Qualification": "仅适用于接受分支；拒绝、补资料、转诊也是合法结果。所有任务 assignee=demo，未验证真正的 Consultant 权限。"
+        "Evidence": "ReviewReferral → ReferralDecision；accept → BookVisit（新患者门诊）。",
+        "Qualification": "仅当顾问接受转诊后才可安排新患者门诊。后续随访由临床提出，不属于 D5。拒绝、补材料、转专科不提供本依赖。"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "7e45ab2a-1fcb-465a-bdc4-103cd708b16d"
     },
     {
       "id": "218e63f8-fffb-40ee-92e4-f6d73587b5b0",
-      "text": "D7 Approved clinic letter (required; V1 partial)",
-      "type": "istar.Resource",
+      "text": "D7 Clinic letter clinically approved",
+      "type": "istar.Goal",
       "x": 128,
       "y": 528,
       "customProperties": {
         "Case paragraphs": "19–23",
         "V1 status": "案例要求正确；V1 有明显缺口",
         "Evidence": "ClinicalCare → DispatchLetter → dispatch-clinic-letter；ClinicalCareNotes 为自由备注。LetterWorkers 只写模拟外发记录。",
-        "Qualification": "保留业务上需要的已批准信件；V1 缺结构化正文、审批人/日期及分发前审批检查，不能称为已完整提供。"
+        "Qualification": "秘书仅在顾问批准后分发；不得改临床含义。V1 缺结构化正文与审批检查，属部分支持。"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "aaebbfe0-ecdd-4673-9d4e-abf3d3cbb207"
     },
     {
       "id": "66fe5d72-b1ec-4ae0-bd32-6f7b52ba782e",
-      "text": "D12 Appropriate clinical care",
+      "text": "D12 Appropriate clinical assessment and care",
       "type": "istar.Goal",
       "x": 128,
       "y": 34,
       "customProperties": {
         "Case paragraphs": "7, 14–15, 25",
         "V1 status": "符合案例；人工临床工作受部分支持",
-        "Evidence": "ClinicalCare：careDecision=treatment/follow_up/discharge，ClinicalCareNotes。",
+        "Evidence": "ClinicalCare：careDecision、ClinicalCareNotes。",
         "Qualification": "这是患者对临床的目标，不是软件自动诊断或保证疗效。结构化同意书、治疗请求和周期信息仍不完整。"
       },
       "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
       "target": "29b1834f-8932-48c9-a775-d4860e74a7e9"
     },
     {
-      "id": "648f5d89-9163-44c2-8bf7-17de9dcaf0b5",
-      "text": "D18 Financial follow-up after urgent care",
+      "id": "d4e5f6a7-b8c9-4012-def0-1234567890ab",
+      "text": "D8 Arrange clinic and treatment appointments",
       "type": "istar.Task",
+      "x": 1030,
+      "y": 83,
+      "customProperties": {
+        "Case paragraphs": "4–8",
+        "V1 status": "符合案例；V1 有预约任务支持",
+        "Evidence": "BookVisit / BookTreatment after clinical authorisation; Admin uses scheduling and external clinical services.",
+        "Qualification": "Clinical depends on Admin to arrange appointments after authorisation. New-patient booking also uses D5; normal-route treatment confirmation uses D14."
+      },
+      "source": "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8",
+      "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
+    },
+    {
+      "id": "648f5d89-9163-44c2-8bf7-17de9dcaf0b5",
+      "text": "D18 Urgent care not blocked solely by payment delay",
+      "type": "istar.Quality",
       "x": 1030,
       "y": 344,
       "customProperties": {
         "Case paragraphs": "12",
-        "V1 status": "已修正责任表述；V1 有对应任务",
+        "V1 status": "已对齐最新 SD；V1 有紧急授权与事后财务路径",
         "Evidence": "UrgentAuthorisation → BookTreatment → ClinicalCare → UrgentFinance。",
-        "Qualification": "原“Urgent care not delayed”是临床软目标，不能让 Finance 看起来拥有紧急治疗授权。改为 Clinical 依赖 Finance 进行事后财务处理；不延误护理放入 SR 内部软目标。"
+        "Qualification": "软目标：紧急护理不得仅因付款延迟被挡住。临床凭记录原因可先治；财务事后处理。正常路径清讫是 D14，不算本依赖失败。"
       },
-      "source": "59133617-e228-45ac-a336-128698695913",
+      "source": "9e8d7c6b-5a49-4837-9210-fedcba098765",
       "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
     }
   ],
@@ -357,10 +350,22 @@
       "target": "29b1834f-8932-48c9-a775-d4860e74a7e9"
     },
     {
+      "id": "a0b1c2d3-e4f5-6789-abcd-ef0123456789",
+      "type": "istar.AndRefinementLink",
+      "source": "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8",
+      "target": "29b1834f-8932-48c9-a775-d4860e74a7e9"
+    },
+    {
       "id": "b6a85dbf-c2fa-4da7-b8c4-650a98eef5b7",
       "type": "istar.AndRefinementLink",
       "source": "7e45ab2a-1fcb-465a-bdc4-103cd708b16d",
       "target": "ccbb20da-125b-4154-b694-b5af248ed6d5"
+    },
+    {
+      "id": "b1c2d3e4-f5a6-7890-bcde-f01234567890",
+      "type": "istar.AndRefinementLink",
+      "source": "7e45ab2a-1fcb-465a-bdc4-103cd708b16d",
+      "target": "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8"
     },
     {
       "id": "84791d3e-03c5-4f68-89e9-1572ad61d0ff",
@@ -381,24 +386,6 @@
       "target": "b4b9fc86-743c-4c4a-86e6-109bd4f9bd08"
     },
     {
-      "id": "e95208e2-54e9-451e-888e-d6693298838b",
-      "type": "istar.OrRefinementLink",
-      "source": "c10a2a77-793c-4c29-ac6e-fb17f7b1fd09",
-      "target": "f1efc27d-3654-4d9c-9879-0cd65873f6ed"
-    },
-    {
-      "id": "b13dd570-e3f2-4942-a84c-5f43f3386b9c",
-      "type": "istar.OrRefinementLink",
-      "source": "6ecc80b8-3a75-4ca4-8f55-d2adbc9aca0c",
-      "target": "f1efc27d-3654-4d9c-9879-0cd65873f6ed"
-    },
-    {
-      "id": "7b774bbf-c393-4cf2-bc56-c6dd92ecb216",
-      "type": "istar.OrRefinementLink",
-      "source": "4dbe4269-cdb6-4766-b870-f8afe978c7b4",
-      "target": "f1efc27d-3654-4d9c-9879-0cd65873f6ed"
-    },
-    {
       "id": "1a9ae1c0-f259-4e9b-9d4b-9e0c3c1d783d",
       "type": "istar.AndRefinementLink",
       "source": "aaebbfe0-ecdd-4673-9d4e-abf3d3cbb207",
@@ -411,15 +398,22 @@
       "target": "1a3e82f2-dbb0-41d9-b544-c28810a78f15"
     },
     {
-      "id": "9b95a356-0432-44da-9e5e-4d7d32a5067f",
+      "id": "c2d3e4f5-a6b7-8901-cdef-012345678901",
       "type": "istar.AndRefinementLink",
-      "source": "59133617-e228-45ac-a336-128698695913",
+      "source": "9e8d7c6b-5a49-4837-9210-fedcba098765",
       "target": "1a3e82f2-dbb0-41d9-b544-c28810a78f15"
     },
     {
       "id": "ffa92510-c77d-488c-902a-9130d715dd3f",
       "type": "istar.ContributionLink",
       "source": "7e45ab2a-1fcb-465a-bdc4-103cd708b16d",
+      "target": "dc1c23eb-6b56-4ffa-9b61-ff4784296e2d",
+      "label": "help"
+    },
+    {
+      "id": "d3e4f5a6-b7c8-9012-def0-123456789012",
+      "type": "istar.ContributionLink",
+      "source": "f1efc27d-3654-4d9c-9879-0cd65873f6ed",
       "target": "dc1c23eb-6b56-4ffa-9b61-ff4784296e2d",
       "label": "help"
     },
@@ -441,6 +435,13 @@
       "id": "32182319-e71f-4aac-bbe9-fa6886622fd2",
       "type": "istar.ContributionLink",
       "source": "1a3e82f2-dbb0-41d9-b544-c28810a78f15",
+      "target": "05cace08-fcee-49d9-8bfa-4f08dcbf6344",
+      "label": "help"
+    },
+    {
+      "id": "e4f5a6b7-c8d9-0123-ef01-234567890123",
+      "type": "istar.ContributionLink",
+      "source": "9e8d7c6b-5a49-4837-9210-fedcba098765",
       "target": "05cace08-fcee-49d9-8bfa-4f08dcbf6344",
       "label": "help"
     },
@@ -505,9 +506,21 @@
       "target": "29b1834f-8932-48c9-a775-d4860e74a7e9"
     },
     {
+      "id": "f5a6b7c8-d9e0-1234-f012-345678901234",
+      "type": "istar.DependencyLink",
+      "source": "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8",
+      "target": "d4e5f6a7-b8c9-4012-def0-1234567890ab"
+    },
+    {
+      "id": "a6b7c8d9-e0f1-2345-0123-456789012345",
+      "type": "istar.DependencyLink",
+      "source": "d4e5f6a7-b8c9-4012-def0-1234567890ab",
+      "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
+    },
+    {
       "id": "a98980de-b2ef-4b63-8d4a-a148e0f9c40e",
       "type": "istar.DependencyLink",
-      "source": "59133617-e228-45ac-a336-128698695913",
+      "source": "9e8d7c6b-5a49-4837-9210-fedcba098765",
       "target": "648f5d89-9163-44c2-8bf7-17de9dcaf0b5"
     },
     {
@@ -555,6 +568,10 @@
       "width": 145,
       "height": 70
     },
+    "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8": {
+      "width": 160,
+      "height": 70
+    },
     "c8fc1c15-1252-4500-a570-2fffcb2b2e1f": {
       "width": 145,
       "height": 70,
@@ -573,20 +590,7 @@
       "height": 70
     },
     "f1efc27d-3654-4d9c-9879-0cd65873f6ed": {
-      "width": 145,
-      "height": 70
-    },
-    "c10a2a77-793c-4c29-ac6e-fb17f7b1fd09": {
-      "width": 145,
-      "height": 70,
-      "backgroundColor": "#fff0d7"
-    },
-    "6ecc80b8-3a75-4ca4-8f55-d2adbc9aca0c": {
-      "width": 145,
-      "height": 70
-    },
-    "4dbe4269-cdb6-4766-b870-f8afe978c7b4": {
-      "width": 145,
+      "width": 160,
       "height": 70
     },
     "aaebbfe0-ecdd-4673-9d4e-abf3d3cbb207": {
@@ -602,8 +606,8 @@
       "width": 145,
       "height": 70
     },
-    "59133617-e228-45ac-a336-128698695913": {
-      "width": 145,
+    "9e8d7c6b-5a49-4837-9210-fedcba098765": {
+      "width": 160,
       "height": 70
     },
     "dc1c23eb-6b56-4ffa-9b61-ff4784296e2d": {
@@ -623,20 +627,24 @@
       "height": 70
     },
     "7ea66ccb-d2f8-49a6-b396-56fed11def3c": {
-      "width": 160,
-      "height": 70
+      "width": 170,
+      "height": 80
     },
     "218e63f8-fffb-40ee-92e4-f6d73587b5b0": {
       "width": 160,
       "height": 70
     },
     "66fe5d72-b1ec-4ae0-bd32-6f7b52ba782e": {
-      "width": 160,
+      "width": 170,
+      "height": 70
+    },
+    "d4e5f6a7-b8c9-4012-def0-1234567890ab": {
+      "width": 170,
       "height": 70
     },
     "648f5d89-9163-44c2-8bf7-17de9dcaf0b5": {
-      "width": 160,
-      "height": 70
+      "width": 170,
+      "height": 80
     },
     "16ab6923-f0d4-44fa-8b9f-669f2c1526c0": {
       "vertices": [
@@ -662,7 +670,15 @@
         }
       ]
     },
-    "9b95a356-0432-44da-9e5e-4d7d32a5067f": {
+    "b1c2d3e4-f5a6-7890-bcde-f01234567890": {
+      "vertices": [
+        {
+          "x": 500,
+          "y": 118.0
+        }
+      ]
+    },
+    "c2d3e4f5-a6b7-8901-cdef-012345678901": {
       "vertices": [
         {
           "x": 1016,
@@ -745,17 +761,29 @@
           "y": 118.0
         }
       ]
+    },
+    "a6b7c8d9-e0f1-2345-0123-456789012345": {
+      "vertices": [
+        {
+          "x": 114,
+          "y": 118.0
+        },
+        {
+          "x": 114,
+          "y": 379.0
+        }
+      ]
     }
   },
   "tool": "pistar.2.1.0",
   "istar": "2.0",
-  "saveDate": "Tue, 13 Oct 2026 07:27:49 GMT",
+  "saveDate": "Thu, 15 Oct 2026 01:45:00 GMT",
   "diagram": {
-    "name": "V1 Clinical SR - case and implementation reviewed",
-    "width": 1340,
+    "name": "V1 Clinical SR - aligned to updated SD dependencies",
+    "width": 1400,
     "height": 643,
     "customProperties": {
-      "Description": "Clinical main-pathway rationale view, consistent with reviewed SD. Required responsibilities are not a BPMN execution sequence; urgent branch applies only to urgent cases. Clinical judgement remains human. P means partial V1 support; M means manual. D7 remains a case requirement with missing structured approval enforcement. OR outcomes are treatment / follow_up / discharge. Contribution help/hurt expresses case-grounded reasoning, not measured performance. All current user tasks use demo; actual role authorisation is a gap. Six dependency IDs remain traceable to reviewed SD."
+      "Description": "Clinical main-pathway rationale view, aligned to docs/istar/PB-16_istar-sd-sr.md after 2026-10-14 dependency updates. OR-refinement under care outcome removed: one encounter records one care decision (treatment / follow-up / discharge) as a single task. D5 narrowed to new-patient acceptance only. D7 is a goal. D8 added for appointment arrangement after authorisation. D18 is a softgoal (urgent care not blocked solely by payment delay), not a finance follow-up task. P means partial V1 support; M means manual. Contribution help/hurt expresses case-grounded reasoning, not measured performance."
     }
   }
 }
