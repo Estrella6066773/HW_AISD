@@ -138,7 +138,7 @@
           "x": 812,
           "y": 495,
           "customProperties": {
-            "Evidence": "D10; external lab/imaging/treatment availability is aggregated and mocked/manual.",
+            "Evidence": "D10. When the external provider is available, BookTreatment can reserve and confirm. When it is unavailable, the booking stays pending and is not duplicated. The resource helps treatment coordination. It is not required for every recorded outcome, including pending.",
             "V1 status": "V1 mock/manual"
           }
         },
@@ -375,7 +375,7 @@
         "Case paragraphs": "7–8",
         "V1 status": "符合案例；V1 部分/模拟支持",
         "Evidence": "BookTreatment ready/pending；reserve-appointment 本地 worker。",
-        "Qualification": "外部治疗、实验室、影像是战略级合并角色；并非三种服务均已真实接通。"
+        "Qualification": "外部治疗、实验室、影像在本模型里合并为一个被依赖方。资源不可用时预约保持待定、不重复占号，所以这条依赖帮助治疗协调，而不是每一次记录结果都必须完成。第一版没有真实接通三种外部服务。"
       },
       "source": "b899350e-115c-4eb7-af23-8f87f2f26eda",
       "target": "bc2d31fa-d0cc-44ab-a44f-a0de064bad45"
@@ -507,8 +507,9 @@
     {
       "id": "49cf4816-e0be-4289-8fe3-ce095cc56579",
       "source": "b899350e-115c-4eb7-af23-8f87f2f26eda",
-      "target": "77e388ce-2830-4165-88b0-30ed4894caf1",
-      "type": "istar.NeededByLink"
+      "target": "cdcc382f-4f3a-4903-bcd6-b8e3bb264acf",
+      "type": "istar.ContributionLink",
+      "label": "help"
     },
     {
       "id": "c1ac3845-a89f-458f-b329-37d4aa51ec2b",
@@ -920,7 +921,7 @@
     "width": 1520,
     "height": 760,
     "customProperties": {
-      "Description": "Admin-team rationale checked against the case and Hospital_All_Processes_V2. The five pathway goals help Patient pathway coordinated; a rejected referral can still be coordinated without treatment, a letter or a patient notification. Initial-referral acceptance helps visit arrangement and applies only to a new patient appointment. An appointment slot helps that same visit goal only when a slot is required; decline, patient cancellation and did-not-attend do not use one. Normal-route funding clearance helps treatment coordination and applies before confirmation, not to every pending or urgent outcome. D7 is the clinical-approval goal, and the depender is the letter-processing goal rather than the already-approved letter resource. D20 keeps the appointment letter and recorded contact attempts, including the two-week telephone, and does not assign clinical explanation to Admin. M=manual; P=partial support; X=mock integration. A dependency states a business need, not verified fulfilment, so the dependum name does not carry the mock status. User tasks still use the demo assignee. Enquiries, changes, refunds and management escalation stay on other views. Clinical judgement and urgent authorisation do not belong to Admin."
+      "Description": "Admin-team rationale checked against the case and Hospital_All_Processes_V2. The five pathway goals help Patient pathway coordinated; a rejected referral can still be coordinated without treatment, a letter or a patient notification. Initial-referral acceptance helps visit arrangement and applies only to a new patient appointment. An appointment slot helps that same visit goal only when a slot is required; decline, patient cancellation and did-not-attend do not use one. External treatment resources and normal-route funding clearance both help treatment coordination: unavailable resources leave the booking pending without a duplicate, and clearance applies before confirmation, not to every pending or urgent outcome. D7 is the clinical-approval goal, and the depender is the letter-processing goal rather than the already-approved letter resource. D20 keeps the appointment letter and recorded contact attempts, including the two-week telephone, and does not assign clinical explanation to Admin. M=manual; P=partial support; X=mock integration. A dependency states a business need, not verified fulfilment, so the dependum name does not carry the mock status. User tasks still use the demo assignee. Enquiries, changes, refunds and management escalation stay on other views. Clinical judgement and urgent authorisation do not belong to Admin."
     }
   }
 }
