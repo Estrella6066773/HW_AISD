@@ -1404,11 +1404,12 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="1180" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05_di" bpmnElement="Flow_05" bioc:stroke="#1768a6">
-        <di:waypoint x="1200" y="870" />
-        <di:waypoint x="1200" y="400" />
+        <di:waypoint x="1220" y="890" />
+        <di:waypoint x="1280" y="890" />
+        <di:waypoint x="1280" y="400" />
         <di:waypoint x="1390" y="400" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1163" y="511" width="34" height="14" />
+          <dc:Bounds x="1243" y="516" width="34" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_31_di" bpmnElement="Flow_31" bioc:stroke="#667481">
@@ -1936,11 +1937,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="Stage_1_di" bpmnElement="Stage_1">
         <dc:Bounds x="880" y="235" width="400" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Stage_2_di" bpmnElement="Stage_2">
+        <dc:Bounds x="1390" y="220" width="170" height="43" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Stage_3_di" bpmnElement="Stage_3">
         <dc:Bounds x="2080" y="235" width="400" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Stage_4_di" bpmnElement="Stage_4">
         <dc:Bounds x="2860" y="235" width="400" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Change_Section_di" bpmnElement="Change_Section">
+        <dc:Bounds x="670" y="950" width="280" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Guide_Main_di" bpmnElement="Guide_Main">
         <dc:Bounds x="200" y="2060" width="3700" height="80" />
@@ -1983,12 +1990,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <dc:Bounds x="3555" y="1720" width="124" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Stage_2_di" bpmnElement="Stage_2">
-        <dc:Bounds x="1390" y="220" width="170" height="43" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Change_Section_di" bpmnElement="Change_Section">
-        <dc:Bounds x="670" y="950" width="280" height="40" />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
