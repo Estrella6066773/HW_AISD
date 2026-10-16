@@ -39,7 +39,7 @@
 
 - **F1** 给 `Hospital_All_Processes_V2.bpmn` 补一份可读的 PDF 导出（目前只有 9 月 29 日旧模型那份 9 页 PDF）→ `PB-30`
 - **F2** 重跑 `pb14_acceptance.py` / `pb18_acceptance.py` 并归档新记录 → `PB-31`
-- **F3** 四份 SR/SD 文件里 `V1 status` 的中文串是乱码；需要时补中文对照说明，或统一改成 ASCII
+- **F3** 已查明并处置：四份 i\* 模型文件（`istar/V1_SD_diagram.txt` 与三份 `*_SR_reviewed_2026-10-13.txt`）是**合法 UTF-8（无 BOM）、JSON 校验通过**，磁盘上没有乱码；花屏是查看器按 GBK 解码所致。处置见 `Week6 Coursework/README.md` 的「Encoding of the i\* model files」一节。是否把中文批注统一改成英文，另列为待定。
 
 ### G 类 · 无法在仓库内核实
 
@@ -49,12 +49,12 @@
 
 ---
 
-## 五、动手之前必须先做的一件事
+## 五、拉取（已完成）
 
-**先 `git pull`。** 本地 `main` = `de555fd`，`origin/main` = `40297f2`，落后 2 个提交，而这两个提交改的正是：
+**已拉取并合并，无需再拉。** `40297f2`（及合并提交 `2f9264b`）已并入本地 `main`，与 `origin/main` 同步（`behind/ahead = 0 0`）。这两个提交改的是：
 
 - `Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn`
 - `Week6 Coursework/istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt`
 - `Ruby/2026-10-15/Hospital_All_Processes_V2_中文.bpmn`
 
-拉取后还会带进来一个 `Ruby/2026-10-15/~$SR-中文图解.docx`，`~$` 开头是 Word 打开文档时生成的锁定文件，不该进仓库，需要单独清掉。
+随拉取进来的 `Ruby/2026-10-15/~$SR-中文图解.docx` 是 Word 打开文档时生成的锁定文件，已从版本管理移除并从磁盘删除，`~$*` 已写进 `.gitignore`（2026-10-16）。

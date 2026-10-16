@@ -58,6 +58,14 @@ The Chinese-label copy of the operational diagram is `../Ruby/2026-10-15/Hospita
 
 The earlier `W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` (process id `Hospital_All_Processes_Simple_C8`) is the model behind the 29 September submission and its exported PDF. It stays valid as that baseline but it does not contain the split visit outcomes, so it is not the second-release model.
 
+## Encoding of the i\* model files
+
+The four piStar model files — `istar/V1_SD_diagram.txt`, `istar/PB-16_V1_Admin_SR_reviewed_2026-10-13.txt`, `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt` and `istar/PB-16_V1_Finance_SR_reviewed_2026-10-13.txt` — are UTF-8 **without a byte-order mark**. Their `V1 status`, `Evidence` and `Qualification` values mix English and Chinese: the earlier sections are in English, the reviewed sections are in Chinese.
+
+**Open them in a viewer set to UTF-8.** On a Windows machine whose default code page is GBK, some viewers — Notepad, and Excel if the file is opened as a table — render those Chinese values as mojibake. That is a viewer setting, not file damage. Checked on 2026-10-16: all four files pass a strict UTF-8 validation and each parses as valid JSON.
+
+No byte-order mark is added, and the values are not translated by hand. These files are piStar model exports: a mark would make them invalid JSON under RFC 8259 and risks the importer, while editing the annotation text directly would desynchronise the model from `V1_SD_diagram.png`. If the group wants the annotations in English only, make that change in piStar and re-export.
+
 ## Where the executable package lives now
 
 `Coursework/` was renamed to `Week3 Coursework/` in commit `03180bb` (2026-10-16). The old name `Coursework/` still exists on disk but holds only build output (`target/`, `data/`); nothing under it is tracked any more. Every reference to the old path was re-pointed on 2026-10-16, except the captures under `evidence/`, which are left as recorded.
@@ -76,4 +84,4 @@ These documents are not submission artefacts. They track the open questions:
 
 Since 2026-10-16, `../docs/p3-product-backlog.md` lists **product work only** — what produces the solution or verifies it. The graded process artefacts of this release (the feedback response record, the standup and sprint-review records, the plan evaluation, the presentation deck, the contribution record, the Definition of Done sign-off) are **not** backlog items and carry no `PB` number. They are tracked in part B of `plan/sprint3-4-plan_2026-10-16.md`, and the standup and review records have their own tables in `process/`. Note 9 of the backlog lists the IDs that were withdrawn for this reason, so that references in documents dated 15 to 17 September do not dangle.
 
-**Before editing anything here, pull.** As at 2026-10-16 the local `main` (`de555fd`) is two commits behind `origin/main` (`40297f2`), and those two commits change `bpmn/Hospital_All_Processes_V2.bpmn` and `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt` — both files named as authoritative in the table above. The copies on `origin/main` are the newer ones. They also add `Ruby/2026-10-15/~$SR-中文图解.docx`, a Word lock file that should not be in the repository.
+**Pull before editing.** The pull that was outstanding on 2026-10-16 has been done: the changes on `origin/main` (`40297f2`) were merged in as `2f9264b`, and local `main` and `origin/main` are level. Those commits carry the newer copies of `bpmn/Hospital_All_Processes_V2.bpmn` and `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt`, both named as authoritative above. They also brought in `Ruby/2026-10-15/~$SR-中文图解.docx`, a Word lock file; it has since been removed from version control and from disk, and `~$*` is now in `.gitignore`.
