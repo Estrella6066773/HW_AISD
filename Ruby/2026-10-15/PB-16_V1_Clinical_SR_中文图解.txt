@@ -56,167 +56,182 @@
       "nodes": [
         {
           "id": "29b1834f-8932-48c9-a775-d4860e74a7e9",
-          "text": "临床路径管理得当（四条一起才算：转诊决定、护理计划、诊后信批准、授权后预约。没有先后顺序）",
+          "text": "临床路径管理得当\n无单独方框",
           "type": "istar.Goal",
           "x": 674,
           "y": 183,
           "customProperties": {
             "Evidence": "Case 1, 4, 7, 12, 19–20; overarching human clinical responsibility.",
-            "V1 status": "Business goal"
+            "V1 status": "Business goal",
+            "说明": "无单独方框。四条一起才算：转诊决定、护理计划、诊后信批准、授权后预约。没有先后顺序。"
           }
         },
         {
           "id": "ccbb20da-125b-4154-b694-b5af248ed6d5",
-          "text": "转诊决策记录（决定已经写下。接受、拒绝、补材料、转科都算，不必是接受）",
+          "text": "转诊决策记录\nP2",
           "type": "istar.Goal",
           "x": 461,
           "y": 242,
           "customProperties": {
             "Evidence": "ReviewReferral: decision, reason, clinicianId; case 4. Decision may be accept, reject, more info, or redirect.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P2。决定已经写下。接受、拒绝、补材料、转科都算，不必是接受。"
           }
         },
         {
           "id": "b4b9fc86-743c-4c4a-86e6-109bd4f9bd08",
-          "text": "临床护理与计划记录（靠评估患者，和记下治疗、复诊或出院。两件一起）",
+          "text": "临床护理与计划记录\nP5 / P9 / P12",
           "type": "istar.Goal",
           "x": 674,
           "y": 264,
           "customProperties": {
             "Evidence": "ClinicalCare; case 7, 14–15, 25.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P5 / P9 / P12。靠评估患者，以及记下治疗、复诊或出院。两件一起。"
           }
         },
         {
           "id": "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8",
-          "text": "授权后安排诊所及治疗预约（一头从总目标来，一头从审阅来。写下接受，新门诊才订得成。出框由行政去订号）",
+          "text": "授权后安排预约\nP3 / P4 / P12；P6",
           "type": "istar.Goal",
           "x": 840,
           "y": 183,
           "customProperties": {
             "Evidence": "D8; BookVisit / BookTreatment after clinical authorisation. Case 4–8.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P3 / P4 / P12；P6。一头从总目标来，一头从审阅来。写下接受，新门诊才订得成。出框由行政去订号。"
           }
         },
         {
           "id": "c8fc1c15-1252-4500-a570-2fffcb2b2e1f",
-          "text": "诊后信函临床批准［P］（要的结果是信已被临床批准。［P］表示现在只是一段备注，没有单独批准栏）",
+          "text": "诊后信临床批准［P］\nP5 / P9 / P12；P9",
           "type": "istar.Goal",
           "x": 462,
           "y": 542,
           "customProperties": {
             "Evidence": "Case 19–23. ClinicalCare task name covers authorisation, but no explicit approval fields/check.",
-            "V1 status": "Case required; V1 partial"
+            "V1 status": "Case required; V1 partial",
+            "说明": "P5 / P9 / P12；P9。要的结果是信已被临床批准。［P］表示现在只是一段备注，没有单独批准栏。"
           }
         },
         {
           "id": "7e45ab2a-1fcb-465a-bdc4-103cd708b16d",
-          "text": "审查转诊，记录决策［M］（靠这一步把决定写下来。行政要的“已接受”也看这里）",
+          "text": "审查转诊，记录决策［M］\nP2",
           "type": "istar.Task",
           "x": 460,
           "y": 332,
           "customProperties": {
             "Evidence": "ReviewReferral: accept/reject/more info/redirect. Provides D2 always; provides D5 only when accepted for a new patient appointment.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P2。靠这一步把决定写下来。行政要的“已接受”也看这里。"
           }
         },
         {
           "id": "1fa22408-0471-46fa-92a9-d6f67441ec5b",
-          "text": "核查转诊包［M］（一包已核过的材料。审阅要用它，所以临床依赖行政交过来）",
+          "text": "核查转诊包［M］\nP1 / P10 / P13",
           "type": "istar.Resource",
           "x": 462,
           "y": 444,
           "customProperties": {
             "Evidence": "GetDocuments manual notes; case 3–4. Structured documents package not implemented.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P1 / P10 / P13。一包已核过的材料。审阅要用它，所以临床依赖行政交过来。材料不够是 P1 / P11。"
           }
         },
         {
           "id": "c47efdfd-10aa-4bc7-97b6-a1e46e407c68",
-          "text": "评估患者，记录临床笔记［M/P］（人来判断，系统不自动诊断。写完整会拖慢及时护理）",
+          "text": "评估患者，记录笔记［M/P］\nP5 / P9 / P12",
           "type": "istar.Task",
           "x": 655,
           "y": 370,
           "customProperties": {
             "Evidence": "ClinicalCareNotes. Human assessment; no automated diagnosis. Case 7.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P5 / P9 / P12。人来判断，系统不自动诊断。写完整会拖慢及时护理。"
           }
         },
         {
           "id": "f1efc27d-3654-4d9c-9879-0cd65873f6ed",
-          "text": "记录护理决策［M］（治疗 / 复诊 / 出院。一次记一个。有助于安全临床决策）",
+          "text": "记录护理决策［M］\nP5 / P9 / P12",
           "type": "istar.Task",
           "x": 717,
           "y": 514,
           "customProperties": {
             "Evidence": "ClinicalCare.careDecision; case 7, 24–25. One recorded decision per encounter; exclusive choice is stated in the task text, not as OR-refinement alternatives across the pathway.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P5 / P9 / P12。治疗、复诊或出院。一次记一个。有助于安全临床决策。"
           }
         },
         {
           "id": "aaebbfe0-ecdd-4673-9d4e-abf3d3cbb207",
-          "text": "准备/批准诊后信函［P］（这是做成“信已批准”的办法。现在还没有单独的批准栏）",
+          "text": "准备/批准诊后信［P］\nP5 / P9 / P12",
           "type": "istar.Task",
           "x": 462,
           "y": 633,
           "customProperties": {
             "Evidence": "Case 19–20 required work; ClinicalCareNotes only. Full letter and explicit approval checks missing.",
-            "V1 status": "Case required; V1 partial"
+            "V1 status": "Case required; V1 partial",
+            "说明": "P5 / P9 / P12。这是做成“信已批准”的办法。现在还没有单独的批准栏。发出去是 P9。"
           }
         },
         {
           "id": "1a3e82f2-dbb0-41d9-b544-c28810a78f15",
-          "text": "紧急路径支持（当需要时）（等付款会让患者有危险才用。不连总目标，也不直接连外面的人）",
+          "text": "紧急路径支持（当需要时）\nP8",
           "type": "istar.Goal",
           "x": 1007,
           "y": 198,
           "customProperties": {
             "Evidence": "Case 12; conditional exception only.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P8。等付款会让患者有危险才用。不连总目标，也不直接连外面的人。"
           }
         },
         {
           "id": "cafb722a-df73-4f56-8aed-054865bfbbd3",
-          "text": "授权紧急护理，记录原因［M］（要走紧急路，就得授权并写下理由。这有助于及时护理）",
+          "text": "授权紧急护理，记录原因［M］\nP8",
           "type": "istar.Task",
           "x": 962,
           "y": 354,
           "customProperties": {
             "Evidence": "UrgentAuthorisation: urgentDecision, urgentCase, notes; authorise vs hold. Finance follow-up is D18 softgoal, not a clinical payment approval.",
-            "V1 status": "V1 manual/partial"
+            "V1 status": "V1 manual/partial",
+            "说明": "P8。要走紧急路，就得授权并写下理由。这有助于及时护理。"
           }
         },
         {
           "id": "9e8d7c6b-5a49-4837-9210-fedcba098765",
-          "text": "临床工作不单因付款确认缺口而延迟（云：希望不要只卡在付款回执还没到。这朵云出框连财务）",
+          "text": "不单因付款确认而延迟\nP8",
           "type": "istar.Quality",
           "x": 962,
           "y": 444,
           "customProperties": {
             "Evidence": "Case 12; aligns with D18. Urgent care may proceed with recorded clinical reason; Finance resolves afterwards.",
-            "V1 status": "Business quality"
+            "V1 status": "Business quality",
+            "说明": "P8。云：希望不要只卡在付款回执还没到。这朵云出框连财务。"
           }
         },
         {
           "id": "dc1c23eb-6b56-4ffa-9b61-ff4784296e2d",
-          "text": "安全临床决策（云：希望决定是安全的。审阅转诊、写清治疗或复诊或出院，都在帮它）",
+          "text": "安全临床决策\n无方框",
           "type": "istar.Quality",
           "x": 722,
           "y": 642,
           "customProperties": {
             "Evidence": "Case 4, 7, 12, 14–15; quality aspiration, not demonstrated clinical safety.",
-            "V1 status": "Business quality"
+            "V1 status": "Business quality",
+            "说明": "无方框。云：希望决定是安全的。审阅转诊、写清治疗或复诊或出院，都在帮它。"
           }
         },
         {
           "id": "05cace08-fcee-49d9-8bfa-4f08dcbf6344",
-          "text": "及时临床护理（云：希望患者更快得到治疗。紧急授权在帮它。把评估写完整会拖慢它）",
+          "text": "及时临床护理\n无方框",
           "type": "istar.Quality",
           "x": 903,
           "y": 633,
           "customProperties": {
             "Evidence": "Case 12 and 28; quality aspiration.",
-            "V1 status": "Business quality"
+            "V1 status": "Business quality",
+            "说明": "无方框。云：希望患者更快得到治疗。紧急授权在帮它。把评估写完整会拖慢它。"
           }
         }
       ]
@@ -226,7 +241,7 @@
   "dependencies": [
     {
       "id": "a51439e8-c549-4b48-9bec-c805d0e2576b",
-      "text": "D2 转诊决策记录（转诊机构依赖临床。D指向临床。要的是决定已经写下）",
+      "text": "D2 转诊决策记录\nP2",
       "type": "istar.Goal",
       "x": 128,
       "y": 230,
@@ -234,14 +249,15 @@
         "Case paragraphs": "4, 25",
         "V1 status": "合理建模推论；记录已有支持",
         "Evidence": "ReviewReferral：referralDecision、decisionReason、clinicianId；Redirect / notify-referrer。",
-        "Qualification": "决定可为接受、拒绝、补材料或转专科，不等于接受。接受新患者转诊才另提供 D5。"
+        "Qualification": "决定可为接受、拒绝、补材料或转专科，不等于接受。接受新患者转诊才另提供 D5。",
+        "说明": "P2。转诊机构依赖临床。D指向临床。要的是决定已经写下。"
       },
       "source": "ca384f60-b9fa-4af6-83c8-af2e532fbdf3",
       "target": "ccbb20da-125b-4154-b694-b5af248ed6d5"
     },
     {
       "id": "5862c004-9027-472c-bd60-b8dc2c72c6f4",
-      "text": "D4 核查转诊包（临床依赖行政。D指向行政。要的是一包核过的材料）",
+      "text": "D4 核查转诊包\nP1 / P10 / P13",
       "type": "istar.Resource",
       "x": 128,
       "y": 446,
@@ -249,14 +265,15 @@
         "Case paragraphs": "3–4",
         "V1 status": "符合案例；V1 部分支持",
         "Evidence": "GetDocuments → ReviewReferral；人工备注，无结构化资料包。",
-        "Qualification": "临床依赖 Admin 检查资料；Admin 不应判断临床适宜性。包的完整性/传输为人工约定。"
+        "Qualification": "临床依赖 Admin 检查资料；Admin 不应判断临床适宜性。包的完整性/传输为人工约定。",
+        "说明": "P1 / P10 / P13。临床依赖行政。D指向行政。要的是一包核过的材料。材料不够是 P1 / P11。"
       },
       "source": "1fa22408-0471-46fa-92a9-d6f67441ec5b",
       "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
     },
     {
       "id": "7ea66ccb-d2f8-49a6-b396-56fed11def3c",
-      "text": "D5 新患者预约前须授权接受（行政依赖临床。D指向审阅。新门诊之前必须已经是接受）",
+      "text": "D5 预约前须已接受\nP3 / P4 / P12",
       "type": "istar.Goal",
       "x": 128,
       "y": 356,
@@ -264,14 +281,15 @@
         "Case paragraphs": "4",
         "V1 status": "符合案例；分支逻辑已有支持",
         "Evidence": "ReviewReferral → ReferralDecision；accept → BookVisit（新患者门诊）。",
-        "Qualification": "仅当顾问接受转诊后才可安排新患者门诊。后续随访由临床提出，不属于 D5。拒绝、补材料、转专科不提供本依赖。"
+        "Qualification": "仅当顾问接受转诊后才可安排新患者门诊。后续随访由临床提出，不属于 D5。拒绝、补材料、转专科不提供本依赖。",
+        "说明": "P3 / P4 / P12。行政依赖临床。D指向审阅。新门诊之前必须已经是接受。"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "7e45ab2a-1fcb-465a-bdc4-103cd708b16d"
     },
     {
       "id": "218e63f8-fffb-40ee-92e4-f6d73587b5b0",
-      "text": "D7 诊后信函临床批准（行政依赖临床。D指向准备/批准。信先批准，行政再发）",
+      "text": "D7 诊后信临床批准\nP9",
       "type": "istar.Goal",
       "x": 129,
       "y": 630,
@@ -279,14 +297,15 @@
         "Case paragraphs": "19–23",
         "V1 status": "案例要求正确；V1 有明显缺口",
         "Evidence": "ClinicalCare → DispatchLetter → dispatch-clinic-letter；ClinicalCareNotes 为自由备注。LetterWorkers 只写模拟外发记录。",
-        "Qualification": "秘书仅在顾问批准后分发；不得改临床含义。V1 缺结构化正文与审批检查，属部分支持。"
+        "Qualification": "秘书仅在顾问批准后分发；不得改临床含义。V1 缺结构化正文与审批检查，属部分支持。",
+        "说明": "P9。行政依赖临床。D指向准备/批准。信先批准，行政再发。"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "aaebbfe0-ecdd-4673-9d4e-abf3d3cbb207"
     },
     {
       "id": "66fe5d72-b1ec-4ae0-bd32-6f7b52ba782e",
-      "text": "D12 适当的临床评估与护理（患者依赖临床。D指向总目标。要得到恰当的评估和护理）",
+      "text": "D12 适当的临床评估与护理\nP5 / P9 / P12",
       "type": "istar.Goal",
       "x": 219,
       "y": 22,
@@ -294,14 +313,15 @@
         "Case paragraphs": "7, 14–15, 25",
         "V1 status": "符合案例；人工临床工作受部分支持",
         "Evidence": "ClinicalCare：careDecision、ClinicalCareNotes。",
-        "Qualification": "这是患者对临床的目标，不是软件自动诊断或保证疗效。结构化同意书、治疗请求和周期信息仍不完整。"
+        "Qualification": "这是患者对临床的目标，不是软件自动诊断或保证疗效。结构化同意书、治疗请求和周期信息仍不完整。",
+        "说明": "P5 / P9 / P12。患者依赖临床。D指向总目标。要得到恰当的评估和护理。"
       },
       "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
       "target": "29b1834f-8932-48c9-a775-d4860e74a7e9"
     },
     {
       "id": "d4e5f6a7-b8c9-4012-def0-1234567890ab",
-      "text": "D8 安排门诊及治疗预约（临床依赖行政。D指向行政。要行政去订号）",
+      "text": "D8 安排门诊及治疗预约\nP3 / P4 / P12；P6",
       "type": "istar.Task",
       "x": 129,
       "y": 123,
@@ -309,14 +329,15 @@
         "Case paragraphs": "4–8",
         "V1 status": "符合案例；V1 有预约任务支持",
         "Evidence": "BookVisit / BookTreatment after clinical authorisation; Admin uses scheduling and external clinical services.",
-        "Qualification": "Clinical depends on Admin to arrange appointments after authorisation. New-patient booking also uses D5; normal-route treatment confirmation uses D14."
+        "Qualification": "Clinical depends on Admin to arrange appointments after authorisation. New-patient booking also uses D5; normal-route treatment confirmation uses D14.",
+        "说明": "P3 / P4 / P12；P6。临床依赖行政。D指向行政。要行政去订号。"
       },
       "source": "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8",
       "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
     },
     {
       "id": "648f5d89-9163-44c2-8bf7-17de9dcaf0b5",
-      "text": "D18 急诊护理未因付款延迟而被阻断（临床依赖财务。D指向财务。别只因付款没确认就把治疗挡住。财务事后再跟）",
+      "text": "D18 急诊不因付款受阻\nP8",
       "type": "istar.Quality",
       "x": 1180,
       "y": 459,
@@ -324,7 +345,8 @@
         "Case paragraphs": "12",
         "V1 status": "已对齐最新 SD；V1 有紧急授权与事后财务路径",
         "Evidence": "UrgentAuthorisation → BookTreatment → ClinicalCare → UrgentFinance。",
-        "Qualification": "软目标：紧急护理不得仅因付款延迟被挡住。临床凭记录原因可先治；财务事后处理。正常路径清讫是 D14，不算本依赖失败。"
+        "Qualification": "软目标：紧急护理不得仅因付款延迟被挡住。临床凭记录原因可先治；财务事后处理。正常路径清讫是 D14，不算本依赖失败。",
+        "说明": "P8。临床依赖财务。D指向财务。别只因付款没确认就把治疗挡住。财务事后再跟。"
       },
       "source": "9e8d7c6b-5a49-4837-9210-fedcba098765",
       "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
@@ -492,134 +514,134 @@
       "type": "istar.ContributionLink",
       "source": "7e45ab2a-1fcb-465a-bdc4-103cd708b16d",
       "target": "dc1c23eb-6b56-4ffa-9b61-ff4784296e2d",
-      "label": "help（审查并记下决定，有助于安全）"
+      "label": "help"
     },
     {
       "id": "ed190af2-74fd-4b2d-9337-038f2ea1bc74",
       "type": "istar.ContributionLink",
       "source": "f1efc27d-3654-4d9c-9879-0cd65873f6ed",
       "target": "dc1c23eb-6b56-4ffa-9b61-ff4784296e2d",
-      "label": "help（写清治疗、复诊或出院，有助于安全）"
+      "label": "help"
     },
     {
       "id": "836af617-757e-4d24-95d0-10ae586740c8",
       "type": "istar.ContributionLink",
       "source": "cafb722a-df73-4f56-8aed-054865bfbbd3",
       "target": "05cace08-fcee-49d9-8bfa-4f08dcbf6344",
-      "label": "help（写下紧急理由再治，有助于及时）"
+      "label": "help"
     },
     {
       "id": "692a080f-25b3-4a97-bc80-bfa8b2e8a10d",
       "type": "istar.ContributionLink",
       "source": "c47efdfd-10aa-4bc7-97b6-a1e46e407c68",
       "target": "05cace08-fcee-49d9-8bfa-4f08dcbf6344",
-      "label": "hurt（评估写完整要花时间，会拖慢及时）"
+      "label": "hurt"
     },
     {
       "id": "f6fb9a64-efcf-4862-ab6c-5ded869d9c5e",
       "type": "istar.ContributionLink",
       "source": "1a3e82f2-dbb0-41d9-b544-c28810a78f15",
       "target": "05cace08-fcee-49d9-8bfa-4f08dcbf6344",
-      "label": "help（紧急路径是为了更快得到治疗）"
+      "label": "help"
     },
     {
       "id": "13bbd997-f74c-4ba3-aedf-36cda4cd19db",
       "type": "istar.ContributionLink",
       "source": "9e8d7c6b-5a49-4837-9210-fedcba098765",
       "target": "05cace08-fcee-49d9-8bfa-4f08dcbf6344",
-      "label": "help（不让付款回执拖住临床，有助于及时）"
+      "label": "help"
     }
   ],
   "display": {
     "29b1834f-8932-48c9-a775-d4860e74a7e9": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "ccbb20da-125b-4154-b694-b5af248ed6d5": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "b4b9fc86-743c-4c4a-86e6-109bd4f9bd08": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "8f3c1a2b-4d5e-6f70-8192-a3b4c5d6e7f8": {
-      "width": 352,
-      "height": 168
+      "width": 160,
+      "height": 70
     },
     "c8fc1c15-1252-4500-a570-2fffcb2b2e1f": {
       "backgroundColor": "#fff0d7",
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "7e45ab2a-1fcb-465a-bdc4-103cd708b16d": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "1fa22408-0471-46fa-92a9-d6f67441ec5b": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "c47efdfd-10aa-4bc7-97b6-a1e46e407c68": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "f1efc27d-3654-4d9c-9879-0cd65873f6ed": {
-      "width": 352,
-      "height": 168
+      "width": 160,
+      "height": 70
     },
     "aaebbfe0-ecdd-4673-9d4e-abf3d3cbb207": {
       "backgroundColor": "#fff0d7",
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "1a3e82f2-dbb0-41d9-b544-c28810a78f15": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "cafb722a-df73-4f56-8aed-054865bfbbd3": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "9e8d7c6b-5a49-4837-9210-fedcba098765": {
-      "width": 352,
-      "height": 168
+      "width": 160,
+      "height": 70
     },
     "dc1c23eb-6b56-4ffa-9b61-ff4784296e2d": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "05cace08-fcee-49d9-8bfa-4f08dcbf6344": {
-      "width": 319,
-      "height": 168
+      "width": 145,
+      "height": 70
     },
     "a51439e8-c549-4b48-9bec-c805d0e2576b": {
-      "width": 352,
-      "height": 168
+      "width": 160,
+      "height": 70
     },
     "5862c004-9027-472c-bd60-b8dc2c72c6f4": {
-      "width": 352,
-      "height": 168
+      "width": 160,
+      "height": 70
     },
     "7ea66ccb-d2f8-49a6-b396-56fed11def3c": {
-      "width": 374,
-      "height": 192
+      "width": 170,
+      "height": 80
     },
     "218e63f8-fffb-40ee-92e4-f6d73587b5b0": {
-      "width": 352,
-      "height": 168
+      "width": 160,
+      "height": 70
     },
     "66fe5d72-b1ec-4ae0-bd32-6f7b52ba782e": {
-      "width": 374,
-      "height": 168
+      "width": 170,
+      "height": 70
     },
     "d4e5f6a7-b8c9-4012-def0-1234567890ab": {
-      "width": 374,
-      "height": 168
+      "width": 170,
+      "height": 70
     },
     "648f5d89-9163-44c2-8bf7-17de9dcaf0b5": {
-      "width": 374,
-      "height": 192
+      "width": 170,
+      "height": 80
     },
     "3caceec8-f61e-42fa-9511-078ecad7f9d6": {
       "vertices": [
@@ -812,10 +834,10 @@
   "diagram": {
     "width": 1400,
     "height": 745,
-    "name": "临床 SR 中文图解（括号里是这格的意思）",
+    "name": "临床 SR 中文图",
     "customProperties": {
-      "Description": "Clinical main-pathway rationale view, aligned to docs/istar/PB-16_istar-sd-sr.md after 2026-10-14 dependency updates. OR-refinement under care outcome removed: one encounter records one care decision (treatment / follow-up / discharge) as a single task. D5 narrowed to new-patient acceptance only. D7 is a goal. D8 added for appointment arrangement after authorisation. D18 is a softgoal (urgent care not blocked solely by payment delay), not a finance follow-up task. P means partial V1 support; M means manual. Contribution help/hurt expresses case-grounded reasoning, not measured performance."
+      "Description": "中文短名称。点开每个元素，说明栏里是这格的意思。详细问答见同目录的问题咨询总结.md。"
     }
   },
-  "name": "临床 SR 中文图解（括号里是这格的意思）"
+  "name": "临床 SR 中文图"
 }
