@@ -1535,8 +1535,9 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_DeclineToChange_di" bpmnElement="Flow_DeclineToChange" bioc:stroke="#667481">
         <di:waypoint x="3860" y="850" />
-        <di:waypoint x="3860" y="1130" />
-        <di:waypoint x="980" y="1130" />
+        <di:waypoint x="3860" y="1090" />
+        <di:waypoint x="750" y="1030" />
+        <di:waypoint x="750" y="1110" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_Dna_di" bpmnElement="Flow_Dna" bioc:stroke="#667481">
         <di:waypoint x="1890" y="420" />
@@ -1549,6 +1550,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Flow_DnaToChange_di" bpmnElement="Flow_DnaToChange" bioc:stroke="#667481">
         <di:waypoint x="3860" y="1070" />
         <di:waypoint x="3860" y="1160" />
+        <di:waypoint x="990" y="1190" />
         <di:waypoint x="980" y="1160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_66_di" bpmnElement="Flow_66" bioc:stroke="#1768a6">
@@ -1812,8 +1814,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_51_di" bpmnElement="Flow_51" bioc:stroke="#667481">
-        <di:waypoint x="980" y="1130" />
-        <di:waypoint x="1020" y="1130" />
+        <di:waypoint x="885" y="1080" />
+        <di:waypoint x="885" y="1050" />
+        <di:waypoint x="1090" y="1050" />
+        <di:waypoint x="1090" y="1080" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_51_D_di" bpmnElement="Flow_51_D" bioc:stroke="#667481">
         <di:waypoint x="1160" y="1130" />
