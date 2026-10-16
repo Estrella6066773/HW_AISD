@@ -19,7 +19,8 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 |------|---------|
 | `docs/` | Group-level deliverables: product backlog, task breakdown, sprint backlog, requirements traceability matrix, definition of done, i* models in `docs/istar/` |
 | `Ruby/`, `Est/`, `Ender/`, `Ryan/` | Individual workspaces: drafts, part-level documents, meeting notes |
-| `Coursework/` | Shared executable pathway package in `hospital-pathway/` (BPMN + forms + Java workers + test logs); workbook Word copies |
+| `Week3 Coursework/` | Shared executable pathway package in `hospital-pathway/` (BPMN + forms + Java workers + test logs); workbook Word copies. Renamed from `Coursework/` in `03180bb`; anything still linking to `Coursework/hospital-pathway/` is a dead link. |
+| `Week6 Coursework/` | Second-release working set: operational BPMN V2, strategic BPMN, reviewed i\* SD and the three service SR views, feedback response record, requirements traceability, acceptance evidence, Sprint 3 and 4 plan. See its [README](Week6%20Coursework/README.md). |
 | [`submissions/BPMEA/`](submissions/BPMEA/README.md) | BPM&EA-specific Project and Test Plan and submission index |
 | [`submissions/AISD/`](submissions/AISD/README.md) | AISD-specific Design Decisions and Acceptance Test Plan/Results |
 | `W01/` | Course materials: session slides, case study, assessment specifications |
@@ -28,7 +29,7 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 
 ## Current status
 
-29 September 2026 is the submission date. The shared executable pathway is in `Coursework/hospital-pathway/`. Java tests and one final-model self-pay route to `COMPLETED` are recorded against commit `fc6293e`. Current `main` is `91a02c9`. Commit `7be65b4` added the strategic BPMN and the i\* models. The 16 September Sprint 1 table in `docs/p6-sprint-backlog.md` remains the historical planning record.
+**20 October 2026 23:59** is the deadline for the second-release deliverables in both modules. The 29 September initial release remains the recorded baseline, tagged `submission-2026-09-29` (`f6fec99`): the Java tests and one final-model self-pay route to `COMPLETED` are recorded against that state, and worker source, forms and the executable BPMN have changed since then, so those results describe that tagged baseline rather than the current tree. The executable package is `Week3 Coursework/hospital-pathway/`; `Coursework/` was renamed to `Week3 Coursework/` in `03180bb`. The 16 September Sprint 1 table in `docs/p6-sprint-backlog.md` remains the historical planning record. The second-release working set is in `Week6 Coursework/`.
 
 Present:
 
@@ -37,7 +38,7 @@ Present:
 - i\* SD/SR in `docs/istar/` (second-owner checklist still unsigned)
 - Requirements traceability matrix, with 12 supported, 26 partial and 4 unsupported business rules
 - Course indexes in `submissions/BPMEA/` and `submissions/AISD/`
-- The group has given the presentation
+- The initial-release presentation and demonstration were given on 29 September. The second-release presentation is still to be delivered.
 
 Still open:
 
@@ -82,6 +83,6 @@ Supporting documents, not tied to a single part:
 
 ## Reference
 
-- Agile Workshop workbook: `W01/Agile Workshop.docx`; English copy: `Coursework/Agile Workshop-EN.docx`
+- Agile Workshop workbook: `W01/Agile Workshop.docx`; English copy: `Week3 Coursework/Agile Workshop-EN.docx`
 - Defence notes on the case study: `Ruby/2026-09-15/正式作答-答辩批注.md`, `Ruby/2026-09-15/Case Study-批注.docx`
 - Case study: `W01/Case Study - Hospital Patient Referral, Treatment and Administration System.docx`

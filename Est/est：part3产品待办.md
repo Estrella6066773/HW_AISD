@@ -7,6 +7,27 @@
 
 ---
 
+**编号基准已统一**：本表使用 2026-09-15 的旧编号。全组的唯一权威编号是英文表 `docs/p3-product-backlog.md`（29 条）。从 `PB-16` 起两表含义不同，**引用 `PB-16` 及以后一律按英文表**。对照关系见下表，本表内容保持原样存档，不再回改。
+
+| 本表编号 | 本表名称 | 权威编号（`docs/p3-product-backlog.md`） | 权威表名称 |
+|----------|----------|------------------------------------------|------------|
+| `PB-01` … `PB-15` | 含义相同 | `PB-01` … `PB-15` | 含义相同 |
+| `PB-16` | 治疗变更正式申请 | **`PB-19`** | Formal treatment modification request |
+| `PB-17` | 退款与取消处理 | **`PB-20`** | Refund and cancellation handling |
+| `PB-18` | 化疗周期复查与继续决定 | **`PB-23`** | Chemotherapy cycle review and continuation decision |
+| `PB-19` | 随访预约与患者缺席处理 | **`PB-21`** | Follow-up booking and non-attendance handling |
+| `PB-20` | 登录、角色授权与最小权限 | **`PB-22`** | Login and role permissions |
+| `PB-21` | 患者身份核对与错配防控 | **`PB-24`** | Patient identity checking |
+| `PB-22` | 服务不可用时的降级与线下补录 | **`PB-25`** | Back-entry during service outages |
+| `PB-23` | 管理报表 | **`PB-26`** | Management reports |
+| `PB-24` | 患者沟通偏好 | **`PB-27`** | Patient communication preferences |
+| `PB-25` | 需求追溯矩阵 | **`PB-28`** | Requirements traceability matrix |
+| `PB-26` | 完成定义与证据最低要求 | **`PB-29`** | Definition of Done and minimum evidence |
+
+权威表中另有本表没有的三条：`PB-16` i\* SD/SR 模型、`PB-17` 举证与贡献记录、`PB-18` 补充验收测试。
+
+---
+
 ## 口径说明
 
 1. **编号冻结**：`PB-01` … `PB-15` 沿用 Part 4 任务拆分表已使用的映射，语义不变；本表新增条目从 `PB-16` 起编号，后续不再改名、不复用。
