@@ -88,108 +88,230 @@ This picture is not a time order. It shows what the clinical team must achieve, 
 
 Inside the dashed box is the clinical team. Outside are the patient, the referrer, the admin team and finance.
 
-### 图上的形状
+### 先看懂一条线
 
-| 形状 | 意思 |
-| --- | --- |
-| 圆角矩形 | 目标。要达成的结果 |
-| 六边形 | 任务。为了目标要做的事 |
-| 矩形 | 资源。任务要用到的东西 |
-| 云形 | 软目标。希望更好，很难用“完成了”来勾掉 |
-| 带 D 的小元素 | 依赖。框外的人向框内要的东西，或框内向框外要的东西 |
-| help | 有帮助 |
-| hurt | 会带来压力或变慢 |
-| 黑点连线 | AND。这几项一起支撑上面的目标 |
+虚线框是临床团队自己的理由。框外四个圆是别人：患者、转诊机构、行政、财务。
 
-`[M]` 表示这件事主要靠人做。`[P]` 表示案例要求有，当前系统只做了一部分。诊后信那两块是橙色，就是因为它们是 `[P]`。
+The dashed box is the clinical team's own reasoning. The four circles outside are other people: patient, referrer, admin, finance.
 
-`[M]` means a person does the work. `[P]` means the case asks for it, but the current system only covers part of it. The two orange letter shapes are `[P]`.
+每一条带 D 的线都停三下：需要的人，中间那个写着 D 编号的图形，然后是要交出来的人。
 
-### 框外的七条依赖
+Every D line has three stops: the one who needs something, the labelled shape in the middle, then the one who must provide it.
 
-读法：谁依赖谁，依赖什么。
+D 是箭头，不是装饰。它从需要的人指向要交出来的人。D 朝着谁，谁就是被依赖的那一个。需要的人在另一头。
 
-Read each line as: who depends on whom, and for what.
+D is an arrow. It points from the one who needs something to the one who must provide it. The person the D points at is the one being depended on. The one who depends stands at the other end.
 
-| 编号 | 谁依赖谁 | 依赖什么 |
-| --- | --- | --- |
-| D2 | 转诊机构依赖临床团队 | 转诊决定已经记下 |
-| D4 | 临床团队依赖行政团队 | 已经核过的转诊材料 |
-| D5 | 行政团队依赖临床团队 | 新患者门诊之前，必须先有“接受” |
-| D7 | 行政团队依赖临床团队 | 诊后信先经过临床批准 |
-| D8 | 临床团队依赖行政团队 | 在授权之后，去安排门诊和治疗预约 |
-| D12 | 患者依赖临床团队 | 得到恰当的评估和护理 |
-| D18 | 临床团队依赖财务 | 紧急治疗不单单因为付款没完成就被挡住 |
+中间图形的形状，只说明“要的是哪一种东西”。在这张图上，椭圆才是要一个结果。矩形不是目标。七条依赖里，矩形只有 D4，那是一包材料。六边形只有 D8，那是一件指定要做的事。云形只有 D18。
 
-D4 和 D8 的方向要记清楚。材料是行政准备好，临床才用。预约是临床先授权，行政再去订。
+The shape says what kind of thing is wanted. On this diagram, the ovals are the wanted results. The rectangle is not a goal. Among the seven dependencies, the only rectangle is D4, a pack of documents. The only hexagon is D8, a specified job. The only cloud is D18.
 
-D4 and D8 point opposite ways. Admin prepares the documents, then clinical uses them. Clinical authorises first, then admin books.
+框里的线只有三种。
 
-### 框里的目标
+Inside the box there are only three kinds of line.
 
-最上面的目标是：**临床路径得到恰当管理。**
+- 小横杠贴在椭圆上：下面这几件一起撑住上面的结果。AND. The small bar sits on the oval. The pieces below together support that result.
+- 黑点：上面的六边形要用下面的矩形。Black dot: the hexagon above needs the rectangle below.
+- help / hurt：这条线在底部的云结束。它表示有帮助，或会拖慢。它不是下一项任务。help / hurt: the line ends on a cloud at the bottom. It means the work helps that quality, or slows it. It is not the next task.
 
-The top goal is: the clinical pathway is managed properly.
+### 线 1：患者进来以后，总目标分成四条
 
-它下面用 AND 连着四块。四块都要有，才算这个目标站住。
+患者 Patient  
+→ D12 Appropriate clinical assessment and care / 恰当的临床评估和护理  
+→ Clinical pathway managed appropriately / 临床路径得到恰当管理
 
-Four parts sit under it with AND. All four are needed.
+D 指向框内。患者依赖临床团队。要的结果是得到恰当的评估和护理。
 
-**1. 转诊决定已记录**
+The D points into the box. The patient depends on the clinical team.
 
-任务是：审阅转诊，记下决定。决定可以是接受、拒绝、再要材料，或转科。
+这个椭圆自己不再往下做一件事。它用四条带小横杠的线分出去。四条都要有，这个总目标才算站住。
 
-这个任务需要资源：已核验的转诊材料。这就是 D4。
+This oval does not do one job by itself. Four lines with a small bar leave it. All four are needed.
 
-每次审阅都满足 D2。只有选了“接受”，才满足 D5，行政才能订新患者门诊。
+**1a，左转诊。**  
+→ Referral decision recorded / 转诊决定已记录  
+→ Review referral; record decision [M] / 审阅转诊，记下决定
 
-这条任务对“安全的临床决定”是 help。
+小横杠在“转诊决定已记录”上。审阅并记下决定，这个结果才成立。决定可以是接受、拒绝、再要材料或转科。
 
-The task is to review the referral and record the decision. The decision can be accept, reject, ask for more documents, or redirect. The task needs the checked package. Every review meets D2. Only “accept” meets D5. This task helps safe clinical decisions.
+The bar sits on “Referral decision recorded”. Reviewing and writing the decision is how that result is met. The decision may be accept, reject, more documents, or redirect.
 
-**2. 临床护理和计划已记录**
+这个六边形后面还有三条线，分别是线 2 的黑点、线 2 的 help、线 5 的另一头。
 
-两件任务：
+This hexagon continues on three more lines: the black dot and the help line in line 2, and the other end of line 5.
 
-- 评估患者，写下临床记录。对人做判断，系统不自动诊断。
-- 记下护理决定：治疗、复诊，或出院。一次就诊记一个决定。
+**1b，中问护理。**  
+→ Clinical care and plan recorded / 临床护理和计划已记录  
+→ 再分成线 3 的两个六边形。
 
-评估对“及时的临床护理”是 hurt。完整评估要花时间。记下决定对“安全的临床决定”是 help。
+The bar sits on “Clinical care and plan recorded”. It then splits into the two hexagons in line 3.
 
-One task assesses the patient and writes notes. The system does not diagnose. The other task records one decision: treatment, follow-up, or discharge. A full assessment can slow timely care. Recording the decision helps safe decisions.
+**1c，左下诊后信。**  
+→ Clinic letter clinically approved [P] / 诊后信已获临床批准  
+→ Prepare / approve clinic letter [P] / 准备并批准诊后信
 
-**3. 诊后信已获临床批准**
+小横杠在橙色椭圆上。下面的橙色六边形是准备并批准这封信。线再从六边形出框，见线 4。
 
-任务是：准备并批准诊后信。这块是橙色 `[P]`。
+The bar sits on the orange oval. The orange hexagon prepares and approves the letter. The line then leaves the box. See line 4.
 
-当前系统里，信的内容主要还是临床任务上的一段备注。没有单独的批准栏，也没有检查“没批准就不能发”。
+**1d，右上预约。**  
+→ Clinic and treatment appointments arranged after authorisation / 授权之后安排门诊和治疗预约
 
-The letter goal is orange and marked `[P]`. In the current system the letter is mainly a note on the clinical task. There is no separate approval field, and no check that blocks sending before approval.
+小横杠在总目标与这个椭圆之间。这个椭圆再出框，见线 5。
 
-**4. 授权之后才安排门诊和治疗预约**
+The bar sits between the top goal and this oval. The oval then leaves the box. See line 5.
 
-这是临床这边的目标。真正去订号的是行政，所以它连到 D8。
+### 线 2：左列，从转诊决定走到材料，再弯到“安全”
 
-第一次门诊，要等转诊被接受。治疗预约，要等临床授权治疗。
+转诊机构 Referring organisation  
+→ D2 Referral decision recorded / 转诊决定已记录  
+→ Referral decision recorded / 转诊决定已记录  
+→ Review referral; record decision [M] / 审阅转诊，记下决定
 
-This is the clinical goal. Admin does the booking, so the goal links to D8. The first clinic waits for an accepted referral. Treatment booking waits for a treatment authorisation.
+D 指向框内。转诊机构依赖临床团队。框内的椭圆和框外的 D2 是同一件事：决定已经写下来。接受、拒绝、再要材料、转科都算。
 
-旁边还有一个目标：**需要时才走的紧急路径。** 它不在那四块 AND 里面。只有付款等待会让患者有风险时才用。
+The D points into the box. The referrer depends on the clinical team. The oval inside and D2 outside are the same result: a decision is written down.
 
-Beside them is a separate goal: support the urgent path when it is needed. It is not one of the four AND parts. Use it only when waiting for payment would put the patient at risk.
+竖线继续往下，中间有一个黑点：
 
-它下面有：
+→ Checked referral package [M] / 已核验的转诊材料  
+→ D4 Checked referral package / 已核验的转诊材料  
+→ 行政 Admin team
 
-- 任务：授权紧急治疗，并写下理由。可以授权，也可以暂缓。
-- 软目标：临床工作不因为付款确认还没回来就被拖住。
+黑点的意思是：审阅这个六边形要用下面那包材料。D 从材料指向行政。临床依赖行政把材料核好交过来。
 
-紧急授权，以及这个软目标，都对“及时的临床护理”是 help。财务事后跟进。临床不替财务批退款。这就是 D18。
+The black dot means the review hexagon needs the package below it. The D points at admin. The clinical team depends on admin for the checked documents.
 
-Under it, the clinician authorises urgent care and writes the reason, or holds it. A softgoal says clinical work should not wait only because payment confirmation is missing. Both help timely care. Finance follows up afterwards. Clinical staff do not approve refunds. That is D18.
+同一六边形还有一条弯线，写着 help，终点是云：
 
-框底还有两个软目标：**安全的临床决定**，**及时的临床护理**。它们是希望达到的质量，不是已经证明系统做到了。
+→ Safe clinical decisions / 安全的临床决定
 
-Two softgoals sit at the bottom: safe clinical decisions, and timely clinical care. They are qualities the team wants. They are not proof that the system already achieves them.
+把决定和理由记下来，有助于安全的临床决定。线在这朵云结束。
+
+Writing the decision and the reason helps safe clinical decisions. The line ends on this cloud.
+
+行政还有一条线扎进同一个六边形：
+
+行政 Admin team  
+→ D5 Authorised acceptance before a new patient appointment / 新患者门诊前须已授权接受  
+→ Review referral; record decision [M] / 审阅转诊，记下决定
+
+D 指向六边形。行政依赖临床团队。这条比 D2 窄：新患者第一次门诊之前，必须已经是“接受”。拒绝、再要材料、转科只停在 D2，不完成 D5。
+
+The D points at the hexagon. Admin depends on the clinical team. This line is narrower than D2. A first visit for a new patient needs “accept”. Reject, more documents and redirect stop at D2. They do not finish D5.
+
+### 线 3：中间列，评估走向“及时”，决定走向“安全”
+
+Clinical pathway managed appropriately / 临床路径得到恰当管理  
+→ Clinical care and plan recorded / 临床护理和计划已记录
+
+小横杠在下面这个椭圆上。它再分成两个六边形。
+
+The bar sits on the lower oval. That oval splits into two hexagons.
+
+**3a**  
+→ Assess patient; record clinical notes [M/P] / 评估患者，记下临床记录  
+→ hurt  
+→ Timely clinical care / 及时的临床护理
+
+评估要花时间，所以这根线标 hurt，终点是“及时的临床护理”。线在云上结束。`[M/P]` 表示人来判断，系统不自动诊断。
+
+Assessment takes time, so this line is marked hurt and ends on “Timely clinical care”. `[M/P]` means a person judges. The system does not diagnose.
+
+**3b**  
+→ Record care decision [M] (treatment / follow-up / discharge) / 记下护理决定（治疗 / 复诊 / 出院）  
+→ help  
+→ Safe clinical decisions / 安全的临床决定
+
+一次就诊记下一个决定：治疗、复诊或出院。这根线标 help，终点同样是底部那朵“安全”的云。
+
+One encounter records one decision: treatment, follow-up, or discharge. This line is marked help and ends on the same “safe” cloud.
+
+### 线 4：橙色诊后信，从行政穿进框，再接到总目标
+
+行政 Admin team  
+→ D7 Clinic letter clinically approved / 诊后信已获临床批准  
+→ Prepare / approve clinic letter [P] / 准备并批准诊后信  
+→ Clinic letter clinically approved [P] / 诊后信已获临床批准  
+→ Clinical pathway managed appropriately / 临床路径得到恰当管理
+
+D 指向框内的橙色六边形。行政依赖临床团队。行政要的是信已经批准。六边形上面的橙色椭圆用小横杠接住它，这根横杠再接到线 1 的总目标，所以它就是线 1c。
+
+The D points at the orange hexagon. Admin depends on the clinical team for an approved letter. The orange oval above the hexagon carries the small bar, and that bar joins the top goal in line 1. This is line 1c.
+
+`[P]` 和橙色表示：现在系统里主要还是临床任务上的一段备注，没有单独的批准栏。
+
+`[P]` and the orange colour mean the current system mainly keeps a note on the clinical task. There is no separate approval field.
+
+### 线 5：预约椭圆有两头，出框才到行政
+
+这一头从总目标来：
+
+Clinical pathway managed appropriately / 临床路径得到恰当管理  
+→ Clinic and treatment appointments arranged after authorisation / 授权之后安排门诊和治疗预约
+
+另一头从左列的六边形来：
+
+Review referral; record decision [M] / 审阅转诊，记下决定  
+→ Clinic and treatment appointments arranged after authorisation / 授权之后安排门诊和治疗预约
+
+两头都用小横杠接到这个椭圆上。审阅时如果写下“接受”，新门诊才订得成，所以左列的六边形也撑着这个预约结果。
+
+Both lines meet this oval with a small bar. If the review records “accept”, the new visit can be booked. That is why the left hexagon also supports this appointments result.
+
+椭圆再出框：
+
+→ D8 Arrange clinic and treatment appointments / 安排门诊和治疗预约  
+→ 行政 Admin team
+
+D 指向行政。临床依赖行政去订号。中间是六边形，因为要的是“去安排”这件事。第一次门诊还要先完成线 2 的 D5。治疗预约要等线 3b 记下“治疗”。
+
+The D points at admin. The clinical team depends on admin to make the booking. The middle shape is a hexagon because the wanted thing is the job of arranging it. The first visit also needs D5 from line 2. Treatment booking waits until line 3b records “treatment”.
+
+### 线 6：右边紧急路径，三条 help 都结束在“及时”
+
+Urgent pathway supported (when required) / 需要时支持紧急路径
+
+这个椭圆在总目标旁边。它没有小横杠连回“临床路径得到恰当管理”。只有付款等待会让患者有风险时才用。
+
+This oval sits beside the top goal. It has no bar back to “Clinical pathway managed appropriately”. It is used only when waiting for payment would put the patient at risk.
+
+它下面两条线的小横杠贴在它自己身上：
+
+→ Authorise urgent care; record reason [M] / 授权紧急治疗并写下理由
+
+→ Clinical work not delayed solely by payment confirmation gaps / 临床工作不单因付款确认缺口被拖延
+
+然后有三条 help，终点都是 Timely clinical care / 及时的临床护理：
+
+- Urgent pathway supported (when required) / 需要时支持紧急路径 → help → Timely clinical care / 及时的临床护理
+- Authorise urgent care; record reason [M] / 授权紧急治疗并写下理由 → help → Timely clinical care / 及时的临床护理
+- Clinical work not delayed solely by payment confirmation gaps / 临床工作不单因付款确认缺口被拖延 → help → Timely clinical care / 及时的临床护理
+
+这三根线都在“及时”这朵云结束。
+
+All three lines end on the “timely” cloud.
+
+付款那朵云再出框：
+
+→ D18 Urgent care not blocked solely by payment delay / 紧急治疗不单因付款延迟被挡住  
+→ 财务 Finance
+
+D 指向财务。临床依赖财务。临床可以先写下理由做，财务事后跟进。
+
+The D points at finance. The clinical team depends on finance. Clinical staff may go ahead with a written reason. Finance follows up afterwards.
+
+### 两条线会汇合的地方
+
+Safe clinical decisions / 安全的临床决定  
+这朵云是线 2 的 help 和线 3b 的 help 的终点。
+
+Timely clinical care / 及时的临床护理  
+这朵云是线 3a 的 hurt，以及线 6 三条 help 的终点。
+
+两朵云都不再往下连任务。
+
+The “safe” cloud is where the help lines from line 2 and line 3b end. The “timely” cloud is where the hurt line from line 3a and the three help lines from line 6 end. Neither cloud continues into another task.
 
 ---
 
