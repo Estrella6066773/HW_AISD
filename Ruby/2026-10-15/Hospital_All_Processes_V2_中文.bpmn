@@ -1063,7 +1063,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="Shape_VisitNeedsSlot" bpmnElement="VisitNeedsSlot" isMarkerVisible="true">
         <dc:Bounds x="1648" y="292" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1644" y="262" width="48" height="27" />
+          <dc:Bounds x="1652" y="246" width="33" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Join_VisitOutcome" bpmnElement="Join_VisitOutcome" isMarkerVisible="true">
@@ -1072,7 +1072,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="VisitOutcome_di" bpmnElement="VisitOutcome" isMarkerVisible="true">
         <dc:Bounds x="1880" y="380" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1876" y="330" width="49" height="27" />
+          <dc:Bounds x="1913" y="356" width="33" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="AwaitAttendance_di" bpmnElement="AwaitAttendance" bioc:stroke="#263746" bioc:fill="#edf5ff">
@@ -1403,11 +1403,12 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="1180" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05_di" bpmnElement="Flow_05" bioc:stroke="#1768a6">
-        <di:waypoint x="1200" y="870" />
-        <di:waypoint x="1200" y="400" />
+        <di:waypoint x="1220" y="890" />
+        <di:waypoint x="1270" y="890" />
+        <di:waypoint x="1270" y="400" />
         <di:waypoint x="1390" y="400" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1163" y="511" width="34" height="14" />
+          <dc:Bounds x="1239" y="516" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_31_di" bpmnElement="Flow_31" bioc:stroke="#667481">
@@ -1475,10 +1476,16 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="1668" y="332" />
         <di:waypoint x="1668" y="360" />
         <di:waypoint x="1720" y="360" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1681" y="326" width="77" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_SkipSlot_di" bpmnElement="Flow_SkipSlot" bioc:stroke="#1768a6">
         <di:waypoint x="1688" y="312" />
         <di:waypoint x="1836" y="312" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1761" y="287" width="77" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06b_di" bpmnElement="Flow_06b" bioc:stroke="#1768a6">
         <di:waypoint x="1830" y="400" />
@@ -1505,10 +1512,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_Booked_di" bpmnElement="Flow_Booked" bioc:stroke="#1768a6">
-        <di:waypoint x="1920" y="390" />
-        <di:waypoint x="3760" y="305" />
+        <di:waypoint x="1910" y="390" />
+        <di:waypoint x="1910" y="280" />
+        <di:waypoint x="3760" y="299" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2700" y="280" width="40" height="14" />
+          <dc:Bounds x="2702" y="216" width="33" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_AwaitReturn_di" bpmnElement="Flow_AwaitReturn" bioc:stroke="#1768a6">
@@ -1895,8 +1903,8 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="2860" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Join_VisitOutcome" bpmnElement="Flow_Join_VisitOutcome">
-        <di:waypoint x="1856" y="332" />
-        <di:waypoint x="1856" y="400" />
+        <di:waypoint x="1870" y="318" />
+        <di:waypoint x="1870" y="400" />
         <di:waypoint x="1880" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Join_ClinicalChange" bpmnElement="Flow_Join_ClinicalChange">
