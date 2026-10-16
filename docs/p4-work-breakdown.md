@@ -23,8 +23,10 @@
 | T17 | PB-12 | 起草战略 BPMN 主图并与运营模型对齐 | Ruby | Estrella | 4h | T02–T08 | 高层路径完整、门禁可见 | `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn`；`docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md`；待 Estrella 复核 | In progress |
 | T18 | PB-13 | 绑定转诊核验与 Consultant 决策的 Camunda Form | Estrella | Ruby | 4h | T03, T17 | 必填校验生效 | 表单 + 截图 | Not started |
 | T19 | PB-14 | 编写主路径与拒绝转诊两条验收测试 | Ryan | Ender | 3h | T03, T06 | 有预期结果与实际结果栏 | `Ryan/2026-09-26/PB-14_acceptance-test-plan_2026-09-29.md`；待二责签字 | In progress |
-| T20 | PB-15 | 准备第一次站会：上传产品待办与本表，四人入仓 | Ruby | Estrella | 2h | 当前增量 | 仓库内有产品待办与本表，四人已加入 | GitHub 链接 + Part 3 与 Part 6 文件 | In progress |
+| T20 | —（原 PB-15，2026-10-16 撤出待办） | 准备第一次站会：上传产品待办与本表，四人入仓 | Ruby | Estrella | 2h | 当前增量 | 仓库内有产品待办与本表，四人已加入 | GitHub 链接 + Part 3 与 Part 6 文件 | In progress |
 
 估算为第一负责人工时。Part 3 定稿后如编号有变，只改 Backlog ID 列即可。
 
 T01 的角色与权限规则已按案例第 3 段写进 Part 1 摘要，证据列据此指向该摘要；Ender 的复核意见要求补证据位置，即为此处。T02 沿用 Sprint Backlog 的记法，同为 In progress，故 `docs/p3-product-backlog.md` 的 PB-01 记 In progress。T20 与 Part 6 的 Sprint 1 范围一致，指第一次站会的上传动作。
+
+**2026-10-16 变更**：`docs/p3-product-backlog.md` 已收窄为**只记产品工作**，站会与评审准备的 `PB-15` 因此撤出待办，T20 的 Backlog ID 列改记撤出说明（依据上句「只改 Backlog ID 列即可」）。T20 本身仍是任务卡，工作与证据改挂在 Part 7 的 standup 记录与 Part 8 的 sprint review 记录下（`Week6 Coursework/process/`）。其余任务卡对应的 `PB-01` 至 `PB-14` 未受影响。

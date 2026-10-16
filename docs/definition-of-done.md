@@ -2,7 +2,7 @@
 
 > **Provenance**: first written on 2026-09-14 as `agile/definition-of-done.md`, in the initial repository skeleton (commit `c8da046`); deleted in commit `3d114fa`; restored from history on 2026-09-16 into `docs/`. Corrected on 2026-09-16 against the layout the repository actually has: every path below now points at a file or folder that exists, and items that belong to the implementation increment are labelled as such.
 >
-> This file is the evidence for **PB-29** (first owner Ender, second owner Estrella). Group sign-off is still required before PB-29 is counted as Done.
+> This file is the deliverable for **PB-29** (first owner Ender, second owner Estrella). PB-29 was withdrawn from the product backlog on 2026-10-16: a Definition of Done is an agreement about how the group works, not product work, so it carries no backlog ID. Group sign-off is still required before the checklist below can be called agreed.
 
 A user story, task, or work item is considered **Done** when ALL of the following are true.
 
@@ -68,4 +68,4 @@ An item must not be marked Done by ticking items from a group that does not appl
 
 ## Group sign-off
 
-This checklist is the deliverable for PB-29, whose acceptance condition is that the whole group agrees to it. It stays **In progress** in `docs/p3-product-backlog.md` until all four members have signed off; the sign-off record is part of the evidence.
+This checklist is the deliverable for PB-29, whose acceptance condition is that the whole group agrees to it. PB-29 was withdrawn from the product backlog on 2026-10-16 and now carries no backlog ID; it is tracked as planning work in part B of `Week6 Coursework/plan/sprint3-4-plan_2026-10-16.md`. The checklist stays **unagreed** until all four members have signed off, and the sign-off record is part of the evidence.

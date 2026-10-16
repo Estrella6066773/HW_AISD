@@ -2,6 +2,8 @@
 
 **主笔**：Estrella　**复核**：Ender　**起表日期**：2026-09-16　**对应条目**：PB-17 举证与贡献记录维护
 
+> **2026-10-16**：`PB-17` 已从产品待办撤出——产品待办只记产品工作，而贡献记录是考核过程材料，不是产品。本表因此不带 `PB` 编号；它现在的落点是 `Week6 Coursework/plan/sprint3-4-plan_2026-10-16.md` 的 B 部分。表内「对应条目」一栏保留原样，因为记的是 9 月 16 日起表时的情况。
+
 **用途**：留存全组贡献证据，供 tutor 核查个人贡献。依据考核规范 Section 4 的要求：*Group-based marks are subject to individual contribution. Retain contribution evidence for tutor moderation.*
 
 **验收条件**（取自产品待办 PB-17）：表内每条证据都能打开，且与条目负责人一致；缺证据的条目不标完成。
