@@ -11,6 +11,7 @@ The brief for this release asks for four things: the presentation, the updated s
 | V1-to-V2 change note | `istar/` |
 | Reviewed i\* SD and the three SR views | `istar/` |
 | Sprint 3 / Sprint 4 plan, by backlog item | `plan/` |
+| Standup 3 speaking cards, one per member | `standup/` |
 | What still has to be solved before the deadline | `problems_2026-10-16.md` |
 | Strategic BPMN and the abstraction note | `../docs/strategic-bpmn/` |
 | Requirement traceability matrix | `../docs/requirements-traceability-matrix.md` |
