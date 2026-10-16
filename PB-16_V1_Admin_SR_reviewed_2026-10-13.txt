@@ -56,12 +56,12 @@
         },
         {
           "id": "1b6eb390-977f-4a6f-a5a2-4d9478d70c22",
-          "text": "Initial / follow-up visit arranged",
+          "text": "Initial / follow-up visit arranged and outcome recorded",
           "type": "istar.Goal",
           "x": 564,
           "y": 180,
           "customProperties": {
-            "Evidence": "Case 5–6, 24; BookVisit/check-slot.",
+            "Evidence": "Case 5–6, 24; BookVisit/check-slot. The stage covers both arranging a visit and recording the outcome when no visit takes place: decline, patient cancellation or did-not-attend are recorded and passed on rather than booked.",
             "V1 status": "V1 manual/partial"
           }
         },
@@ -72,7 +72,7 @@
           "x": 564,
           "y": 274,
           "customProperties": {
-            "Evidence": "BookVisit records the outcome. On Hospital_All_Processes_V2, VisitNeedsSlot calls check-slot only for booked, attended and pending visits. Decline, patient cancellation and did-not-attend do not reserve a slot. There is still no complete per-attempt contact log.",
+            "Evidence": "BookVisit records the outcome. The stage arranges a visit and, when no visit takes place, records the outcome. On Hospital_All_Processes_V2, VisitNeedsSlot calls check-slot only for booked, attended and pending visits. Decline, patient cancellation and did-not-attend do not reserve a slot. There is still no complete per-attempt contact log.",
             "V1 status": "V1 manual/partial"
           }
         },
@@ -399,7 +399,7 @@
       "y": 420,
       "customProperties": {
         "Case paragraphs": "9, 11–12",
-        "V1 status": "符合案例；正常/紧急分支已有支持",
+        "V1 status": "符合案例；仅常规路径已有支持，紧急例外单列",
         "Evidence": "FundingOutcome：hospital_funded / insurer_approved / patient_paid / arrangement；urgent_review → UrgentAuthorisation。",
         "Qualification": "案例要求在确认治疗预约之前确定经费。多数患者由医院或保险覆盖，不直接付款。紧急情况下临床可以先治疗，再把原因交给财务。把经费放行写成每次记录预约结果都必须完成的与关系，会把待定和紧急例外也算进去，所以这里只作为对治疗协调的帮助。"
       },
