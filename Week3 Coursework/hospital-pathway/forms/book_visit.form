@@ -1,0 +1,177 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P3 / P4 / P12 — Book visit\n\nRecord one outcome. Booked, attended, cancelled, declined and did-not-attend are separate paths.\n\n_Demo only._",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "Patient / case ID",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_staffRole",
+      "type": "textfield",
+      "key": "staffRole",
+      "label": "Staff name and role",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "Outcome / next action",
+      "values": [
+        {
+          "label": "Booked — patient has not attended yet",
+          "value": "booked"
+        },
+        {
+          "label": "Patient attended",
+          "value": "attended"
+        },
+        {
+          "label": "Patient cancelled",
+          "value": "patient_cancelled"
+        },
+        {
+          "label": "Patient declined the appointment",
+          "value": "declined"
+        },
+        {
+          "label": "Did not attend",
+          "value": "dna"
+        },
+        {
+          "label": "Still waiting",
+          "value": "pending"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_appointmentDate",
+      "type": "datetime",
+      "subtype": "date",
+      "key": "appointmentDate",
+      "label": "Appointment date",
+      "disallowPassedDates": true,
+      "validate": {
+        "required": true
+      },
+      "conditional": {
+        "hide": "=action = \"pending\""
+      },
+      "layout": {
+        "row": "Row_date",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_appointmentTime",
+      "type": "datetime",
+      "subtype": "time",
+      "key": "appointmentTime",
+      "label": "Appointment time",
+      "use24h": true,
+      "timeInterval": 15,
+      "validate": {
+        "required": true
+      },
+      "conditional": {
+        "hide": "=action = \"pending\""
+      },
+      "layout": {
+        "row": "Row_time",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_waitReason",
+      "type": "select",
+      "key": "waitReason",
+      "label": "Why the booking is still waiting",
+      "values": [
+        {
+          "label": "No suitable slot in the requested period",
+          "value": "no_slot"
+        },
+        {
+          "label": "Contact not completed",
+          "value": "contact_incomplete"
+        },
+        {
+          "label": "External service still waiting",
+          "value": "external_waiting"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "conditional": {
+        "hide": "=action != \"pending\""
+      },
+      "layout": {
+        "row": "Row_wait",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Booking / contact notes",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "Complete task",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "book_visit",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_PB12_Strategic" targetNamespace="https://aisd.example/hospital/strategic" exporter="PB-12 strategic model" exporterVersion="2026-09-29" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <bpmn:collaboration id="Collaboration_Strategic">
+    <bpmn:participant id="Hospital" name="Hospital" processRef="Strategic_Hospital_Pathway" />
+    <bpmn:participant id="Referrer" name="Referring organisation" />
+    <bpmn:participant id="Scheduler" name="External scheduling service" />
+    <bpmn:participant id="CareServices" name="External treatment, laboratory and imaging" />
+    <bpmn:participant id="Funder" name="Insurer or funding organisation" />
+    <bpmn:participant id="PaymentProvider" name="External payment service provider" />
+    <bpmn:participant id="Patient" name="Patient or authorised representative" />
+    <bpmn:messageFlow id="Msg_ReferralIn" name="Referral documents" sourceRef="Referrer" targetRef="CheckDocuments" />
+    <bpmn:messageFlow id="Msg_Missing" name="Request for missing documents" sourceRef="CheckDocuments" targetRef="Referrer" />
+    <bpmn:messageFlow id="Msg_Closed" name="Rejection or redirect notice" sourceRef="CloseReferral" targetRef="Referrer" />
+    <bpmn:messageFlow id="Msg_SlotOut" name="Slot request inside the clinical window" sourceRef="BookAppointment" targetRef="Scheduler" />
+    <bpmn:messageFlow id="Msg_SlotIn" name="Slot offered, or no suitable slot" sourceRef="Scheduler" targetRef="BookAppointment" />
+    <bpmn:messageFlow id="Msg_NotifyPatient" name="Appointment letter; telephone as well when the visit is within two weeks" sourceRef="BookAppointment" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_ResourceOut" name="Treatment, laboratory or imaging request" sourceRef="CoordinateResources" targetRef="CareServices" />
+    <bpmn:messageFlow id="Msg_ResourceIn" name="Available, or unavailable and still pending" sourceRef="CareServices" targetRef="CoordinateResources" />
+    <bpmn:messageFlow id="Msg_FundOut" name="Funding approval request" sourceRef="DetermineFunding" targetRef="Funder" />
+    <bpmn:messageFlow id="Msg_FundIn" name="Organisation, reference, amount and limits" sourceRef="Funder" targetRef="DetermineFunding" />
+    <bpmn:messageFlow id="Msg_PayOut" name="Payment or refund request, without the card number" sourceRef="DetermineFunding" targetRef="PaymentProvider" />
+    <bpmn:messageFlow id="Msg_PayIn" name="Status, reference, date and amount" sourceRef="PaymentProvider" targetRef="DetermineFunding" />
+    <bpmn:messageFlow id="Msg_LetterPatient" name="Approved clinic letter" sourceRef="DispatchLetter" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_LetterReferrer" name="Clinic letter for the referring clinician" sourceRef="DispatchLetter" targetRef="Referrer" />
+    <bpmn:messageFlow id="Msg_ClinReply" name="Clinical response from an authorised clinician" sourceRef="AnswerClinical" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_FinReply" name="Funding or payment response" sourceRef="AnswerFinance" targetRef="Patient" />
+    <bpmn:messageFlow id="Msg_AdminReply" name="Administrative response" sourceRef="RouteEnquiry" targetRef="Patient" />
+    <bpmn:textAnnotation id="Note_Strategic">
+      <bpmn:text>STRATEGIC MODEL for the initial release. This diagram is not executable and has no Camunda forms or job workers. Each task is one business stage. The operational model Hospital_All_Processes_Simple_C8 expands the stages into user tasks, gateways and workers. Read docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md for the abstraction level, the mapping, and the gaps.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Assoc_Note" sourceRef="Hospital" targetRef="Note_Strategic" />
+  </bpmn:collaboration>
+  <bpmn:process id="Strategic_Hospital_Pathway" name="Hospital patient pathway (strategic)" isExecutable="false">
+    <bpmn:documentation>PB-12 strategic BPMN. Not for deployment. Lanes separate clinical decisions, administrative coordination and finance decisions. Black-box pools are the referring organisation, the patient, and the external scheduling, care-resource, funding and payment participants. The opening gateway is the same business choice as the operational RequestType gateway, collapsed to three incoming kinds: referral, enquiry, and change or follow-up.</bpmn:documentation>
+    <bpmn:laneSet id="LaneSet_Strategic">
+      <bpmn:lane id="Lane_Clinical" name="Clinical team">
+        <bpmn:flowNodeRef>DecideReferral</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Accepted</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Treatment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AuthoriseTreatment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_NoTreatment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>WriteLetter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AnswerClinical</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_ClinicalEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AuthoriseChange</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Money</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Change</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Admin" name="Administration">
+        <bpmn:flowNodeRef>Start_Request</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Kind</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CheckDocuments</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CloseReferral</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Closed</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>BookAppointment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_AfterVisit</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CoordinateResources</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Treatment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>DispatchLetter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Main</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RouteEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Enquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_AdminEnquiry</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Finance" name="Finance">
+        <bpmn:flowNodeRef>DetermineFunding</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AnswerFinance</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_FinanceEnquiry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ReviewMoney</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Money</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_Request" name="Request arrives" />
+    <bpmn:exclusiveGateway id="GW_Kind" name="Incoming request" default="Flow_Referral" />
+    <bpmn:task id="CheckDocuments" name="Check referral documents">
+      <bpmn:documentation>Medical secretaries check previous clinic letters, investigation results and other clinical documents. They may ask the referring organisation for missing items. They do not judge clinical suitability and they do not accept the referral. Operational model: Register, GetDocuments.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:task id="DecideReferral" name="Record the clinical decision">
+      <bpmn:documentation>The consultant accepts, rejects, asks for further information, or redirects to another speciality, and records the reason and who decided. Operational model: ReviewReferral, ReferralDecision, Redirect.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Accepted" name="Clinical decision" default="Flow_Accepted" />
+    <bpmn:task id="CloseReferral" name="Notify the referrer and close">
+      <bpmn:documentation>Administration tells the referring organisation that the referral was rejected or redirected. No first clinic appointment is created. Operational model: Redirect, EndRejected.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Closed" name="Referral closed" />
+    <bpmn:task id="BookAppointment" name="Book the first appointment and notify the patient">
+      <bpmn:documentation>Only after acceptance, outpatient bookings ask the external scheduling service for a slot inside the consultant's window, confirm it in the hospital, and notify the patient. A visit within two weeks also needs a telephone attempt and a recorded outcome. No suitable slot stays pending for the pathway team. Operational model: BookVisit, CheckVisitSlot, send-booking-confirmation.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:parallelGateway id="GW_AfterVisit" name="Attendance recorded" />
+    <bpmn:exclusiveGateway id="GW_Treatment" name="After the consultation" default="Flow_Treat" />
+    <bpmn:task id="AuthoriseTreatment" name="Authorise the treatment booking">
+      <bpmn:documentation>After the patient agrees, the consultant records consent and creates the treatment booking request. Administrative staff cannot continue an unauthorised request. Operational model: ClinicalCare.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:endEvent id="End_NoTreatment" name="No further treatment" />
+    <bpmn:task id="DetermineFunding" name="Determine funding and payment">
+      <bpmn:documentation>Finance decides whether the hospital, an insurer or funding organisation, or the patient pays, then requests payment or records an approval. The card number is not stored. A missing confirmation is investigated and is not charged again automatically. Urgent care can proceed only with a recorded clinical reason and a later finance follow-up. Operational model: Funding, RequestPayment, PaymentReceived, FundingIssue, UrgentAuthorisation, mark-payment-investigate.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:task id="CoordinateResources" name="Confirm external treatment resources">
+      <bpmn:documentation>Treatment bookings confirm external treatment, laboratory or imaging only after funding or payment allows confirmation. An unavailable service stays pending, the responsible team is told, and the same request is not booked twice. Operational model: BookTreatment, FlagResourceUnavailable, reserve-appointment.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Treatment" name="Treatment booking recorded" />
+    <bpmn:task id="WriteLetter" name="Write and approve the clinic letter">
+      <bpmn:documentation>The consultant writes the clinic letter and approves it before anyone distributes it. Operational model: ClinicalCare letter fields, letterStatus.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:task id="DispatchLetter" name="Distribute the approved clinic letter">
+      <bpmn:documentation>Medical secretaries distribute the approved letter. They may correct formatting and administrative errors only. Past seven days is delayed; about one month and three months escalate. Reminders stop once the letter is complete. The classroom operational model records the time band on a user task and does not run a multi-day timer. Operational model: DispatchLetter, DispatchClinicLetter, MonitorLetters.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Main" name="Letter sent" />
+    <bpmn:task id="RouteEnquiry" name="Log the enquiry and route it">
+      <bpmn:documentation>Call handling logs the enquiry and classifies it as administrative, financial or clinical. Call handlers answer administrative questions only. Operational model: AdminEnquiry.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Enquiry" name="Enquiry class" default="Flow_EnqAdmin" />
+    <bpmn:endEvent id="End_AdminEnquiry" name="Administrative enquiry closed" />
+    <bpmn:task id="AnswerClinical" name="Answer the clinical enquiry">
+      <bpmn:documentation>A clinical nurse specialist or another authorised clinician answers a clinical enquiry. Call handlers do not diagnose, interpret results or recommend treatment. Operational model: ClinicalEnquiry.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:endEvent id="End_ClinicalEnquiry" name="Clinical enquiry closed" />
+    <bpmn:task id="AnswerFinance" name="Answer the funding enquiry">
+      <bpmn:documentation>Finance answers payment and funding enquiries. Operational model: FinanceEnquiry.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:endEvent id="End_FinanceEnquiry" name="Funding enquiry closed" />
+    <bpmn:task id="AuthoriseChange" name="Authorise the change or follow-up">
+      <bpmn:documentation>Clinical staff submit a formal request before a treatment change, cancellation, postponement or follow-up. Telephone, email or a verbal request is not enough. An urgent stop for safety can happen first, with authorisation recorded afterwards. Operational model: ClinicalChange, notify-care-change.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Money" name="Money affected?" default="Flow_MoneyNo" />
+    <bpmn:endEvent id="End_Change" name="Change recorded" />
+    <bpmn:task id="ReviewMoney" name="Review the refund or retained payment">
+      <bpmn:documentation>Finance, not the consultant, decides a refund, transfer or retention when a change affects a charge, an approval or a completed payment. Operational model: FinanceAdjustment, request-refund.</bpmn:documentation>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Money" name="Financial review recorded" />
+    <bpmn:sequenceFlow id="Flow_Start" sourceRef="Start_Request" targetRef="GW_Kind" />
+    <bpmn:sequenceFlow id="Flow_Referral" name="Referral" sourceRef="GW_Kind" targetRef="CheckDocuments" />
+    <bpmn:sequenceFlow id="Flow_Enquiry" name="Enquiry" sourceRef="GW_Kind" targetRef="RouteEnquiry" />
+    <bpmn:sequenceFlow id="Flow_Change" name="Change or follow-up" sourceRef="GW_Kind" targetRef="AuthoriseChange" />
+    <bpmn:sequenceFlow id="Flow_Checked" sourceRef="CheckDocuments" targetRef="DecideReferral" />
+    <bpmn:sequenceFlow id="Flow_Decided" sourceRef="DecideReferral" targetRef="GW_Accepted" />
+    <bpmn:sequenceFlow id="Flow_MoreInfo" name="More information" sourceRef="GW_Accepted" targetRef="CheckDocuments" />
+    <bpmn:sequenceFlow id="Flow_NotAccepted" name="Not accepted" sourceRef="GW_Accepted" targetRef="CloseReferral" />
+    <bpmn:sequenceFlow id="Flow_Closed" sourceRef="CloseReferral" targetRef="End_Closed" />
+    <bpmn:sequenceFlow id="Flow_Accepted" name="Accepted" sourceRef="GW_Accepted" targetRef="BookAppointment" />
+    <bpmn:sequenceFlow id="Flow_Booked" sourceRef="BookAppointment" targetRef="GW_AfterVisit" />
+    <bpmn:sequenceFlow id="Flow_ToCare" name="Care plan" sourceRef="GW_AfterVisit" targetRef="GW_Treatment" />
+    <bpmn:sequenceFlow id="Flow_ToLetter" name="Clinic letter" sourceRef="GW_AfterVisit" targetRef="WriteLetter" />
+    <bpmn:sequenceFlow id="Flow_Treat" name="Treatment agreed" sourceRef="GW_Treatment" targetRef="AuthoriseTreatment" />
+    <bpmn:sequenceFlow id="Flow_NoTreat" name="No further treatment" sourceRef="GW_Treatment" targetRef="End_NoTreatment" />
+    <bpmn:sequenceFlow id="Flow_Authorised" sourceRef="AuthoriseTreatment" targetRef="DetermineFunding" />
+    <bpmn:sequenceFlow id="Flow_Funded" sourceRef="DetermineFunding" targetRef="CoordinateResources" />
+    <bpmn:sequenceFlow id="Flow_Coordinated" sourceRef="CoordinateResources" targetRef="End_Treatment" />
+    <bpmn:sequenceFlow id="Flow_Letter" sourceRef="WriteLetter" targetRef="DispatchLetter" />
+    <bpmn:sequenceFlow id="Flow_Dispatched" sourceRef="DispatchLetter" targetRef="End_Main" />
+    <bpmn:sequenceFlow id="Flow_Routed" sourceRef="RouteEnquiry" targetRef="GW_Enquiry" />
+    <bpmn:sequenceFlow id="Flow_EnqAdmin" name="Administrative" sourceRef="GW_Enquiry" targetRef="End_AdminEnquiry" />
+    <bpmn:sequenceFlow id="Flow_EnqClinical" name="Clinical" sourceRef="GW_Enquiry" targetRef="AnswerClinical" />
+    <bpmn:sequenceFlow id="Flow_EnqFinance" name="Financial" sourceRef="GW_Enquiry" targetRef="AnswerFinance" />
+    <bpmn:sequenceFlow id="Flow_ClinDone" sourceRef="AnswerClinical" targetRef="End_ClinicalEnquiry" />
+    <bpmn:sequenceFlow id="Flow_FinDone" sourceRef="AnswerFinance" targetRef="End_FinanceEnquiry" />
+    <bpmn:sequenceFlow id="Flow_Changed" sourceRef="AuthoriseChange" targetRef="GW_Money" />
+    <bpmn:sequenceFlow id="Flow_MoneyYes" name="Charge, approval or payment affected" sourceRef="GW_Money" targetRef="ReviewMoney" />
+    <bpmn:sequenceFlow id="Flow_MoneyNo" name="No financial impact" sourceRef="GW_Money" targetRef="End_Change" />
+    <bpmn:sequenceFlow id="Flow_MoneyDone" sourceRef="ReviewMoney" targetRef="End_Money" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Strategic">
+    <bpmndi:BPMNPlane id="Plane_Strategic" bpmnElement="Collaboration_Strategic">
+      <bpmndi:BPMNShape id="Hospital_di" bpmnElement="Hospital">
+        <dc:Bounds x="80" y="180" width="2480" height="830" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Clinical_di" bpmnElement="Lane_Clinical">
+        <dc:Bounds x="100" y="180" width="2460" height="280" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Admin_di" bpmnElement="Lane_Admin">
+        <dc:Bounds x="100" y="460" width="2460" height="300" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Finance_di" bpmnElement="Lane_Finance">
+        <dc:Bounds x="100" y="760" width="2460" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Referrer_di" bpmnElement="Referrer">
+        <dc:Bounds x="80" y="40" width="420" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Scheduler_di" bpmnElement="Scheduler">
+        <dc:Bounds x="560" y="40" width="460" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CareServices_di" bpmnElement="CareServices">
+        <dc:Bounds x="1100" y="40" width="520" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Funder_di" bpmnElement="Funder">
+        <dc:Bounds x="1700" y="40" width="440" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PaymentProvider_di" bpmnElement="PaymentProvider">
+        <dc:Bounds x="2220" y="40" width="480" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Patient_di" bpmnElement="Patient">
+        <dc:Bounds x="80" y="1100" width="520" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_Request_di" bpmnElement="Start_Request">
+        <dc:Bounds x="140" y="522" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Kind_di" bpmnElement="GW_Kind" isMarkerVisible="true">
+        <dc:Bounds x="220" y="515" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckDocuments_di" bpmnElement="CheckDocuments">
+        <dc:Bounds x="320" y="500" width="180" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DecideReferral_di" bpmnElement="DecideReferral">
+        <dc:Bounds x="560" y="220" width="190" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Accepted_di" bpmnElement="GW_Accepted" isMarkerVisible="true">
+        <dc:Bounds x="800" y="235" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CloseReferral_di" bpmnElement="CloseReferral">
+        <dc:Bounds x="1040" y="640" width="190" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Closed_di" bpmnElement="End_Closed">
+        <dc:Bounds x="1280" y="657" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BookAppointment_di" bpmnElement="BookAppointment">
+        <dc:Bounds x="900" y="500" width="180" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_AfterVisit_di" bpmnElement="GW_AfterVisit" isMarkerVisible="true">
+        <dc:Bounds x="1120" y="510" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Treatment_di" bpmnElement="GW_Treatment" isMarkerVisible="true">
+        <dc:Bounds x="1240" y="235" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AuthoriseTreatment_di" bpmnElement="AuthoriseTreatment">
+        <dc:Bounds x="1340" y="220" width="190" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_NoTreatment_di" bpmnElement="End_NoTreatment">
+        <dc:Bounds x="1240" y="367" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DetermineFunding_di" bpmnElement="DetermineFunding">
+        <dc:Bounds x="1560" y="800" width="200" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CoordinateResources_di" bpmnElement="CoordinateResources">
+        <dc:Bounds x="1820" y="500" width="200" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Treatment_di" bpmnElement="End_Treatment">
+        <dc:Bounds x="2060" y="517" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="WriteLetter_di" bpmnElement="WriteLetter">
+        <dc:Bounds x="2140" y="220" width="190" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DispatchLetter_di" bpmnElement="DispatchLetter">
+        <dc:Bounds x="2140" y="500" width="200" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Main_di" bpmnElement="End_Main">
+        <dc:Bounds x="2380" y="517" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RouteEnquiry_di" bpmnElement="RouteEnquiry">
+        <dc:Bounds x="320" y="640" width="180" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Enquiry_di" bpmnElement="GW_Enquiry" isMarkerVisible="true">
+        <dc:Bounds x="540" y="650" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_AdminEnquiry_di" bpmnElement="End_AdminEnquiry">
+        <dc:Bounds x="680" y="657" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AnswerClinical_di" bpmnElement="AnswerClinical">
+        <dc:Bounds x="640" y="350" width="180" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_ClinicalEnquiry_di" bpmnElement="End_ClinicalEnquiry">
+        <dc:Bounds x="860" y="367" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AnswerFinance_di" bpmnElement="AnswerFinance">
+        <dc:Bounds x="640" y="810" width="190" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_FinanceEnquiry_di" bpmnElement="End_FinanceEnquiry">
+        <dc:Bounds x="870" y="827" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AuthoriseChange_di" bpmnElement="AuthoriseChange">
+        <dc:Bounds x="1460" y="350" width="200" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Money_di" bpmnElement="GW_Money" isMarkerVisible="true">
+        <dc:Bounds x="1700" y="360" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Change_di" bpmnElement="End_Change">
+        <dc:Bounds x="1800" y="367" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReviewMoney_di" bpmnElement="ReviewMoney">
+        <dc:Bounds x="2060" y="800" width="230" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Money_di" bpmnElement="End_Money">
+        <dc:Bounds x="2330" y="817" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Note_Strategic_di" bpmnElement="Note_Strategic">
+        <dc:Bounds x="80" y="1200" width="720" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Start_di" bpmnElement="Flow_Start">
+        <di:waypoint x="176" y="540" />
+        <di:waypoint x="220" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Referral_di" bpmnElement="Flow_Referral">
+        <di:waypoint x="270" y="540" />
+        <di:waypoint x="320" y="535" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="295" y="520" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Enquiry_di" bpmnElement="Flow_Enquiry">
+        <di:waypoint x="245" y="565" />
+        <di:waypoint x="245" y="675" />
+        <di:waypoint x="320" y="675" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="245" y="602" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Change_di" bpmnElement="Flow_Change">
+        <di:waypoint x="245" y="565" />
+        <di:waypoint x="245" y="730" />
+        <di:waypoint x="1560" y="730" />
+        <di:waypoint x="1560" y="420" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="245" y="630" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Checked_di" bpmnElement="Flow_Checked">
+        <di:waypoint x="410" y="500" />
+        <di:waypoint x="410" y="260" />
+        <di:waypoint x="560" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Decided_di" bpmnElement="Flow_Decided">
+        <di:waypoint x="750" y="260" />
+        <di:waypoint x="800" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MoreInfo_di" bpmnElement="Flow_MoreInfo">
+        <di:waypoint x="825" y="285" />
+        <di:waypoint x="825" y="430" />
+        <di:waypoint x="410" y="430" />
+        <di:waypoint x="410" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="825" y="340" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_NotAccepted_di" bpmnElement="Flow_NotAccepted">
+        <di:waypoint x="825" y="285" />
+        <di:waypoint x="825" y="675" />
+        <di:waypoint x="1135" y="640" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="825" y="462" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Closed_di" bpmnElement="Flow_Closed">
+        <di:waypoint x="1230" y="675" />
+        <di:waypoint x="1280" y="675" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Accepted_di" bpmnElement="Flow_Accepted">
+        <di:waypoint x="850" y="260" />
+        <di:waypoint x="880" y="260" />
+        <di:waypoint x="880" y="535" />
+        <di:waypoint x="900" y="535" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="865" y="242" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Booked_di" bpmnElement="Flow_Booked">
+        <di:waypoint x="1080" y="535" />
+        <di:waypoint x="1120" y="535" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ToCare_di" bpmnElement="Flow_ToCare">
+        <di:waypoint x="1145" y="510" />
+        <di:waypoint x="1145" y="260" />
+        <di:waypoint x="1240" y="260" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1145" y="367" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ToLetter_di" bpmnElement="Flow_ToLetter">
+        <di:waypoint x="1145" y="510" />
+        <di:waypoint x="1145" y="200" />
+        <di:waypoint x="2235" y="200" />
+        <di:waypoint x="2235" y="220" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1145" y="337" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Treat_di" bpmnElement="Flow_Treat">
+        <di:waypoint x="1290" y="260" />
+        <di:waypoint x="1340" y="260" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1315" y="242" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_NoTreat_di" bpmnElement="Flow_NoTreat">
+        <di:waypoint x="1265" y="285" />
+        <di:waypoint x="1258" y="367" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1262" y="308" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Authorised_di" bpmnElement="Flow_Authorised">
+        <di:waypoint x="1530" y="260" />
+        <di:waypoint x="1545" y="260" />
+        <di:waypoint x="1545" y="840" />
+        <di:waypoint x="1560" y="840" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Funded_di" bpmnElement="Flow_Funded">
+        <di:waypoint x="1760" y="840" />
+        <di:waypoint x="1790" y="840" />
+        <di:waypoint x="1790" y="535" />
+        <di:waypoint x="1820" y="535" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Coordinated_di" bpmnElement="Flow_Coordinated">
+        <di:waypoint x="2020" y="535" />
+        <di:waypoint x="2060" y="535" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Letter_di" bpmnElement="Flow_Letter">
+        <di:waypoint x="2235" y="300" />
+        <di:waypoint x="2240" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Dispatched_di" bpmnElement="Flow_Dispatched">
+        <di:waypoint x="2340" y="535" />
+        <di:waypoint x="2380" y="535" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Routed_di" bpmnElement="Flow_Routed">
+        <di:waypoint x="500" y="675" />
+        <di:waypoint x="540" y="675" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_EnqAdmin_di" bpmnElement="Flow_EnqAdmin">
+        <di:waypoint x="590" y="675" />
+        <di:waypoint x="680" y="675" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="635" y="657" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_EnqClinical_di" bpmnElement="Flow_EnqClinical">
+        <di:waypoint x="565" y="650" />
+        <di:waypoint x="565" y="385" />
+        <di:waypoint x="640" y="385" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="565" y="500" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_EnqFinance_di" bpmnElement="Flow_EnqFinance">
+        <di:waypoint x="565" y="700" />
+        <di:waypoint x="565" y="845" />
+        <di:waypoint x="640" y="845" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="565" y="754" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ClinDone_di" bpmnElement="Flow_ClinDone">
+        <di:waypoint x="820" y="385" />
+        <di:waypoint x="860" y="385" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_FinDone_di" bpmnElement="Flow_FinDone">
+        <di:waypoint x="830" y="845" />
+        <di:waypoint x="870" y="845" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Changed_di" bpmnElement="Flow_Changed">
+        <di:waypoint x="1660" y="385" />
+        <di:waypoint x="1700" y="385" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MoneyYes_di" bpmnElement="Flow_MoneyYes">
+        <di:waypoint x="1725" y="410" />
+        <di:waypoint x="2030" y="410" />
+        <di:waypoint x="2030" y="835" />
+        <di:waypoint x="2060" y="835" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1878" y="392" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MoneyNo_di" bpmnElement="Flow_MoneyNo">
+        <di:waypoint x="1750" y="385" />
+        <di:waypoint x="1800" y="385" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1775" y="367" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_MoneyDone_di" bpmnElement="Flow_MoneyDone">
+        <di:waypoint x="2290" y="835" />
+        <di:waypoint x="2330" y="835" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_ReferralIn_di" bpmnElement="Msg_ReferralIn">
+        <di:waypoint x="290" y="110" />
+        <di:waypoint x="410" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="350" y="287" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_Missing_di" bpmnElement="Msg_Missing">
+        <di:waypoint x="410" y="500" />
+        <di:waypoint x="290" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="350" y="287" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_Closed_di" bpmnElement="Msg_Closed">
+        <di:waypoint x="1040" y="675" />
+        <di:waypoint x="290" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="665" y="374" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_SlotOut_di" bpmnElement="Msg_SlotOut">
+        <di:waypoint x="990" y="500" />
+        <di:waypoint x="790" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="890" y="287" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_SlotIn_di" bpmnElement="Msg_SlotIn">
+        <di:waypoint x="790" y="110" />
+        <di:waypoint x="990" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="890" y="287" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_NotifyPatient_di" bpmnElement="Msg_NotifyPatient">
+        <di:waypoint x="900" y="535" />
+        <di:waypoint x="340" y="1100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="620" y="800" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_ResourceOut_di" bpmnElement="Msg_ResourceOut">
+        <di:waypoint x="1820" y="535" />
+        <di:waypoint x="1360" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1590" y="304" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_ResourceIn_di" bpmnElement="Msg_ResourceIn">
+        <di:waypoint x="1360" y="110" />
+        <di:waypoint x="1820" y="535" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1590" y="304" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_FundOut_di" bpmnElement="Msg_FundOut">
+        <di:waypoint x="1660" y="800" />
+        <di:waypoint x="1920" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1790" y="437" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_FundIn_di" bpmnElement="Msg_FundIn">
+        <di:waypoint x="1920" y="110" />
+        <di:waypoint x="1660" y="800" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1790" y="437" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_PayOut_di" bpmnElement="Msg_PayOut">
+        <di:waypoint x="1660" y="800" />
+        <di:waypoint x="2460" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2060" y="437" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_PayIn_di" bpmnElement="Msg_PayIn">
+        <di:waypoint x="2460" y="110" />
+        <di:waypoint x="1760" y="840" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2110" y="457" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_LetterPatient_di" bpmnElement="Msg_LetterPatient">
+        <di:waypoint x="2140" y="535" />
+        <di:waypoint x="340" y="1100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1240" y="800" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_LetterReferrer_di" bpmnElement="Msg_LetterReferrer">
+        <di:waypoint x="2140" y="535" />
+        <di:waypoint x="290" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1215" y="304" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_ClinReply_di" bpmnElement="Msg_ClinReply">
+        <di:waypoint x="730" y="420" />
+        <di:waypoint x="340" y="1100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="535" y="742" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_FinReply_di" bpmnElement="Msg_FinReply">
+        <di:waypoint x="640" y="845" />
+        <di:waypoint x="340" y="1100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="490" y="954" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Msg_AdminReply_di" bpmnElement="Msg_AdminReply">
+        <di:waypoint x="410" y="710" />
+        <di:waypoint x="340" y="1100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="375" y="887" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Assoc_Note_di" bpmnElement="Assoc_Note">
+        <di:waypoint x="200" y="1010" />
+        <di:waypoint x="200" y="1200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
