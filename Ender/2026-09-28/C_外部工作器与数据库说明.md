@@ -15,7 +15,7 @@ P2：Redirect（人填表）      → NotifyReferrer（Java, notify-referrer） 
 
 ## 只需要理解几步
 
-打开 [LetterWorkers.java](../../Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/LetterWorkers.java)。整个类含导入、空行与中文注释。
+打开 [LetterWorkers.java](../../Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/LetterWorkers.java)。整个类含导入、空行与中文注释。
 
 ### dispatch-clinic-letter（P9）
 
@@ -47,11 +47,11 @@ P2：Redirect（人填表）      → NotifyReferrer（Java, notify-referrer） 
 
 ## 数据库部分怎么看
 
-[AuditEventWriter.java](../../Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/domain/AuditEventWriter.java)：C 调用的是 5 参 `append(actor, action, caseReference, idempotencyKey, summary)` 重载，**先按 idempotencyKey 查询，有记录就返回，没有才新增**；普通 `@Transactional` 保证保存成功后才从方法返回。原四参数接口供其他同学继续使用。
+[AuditEventWriter.java](../../Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/domain/AuditEventWriter.java)：C 调用的是 5 参 `append(actor, action, caseReference, idempotencyKey, summary)` 重载，**先按 idempotencyKey 查询，有记录就返回，没有才新增**；普通 `@Transactional` 保证保存成功后才从方法返回。原四参数接口供其他同学继续使用。
 
 重复检查键由"Worker 类型 + 病例号"组成（即 `caseReference|workerType`）。同一节点重试用相同的键；下一次新的信件／转诊有新键。数据库唯一列是基本防重复保护，不再加额外并发补偿框架。
 
-库文件是 `Coursework/hospital-pathway/data/hospital-domain.mv.db`。查库方法见[运行说明](../../Coursework/hospital-pathway/README.md)。
+库文件是 `Week3 Coursework/hospital-pathway/data/hospital-domain.mv.db`。查库方法见[运行说明](../../Week3 Coursework/hospital-pathway/README.md)。
 
 ```sql
 SELECT id, actor, action, case_reference, payload_summary, occurred_at
@@ -77,8 +77,8 @@ ORDER BY occurred_at DESC;
 ## 今日（2026-09-28）完成记录
 
 - 从组长指引 `Est/est：外部工作器与领域数据库总指引.md` 认领 C 的两个 Worker：`dispatch-clinic-letter`（P9）、`notify-referrer`（P2）。
-- 类文件为 `Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/LetterWorkers.java`（两个 `@JobWorker`，仅写 `audit_event`）。
-- 修改 `Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`：在 `DispatchLetter→LetterOutcome` 间插入 `DispatchClinicLetter`，在 `Redirect→EndReferral` 间插入 `NotifyReferrer`；两个 serviceTask 的 `zeebe:taskDefinition type` 与 Java 注解一致，`retries=3`，diagram 同步更新，XML 校验通过。
+- 类文件为 `Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/LetterWorkers.java`（两个 `@JobWorker`，仅写 `audit_event`）。
+- 修改 `Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`：在 `DispatchLetter→LetterOutcome` 间插入 `DispatchClinicLetter`，在 `Redirect→EndReferral` 间插入 `NotifyReferrer`；两个 serviceTask 的 `zeebe:taskDefinition type` 与 Java 注解一致，`retries=3`，diagram 同步更新，XML 校验通过。
 - 未新增测试（按本人要求），未动 A／B／D 代码、未改表单、未新建数据表；推送前确认本地 `main` 与远端 `main` 同为 `ddeaaa7`，即其余部分均为仓库最新。
 - 提交并推送：commit `943d935`（基于 `ddeaaa7`），已 `push origin main`，远端 `main` 现指向 `943d935`。
 - 推送踩坑：第一发被工作台托管代理（`https_proxy=127.0.0.1:64667`）502 拦截，清空代理变量直连后成功。下次推送前缀：`env https_proxy= http_proxy= HTTPS_PROXY= HTTP_PROXY= git push origin main`。

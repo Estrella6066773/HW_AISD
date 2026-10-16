@@ -3,7 +3,7 @@
 **主笔**：Ruby（23084382）
 **复核**：Ender（Ender）
 
-与 `Coursework/Agile Workshop-ZH.docx` / `Agile Workshop-EN.docx` 一致。任务编号与 Part 4（`docs/p4-work-breakdown.md`）一致；每条任务行首标出对应的 Backlog 条目。
+与 `W01/Agile Workshop.docx`（中文原件）/ `Week3 Coursework/Agile Workshop-EN.docx`（英文副本）一致。仓库内没有名为 `Agile Workshop-ZH.docx` 的文件。任务编号与 Part 4（`docs/p4-work-breakdown.md`）一致；每条任务行首标出对应的 Backlog 条目。
 
 | Sprint | Goal |
 |--------|------|
@@ -21,6 +21,8 @@
 | Sprint 1 | T20 | From PB-15: upload Product Backlog and this table; all members on GitHub; plan only | Hao Zheng | Geping Chen | 2h | Repo has PB and Sprint Backlog; four members added | GitHub; Parts 3 and 6 | In progress |
 
 本期只做规格与计划：不出图，不写代码。
+
+**2026-10-16 变更**：T20 原对应 `PB-15`（站会与评审准备）。`docs/p3-product-backlog.md` 已收窄为只记产品工作，`PB-15` 因此撤出待办；本表的 `From PB-15` 是 9 月 16 日定计划时的记法，保留原样不改。T20 的工作仍在，现按过程记录挂在 Part 7 的 standup 记录与 Part 8 的 sprint review 记录下（`Week6 Coursework/process/`）。其余任务行对应的 `PB-01` 至 `PB-04` 未受影响。
 
 ## 后续实现证据（2026-09-28，独立于上述 Sprint 1 计划）
 

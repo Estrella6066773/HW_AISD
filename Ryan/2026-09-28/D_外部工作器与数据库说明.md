@@ -1,6 +1,6 @@
 # D / Ryan：一个 Worker 的学生精简版
 
-只保留必做 `notify-care-change`。当前正式文件在 `Coursework/hospital-pathway/`，可选学习包尚未同步。组长要求的二责复核仍待 A／B 完成。
+只保留必做 `notify-care-change`。当前正式文件在 `Week3 Coursework/hospital-pathway/`，可选学习包尚未同步。组长要求的二责复核仍待 A／B 完成。
 
 ## 这个 Worker 做什么
 
@@ -14,7 +14,7 @@
 
 ## 只需要理解四步
 
-打开 [CareChangeWorkers.java](../../Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/CareChangeWorkers.java)。整个类包含导入、空行和中文注释。
+打开 [CareChangeWorkers.java](../../Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/CareChangeWorkers.java)。整个类包含导入、空行和中文注释。
 
 | 行号 | 做什么 | 讲解重点 |
 |---|---|---|
@@ -36,11 +36,11 @@
 
 ## 数据库部分怎么看
 
-[AuditEventWriter.java](../../Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/domain/AuditEventWriter.java) 的 24–39 行：**先查询，有记录就返回，没有才新增**。普通 `@Transactional` 保证保存成功后才从方法返回。原四参数接口供其他同学继续使用。
+[AuditEventWriter.java](../../Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/domain/AuditEventWriter.java) 的 24–39 行：**先查询，有记录就返回，没有才新增**。普通 `@Transactional` 保证保存成功后才从方法返回。原四参数接口供其他同学继续使用。
 
 重复检查键由“Worker 类型 + 流程实例编号 + 节点实例编号”组成。同一节点重试用相同的键；下一次新的变更有新键。数据库唯一列是基本防重复保护，不再加额外并发补偿框架。
 
-库文件是 `Coursework/hospital-pathway/data/hospital-domain.mv.db`。查库方法见[运行说明](../../Coursework/hospital-pathway/README.md)。既有演示记录保留；可按自己的新病例号查看本次记录。
+库文件是 `Week3 Coursework/hospital-pathway/data/hospital-domain.mv.db`。查库方法见[运行说明](../../Week3 Coursework/hospital-pathway/README.md)。既有演示记录保留；可按自己的新病例号查看本次记录。
 
 ```sql
 SELECT id, actor, action, case_reference, payload_summary

@@ -12,7 +12,7 @@
 | Item | Value |
 |------|-------|
 | Process id | `Hospital_All_Processes_Simple_C8` |
-| BPMN | `Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` |
+| BPMN | `Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` |
 | Forms | `register_request`, `review_referral`, `book_visit`, `clinical_care`, `dispatch_letter`, `funding_assessment`, `simple_record` |
 | Deployed definition | version **6**, key `2251799813925244` |
 | Git baseline | `8c666bf` (at plan write) |
@@ -22,7 +22,7 @@
 | Overall run result | **PASS_WITH_KNOWN_FAILS** (AT-03 Fail as expected for classroom RBAC gap; AT-04/05/06 Pass) |
 
 **Official procedure:** Tasklist form steps below.  
-**Recorded execution:** same field values via `Coursework/hospital-pathway/scripts/pb18_acceptance.py` (REST `/v2`).
+**Recorded execution:** same field values via `Week3 Coursework/hospital-pathway/scripts/pb18_acceptance.py` (REST `/v2`).
 
 ---
 
@@ -200,7 +200,7 @@ Shared 1–4. `mark-payment-investigate` worker active.
 ## 9. How to repeat
 
 ```text
-cd Coursework/hospital-pathway
+cd "Week3 Coursework/hospital-pathway"
 mvn spring-boot:run
 python scripts/pb18_acceptance.py
 ```

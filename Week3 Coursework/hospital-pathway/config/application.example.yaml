@@ -1,5 +1,5 @@
 # Local classroom configuration template for hospital-pathway.
-# Run Maven from Coursework/hospital-pathway so the relative H2 data path is stable.
+# Run Maven from Week3 Coursework/hospital-pathway so the relative H2 data path is stable.
 # The existing src/main/resources/application.yaml is the checked-in runnable demo config.
 # To use this template instead, copy it to that path and set the environment variables below.
 spring:

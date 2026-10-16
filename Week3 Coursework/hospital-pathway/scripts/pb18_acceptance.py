@@ -382,7 +382,7 @@ def main():
             "sort": [{"field": "version", "order": "DESC"}],
         },
     )["items"]
-    assert definitions, "Deploy Coursework/hospital-pathway BPMN first"
+    assert definitions, "Deploy Week3 Coursework/hospital-pathway BPMN first"
     definition = definitions[0]
     EVIDENCE["definition"] = {
         "processDefinitionId": definition.get("processDefinitionId"),

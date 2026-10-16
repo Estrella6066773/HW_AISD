@@ -23,7 +23,7 @@
    或英文版：
 
    ```bash
-   cd "Coursework/hospital-pathway"
+   cd "Week3 Coursework/hospital-pathway"
    mvn spring-boot:run
    ```
 

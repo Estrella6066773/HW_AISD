@@ -1,7 +1,7 @@
 # Ruby 答辩开场稿（打头阵 · 约 8 分钟）+ 可能问答
 
 **侧重点：Java + 领域库。** 线 4 / 10 / 13 顺序已从 `完整体验路线.md` 贴入第二节，现场指图即可。  
-**演示工程：** `Coursework/hospital-pathway`  
+**演示工程：** `Week3 Coursework/hospital-pathway`  
 **我是谁：** Ruby（成员 A）
 
 计时建议：组员 **约 1 分钟** → 指线 **约 1 分钟** → **Java / 库约 5–6 分钟** → 收尾 **约 1 分钟**。
@@ -238,7 +238,7 @@ Do not mix two databases:
 
 1. **Camunda 引擎库** —— 流程实例、任务、作业、消息关联（流程状态）  
    **Engine DB** — instances, tasks, jobs, message correlation (process state)
-2. **领域 H2 文件** —— `Coursework/hospital-pathway/data/hospital-domain`（业务事实）  
+2. **领域 H2 文件** —— `Week3 Coursework/hospital-pathway/data/hospital-domain`（业务事实）  
    **Domain H2 file** — business facts
 
 | 表 | 谁写 | 我强调 |

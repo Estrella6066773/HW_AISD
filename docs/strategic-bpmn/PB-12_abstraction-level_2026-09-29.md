@@ -5,7 +5,7 @@
 **Second owner:** Estrella  
 **Date:** 2026-09-29  
 **Model:** `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn`  
-**Operational model this file connects to:** `Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` (`Hospital_All_Processes_Simple_C8`)
+**Operational model this file connects to:** `Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` (`Hospital_All_Processes_Simple_C8`)
 
 This note explains the abstraction level of the strategic model, how each strategic activity lines up with the executable operational model, and which parts of the full case are left out of the picture.
 

@@ -10,7 +10,7 @@
 
 - Assessment Task 02 in `W01/S03 - Assessment Introduction(1).pptx`
 - Case study: `W01/Case Study - Hospital Patient Referral, Treatment and Administration System.docx`
-- Executable-scope reference only: `Coursework/hospital-pathway/README.md` and `Coursework/hospital-pathway/bpmn/Hospital_All_Processes_V2.bpmn`
+- Executable-scope reference only: `Week3 Coursework/hospital-pathway/README.md` and `Week3 Coursework/hospital-pathway/bpmn/Hospital_All_Processes_V2.bpmn`
 - Diagram files: [`PB-16_sd.md`](PB-16_sd.md), [`PB-16_sr.md`](PB-16_sr.md), presentation figure [`PB-16_sd-overview.png`](PB-16_sd-overview.png)
 
 ---

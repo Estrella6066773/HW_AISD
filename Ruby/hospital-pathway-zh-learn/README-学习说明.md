@@ -1,6 +1,6 @@
 # 医院路径 — 中文学习副本（可删）
 
-正式工程在 `Coursework/hospital-pathway`。本目录仅供自己看懂流程，交作业请用英文版。
+正式工程在 `Week3 Coursework/hospital-pathway`。本目录仅供自己看懂流程，交作业请用英文版。
 
 ## 每次怎么开（与英文版相同顺序）
 

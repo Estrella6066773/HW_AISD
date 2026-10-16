@@ -10,7 +10,7 @@
 
 - 考核任务 02：`W01/S03 - Assessment Introduction(1).pptx`
 - 案例：`W01/Case Study - Hospital Patient Referral, Treatment and Administration System.docx`
-- 可执行范围仅作对照：`Coursework/hospital-pathway/README.md` 与 `Coursework/hospital-pathway/bpmn/Hospital_All_Processes_V2.bpmn`
+- 可执行范围仅作对照：`Week3 Coursework/hospital-pathway/README.md` 与 `Week3 Coursework/hospital-pathway/bpmn/Hospital_All_Processes_V2.bpmn`
 - 图文件：[`PB-16_sd.md`](../../docs/istar/PB-16_sd.md)、[`PB-16_sr.md`](../../docs/istar/PB-16_sr.md)、演示用图 [`PB-16_sd-overview.png`](../../docs/istar/PB-16_sd-overview.png)
 
 > 本文是 `docs/istar/PB-16_istar-sd-sr.md` 的中文译本，供 Ruby 对照改图与答辩；正式交稿以英文原文为准。
