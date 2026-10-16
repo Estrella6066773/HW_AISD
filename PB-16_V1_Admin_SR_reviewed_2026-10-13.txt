@@ -143,6 +143,17 @@
           }
         },
         {
+          "id": "c3a71f4e-2d05-4b8c-9f61-7a0d5e4b1c88",
+          "text": "Authorised treatment booking request [P]",
+          "type": "istar.Resource",
+          "x": 812,
+          "y": 385,
+          "customProperties": {
+            "Evidence": "D6; BookTreatment is reached only from an authorised clinical request, and Admin must not process an unauthorised one. The V1 treatment request is not fully structured.",
+            "V1 status": "V1 manual/partial"
+          }
+        },
+        {
           "id": "0a037a3d-e23a-48eb-9e14-b5a01d73d400",
           "text": "Approved letter processed",
           "type": "istar.Goal",
@@ -409,6 +420,21 @@
       },
       "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
       "target": "f003fd6c-e3c6-445f-9e90-73f80b4dba00"
+    },
+    {
+      "id": "b6f0c2d7-8e34-4a15-9d2c-3f6b7a1e4c90",
+      "text": "D6 Authorised treatment booking request",
+      "type": "istar.Resource",
+      "x": 1210,
+      "y": 130,
+      "customProperties": {
+        "Case paragraphs": "6",
+        "V1 status": "符合案例；V1 部分支持",
+        "Evidence": "BookTreatment 只在已有临床授权请求时进入；授权请求本身没有完全结构化。",
+        "Qualification": "案例要求行政不能处理未经授权的治疗请求，所以方向是行政向临床团队索取已授权的预约请求。第一版把授权请求当作流程输入，没有真正的临床签字或审批记录。"
+      },
+      "source": "c3a71f4e-2d05-4b8c-9f61-7a0d5e4b1c88",
+      "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     }
   ],
   "links": [
@@ -633,6 +659,24 @@
       "source": "d865bd51-94e2-4942-8fbe-02b3032ab388",
       "target": "f003fd6c-e3c6-445f-9e90-73f80b4dba00",
       "type": "istar.DependencyLink"
+    },
+    {
+      "id": "4a91e6f8-3c27-4d5b-8e10-6b2f9a4d7c31",
+      "source": "c3a71f4e-2d05-4b8c-9f61-7a0d5e4b1c88",
+      "target": "b6f0c2d7-8e34-4a15-9d2c-3f6b7a1e4c90",
+      "type": "istar.DependencyLink"
+    },
+    {
+      "id": "7d3b8c15-9f46-4e28-a053-1c8e6b2a9f74",
+      "source": "b6f0c2d7-8e34-4a15-9d2c-3f6b7a1e4c90",
+      "target": "29f43fde-169f-4350-b10a-c68af4c6a582",
+      "type": "istar.DependencyLink"
+    },
+    {
+      "id": "e2c5a91d-6b73-4f08-9c47-8a1d3e7b50f2",
+      "source": "c3a71f4e-2d05-4b8c-9f61-7a0d5e4b1c88",
+      "target": "77e388ce-2830-4165-88b0-30ed4894caf1",
+      "type": "istar.NeededByLink"
     }
   ],
   "display": {
@@ -780,6 +824,14 @@
       "width": 160,
       "height": 70
     },
+    "c3a71f4e-2d05-4b8c-9f61-7a0d5e4b1c88": {
+      "width": 145,
+      "height": 70
+    },
+    "b6f0c2d7-8e34-4a15-9d2c-3f6b7a1e4c90": {
+      "width": 160,
+      "height": 70
+    },
     "88edf638-ee35-47fe-93cb-28b06755e727": {
       "vertices": [
         {
@@ -921,7 +973,7 @@
     "width": 1520,
     "height": 760,
     "customProperties": {
-      "Description": "Admin-team rationale checked against the case and Hospital_All_Processes_V2. The five pathway goals help Patient pathway coordinated; a rejected referral can still be coordinated without treatment, a letter or a patient notification. Initial-referral acceptance helps visit arrangement and applies only to a new patient appointment. An appointment slot helps that same visit goal only when a slot is required; decline, patient cancellation and did-not-attend do not use one. External treatment resources and normal-route funding clearance both help treatment coordination: unavailable resources leave the booking pending without a duplicate, and clearance applies before confirmation, not to every pending or urgent outcome. D7 is the clinical-approval goal, and the depender is the letter-processing goal rather than the already-approved letter resource. D20 keeps the appointment letter and recorded contact attempts, including the two-week telephone, and does not assign clinical explanation to Admin. M=manual; P=partial support; X=mock integration. A dependency states a business need, not verified fulfilment, so the dependum name does not carry the mock status. User tasks still use the demo assignee. Enquiries, changes, refunds and management escalation stay on other views. Clinical judgement and urgent authorisation do not belong to Admin."
+      "Description": "Admin-team rationale checked against the case and Hospital_All_Processes_V2. The five pathway goals help Patient pathway coordinated; a rejected referral can still be coordinated without treatment, a letter or a patient notification. Initial-referral acceptance helps visit arrangement and applies only to a new patient appointment. An appointment slot helps that same visit goal only when a slot is required; decline, patient cancellation and did-not-attend do not use one. External treatment resources and normal-route funding clearance both help treatment coordination: unavailable resources leave the booking pending without a duplicate, and clearance applies before confirmation, not to every pending or urgent outcome. D7 is the clinical-approval goal, and the depender is the letter-processing goal rather than the already-approved letter resource. D20 keeps the appointment letter and recorded contact attempts, including the two-week telephone, and does not assign clinical explanation to Admin. M=manual; P=partial support; X=mock integration. A dependency states a business need, not verified fulfilment, so the dependum name does not carry the mock status. D6 is the authorised clinical request that Admin must hold before any treatment booking, and the internal resource is needed by the treatment booking task. User tasks still use the demo assignee. Enquiries, changes, refunds and management escalation stay on other views. Clinical judgement and urgent authorisation do not belong to Admin."
     }
   }
 }
