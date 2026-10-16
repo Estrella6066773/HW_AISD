@@ -4,8 +4,8 @@
       "id": "e0e71d32-f3f6-4903-8110-0fba782a6845",
       "text": "Payment provider",
       "type": "istar.Actor",
-      "x": 930,
-      "y": 540,
+      "x": 1213,
+      "y": 590,
       "customProperties": {
         "Description": ""
       },
@@ -15,8 +15,8 @@
       "id": "cacc64a7-6578-4885-b7c9-1129b704039b",
       "text": "Funding organisation",
       "type": "istar.Actor",
-      "x": 30,
-      "y": 540,
+      "x": 93,
+      "y": 594,
       "customProperties": {
         "Description": ""
       },
@@ -26,8 +26,8 @@
       "id": "d2ec3203-4537-46fb-bd25-ee2d976d06b1",
       "text": "Finance",
       "type": "istar.Actor",
-      "x": 480,
-      "y": 540,
+      "x": 593,
+      "y": 607,
       "customProperties": {
         "Description": ""
       },
@@ -37,8 +37,8 @@
       "id": "bc2d31fa-d0cc-44ab-a44f-a0de064bad45",
       "text": "External treatment services",
       "type": "istar.Actor",
-      "x": 930,
-      "y": 280,
+      "x": 1197,
+      "y": 312,
       "customProperties": {
         "Description": ""
       },
@@ -48,8 +48,8 @@
       "id": "d4d74b8d-fdb7-4784-ba89-d7837e0afb2e",
       "text": "Scheduling service",
       "type": "istar.Actor",
-      "x": 30,
-      "y": 280,
+      "x": 52,
+      "y": 322,
       "customProperties": {
         "Description": ""
       },
@@ -59,8 +59,8 @@
       "id": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "text": "Admin team",
       "type": "istar.Actor",
-      "x": 480,
-      "y": 280,
+      "x": 586,
+      "y": 318,
       "customProperties": {
         "Description": ""
       },
@@ -70,8 +70,8 @@
       "id": "54239a8d-20e1-4cc3-b58e-f7416501d389",
       "text": "Patient",
       "type": "istar.Actor",
-      "x": 930,
-      "y": 20,
+      "x": 1080,
+      "y": 22,
       "customProperties": {
         "Description": ""
       },
@@ -81,7 +81,7 @@
       "id": "29f43fde-169f-4350-b10a-c68af4c6a582",
       "text": "Clinical team",
       "type": "istar.Actor",
-      "x": 480,
+      "x": 570,
       "y": 20,
       "customProperties": {
         "Description": ""
@@ -92,7 +92,7 @@
       "id": "ca384f60-b9fa-4af6-83c8-af2e532fbdf3",
       "text": "Referring organisation",
       "type": "istar.Actor",
-      "x": 30,
+      "x": 120,
       "y": 20,
       "customProperties": {
         "Description": ""
@@ -104,15 +104,18 @@
   "dependencies": [
     {
       "id": "07f183de-0e00-48b4-ab4e-5416bb25b0d3",
-      "text": "D1 Referral documents",
+      "text": "D1 Supporting referral documents",
       "type": "istar.Resource",
-      "x": 140,
-      "y": 155,
+      "x": 134,
+      "y": 182,
       "customProperties": {
         "Case paragraphs": "3",
         "V1 status": "符合案例；V1 部分支持",
         "Evidence": "GetDocuments；simple_record.form：人工任务及备注。",
-        "Qualification": "Admin 向 Referrer 要资料的方向合理；V1 没有结构化附件包或真实跨机构收件。"
+        "Qualification": "Supporting referral documents are provided by the referring organisation. Admin checks completeness, not clinical suitability.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "resource",
+        "Catalogue case basis": "Secretaries check letters, results and reports; may request missing items from the referrer"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "ca384f60-b9fa-4af6-83c8-af2e532fbdf3"
@@ -121,13 +124,16 @@
       "id": "a51439e8-c549-4b48-9bec-c805d0e2576b",
       "text": "D2 Referral decision recorded",
       "type": "istar.Goal",
-      "x": 250,
-      "y": 25,
+      "x": 326,
+      "y": 10,
       "customProperties": {
         "Case paragraphs": "4, 25",
         "V1 status": "合理建模推论；记录已有支持",
         "Evidence": "ReviewReferral：referralDecision、decisionReason、clinicianId；Redirect / notify-referrer。",
-        "Qualification": "案例明确要求临床决定和记录；将 Referrer 设为依赖者是分析推论，不代表 V1 会把每一种决定实际发送给转诊方。"
+        "Qualification": "A referral decision can be acceptance, rejection, further information or redirection. This is not a promise that every referral is accepted or every decision is automatically sent.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "goal",
+        "Catalogue case basis": "Consultant accepts, rejects, requests further information or redirects; reason and identity are recorded"
       },
       "source": "ca384f60-b9fa-4af6-83c8-af2e532fbdf3",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
@@ -136,372 +142,342 @@
       "id": "5862c004-9027-472c-bd60-b8dc2c72c6f4",
       "text": "D4 Checked referral package",
       "type": "istar.Resource",
-      "x": 320,
-      "y": 155,
+      "x": 319,
+      "y": 117,
       "customProperties": {
         "Case paragraphs": "3–4",
         "V1 status": "符合案例；V1 部分支持",
         "Evidence": "GetDocuments → ReviewReferral；人工备注，无结构化资料包。",
-        "Qualification": "临床依赖 Admin 检查资料；Admin 不应判断临床适宜性。包的完整性/传输为人工约定。"
+        "Qualification": "Administrative checking precedes clinical review; the checked package is not clinical acceptance.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "resource",
+        "Catalogue case basis": "Clinical review starts after administrative document checking"
       },
       "source": "29f43fde-169f-4350-b10a-c68af4c6a582",
       "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
     },
     {
       "id": "7ea66ccb-d2f8-49a6-b396-56fed11def3c",
-      "text": "D5 Acceptance recorded before booking (if accepted)",
+      "text": "D5 Authorised acceptance before a new patient appointment",
       "type": "istar.Goal",
-      "x": 510,
-      "y": 155,
+      "x": 657,
+      "y": 115,
       "customProperties": {
         "Case paragraphs": "4",
         "V1 status": "符合案例；分支逻辑已有支持",
         "Evidence": "ReviewReferral → ReferralDecision；accept → BookVisit。",
-        "Qualification": "仅适用于接受分支；拒绝、补资料、转诊也是合法结果。所有任务 assignee=demo，未验证真正的 Consultant 权限。"
-      },
-      "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
-      "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
-    },
-    {
-      "id": "218e63f8-fffb-40ee-92e4-f6d73587b5b0",
-      "text": "D7 Approved clinic letter (required; V1 partial)",
-      "type": "istar.Resource",
-      "x": 700,
-      "y": 125,
-      "customProperties": {
-        "Case paragraphs": "19–23",
-        "V1 status": "案例要求正确；V1 有明显缺口",
-        "Evidence": "ClinicalCare → DispatchLetter → dispatch-clinic-letter；ClinicalCareNotes 为自由备注。LetterWorkers 只写模拟外发记录。",
-        "Qualification": "保留业务上需要的已批准信件；V1 缺结构化正文、审批人/日期及分发前审批检查，不能称为已完整提供。"
+        "Qualification": "Applies only before a NEW patient appointment after an authorised consultant accepts the referral. A later follow-up uses a clinical request, not a new acceptance.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "goal",
+        "Catalogue case basis": "A new patient appointment is arranged only after an authorised consultant has accepted the referral. A later follow-up appointment is requested by a clinician and is not this dependency"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     },
     {
       "id": "66fe5d72-b1ec-4ae0-bd32-6f7b52ba782e",
-      "text": "D12 Appropriate clinical care",
+      "text": "D12 Appropriate clinical assessment and care",
       "type": "istar.Goal",
-      "x": 700,
-      "y": 25,
+      "x": 791,
+      "y": 12,
       "customProperties": {
         "Case paragraphs": "7, 14–15, 25",
         "V1 status": "符合案例；人工临床工作受部分支持",
         "Evidence": "ClinicalCare：careDecision=treatment/follow_up/discharge，ClinicalCareNotes。",
-        "Qualification": "这是患者对临床的目标，不是软件自动诊断或保证疗效。结构化同意书、治疗请求和周期信息仍不完整。"
+        "Qualification": "The patient depends on human clinical assessment and care; the software does not automatically diagnose or guarantee clinical outcomes.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "goal",
+        "Catalogue case basis": "Consultation, diagnosis, treatment options, CNS advice and fitness-to-continue decisions"
       },
       "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     },
     {
-      "id": "d865bd51-94e2-4942-8fbe-02b3032ab388",
-      "text": "D20 Notify patient of appointment",
-      "type": "istar.Task",
-      "x": 850,
-      "y": 200,
-      "customProperties": {
-        "Case paragraphs": "5–6, 24",
-        "V1 status": "符合案例；V1 人工/模拟支持",
-        "Evidence": "BookVisit 及 send-booking-confirmation；电话/通知细节在备注中。",
-        "Qualification": "由“appointment and outcome”收窄为预约通知，避免暗示 Admin 负责解释临床结果。两周内电话规则和逐次联系记录未完整自动支持。"
-      },
-      "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
-      "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
-    },
-    {
       "id": "7bf4ff82-3c16-4402-9a2b-cd9e88553036",
-      "text": "D9 Available appointment slot (V1 mock)",
+      "text": "D9 Available appointment slot",
       "type": "istar.Resource",
-      "x": 250,
-      "y": 285,
+      "x": 190,
+      "y": 305,
       "customProperties": {
         "Case paragraphs": "5–6, 24",
         "V1 status": "符合案例；外部服务为模拟",
         "Evidence": "BookVisit 后 check-slot；本地 booking_slot 写入。",
-        "Qualification": "V1 没有真实外部排期查询；不能据模拟确认断言符合指定临床时限。"
+        "Qualification": "An appointment slot is needed when making a booking. Do not infer a real external scheduling integration or compliance with the requested timeframe from the V1 mock.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "resource",
+        "Catalogue case basis": "Outpatient and follow-up bookings use the external scheduling service"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "d4d74b8d-fdb7-4784-ba89-d7837e0afb2e"
     },
     {
       "id": "499d6740-9fa4-4228-ae58-7df99d2742d4",
-      "text": "D10 Treatment resource availability (V1 mock/manual)",
+      "text": "D10 External treatment, laboratory or imaging availability",
       "type": "istar.Resource",
-      "x": 700,
-      "y": 285,
+      "x": 903,
+      "y": 302,
       "customProperties": {
         "Case paragraphs": "7–8",
         "V1 status": "符合案例；V1 部分/模拟支持",
         "Evidence": "BookTreatment ready/pending；reserve-appointment 本地 worker。",
-        "Qualification": "外部治疗、实验室、影像是战略级合并角色；并非三种服务均已真实接通。"
+        "Qualification": "Aggregates treatment, laboratory and imaging as one external clinical-services dependee under catalogue assumption A7. Scheduling remains D9. Provider unavailability requires pending handling and avoiding duplicates.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "resource",
+        "Catalogue case basis": "Some treatment appointments depend on an external provider. If that provider is unavailable, the booking stays pending and is not duplicated. Assumption A7 keeps treatment, laboratory and imaging as one dependee. Scheduling is D9"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "bc2d31fa-d0cc-44ab-a44f-a0de064bad45"
     },
     {
       "id": "e80e2e92-ee1e-4b56-92cd-fda8e15982b0",
-      "text": "D14 Funding/payment clearance or arrangement (normal route)",
+      "text": "D14 Normal-route clearance before treatment confirmation",
       "type": "istar.Goal",
-      "x": 610,
-      "y": 420,
+      "x": 927,
+      "y": 455,
       "customProperties": {
         "Case paragraphs": "9, 11–12",
         "V1 status": "符合案例；正常/紧急分支已有支持",
         "Evidence": "FundingOutcome：hospital_funded / insurer_approved / patient_paid / arrangement；urgent_review → UrgentAuthorisation。",
-        "Qualification": "不是所有治疗都要患者付款；正常路径可资金覆盖或授权安排，临床授权的紧急例外可以先治疗。"
+        "Qualification": "NORMAL-ROUTE treatment confirmation requires hospital funding, insurer approval, verified patient payment, exemption or an authorised arrangement. It does not mean every patient pays. A recorded clinician-authorised urgent exception is addressed by D18.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "goal",
+        "Catalogue case basis": "Before a treatment appointment is confirmed on the normal route, Finance records hospital funding, insurer approval, verified patient payment, an exemption, or another authorised arrangement. Urgent treatment that a clinician authorises despite missing payment is D18, not a failure of D14"
       },
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
     },
     {
-      "id": "648f5d89-9163-44c2-8bf7-17de9dcaf0b5",
-      "text": "D18 Financial follow-up after urgent care",
-      "type": "istar.Task",
-      "x": 270,
-      "y": 420,
-      "customProperties": {
-        "Case paragraphs": "12",
-        "V1 status": "已修正责任表述；V1 有对应任务",
-        "Evidence": "UrgentAuthorisation → BookTreatment → ClinicalCare → UrgentFinance。",
-        "Qualification": "原“Urgent care not delayed”是临床软目标，不能让 Finance 看起来拥有紧急治疗授权。改为 Clinical 依赖 Finance 进行事后财务处理；不延误护理放入 SR 内部软目标。"
-      },
-      "source": "29f43fde-169f-4350-b10a-c68af4c6a582",
-      "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
-    },
-    {
       "id": "c631b125-983c-4ba7-ae75-ed6dcd315655",
-      "text": "D15 Funding approval information (V1 manual)",
+      "text": "D15 Funding approval record",
       "type": "istar.Resource",
-      "x": 250,
-      "y": 545,
+      "x": 316,
+      "y": 581,
       "customProperties": {
         "Case paragraphs": "9",
         "V1 status": "符合案例；V1 人工/部分支持",
         "Evidence": "Funding：fundingStatus、insurerReference、charge_amount、FundingNotes。",
-        "Qualification": "有人工状态和参考号；没有真实资金机构接口，也缺完整批准额度/限制的独立字段。"
+        "Qualification": "Funding approval record should include organisation, authorisation reference, amount and limitations. V1 manual fields/notes provide only partial support.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "resource",
+        "Catalogue case basis": "Finance records organisation, authorisation reference, amount and limitations"
       },
       "source": "d2ec3203-4537-46fb-bd25-ee2d976d06b1",
       "target": "cacc64a7-6578-4885-b7c9-1129b704039b"
     },
     {
       "id": "245173ae-0ec5-49eb-a00b-9dd81d954481",
-      "text": "D16 Payment result (V1 mock)",
+      "text": "D16 Verified payment or refund result",
       "type": "istar.Resource",
-      "x": 700,
-      "y": 545,
+      "x": 933,
+      "y": 580,
       "customProperties": {
-        "Case paragraphs": "10–12",
+        "Case paragraphs": "10-13",
         "V1 status": "符合案例；V1 模拟支持",
-        "Evidence": "request-payment → payment-result；HospitalPathwayWorkers。",
-        "Qualification": "依赖方向 Finance → Payment provider 正确；结果为课堂模拟，不代表真实付款或已核验安全支付集成。"
+        "Evidence": "V1 payment-result and request-refund are classroom mocks. Funding/payment/refund records do not establish a live verified provider settlement.",
+        "Qualification": "Business resource includes verified PAYMENT OR REFUND results. V1 provider interactions are mocked; this label is a requirement, not evidence of real settlement. Missing confirmation must be investigated rather than blindly charging again.",
+        "Catalogue revision": "2d09f5a; 2026-10-15",
+        "Catalogue type": "resource",
+        "Catalogue case basis": "Provider returns status, transaction reference, date and amount; missing confirmation is investigated, not auto-retried as a new charge"
       },
       "source": "d2ec3203-4537-46fb-bd25-ee2d976d06b1",
       "target": "e0e71d32-f3f6-4903-8110-0fba782a6845"
+    },
+    {
+      "id": "40a913f4-5a0a-4196-9a60-4a1edc5d4586",
+      "text": "D18 Urgent care not blocked solely by payment delay",
+      "type": "istar.Quality",
+      "x": 222,
+      "y": 414,
+      "customProperties": {
+        "Description": ""
+      },
+      "source": "29f43fde-169f-4350-b10a-c68af4c6a582",
+      "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
+    },
+    {
+      "id": "bf32f802-aa39-49e0-9aa8-234feecb71dc",
+      "text": "D20 Recorded appointment notification and contact attempts",
+      "type": "istar.Task",
+      "x": 1116,
+      "y": 167,
+      "customProperties": {
+        "Description": ""
+      },
+      "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
+      "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
+    },
+    {
+      "id": "20880afa-9ade-481d-9a23-8f74cd67b6a1",
+      "text": "D7 Clinic letter clinically approved",
+      "type": "istar.Goal",
+      "x": 938,
+      "y": 122,
+      "customProperties": {
+        "Description": ""
+      },
+      "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
+      "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     }
   ],
   "links": [
     {
-      "id": "d592854f-5e7a-4ccf-a404-a964dd8dadce",
+      "id": "62f3fd23-9f64-4555-aad1-51dfcb76abd2",
+      "type": "istar.DependencyLink",
+      "source": "20880afa-9ade-481d-9a23-8f74cd67b6a1",
+      "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
+    },
+    {
+      "id": "78126854-2c45-402a-a534-4e0030cb51b4",
+      "type": "istar.DependencyLink",
+      "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
+      "target": "20880afa-9ade-481d-9a23-8f74cd67b6a1"
+    },
+    {
+      "id": "3632e860-3fe0-48e0-a7bc-d9d8500cba34",
+      "type": "istar.DependencyLink",
+      "source": "bf32f802-aa39-49e0-9aa8-234feecb71dc",
+      "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
+    },
+    {
+      "id": "79e56dd4-2e5f-4d9e-9a27-663bb3aafd39",
+      "type": "istar.DependencyLink",
+      "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
+      "target": "bf32f802-aa39-49e0-9aa8-234feecb71dc"
+    },
+    {
+      "id": "fd2f6282-4c97-46dc-a7bf-c8215281ed49",
+      "type": "istar.DependencyLink",
+      "source": "40a913f4-5a0a-4196-9a60-4a1edc5d4586",
+      "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
+    },
+    {
+      "id": "104afe63-c34a-4451-9b46-73d90616814f",
+      "type": "istar.DependencyLink",
+      "source": "29f43fde-169f-4350-b10a-c68af4c6a582",
+      "target": "40a913f4-5a0a-4196-9a60-4a1edc5d4586"
+    },
+    {
+      "id": "5bd86908-a5ad-4426-a862-97b5a99474cb",
       "type": "istar.DependencyLink",
       "source": "245173ae-0ec5-49eb-a00b-9dd81d954481",
       "target": "e0e71d32-f3f6-4903-8110-0fba782a6845"
     },
     {
-      "id": "f1985733-72cc-449a-a0aa-86c7b7673b60",
+      "id": "49238036-23af-45fb-a6b2-cc3d577ea119",
       "type": "istar.DependencyLink",
       "source": "d2ec3203-4537-46fb-bd25-ee2d976d06b1",
       "target": "245173ae-0ec5-49eb-a00b-9dd81d954481"
     },
     {
-      "id": "f66a67e0-0d00-4481-813e-0446cb376e55",
+      "id": "d48ff434-5a39-4484-a569-35963dd4588e",
       "type": "istar.DependencyLink",
       "source": "c631b125-983c-4ba7-ae75-ed6dcd315655",
       "target": "cacc64a7-6578-4885-b7c9-1129b704039b"
     },
     {
-      "id": "977e3653-824c-4167-a759-be3a30b23106",
+      "id": "35c5a148-c059-43f2-a663-50e9000b4636",
       "type": "istar.DependencyLink",
       "source": "d2ec3203-4537-46fb-bd25-ee2d976d06b1",
       "target": "c631b125-983c-4ba7-ae75-ed6dcd315655"
     },
     {
-      "id": "1e562f1b-fb2b-4d02-a1aa-3616066de740",
-      "type": "istar.DependencyLink",
-      "source": "648f5d89-9163-44c2-8bf7-17de9dcaf0b5",
-      "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
-    },
-    {
-      "id": "93c02855-6628-4c17-b50e-df1db9900faa",
-      "type": "istar.DependencyLink",
-      "source": "29f43fde-169f-4350-b10a-c68af4c6a582",
-      "target": "648f5d89-9163-44c2-8bf7-17de9dcaf0b5"
-    },
-    {
-      "id": "8617ce09-fed0-40d2-a88b-379e39c09528",
+      "id": "e654c51d-0cde-4268-8ee7-28478dc5c786",
       "type": "istar.DependencyLink",
       "source": "e80e2e92-ee1e-4b56-92cd-fda8e15982b0",
       "target": "d2ec3203-4537-46fb-bd25-ee2d976d06b1"
     },
     {
-      "id": "cf5cd191-90c2-4902-ba21-d75dbdb688f8",
+      "id": "669c926a-9b27-4719-a2d2-4092b93333b5",
       "type": "istar.DependencyLink",
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "e80e2e92-ee1e-4b56-92cd-fda8e15982b0"
     },
     {
-      "id": "4ae23141-a7fe-45f8-ab6a-0b04557e11db",
+      "id": "7c649c16-798d-4362-bf5d-6a7f1d14029d",
       "type": "istar.DependencyLink",
       "source": "499d6740-9fa4-4228-ae58-7df99d2742d4",
       "target": "bc2d31fa-d0cc-44ab-a44f-a0de064bad45"
     },
     {
-      "id": "384cf95c-53f3-4d67-b22a-1527fefdd65d",
+      "id": "f72a13b4-d334-4997-9ffb-0dfb8933322a",
       "type": "istar.DependencyLink",
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "499d6740-9fa4-4228-ae58-7df99d2742d4"
     },
     {
-      "id": "3de6abd1-798d-4c83-b830-4ce6363a46e9",
+      "id": "5c85c315-62fd-465a-ac41-793724a84e56",
       "type": "istar.DependencyLink",
       "source": "7bf4ff82-3c16-4402-9a2b-cd9e88553036",
       "target": "d4d74b8d-fdb7-4784-ba89-d7837e0afb2e"
     },
     {
-      "id": "b42d7f4a-6fbd-4280-a048-3d37b2a12010",
+      "id": "0d848539-4fed-4c46-aa97-47db6acd32cd",
       "type": "istar.DependencyLink",
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "7bf4ff82-3c16-4402-9a2b-cd9e88553036"
     },
     {
-      "id": "47fded48-e5e5-45cd-b0e0-1df58dc317ff",
-      "type": "istar.DependencyLink",
-      "source": "d865bd51-94e2-4942-8fbe-02b3032ab388",
-      "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
-    },
-    {
-      "id": "ecac133c-e25d-4bf2-bbaa-6c3273a03df9",
-      "type": "istar.DependencyLink",
-      "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
-      "target": "d865bd51-94e2-4942-8fbe-02b3032ab388"
-    },
-    {
-      "id": "77761f0c-65f6-4721-baa8-5956c2ca5a80",
+      "id": "0186882f-92fa-451a-9f79-080eaab3a905",
       "type": "istar.DependencyLink",
       "source": "66fe5d72-b1ec-4ae0-bd32-6f7b52ba782e",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     },
     {
-      "id": "08172084-50af-4fff-9d4d-d8587f76fade",
+      "id": "89df5713-074d-4b88-b002-03e6472a326f",
       "type": "istar.DependencyLink",
       "source": "54239a8d-20e1-4cc3-b58e-f7416501d389",
       "target": "66fe5d72-b1ec-4ae0-bd32-6f7b52ba782e"
     },
     {
-      "id": "c508d6e1-a4d9-436b-be68-3eb679f89d0d",
-      "type": "istar.DependencyLink",
-      "source": "218e63f8-fffb-40ee-92e4-f6d73587b5b0",
-      "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
-    },
-    {
-      "id": "c5c2cf61-90e6-4cd1-88e2-4b00c9aecbf3",
-      "type": "istar.DependencyLink",
-      "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
-      "target": "218e63f8-fffb-40ee-92e4-f6d73587b5b0"
-    },
-    {
-      "id": "3ac005b3-fd8d-43e7-a83d-6fb9271213cb",
+      "id": "36bf7086-a3f1-4437-8c0a-735d1fc1da80",
       "type": "istar.DependencyLink",
       "source": "7ea66ccb-d2f8-49a6-b396-56fed11def3c",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     },
     {
-      "id": "f6cc561c-c1d1-40fc-bad8-cea5aafbc037",
+      "id": "7b57524b-6c5a-46f0-a77b-3a54914f14fe",
       "type": "istar.DependencyLink",
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "7ea66ccb-d2f8-49a6-b396-56fed11def3c"
     },
     {
-      "id": "6e2a57bd-d8a8-415b-a2af-e9032ab57b38",
+      "id": "458fbd3b-8888-4a4a-8ab2-fab392a96d8e",
       "type": "istar.DependencyLink",
       "source": "5862c004-9027-472c-bd60-b8dc2c72c6f4",
       "target": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0"
     },
     {
-      "id": "4a387d2d-0011-49fe-b51f-2e4f9f2901da",
+      "id": "883b65f3-1102-4e7e-8a1f-bc5a69a8b1b1",
       "type": "istar.DependencyLink",
       "source": "29f43fde-169f-4350-b10a-c68af4c6a582",
       "target": "5862c004-9027-472c-bd60-b8dc2c72c6f4"
     },
     {
-      "id": "a0b70ec2-670f-493f-941e-6ae4e340931e",
+      "id": "abb4be60-6e0d-4ccd-b762-4d9b3dc59615",
       "type": "istar.DependencyLink",
       "source": "a51439e8-c549-4b48-9bec-c805d0e2576b",
       "target": "29f43fde-169f-4350-b10a-c68af4c6a582"
     },
     {
-      "id": "f5af64bc-178b-4303-a570-5255b28e8e4d",
+      "id": "f84f6854-532f-43f1-a6ca-9ad971f6b3dc",
       "type": "istar.DependencyLink",
       "source": "ca384f60-b9fa-4af6-83c8-af2e532fbdf3",
       "target": "a51439e8-c549-4b48-9bec-c805d0e2576b"
     },
     {
-      "id": "d9db2f1d-5f76-4cc0-890d-5c50a5ad8d9e",
+      "id": "dd4a1950-87f4-497f-9fe2-32e1d2d7857e",
       "type": "istar.DependencyLink",
       "source": "07f183de-0e00-48b4-ab4e-5416bb25b0d3",
       "target": "ca384f60-b9fa-4af6-83c8-af2e532fbdf3"
     },
     {
-      "id": "2519f664-727c-4594-a421-8766f87ec37f",
+      "id": "f6588b5f-5a91-446a-abc6-22020779e799",
       "type": "istar.DependencyLink",
       "source": "a82933d2-0c8a-4b1e-83ae-c02b406eeed0",
       "target": "07f183de-0e00-48b4-ab4e-5416bb25b0d3"
     }
   ],
   "display": {
-    "e0e71d32-f3f6-4903-8110-0fba782a6845": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
-    "cacc64a7-6578-4885-b7c9-1129b704039b": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
-    "d2ec3203-4537-46fb-bd25-ee2d976d06b1": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
-    "bc2d31fa-d0cc-44ab-a44f-a0de064bad45": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
-    "d4d74b8d-fdb7-4784-ba89-d7837e0afb2e": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
-    "a82933d2-0c8a-4b1e-83ae-c02b406eeed0": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
-    "54239a8d-20e1-4cc3-b58e-f7416501d389": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
-    "29f43fde-169f-4350-b10a-c68af4c6a582": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
-    "ca384f60-b9fa-4af6-83c8-af2e532fbdf3": {
-      "collapsed": true,
-      "width": 80,
-      "height": 80
-    },
     "07f183de-0e00-48b4-ab4e-5416bb25b0d3": {
       "width": 160,
       "height": 70
@@ -515,18 +491,10 @@
       "height": 70
     },
     "7ea66ccb-d2f8-49a6-b396-56fed11def3c": {
-      "width": 160,
-      "height": 70
-    },
-    "218e63f8-fffb-40ee-92e4-f6d73587b5b0": {
-      "width": 160,
-      "height": 70
+      "width": 180,
+      "height": 85
     },
     "66fe5d72-b1ec-4ae0-bd32-6f7b52ba782e": {
-      "width": 160,
-      "height": 70
-    },
-    "d865bd51-94e2-4942-8fbe-02b3032ab388": {
       "width": 160,
       "height": 70
     },
@@ -542,10 +510,6 @@
       "width": 160,
       "height": 70
     },
-    "648f5d89-9163-44c2-8bf7-17de9dcaf0b5": {
-      "width": 160,
-      "height": 70
-    },
     "c631b125-983c-4ba7-ae75-ed6dcd315655": {
       "width": 160,
       "height": 70
@@ -554,52 +518,55 @@
       "width": 160,
       "height": 70
     },
-    "93c02855-6628-4c17-b50e-df1db9900faa": {
-      "vertices": [
-        {
-          "x": 466,
-          "y": 60.0
-        },
-        {
-          "x": 466,
-          "y": 455.0
-        }
-      ]
+    "40a913f4-5a0a-4196-9a60-4a1edc5d4586": {
+      "width": 156.42375946044922,
+      "height": 100.01224517822266
     },
-    "47fded48-e5e5-45cd-b0e0-1df58dc317ff": {
-      "vertices": [
-        {
-          "x": 574,
-          "y": 235.0
-        },
-        {
-          "x": 574,
-          "y": 320.0
-        }
-      ]
+    "bf32f802-aa39-49e0-9aa8-234feecb71dc": {
+      "width": 158.37692260742188,
+      "height": 70.00189971923828
     },
-    "c5c2cf61-90e6-4cd1-88e2-4b00c9aecbf3": {
-      "vertices": [
-        {
-          "x": 684,
-          "y": 320.0
-        },
-        {
-          "x": 684,
-          "y": 160.0
-        }
-      ]
+    "20880afa-9ade-481d-9a23-8f74cd67b6a1": {
+      "width": 105.8920726776123,
+      "height": 50.00189971923828
+    },
+    "e0e71d32-f3f6-4903-8110-0fba782a6845": {
+      "collapsed": true
+    },
+    "cacc64a7-6578-4885-b7c9-1129b704039b": {
+      "collapsed": true
+    },
+    "d2ec3203-4537-46fb-bd25-ee2d976d06b1": {
+      "collapsed": true
+    },
+    "bc2d31fa-d0cc-44ab-a44f-a0de064bad45": {
+      "collapsed": true
+    },
+    "d4d74b8d-fdb7-4784-ba89-d7837e0afb2e": {
+      "collapsed": true
+    },
+    "a82933d2-0c8a-4b1e-83ae-c02b406eeed0": {
+      "collapsed": true
+    },
+    "54239a8d-20e1-4cc3-b58e-f7416501d389": {
+      "collapsed": true
+    },
+    "29f43fde-169f-4350-b10a-c68af4c6a582": {
+      "collapsed": true
+    },
+    "ca384f60-b9fa-4af6-83c8-af2e532fbdf3": {
+      "collapsed": true
     }
   },
   "tool": "pistar.2.1.0",
   "istar": "2.0",
-  "saveDate": "Tue, 13 Oct 2026 07:27:49 GMT",
+  "saveDate": "Thu, 15 Oct 2026 02:53:24 GMT",
   "diagram": {
-    "width": 1050,
-    "height": 660,
-    "name": "V1 SD - reviewed against case and operational V1",
+    "width": 1314,
+    "height": 707,
+    "name": "V1 SD - aligned with group dependency catalogue",
     "customProperties": {
-      "Description": "Reviewed 2026-10-13 against original V1 (d599a8bd...) and the hospital case. 9 aggregated actors / 13 selected main-pathway dependencies. Not an exhaustive whole-case SD. Dependencies describe business needs, not proof of implementation. Manual/mock/partial labels are V1 limitations. D2 referrer interest is an analyst inference. D5 conditional acceptance; D7 required letter remains partial; D18 is subsequent financial follow-up, not finance authorisation of urgent clinical care. Enquiries, care-change and correspondence-service dependencies need separate views for full coverage. Refer to the dependency audit HTML."
+      "Description": "Aligned on 2026-10-15 with the group dependency catalogue at commit 2d09f5a. Main-pathway overview: the same 9 aggregated actors and 13 selected dependencies out of 24. Canonical names, types and directions are used. D7 is a Goal; D18 is a Quality. D5 is new-patient acceptance only; D10 aggregates external treatment/laboratory/imaging (A7), separate from scheduling D9; D14 is normal-route treatment confirmation; D20 includes recorded contact attempts. Goals/resources/qualities describe business needs, not proof of V1 fulfilment. V1 remains manual/partial/mocked where noted in element properties; no real role enforcement or provider integration is claimed. Other dependencies remain outside this selected view. Only this SD is maintained here; SR files are separate owners' responsibility."
     }
   }
 }
