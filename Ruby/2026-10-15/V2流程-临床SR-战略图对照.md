@@ -3,7 +3,7 @@
 中文图：`Hospital_All_Processes_V2_中文.bpmn`  
 英文可执行图：`Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn`  
 临床 SR：`Ruby/2026-10-13/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt`  
-战略图：`Week6 Coursework/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn`
+战略图：`docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn`
 
 中文图只改了图上的名称。编号、箭头、网关条件都和英文 V2 一样。这张中文图不要部署。
 

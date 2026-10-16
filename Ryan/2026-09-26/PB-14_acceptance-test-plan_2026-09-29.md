@@ -12,7 +12,7 @@
 | Item | Value |
 |------|-------|
 | Process id | `Hospital_All_Processes_Simple_C8` |
-| BPMN file | `Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` |
+| BPMN file | `Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` |
 | Forms used | `register_request.form`, `review_referral.form`, `book_visit.form` |
 | Deployed definition | version **6**, processDefinitionKey `2251799813925244` |
 | Git baseline when planned | commit `275ab9f` |
@@ -50,7 +50,7 @@ Pass/fail: a test **passes** only if every Expected check in its table matches A
 
 1. Camunda 8 Run is running; Operate and Tasklist open at port 8080; login `demo` / `demo`.
 2. Process `Hospital_All_Processes_Simple_C8` is deployed (Modeler deploy or existing classroom deployment).
-3. For **AT-01 only**: Java workers are running from `Coursework/hospital-pathway` (`mvn spring-boot:run`) so job type `check-slot` can finish.
+3. For **AT-01 only**: Java workers are running from `Week3 Coursework/hospital-pathway` (`mvn spring-boot:run`) so job type `check-slot` can finish.
 4. Use a unique Patient / case ID for each run so results can be found in Operate.
 
 **Official student procedure (what the test plan describes):** complete the steps in **Tasklist** using the bound Camunda Forms.  
@@ -165,7 +165,7 @@ Shared items 1, 2, 4. Java workers **not** required.
 **Repeatable automated check (same variables as forms):**
 
 ```text
-cd Coursework/hospital-pathway
+cd "Week3 Coursework/hospital-pathway"
 mvn spring-boot:run
 python scripts/pb14_acceptance.py
 ```

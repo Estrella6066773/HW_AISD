@@ -3,7 +3,7 @@
 **主笔**：Ruby（23084382）
 **复核**：Ender（Ender）
 
-与 `Coursework/Agile Workshop-ZH.docx` / `Agile Workshop-EN.docx` 一致。任务编号与 Part 4（`docs/p4-work-breakdown.md`）一致；每条任务行首标出对应的 Backlog 条目。
+与 `W01/Agile Workshop.docx`（中文原件）/ `Week3 Coursework/Agile Workshop-EN.docx`（英文副本）一致。仓库内没有名为 `Agile Workshop-ZH.docx` 的文件。任务编号与 Part 4（`docs/p4-work-breakdown.md`）一致；每条任务行首标出对应的 Backlog 条目。
 
 | Sprint | Goal |
 |--------|------|

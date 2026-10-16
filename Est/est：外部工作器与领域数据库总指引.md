@@ -2,7 +2,7 @@
 
 **主笔**：Estrella（陈格平）  
 **日期**：2026-09-28  
-**状态**：个人目录总指引；指导在 `Coursework/hospital-pathway/`（及可选中文学习版）上扩展外部工作器与受维护的领域数据库  
+**状态**：个人目录总指引；指导在 `Week3 Coursework/hospital-pathway/`（及可选中文学习版）上扩展外部工作器与受维护的领域数据库  
 **范围**：说明更多工作器与应用侧数据库的目标、挂接点、分工与落地顺序；具体字段清单以领域库设计与各任务类型设计为准  
 **行文**：正文用正向陈述（是什么、谁做、写什么）；易混概念用对照表划界，避免用「不是／不要／禁止」堆砌定义  
 **成员 B 已落地**：[`Est/est：领域数据库设计.md`](est：领域数据库设计.md)；成员 B 占号工作器与 BPMN 挂接见第 6.3 节  
@@ -10,12 +10,12 @@
 
 **依据**（按阅读顺序）：
 
-- 可执行包说明：`Coursework/hospital-pathway/README.md`
+- 可执行包说明：`Week3 Coursework/hospital-pathway/README.md`
 - 现有两个工作器行为：[`Est/est：治疗预约与付款外部工作器.md`](est：治疗预约与付款外部工作器.md)
 - 完成定义中的外部工作器条款：`docs/definition-of-done.md`
 - 产品待办：`docs/p3-product-backlog.md`（尤其 PB-03、PB-06、PB-07、PB-11、PB-20）
 - 任务拆分：`docs/p4-work-breakdown.md`（尤其 T06、T09、T10、T11、T16）
-- 全院可执行图：`Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`
+- 全院可执行图：`Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`
 
 ---
 
@@ -31,7 +31,7 @@
 
 | 项目 | 现状 |
 |------|------|
-| 可执行工程 | 提交与演示用 `Coursework/hospital-pathway/`；可选学习镜像 `Ruby/hospital-pathway-zh-learn/`。同一时刻只启动其中一套 |
+| 可执行工程 | 提交与演示用 `Week3 Coursework/hospital-pathway/`；可选学习镜像 `Ruby/hospital-pathway-zh-learn/`。同一时刻只启动其中一套 |
 | 入口类 | `HospitalPathwayApplication.java` |
 | 既有工作器类 | `HospitalPathwayWorkers.java`（`request-payment`、`send-booking-confirmation`） |
 | 成员 A 工作器类 | `RefundWorkers.java`（`request-refund`、`mark-payment-investigate`） |
@@ -114,7 +114,7 @@ flowchart LR
 
 | 规则 | 要求 |
 |------|------|
-| 同源双包 | 先改 `Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`；若使用学习包则同步同名图 |
+| 同源双包 | 先改 `Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`；若使用学习包则同步同名图 |
 | 类型一致 | 图上 `type` 与 `@JobWorker(type=...)` 拼写一致 |
 | 改图方式 | 在用户任务之后插入 `serviceTask` / `sendTask`；保留人工填表，外发交给工作器；既有 `RequestPayment` / `SendBookingConfirmation` 节点保持 |
 | 完成门槛 | 一责工作器在 BPMN 挂类型、部署并跑通对应线路后，方可标该工作项 Done |
@@ -238,9 +238,9 @@ A、B、C、D 每人都开发 JobWorker（至少一责一个新类型，并交�
 ## 8. 工程与协作约定
 
 1. 同一时刻只开一套工作器工程（英文包或学习包二选一）。  
-2. 领域库路径写在 `application.yaml`；启动与查表方式写进 `Coursework/hospital-pathway/README.md`。  
+2. 领域库路径写在 `application.yaml`；启动与查表方式写进 `Week3 Coursework/hospital-pathway/README.md`。  
 3. 若保留学习包：领域库与 BPMN 与英文包同步，或明确只维护英文包、学习包随后合并。  
-4. 完成定义曾写 `src/workers/`；本组可执行代码在 `Coursework/hospital-pathway/`，目录差异记为已知限制。  
+4. 完成定义曾写 `src/workers/`；本组可执行代码在 `Week3 Coursework/hospital-pathway/`，目录差异记为已知限制。  
 5. 仓库内使用演示账号与模拟数据；卡号与真实患者资料留在课堂边界之外。  
 6. BPMN `taskDefinition`、Java `@JobWorker(type=...)`、本文类型名三者拼写一致。
 
@@ -283,7 +283,7 @@ A、B、C、D 每人都开发 JobWorker（至少一责一个新类型，并交�
 - [ ] 证据同时包含「图上节点」与「Java 日志 / 表数据」  
 - [ ] 防重复落在数据库唯一约束  
 - [ ] 财务相关列仅为金额、状态、参考号、日期等业务必要项  
-- [ ] 启动顺序：先 Camunda，再 Java；只开一套工程；库文件在 `Coursework/hospital-pathway/data/`  
+- [ ] 启动顺序：先 Camunda，再 Java；只开一套工程；库文件在 `Week3 Coursework/hospital-pathway/data/`  
 - [ ] 证据路径对应 PB / Task；二责复核人已留名  
 
 ---

@@ -1,6 +1,6 @@
 # A 同学答辩讲稿
 
-正式演示用 `Coursework/hospital-pathway`。线路对照 `完整体验路线.md`。  
+正式演示用 `Week3 Coursework/hospital-pathway`。线路对照 `完整体验路线.md`。  
 我负责 **P5 / P7 / P8 / P13**；主讲 **线 4、线 10、线 13**。  
 *I own P5, P7, P8, P13. I present Routes 4, 10 and 13.*
 
@@ -298,7 +298,7 @@ Then Java payment runs. Later P5 = **discharge**. Done.
 两套库不要混：
 
 1. **Camunda 引擎库**（c8run 自带）—— 流程实例、用户任务、作业、消息关联。  
-2. **应用领域库**（我们 Spring Boot 进程）—— 文件 H2：`Coursework/hospital-pathway/data/hospital-domain`
+2. **应用领域库**（我们 Spring Boot 进程）—— 文件 H2：`Week3 Coursework/hospital-pathway/data/hospital-domain`
 
 三张表：
 
@@ -372,7 +372,7 @@ Route 10 shows payment Java; Route 13 shows refund into `payment_ledger`.
 启动：
 
 ```bash
-cd Coursework/hospital-pathway
+cd "Week3 Coursework/hospital-pathway"
 mvn spring-boot:run
 ```
 

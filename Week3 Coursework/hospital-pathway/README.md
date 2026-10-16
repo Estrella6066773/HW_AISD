@@ -28,7 +28,7 @@ If your Camunda uses port **8090** instead of **8080**, change `rest-address` in
 Option A — terminal:
 
 ```bash
-cd Coursework/hospital-pathway
+cd "Week3 Coursework/hospital-pathway"
 mvn spring-boot:run
 ```
 

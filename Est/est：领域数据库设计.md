@@ -5,7 +5,7 @@
 **角色**：成员 B（领域库设计；一责预约域新工作器）  
 **状态**：本切片落地应用领域库（表结构、仓储、审计只追加接口）；既有 `request-payment` / `send-booking-confirmation` 保持现状  
 **行文**：正向写清存什么、谁写、怎么查；易混处用对照划界  
-**实现位置**：`Coursework/hospital-pathway/`（包 `io.camunda.demo.hospital.domain`）  
+**实现位置**：`Week3 Coursework/hospital-pathway/`（包 `io.camunda.demo.hospital.domain`）  
 **总顺序与分工**：[`Est/est：外部工作器与领域数据库总指引.md`](est：外部工作器与领域数据库总指引.md) 第 6 节
 
 ### 与 A / B / C / D 的衔接
@@ -40,7 +40,7 @@
 | 引擎 | Spring Data JPA + Hibernate | 与 Spring Boot 4 / Java 21 同进程 |
 | 库 | H2 文件模式 | `jdbc:h2:file:./data/hospital-domain` |
 | 建表 | `spring.jpa.hibernate.ddl-auto=update` | 关机后保留演示数据 |
-| 数据目录 | `Coursework/hospital-pathway/data/` | 已 `.gitignore`；本地生成、版本库只保留代码 |
+| 数据目录 | `Week3 Coursework/hospital-pathway/data/` | 已 `.gitignore`；本地生成、版本库只保留代码 |
 
 启动成功后日志示例：
 
@@ -141,7 +141,7 @@ Java：`BookingSlot`、`BookingSlotStatus`、`BookingSlotRepository`。
 ## 7. 本地验证步骤
 
 1. 启动本机 Camunda（c8run）。  
-2. `cd Coursework/hospital-pathway` → `mvn spring-boot:run`。  
+2. `cd "Week3 Coursework/hospital-pathway"` → `mvn spring-boot:run`。  
 3. 确认日志中有「领域库就绪」。  
 4. 确认生成 `data/hospital-domain.mv.db`（或同前缀文件）。  
 5. （可选）停止 Java 后用 IDE 连接同一文件的绝对路径，用户 `sa`、空密码，查看三张表，查完重启 Java。

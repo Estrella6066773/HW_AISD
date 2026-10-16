@@ -68,7 +68,7 @@
 | `request-payment` | P7 Send payment request (send task) | Finance / P7 payment-cluster worker |
 | `mark-payment-investigate` | P7 Mark payment investigate | Finance / P7 payment-cluster worker |
 
-- User tasks are bound via 19 `formId`s to Camunda Forms (11 `.form` files under `Coursework/hospital-pathway/forms/`), closing the loop "user fills form → variables enter process → worker reads variables".
+- User tasks are bound via 19 `formId`s to Camunda Forms (11 `.form` files under `Week3 Coursework/hospital-pathway/forms/`), closing the loop "user fills form → variables enter process → worker reads variables".
 
 ---
 
