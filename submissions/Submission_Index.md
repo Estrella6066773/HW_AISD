@@ -1,7 +1,7 @@
 # Submission Index — second release
 
 AISD (UFCEP6-0-3) · BPM&EA (UFCEP4-0-3) · Group hospital pathway
-Repository `https://github.com/Estrella6066773/HW_AISD` · prepared 19 October 2026 · describes the revised release, tagged `submission-2026-10-20`; read its SHA from the tag
+Repository `https://github.com/Estrella6066773/HW_AISD` · prepared 19 October 2026, with `A-3` and `A-4` added 20 October 2026 · describes the revised release, tagged `submission-2026-10-20`; read its SHA from the tag
 
 This file is the entry point to the pack. It names the releases, gives every artefact's repository path and format, and marks what is not yet in place.
 
@@ -20,8 +20,8 @@ This file is the entry point to the pack. It names the releases, gives every art
 |----|----------|-----------------|-------------------|
 | `A-1` | Second-release deck | `submissions/AISD/AISD_Presentation_2026-10-19.pptx` and `.pdf` | `.pptx` + PDF, 13 slides. In place. |
 | `A-2` | Submission index and repository link | `submissions/Submission_Index.pdf` and `.md` | PDF, 2 pages. In place — this file. |
-| `A-3` | Feedback response record | Record only: `Week6 Coursework/feedback/feedback-response_2026-10-16.md` | PDF (no format set by the brief). **Not in place.** `F-01`–`F-10` recorded; `F-11` not implemented; mentor column empty; `F-08` split undecided. |
-| `A-4` | Planning evidence | Draft only: `Week6 Coursework/plan/sprint3-4-plan_2026-10-16.md` | PDF (no format set by the brief). **Not in place.** Risk record has six rows for the revised plan; none for the initial plan. |
+| `A-3` | Feedback response record | `submissions/AISD/AISD_Feedback_Response_Record.pdf` and `.md` | PDF, 11 pages. In place. Twelve rows, one point each: seven peer points and five from the group's own review; `F-11` kept apart as not implemented, with its residual risk; tutor rows blank, as no tutor point was received in writing. |
+| `A-4` | Planning evidence | `submissions/AISD/AISD_Planning_Evidence.pdf` and `.md` | PDF, 7 pages. In place. Timeline of both releases; the plan for each, including the 19 October move to `V3`; task and standup records; the sprint review record from SR1 to SR4, `SR4` shown as not held; a risk register for each release; lessons learned. |
 
 The initial-release documents are retained as the 29 September baseline, not as second-release slots: `submissions/AISD/Group_Design_Decisions_2026-09-29.pdf`, `Group_Acceptance_Test_Plan_and_Results_2026-09-29.pdf` and `Hospital_All_Processes_Camunda8_Export_2026-09-29.pdf`.
 
@@ -57,7 +57,7 @@ Full sequence: `Week3 Coursework/hospital-pathway/README.md`.
 
 - `AT-03` fails on both releases; `BR-37` is unsupported — no role-based access control, every user task assigned to `demo`.
 - `PB-16` i\* SD/SR second-owner review is unsigned.
-- `B-8` does not exist in second-release form; `A-3` and `A-4` are not yet submittable files.
+- `B-8` does not exist in second-release form.
 - `B-4` is drafted but not yet adopted by Ryan, its designated author.
 - The formal change path, DNA to Finance, urgent authorisation, refund adjustment and letter escalation are modelled but no acceptance case drives them.
 - The contribution record is a blank template and the Definition of Done is unsigned.

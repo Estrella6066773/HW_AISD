@@ -55,7 +55,7 @@ Still open:
 - Second-owner review of `PB-16` i\* SD/SR; the checklist is still unsigned
 - Role-permission test AT-03 remains FAIL on both releases. `BR-37` is recorded as unsupported for the same reason: the model carries no candidate groups, so every user task is still assigned to `demo`
 - The second-release Project and Test Plan (`B-8`) is not in place; only the 29 September PDF exists
-- In the AISD pack, the feedback response (`A-3`) and the planning evidence (`A-4`) are not yet submittable: `A-3` awaits the `F-08` decision and mentor feedback, and `A-4` has a draft plan but no risk record for the initial plan
+- In the AISD pack, the feedback response (`A-3`, eleven pages) and the planning evidence (`A-4`, seven pages) are in place under `submissions/AISD/`; `A-4` states its own gaps — `SR2` has no minutes and `SR4` was not held — rather than filling them. No tutor feedback had arrived in writing by 20 October, so the tutor rows in `A-3` are blank
 - Exception routes stay unevidenced even after the 19 October run: the formal change path, DNA to Finance, urgent authorisation, the refund adjustment and letter escalation are modelled but no case drives them
 - Contribution record `Est/est：PB-17贡献记录表.md` is still a blank template, and the Definition of Done is unsigned
 
