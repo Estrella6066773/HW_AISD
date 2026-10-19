@@ -7,7 +7,7 @@ BPM&EA and AISD · Group project · Agile Workshop Parts 1–8
 | Tag | Commit | Date | What it identifies |
 |-----|--------|------|--------------------|
 | `submission-2026-09-29` | `f6fec99` | 29 September 2026 | Initial release. The submitted baseline, with the 29 September model `Hospital_All_Processes_Simple_C8` and the results recorded against it. |
-| `submission-2026-10-20` | `dcb1ff6` | 19 October 2026 | Revised release, and the **current** state: it carries the V3 model, the 19 October acceptance run and this index. Later commits, if any, are documentation only. |
+| `submission-2026-10-20` | the tag target | 19 October 2026 | Revised release, and the **current** state: it carries the V3 model, the 19 October acceptance run and this index. This table cannot name its own commit, so read the SHA from the tag itself; any commit after it is documentation only. |
 
 Read the revised release first. Its working model is `Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`, process id `Hospital_All_Processes_V3_C8`; the run instructions are in [`Week3 Coursework/hospital-pathway/README.md`](<Week3 Coursework/hospital-pathway/README.md>). The pack is indexed in [`submissions/Submission_Index.pdf`](submissions/Submission_Index.pdf). The other tags are not releases: `standup-1-2026-09-16` marks the first standup and `sr3-2026-10-14` is the Sprint Review 3 snapshot.
 
