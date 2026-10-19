@@ -82,3 +82,5 @@ credentials.txt
 *.tmp
 *.swp
 *~
+# Word/Excel lock files, written while a document is open: ~$name.docx
+~$*
