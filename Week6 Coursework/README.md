@@ -50,7 +50,7 @@ Still held in more than one place, and **not** consolidated here because the cop
 | Abstraction note | `../docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md` | Maps the strategic stages to the operational tasks and states the gaps. |
 | i\* SD | `istar/V1_SD_diagram.txt` with `istar/V1_SD_diagram.png` | piStar 2.1.0 export. Nine aggregated actors; 13 of the 24 catalogue dependencies are shown. |
 | i\* SR | `istar/PB-16_V1_Admin_SR_reviewed_2026-10-13.txt`, `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt`, `istar/PB-16_V1_Finance_SR_reviewed_2026-10-13.txt` | One SR per reviewed service. Every element carries `Evidence` and a `V1 status`. |
-| Requirement traceability | `../docs/requirements-traceability-matrix.md` | BR-01 to BR-42: 12 supported, 26 partial, 4 unsupported, with the second-release plan in section 3. |
+| Requirement traceability | `../docs/requirements-traceability-matrix.md` | BR-01 to BR-42: initial release 12 supported, 26 partial, 4 unsupported; second-release refresh in section 4, 13 supported, 25 partial, 4 unsupported. Section 3 keeps the plan. |
 | V1 to V2 change note | `istar/PB-16_V1-V2_review-changes_2026-10-16.md` | Says what changed in each model and which commit carries it. |
 | Backlog numbering | `../docs/p3-product-backlog.md` | The single authoritative numbering. It lists product work only; `PB-30`, `PB-31`, `PB-34` and `PB-39` are this release. Coursework process work carries no `PB` number and is tracked in `plan/sprint3-4-plan_2026-10-16.md`, part B. |
 

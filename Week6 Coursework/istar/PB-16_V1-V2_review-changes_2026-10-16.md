@@ -66,7 +66,7 @@ A constraint the views state explicitly, and one that should be repeated when pr
 
 ## 5. Requirement traceability
 
-`../requirements/requirements-traceability-matrix.md` grades every business rule from BR-01 to BR-42 against the models, forms, workers and tests: **12 supported, 26 partial, 4 unsupported**, with the second-release plan in section 3.
+`../../docs/requirements-traceability-matrix.md` grades every business rule from BR-01 to BR-42 against the models, forms, workers and tests: **12 supported, 26 partial, 4 unsupported** for the 29 September release, with the second-release plan in section 3. The V2 refresh of those grades is in the same file, section 4: **13 supported, 25 partial, 4 unsupported** as of 2026-10-19.
 
 ## 6. What the review did not change
 
