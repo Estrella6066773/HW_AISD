@@ -32,3 +32,7 @@
 | Ruby | | | | | | |
 | Ryan | | | | | | |
 | Ender | | | | | | |
+
+> **Added after the session, 2026-10-19 — the class feedback sheet.** The sheet the blocker above treats as missing for the class-feedback half has been found and filed: `../feedback/Group_Feedback_2026-10-13.docx`, dated 13 October 11:35, four byte-identical copies received (MD5 `5E1C42B0DC30D683575A2D51FED149BF`). It holds 21 numbered entries, one per submission. Entry 7 is the one this repository treats as its own — keyed to it by `../../Ruby/2026-10-15/问题咨询总结.md`, with the three points there matching entry 7 word for word: "Implement role-based access control in Camunda; improve form validation, particularly for date selections; implement database integration to support data persistence."
+>
+> This closes the class-feedback part of the blocker and leaves the tutor part untouched. The sheet names no author and carries no tutor comment, so the recorded position at SU4 — that no tutor point exists in writing — stands as it was written. The sheet is a feedback source, not a standup record, and nothing has been added to any member's row: a row back-filled on 19 October would date that report before the session it claims to describe.

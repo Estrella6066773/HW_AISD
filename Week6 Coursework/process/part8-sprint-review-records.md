@@ -43,8 +43,8 @@ The specification asks for a record of what each review showed and a version or 
 | Key decisions | |
 | Evidence of integration (the increment shown, and how it holds together) | |
 | Testing or validation evidence | |
-| Feedback received | |
-| Backlog updates the feedback produced | |
+| Feedback received | The class feedback sheet was in the team's hands before this session: `Group_Feedback_2026-10-13.docx`, dated 13 October 11:35, four byte-identical copies received. Its entry for this submission, quoted verbatim: "1. Implement role-based access control in Camunda. 2. Improve form validation, particularly for date selections, to prevent invalid or inappropriate dates. 3. Implement database integration to support data persistence." Every point is about implementation maturity; none names a model, gateway or flow defect, which only one other entry on the sheet shares. The same themes run across the class — validation in 18 of 20 entries, roles in 14, persistence in 13, merging gateways in 12 — so the three points read as marking criteria rather than one reviewer's preference. Two were settled in the second release and one was deferred: dates and persistence done, access control deferred with `AT-03` still a recorded failure. Detail in `../feedback/feedback-response_2026-10-16.md`, the section "The class feedback sheet", then sections 1 and 3. No tutor point was received in writing, so nothing is recorded as tutor feedback |
+| Backlog updates the feedback produced | `PB-13` (forms) took the date and period constraints; `PB-30` (operational model) was not touched for this sheet, because no entry asks this submission for merging gateways — those answer Group 10's review and sit under `F-01`; `PB-22` (access control) is where the deferred point stays, as `F-11` |
 
 ### Retrospective after Sprint Review 3
 
