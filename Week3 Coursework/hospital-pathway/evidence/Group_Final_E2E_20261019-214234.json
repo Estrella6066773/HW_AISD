@@ -1,0 +1,150 @@
+{
+  "testId": "G07",
+  "caseReference": "GROUP-E2E-20261019-214234",
+  "startedAt": "2026-10-19T13:42:34.593433+00:00",
+  "method": "Camunda 8 REST /v2 with live Java worker application; fictional classroom data",
+  "processDefinitionId": "Hospital_All_Processes_V3_C8",
+  "tasks": [
+    {
+      "elementId": "Register",
+      "userTaskKey": "2251799813931110",
+      "formKey": "2251799813928667",
+      "submittedAction": "referral",
+      "submittedAt": "2026-10-19T13:42:35.721352+00:00",
+      "completionDate": null
+    },
+    {
+      "elementId": "ReviewReferral",
+      "userTaskKey": "2251799813931136",
+      "formKey": "2251799813928668",
+      "submittedAction": "accept",
+      "submittedAt": "2026-10-19T13:42:36.327367+00:00",
+      "completionDate": null
+    },
+    {
+      "elementId": "BookVisit",
+      "userTaskKey": "2251799813931164",
+      "formKey": "2251799813928661",
+      "submittedAction": "attended",
+      "submittedAt": "2026-10-19T13:42:36.900792+00:00",
+      "completionDate": null
+    },
+    {
+      "elementId": "ClinicalCare",
+      "userTaskKey": "2251799813931202",
+      "formKey": "2251799813928662",
+      "submittedAction": "treatment",
+      "submittedAt": "2026-10-19T13:42:37.998081+00:00",
+      "completionDate": null
+    },
+    {
+      "elementId": "DispatchLetter",
+      "userTaskKey": "2251799813931228",
+      "formKey": "2251799813928664",
+      "submittedAction": "sent",
+      "submittedAt": "2026-10-19T13:42:38.552054+00:00",
+      "completionDate": null
+    },
+    {
+      "elementId": "Funding",
+      "userTaskKey": "2251799813931260",
+      "formKey": "2251799813928666",
+      "submittedAction": "patient_payment_required",
+      "submittedAt": "2026-10-19T13:42:39.099966+00:00",
+      "completionDate": null
+    },
+    {
+      "elementId": "BookTreatment",
+      "userTaskKey": "2251799813931305",
+      "formKey": "2251799813928660",
+      "submittedAction": "ready",
+      "submittedAt": "2026-10-19T13:42:39.676123+00:00",
+      "completionDate": null
+    },
+    {
+      "elementId": "ClinicalCare",
+      "userTaskKey": "2251799813931341",
+      "formKey": "2251799813928662",
+      "submittedAction": "discharge",
+      "submittedAt": "2026-10-19T13:42:40.744044+00:00",
+      "completionDate": null
+    },
+    {
+      "elementId": "DispatchLetter",
+      "userTaskKey": "2251799813931362",
+      "formKey": "2251799813928664",
+      "submittedAction": "sent",
+      "submittedAt": "2026-10-19T13:42:41.310887+00:00",
+      "completionDate": null
+    }
+  ],
+  "engineVersion": "8.10.0-alpha5",
+  "definition": {
+    "processDefinitionId": "Hospital_All_Processes_V3_C8",
+    "processDefinitionKey": "2251799813928658",
+    "version": 1
+  },
+  "processInstanceKey": "2251799813931091",
+  "finalState": "COMPLETED",
+  "variables": {
+    "patientId": "GROUP-E2E-20261019-214234",
+    "notes": "Synthetic group acceptance case; no real patient data",
+    "priority": "routine",
+    "specialty": "general medicine",
+    "timeframeWeeks": 2,
+    "timeframeDays": 14,
+    "timeframeUnit": "weeks",
+    "action": "sent",
+    "clinicianId": "DEMO-CLINICIAN",
+    "decisionReason": "Synthetic teaching scenario",
+    "staffRole": "G07 / acceptance",
+    "timeframeAmount": 2,
+    "requestKind": "referral",
+    "urgentCase": false,
+    "timeframe": "2 weeks",
+    "RegisterNotes": "Synthetic group acceptance case; no real patient data",
+    "referralDecision": "accept",
+    "ReviewReferralNotes": "Synthetic group acceptance case; no real patient data",
+    "waitReason": "",
+    "appointmentTime": "",
+    "appointmentDate": "2026-10-20",
+    "visitOutcome": "attended",
+    "BookVisitNotes": "Synthetic group acceptance case; no real patient data",
+    "booking_occupancy_key": "GROUP-E2E-20261019-214234|treatment|2 weeks",
+    "case_reference": "GROUP-E2E-20261019-214234",
+    "booking_slot_status": "CONFIRMED",
+    "ClinicalCareNotes": "Synthetic group acceptance case; no real patient data",
+    "careDecision": "discharge",
+    "DispatchLetterNotes": "Synthetic group acceptance case; no real patient data",
+    "letterStatus": "sent",
+    "clinicLetterDispatchReference": "C-DISPATCH-GROUP-E2E-20261019-214234",
+    "clinicLetterDispatchStatus": "dispatched",
+    "charge_amount": "10.01",
+    "insurerReference": "",
+    "fundingStatus": "patient_paid",
+    "FundingNotes": "Synthetic group acceptance case; no real patient data",
+    "payment_requested_once": true,
+    "payment_date": "2026-10-19",
+    "transaction_reference": "TX-6A6C28A4",
+    "payment_status": "successful",
+    "BookTreatmentNotes": "Synthetic group acceptance case; no real patient data",
+    "treatmentSlotStatus": "ready",
+    "confirmation_sent": true,
+    "booking_reference": "BK-GROUP-E2E-20261019-214234"
+  },
+  "activeIncidents": [],
+  "assertions": {
+    "referralDecision": true,
+    "visitOutcome": true,
+    "careDecision": true,
+    "letterStatus": true,
+    "fundingStatus": true,
+    "payment_status": true,
+    "booking_slot_status": true,
+    "confirmation_sent": true,
+    "clinicLetterDispatchStatus": true,
+    "noActiveIncident": true
+  },
+  "result": "PASS",
+  "finishedAt": "2026-10-19T13:42:42.402249+00:00"
+}

@@ -31,7 +31,7 @@ AUTH = base64.b64encode(
         + os.environ.get("CAMUNDA_PASSWORD", "demo")
     ).encode()
 ).decode()
-PROCESS = "Hospital_All_Processes_Simple_C8"
+PROCESS = os.environ.get("CAMUNDA_PROCESS_ID", "Hospital_All_Processes_V3_C8")
 ROOT = Path(__file__).resolve().parents[1]
 STAMP = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
 PREFIX = "PB14-" + STAMP

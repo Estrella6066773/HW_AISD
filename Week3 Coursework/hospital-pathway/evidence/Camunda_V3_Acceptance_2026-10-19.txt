@@ -1,0 +1,186 @@
+Hospital pathway V3 acceptance evidence - 2026-10-19
+
+Repository commit: dbc0a33 (working tree dirty; see the change log at the end)
+Engine: Camunda 8.10.0-alpha5 (c8run, bundled JRE 25)
+  REST/Operate/Tasklist: http://localhost:8080 (user demo / demo)
+  gRPC: 127.0.0.1:26500
+Start command: c8run.exe start --disable-connectors
+  working directory: D:\OneDrive\MyProjects\AISD_Toolbox\tools\c8run-8.10.0-alpha5
+Workers: mvn -B spring-boot:run
+  working directory: Week3 Coursework/hospital-pathway
+  Java 23.0.1 (JAVA_HOME D:\Java\jdk-23), Spring Boot 4.0.5, camunda-spring-boot-starter 8.9.0
+
+Deployment: Hospital_All_Processes_V3.bpmn + 12 forms
+  deployment key: 2251799813928657
+  processDefinitionId: Hospital_All_Processes_V3_C8
+  processDefinitionKey: 2251799813928658, version 1
+
+RESULT SUMMARY
+  G07 full end-to-end path: PASS (COMPLETED)
+  PB-14 AT-01 main path:   PASS
+  PB-14 AT-02 reject path: PASS
+  PB-18 AT-03 unauthorised accept: FAIL (expected classroom limitation: no RBAC)
+  PB-18 AT-04 no suitable slot:    PASS
+  PB-18 AT-05 payment failure/retry: PASS
+  PB-18 AT-06 missing confirmation:  PASS
+
+ENVIRONMENT EVENT (recorded, not hidden)
+  The first c8run start (without --disable-connectors) was shut down by c8run at
+  21:38 because the bundled Connectors runtime never became healthy. That run had
+  already produced AT-01/AT-02 and AT-03..AT-06 results, but one G07 attempt failed
+  at 21:38:33 with an engine connection reset. All cases were re-run after the
+  restart at 21:40 with connectors disabled, so the files below come from one
+  continuous session. The engine itself stayed healthy; the shutdown was the
+  connector health check, not the process model.
+
+G07 INSTANCE
+  processInstanceKey: 2251799813931091
+  caseReference: GROUP-E2E-20261019-214234
+  finalState: COMPLETED
+  activeIncidents: none
+
+  ordered completed human tasks (elementId, userTaskKey, completionDate UTC):
+    Register        2251799813931110  2026-10-19T13:42:35.756Z
+    ReviewReferral  2251799813931136  2026-10-19T13:42:36.339Z
+    BookVisit       2251799813931164  2026-10-19T13:42:36.922Z
+    ClinicalCare    2251799813931202  2026-10-19T13:42:38.011Z
+    DispatchLetter  2251799813931228  2026-10-19T13:42:38.570Z
+    Funding         2251799813931260  2026-10-19T13:42:39.128Z
+    BookTreatment   2251799813931305  2026-10-19T13:42:39.689Z
+    ClinicalCare    2251799813931341  2026-10-19T13:42:40.770Z
+    DispatchLetter  2251799813931362  2026-10-19T13:42:41.332Z
+
+  final variables (raw JSON object from the REST/search result):
+{
+    "patientId": "GROUP-E2E-20261019-214234",
+    "notes": "Synthetic group acceptance case; no real patient data",
+    "priority": "routine",
+    "specialty": "general medicine",
+    "timeframeWeeks": 2,
+    "timeframeDays": 14,
+    "timeframeUnit": "weeks",
+    "action": "sent",
+    "clinicianId": "DEMO-CLINICIAN",
+    "decisionReason": "Synthetic teaching scenario",
+    "staffRole": "G07 / acceptance",
+    "timeframeAmount": 2,
+    "requestKind": "referral",
+    "urgentCase": false,
+    "timeframe": "2 weeks",
+    "RegisterNotes": "Synthetic group acceptance case; no real patient data",
+    "referralDecision": "accept",
+    "ReviewReferralNotes": "Synthetic group acceptance case; no real patient data",
+    "waitReason": "",
+    "appointmentTime": "",
+    "appointmentDate": "2026-10-20",
+    "visitOutcome": "attended",
+    "BookVisitNotes": "Synthetic group acceptance case; no real patient data",
+    "booking_occupancy_key": "GROUP-E2E-20261019-214234|treatment|2 weeks",
+    "case_reference": "GROUP-E2E-20261019-214234",
+    "booking_slot_status": "CONFIRMED",
+    "ClinicalCareNotes": "Synthetic group acceptance case; no real patient data",
+    "careDecision": "discharge",
+    "DispatchLetterNotes": "Synthetic group acceptance case; no real patient data",
+    "letterStatus": "sent",
+    "clinicLetterDispatchReference": "C-DISPATCH-GROUP-E2E-20261019-214234",
+    "clinicLetterDispatchStatus": "dispatched",
+    "charge_amount": "10.01",
+    "insurerReference": "",
+    "fundingStatus": "patient_paid",
+    "FundingNotes": "Synthetic group acceptance case; no real patient data",
+    "payment_requested_once": true,
+    "payment_date": "2026-10-19",
+    "transaction_reference": "TX-6A6C28A4",
+    "payment_status": "successful",
+    "BookTreatmentNotes": "Synthetic group acceptance case; no real patient data",
+    "treatmentSlotStatus": "ready",
+    "confirmation_sent": true,
+    "booking_reference": "BK-GROUP-E2E-20261019-214234"
+}
+
+  assertions:
+{
+    "referralDecision": true,
+    "visitOutcome": true,
+    "careDecision": true,
+    "letterStatus": true,
+    "fundingStatus": true,
+    "payment_status": true,
+    "booking_slot_status": true,
+    "confirmation_sent": true,
+    "clinicLetterDispatchStatus": true,
+    "noActiveIncident": true
+}
+
+  worker log excerpt (Week3 Coursework/hospital-pathway/target/spring-boot-run-20261019.log):
+    2026-10-19T21:42:36.948+08:00  INFO 18672 --- [hospital-pathway] [pool-2-thread-1] i.camunda.demo.hospital.BookingWorkers   : check-slot NEW occupancy=GROUP-E2E-20261019-214234|visit|2 weeks status=CONFIRMED
+    2026-10-19T21:42:38.594+08:00  INFO 18672 --- [hospital-pathway] [pool-2-thread-1] io.camunda.demo.hospital.LetterWorkers   : dispatch-clinic-letter case=GROUP-E2E-20261019-214234 status=sent ref=C-DISPATCH-GROUP-E2E-20261019-214234
+    2026-10-19T21:42:39.156+08:00  INFO 18672 --- [hospital-pathway] [pool-2-thread-1] i.c.d.hospital.HospitalPathwayWorkers    : request-payment SUCCESS case=GROUP-E2E-20261019-214234 amount=10.01 tx=TX-6A6C28A4 date=2026-10-19 (publishing payment-result)
+    2026-10-19T21:42:39.721+08:00  INFO 18672 --- [hospital-pathway] [pool-2-thread-1] i.camunda.demo.hospital.BookingWorkers   : reserve-appointment NEW occupancy=GROUP-E2E-20261019-214234|treatment|2 weeks status=CONFIRMED
+    2026-10-19T21:42:39.765+08:00  INFO 18672 --- [hospital-pathway] [pool-2-thread-1] i.c.d.hospital.HospitalPathwayWorkers    : send-booking-confirmation SENT case=GROUP-E2E-20261019-214234 booking=BK-GROUP-E2E-20261019-214234 (mocked correspondence)
+    2026-10-19T21:42:41.358+08:00  INFO 18672 --- [hospital-pathway] [pool-2-thread-1] io.camunda.demo.hospital.LetterWorkers   : dispatch-clinic-letter case=GROUP-E2E-20261019-214234 status=sent ref=C-DISPATCH-GROUP-E2E-20261019-214234
+
+PB-14 AND PB-18 ACCEPTANCE
+  AT-01 processInstanceKey: 2251799813930310
+  AT-02 processInstanceKey: 2251799813930247
+  AT-03 processInstanceKey: 2251799813930421
+  AT-04 processInstanceKey: 2251799813930493
+  AT-05 processInstanceKey: 2251799813930607
+  AT-06 processInstanceKey: 2251799813930876
+  AT-03 failure reason (verbatim from the PB-18 JSON):
+    "Case rule: secretaries must not accept referrals. Observed: Accept by staffRole Medical Secretary still created BookVisit. Proposed handling: implement role candidate groups / Identity (PB-22); keep this FAIL visible until then."
+
+RAW SCRIPT OUTPUT - python scripts/pb14_acceptance.py
+AT-02 PASS 2251799813930247
+AT-01 PASS 2251799813930310
+Evidence: D:\OneDrive\MyProjects\HW_AISD\Week3 Coursework\hospital-pathway\target\pb14-acceptance-20261019-214153.json
+
+RAW SCRIPT OUTPUT - python scripts/pb18_acceptance.py
+AT-03 FAIL 2251799813930421
+AT-04 PASS 2251799813930493
+AT-05 PASS 2251799813930607
+AT-06 PASS 2251799813930876
+Evidence: D:\OneDrive\MyProjects\HW_AISD\Week3 Coursework\hospital-pathway\target\pb18-acceptance-20261019-214159.json
+
+RAW SCRIPT OUTPUT - python scripts/g07_e2e_acceptance.py
+started 2251799813931091
+completed Register (2251799813931110)
+completed ReviewReferral (2251799813931136)
+completed BookVisit (2251799813931164)
+completed ClinicalCare (2251799813931202)
+completed DispatchLetter (2251799813931228)
+completed Funding (2251799813931260)
+completed BookTreatment (2251799813931305)
+completed ClinicalCare (2251799813931341)
+completed DispatchLetter (2251799813931362)
+result PASS
+Evidence: D:\OneDrive\MyProjects\HW_AISD\Week3 Coursework\hospital-pathway\evidence\Group_Final_E2E_20261019-214234.json
+
+EVIDENCE FILES
+  Group_Final_E2E_20261019-214234.json  (G07, PASS, full task trail)
+  PB-14_acceptance-run-log_2026-10-19.json
+  PB-18_acceptance-run-log_2026-10-19.json
+  Java_Clean_Build_Test_2026-10-19.txt
+
+BUILD AND UNIT TESTS AT THIS TREE
+  Command: mvn -B clean test (from Week3 Coursework/hospital-pathway)
+  Tests run: 19, Failures: 0, Errors: 0, Skipped: 0
+  BUILD SUCCESS, total time 27.093 s
+  CareChangeWorkersTest 7, ChargeAmountRulesTest 2, RefundWorkersTest 10.
+  This confirms the count recorded at 353f988, but the tree is now dbc0a33.
+
+FORM BINDING AUDIT
+  22 user tasks, 12 distinct formIds; 12 .form files; all parse as JSON;
+  every form file's internal id equals its filename; no orphan file.
+  simple_record is reused by 11 record-keeping tasks (Redirect, RecordDecline,
+  RecordDna, FundingIssue, AdminEnquiry, ClinicalEnquiry, FinanceEnquiry,
+  AuditReports, UrgentFinance, MonitorLetters, GetDocuments).
+  Full output: Java_Clean_Build_Test_2026-10-19.txt (form audit section).
+
+CHANGES MADE FOR THIS RUN
+  scripts/pb14_acceptance.py: PROCESS constant now reads CAMUNDA_PROCESS_ID,
+    defaulting to Hospital_All_Processes_V3_C8 (was the 29 Sep Simple_C8 model).
+  scripts/pb18_acceptance.py: same one-line change.
+  scripts/g07_e2e_acceptance.py: new minimal G07 driver (REST, same method as the
+    29 September run). It writes the JSON evidence above.
+  The BPMN and the 12 forms were not modified.
