@@ -1,8 +1,10 @@
 # Hospital Pathway
 
-Executable Camunda 8 pathway: BPMN + 11 forms + Java job types (shared payment/booking communication; member A refund/investigate; member B slots; member C letters/referrer notification; member D care-change).
+Executable Camunda 8 pathway: BPMN + 12 forms + Java job types (shared payment/booking communication; member A refund/investigate; member B slots; member C letters/referrer notification; member D care-change).
 
 This module is the shared implementation for both courses. The course-specific written submission indexes are in [BPM&EA](../../submissions/BPMEA/README.md) and [AISD](../../submissions/AISD/README.md); the same BPMN, forms and worker source are not duplicated there.
+
+`Week6 Coursework/code/` is a trimmed second copy of this module, kept so the Week 6 folder can be read on its own: its Java sources, tests and test resources are identical, but its `pom.xml` packages `../bpmn` and `../forms` from that folder. This module is the one the evidence and the commands below refer to; run one copy at a time, because both deploy the same model and subscribe to the same job types.
 
 The runnable classroom configuration is [`src/main/resources/application.yaml`](src/main/resources/application.yaml). A separate [configuration template](config/application.example.yaml) shows which connection and database settings can be supplied through environment variables. Start the application from this module directory so `./data/hospital-domain` resolves to the intended H2 file.
 
@@ -12,16 +14,25 @@ Payment follows the Est / Message Example pattern: **send task** `request-paymen
 
 **Order matters: start Camunda first, then Java. Keep both running.**
 
-### 1. Start local Camunda 8 (c8run / starter)
+### 1. Start local Camunda 8 (c8run)
 
-Confirm in browser:
+The recorded runs use Camunda **8.10.0-alpha5** through c8run. Start it from the tool directory with connectors disabled:
+
+```powershell
+cd D:\OneDrive\MyProjects\AISD_Toolbox\tools\c8run-8.10.0-alpha5
+.\c8run.exe start --disable-connectors
+```
+
+**`--disable-connectors` matters.** Without it, the bundled Connectors runtime fails its health check and c8run shuts the whole engine down mid-run: that happened at 21:38 on 19 October and the run was restarted at 21:40 with the flag. The process model does not use connectors, so nothing is lost. The environment note in [`evidence/Camunda_V3_Acceptance_2026-10-19.txt`](evidence/Camunda_V3_Acceptance_2026-10-19.txt) records the event.
+
+Wait until Operate answers, then confirm in the browser:
 
 | UI | URL | Login |
 |----|-----|-------|
 | Operate | http://localhost:8080/operate | demo / demo |
 | Tasklist | http://localhost:8080/tasklist | demo / demo |
 
-If your Camunda uses port **8090** instead of **8080**, change `rest-address` in `src/main/resources/application.yaml` to match.
+The worker application connects to REST at `http://127.0.0.1:8080` and gRPC at `127.0.0.1:26500`; both are checked in `src/main/resources/application.yaml`. If your Camunda uses port **8090** instead of **8080**, change `rest-address` (and the gRPC port if it moves) to match.
 
 ### 2. Start Java workers
 
@@ -29,16 +40,32 @@ Option A — terminal:
 
 ```bash
 cd "Week3 Coursework/hospital-pathway"
-mvn spring-boot:run
+mvn -B spring-boot:run
 ```
 
-Option B — IDE: open `HospitalPathwayApplication.java` → Run (Java 21).
+Option B — IDE: open `HospitalPathwayApplication.java` → Run.
 
 Keep the process running after `Started HospitalPathwayApplication`.
 
+`pom.xml` sets `java.version` to 21 and pulls Spring Boot 4.0.5 with `camunda-spring-boot-starter` 8.9.0, so the sources target Java 21. The 19 October acceptance run used **JDK 23.0.1** (`JAVA_HOME D:\Java\jdk-23`); any JDK from 21 up should work.
+
 ### 3. Start a process
 
-Tasklist → Processes → start `Hospital_All_Processes_V3_C8` (assignee `demo`). This is the full pathway diagram with the exclusive merge gateways. The module's `pom.xml` packages the model and the forms from `../../Week6 Coursework/`, so the V3 file is what gets deployed; the local `bpmn/Hospital_All_Processes_V2.bpmn` is kept as an earlier copy and is no longer packaged. The earlier `Hospital_All_Processes_Simple_C8` file is the previous diagram and does not contain the split visit outcomes.
+Tasklist → Processes → start `Hospital_All_Processes_V3_C8` (assignee `demo`). This is the full pathway diagram with the exclusive merge gateways. The module's `pom.xml` packages the model and the forms from `../../Week6 Coursework/`, so the V3 file is what gets deployed; the local `bpmn/Hospital_All_Processes_V2.bpmn` is kept as an earlier copy and is no longer packaged. The 29 September model, process id `Hospital_All_Processes_Simple_C8`, is `bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`; it does not contain the split visit outcomes and is not packaged either.
+
+On startup the application deploys `Hospital_All_Processes_V3.bpmn` plus the 12 forms, and refuses to start if fewer than 11 forms are found.
+
+### 4. Acceptance drivers
+
+Run these from this module directory, with Camunda and the Java workers already up:
+
+| Script | Cases | Needs |
+|--------|-------|-------|
+| `python scripts/pb14_acceptance.py` | AT-01 main path, AT-02 reject | Camunda; AT-01 also needs the Java `check-slot` worker |
+| `python scripts/pb18_acceptance.py` | AT-03 to AT-06 | Camunda and Java; AT-03 is expected to FAIL |
+| `python scripts/g07_e2e_acceptance.py` | G07 full path to `COMPLETED` | Camunda and Java; writes `evidence/Group_Final_E2E_<timestamp>.json` |
+
+All three read `CAMUNDA_PROCESS_ID` (default `Hospital_All_Processes_V3_C8`), `CAMUNDA_REST_URL` (default `http://localhost:8080`) and `CAMUNDA_USERNAME` / `CAMUNDA_PASSWORD` (default `demo` / `demo`).
 
 ## Do you need Java every time?
 
@@ -99,14 +126,16 @@ ORDER BY id;
 
 ## Verify member D
 
-Java 21, Maven and Python 3 are required. Run from this directory:
+JDK 21 or newer, Maven and Python 3 are required. Run from this directory:
 
 ```text
 mvn test
 python scripts/test_member_d_bpmn.py
 ```
 
-The Java tests use a separate in-memory H2 database. After starting Camunda and the formal Java application, run `python scripts/smoke_member_d.py` for seven real-engine scenarios (four change cases and three enquiry regression checks). This creates labelled synthetic process instances and submits user tasks through the API; it does not exercise browser form validation. Evidence is written under `target/`. Running it again creates a new set of test cases.
+The Java tests use a separate in-memory H2 database. The 19 October clean build ran 19 tests with no failures.
+
+`python scripts/smoke_member_d.py` is a live-engine script for seven change and enquiry scenarios (four change cases and three enquiry regression checks). It hard-codes `Hospital_All_Processes_Simple_C8`, the 29 September model, and takes no override, so it does **not** run against the V3 deployment this module now starts; it is kept for the initial-release record. Run it only against a deployment of `bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`. When it does run, it creates labelled synthetic process instances and submits user tasks through the API, does not exercise browser form validation, and writes evidence under `target/`; each run creates a new set of cases.
 
 ## Verify PB-14 acceptance (main path + reject)
 
