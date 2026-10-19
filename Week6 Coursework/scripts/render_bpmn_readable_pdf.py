@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Render the two BPMN models behind deliverable B-5 to readable A3 PDFs.
 
 What it renders
@@ -1068,8 +1068,8 @@ def config_operational() -> dict:
         "render_scale": 3,
         "scale": 0.85,
         "columns": [(140, 650), (650, 1870), (1870, 2835), (2835, 4090)],
-        "rows": [(60, 710), (710, 1260), (1260, 2040)],
-        "row_labels": ["Pool headers and Administration lane",
+        "rows": [(160, 710), (710, 1260), (1260, 2040)],
+        "row_labels": ["Administration lane (external pools are on the overview)",
                        "Clinical team lane",
                        "Finance lane and external payment provider"],
         "legend": legend,
