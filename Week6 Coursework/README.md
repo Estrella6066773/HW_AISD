@@ -12,7 +12,7 @@ The brief for this release asks for four things: the presentation, the updated s
 | Reviewed i\* SD and the three SR views | `istar/` |
 | Sprint 3 / Sprint 4 plan, in two parts: product work, then process work | `plan/` |
 | Standup and sprint-review records (Part 7 table, Part 8 record) | `process/` |
-| Standup 3 speaking cards — personal notes, not a submission artefact | `process/notes/` |
+| Standup 4 speaking cards — personal notes, not a submission artefact | `process/notes/` |
 | What still has to be solved before the deadline | `problems_2026-10-16.md` |
 | Strategic BPMN and the abstraction note | `../docs/strategic-bpmn/` |
 | Requirement traceability matrix | `../docs/requirements-traceability-matrix.md` |
@@ -78,7 +78,7 @@ These documents are not submission artefacts. They track the open questions:
 
 - `problems_2026-10-16.md` — what still has to be solved before 20 October, with the evidence for each point and the commands that reproduce it.
 - `open-items_2026-10-16.md` — the round-by-round record of what has been changed and the candidate next steps.
-- `process/notes/SU3_2026-10-16.md` — a member's private speaking draft for Standup 3. Personal preparation, not a record and not evidence; the record is `process/part7-standup-records.md`.
+- `process/notes/SU4_2026-10-16.md` — a member's private speaking draft for Stand-up 04 (the 16 October session). Personal preparation, not a record and not evidence; the record is `process/part7-standup-records.md`.
 
 ## Which work is a backlog item and which is not
 
