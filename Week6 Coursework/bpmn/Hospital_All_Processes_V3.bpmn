@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Hospital_V2_C8" targetNamespace="https://aisd.example/hospital/simple-c8" exporter="Camunda Modeler" exporterVersion="5.51.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.10.0">
   <bpmn:collaboration id="Collaboration_Hospital_V2">
-    <bpmn:participant id="Hospital" name="HOSPITAL V2 | Patient pathway and supporting services" processRef="Hospital_All_Processes_V2_C8" />
+    <bpmn:participant id="Hospital" name="HOSPITAL V3 | Patient pathway and supporting services" processRef="Hospital_All_Processes_V3_C8" />
     <bpmn:participant id="Referrer" name="Referring organisation | GP / Other hospital" />
     <bpmn:participant id="Patient" name="Patient / authorised representative" />
     <bpmn:participant id="PaymentProvider" name="External Payment Service Provider" />
@@ -36,8 +36,8 @@ P7: unknown payment confirmation -&gt; investigate; never automatically charge a
 P11/P12: formal clinical change first; Finance approves affected payments / refunds. P13: identity, authorised roles and audit apply throughout.</bpmn:text>
     </bpmn:textAnnotation>
   </bpmn:collaboration>
-  <bpmn:process id="Hospital_All_Processes_V2_C8" name="Hospital - Version 2 (Merging Gateway Improvement)" isExecutable="true">
-    <bpmn:documentation>Release 2 working model, separate from the preserved Release 1 file. Current change: four explicit exclusive merges before BookVisit, ClinicalCare, Funding and BookTreatment. This is the first V2 improvement, not a claim that all later-release work is finished. A later V2 change adds exclusive merges before VisitOutcome, ClinicalChange and MarkPaymentInvestigate. Ryan's four merges stay in place. Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Payment follows the Est / Message Example pattern: send task request-payment publishes BPMN message payment-result (correlation key case_reference); intermediate catch PaymentReceived consumes it. Booking confirmation is send task send-booking-confirmation (worker completes the job; no separate inbound message wait). There are no timers. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. User tasks use dedicated Camunda forms with hardcoded select options (no valuesKey). Task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving.</bpmn:documentation>
+  <bpmn:process id="Hospital_All_Processes_V3_C8" name="Hospital - Version 3 (Feedback merges and forms)" isExecutable="true">
+    <bpmn:documentation>Release 2 working model, separate from the preserved Release 1 file. Current change: four explicit exclusive merges before BookVisit, ClinicalCare, Funding and BookTreatment. This is the first V2 improvement, not a claim that all later-release work is finished. A later V2 change adds exclusive merges before VisitOutcome, ClinicalChange and MarkPaymentInvestigate. Ryan's four merges stay in place. Five further exclusive merges now sit in front of Register, GetDocuments, ReviewReferral, DispatchLetter and FinanceAdjustment. Student demonstration based on the supplied hospital case and completed P1-P13 table. All flow nodes are expanded on one canvas; no collapsed subprocesses. Existing-care changes, enquiries and reports have independent request triggers represented by the Register request choice. P13 controls apply at every task, not only the reporting branch. Most external interactions and elapsed time are simulated manually via user tasks. Payment follows the Est / Message Example pattern: send task request-payment publishes BPMN message payment-result (correlation key case_reference); intermediate catch PaymentReceived consumes it. Booking confirmation is send task send-booking-confirmation (worker completes the job; no separate inbound message wait). There are no timers. Hospital roles are grouped into administrative, clinical and finance lanes. Demo tasks are assigned to demo; production permissions, immutable audit storage, real integrations and clinical rules are outside this classroom model. User tasks use dedicated Camunda forms with hardcoded select options (no valuesKey). Task-specific output mappings feed FEEL gateway conditions. Blank/invalid decisions return to the relevant human review rather than silently approving.</bpmn:documentation>
     <bpmn:laneSet id="Hospital_Lanes">
       <bpmn:lane id="Finance" name="Finance">
         <bpmn:flowNodeRef>Funding</bpmn:flowNodeRef>
@@ -55,6 +55,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>MarkPaymentInvestigate</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_Funding</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_MarkPaymentInvestigate</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_FinanceAdjustment</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Clinical" name="Clinical team">
         <bpmn:flowNodeRef>ReviewReferral</bpmn:flowNodeRef>
@@ -66,7 +67,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>UrgentAuthorisation</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ClinicalChange</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ChangeValid</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>MoneyAffected</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ChangeRoute</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ClinicalEnquiry</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndClinicalEnquiry</bpmn:flowNodeRef>
@@ -77,16 +77,15 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>Join_ClinicalChange</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>RecordDecline</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>RecordDna</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_ReviewReferral</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>MoneyAffected</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Admin" name="Administration">
         <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Register</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>RequestType</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>GetDocuments</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Redirect</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>BookVisit</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>VisitOutcome</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>AwaitAttendance</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>DispatchLetter</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>BookTreatment</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>TreatmentOutcome</bpmn:flowNodeRef>
@@ -107,44 +106,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <bpmn:flowNodeRef>Join_VisitOutcome</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>MonitorLetters</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>CheckVisitSlot</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_DispatchLetter</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Register</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_Register</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GetDocuments</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_GetDocuments</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AwaitAttendance</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Start" name="Start request">
       <bpmn:outgoing>Flow_01</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Register" name="P1 / P10 / P13&#10;Register request;&#10;check documents and ID">
-      <bpmn:documentation>Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. The requested period is either 1 to 365 days or 1 to 52 weeks; V2 stores timeframe as that number followed by the unit. Demo only; enter no real patient or card data.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="register_request" />
-        <zeebe:assignmentDefinition assignee="demo" />
-        <zeebe:ioMapping>
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
-          <zeebe:input source="= if is defined(specialty) then specialty else null" target="specialty" />
-          <zeebe:input source="= if is defined(priority) then priority else null" target="priority" />
-          <zeebe:input source="= if is defined(timeframeUnit) then timeframeUnit else &#34;&#34;" target="timeframeUnit" />
-          <zeebe:input source="= if is defined(timeframeDays) then timeframeDays else &#34;&#34;" target="timeframeDays" />
-          <zeebe:input source="= if is defined(timeframeWeeks) then timeframeWeeks else &#34;&#34;" target="timeframeWeeks" />
-          <zeebe:input source="= null" target="action" />
-          <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:output source="= patientId" target="patientId" />
-          <zeebe:output source="= specialty" target="specialty" />
-          <zeebe:output source="= priority" target="priority" />
-          <zeebe:output source="= timeframeUnit" target="timeframeUnit" />
-          <zeebe:output source="= timeframeDays" target="timeframeDays" />
-          <zeebe:output source="= timeframeWeeks" target="timeframeWeeks" />
-          <zeebe:output source="= if timeframeUnit = &#34;weeks&#34; then timeframeWeeks else timeframeDays" target="timeframeAmount" />
-          <zeebe:output source="= if timeframeUnit = &#34;weeks&#34; then string(timeframeWeeks) + &#34; weeks&#34; else string(timeframeDays) + &#34; days&#34;" target="timeframe" />
-          <zeebe:output source="= notes" target="RegisterNotes" />
-          <zeebe:output source="= action" target="requestKind" />
-          <zeebe:output source="= false" target="urgentCase" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_01</bpmn:incoming>
-      <bpmn:incoming>Flow_24</bpmn:incoming>
-      <bpmn:incoming>Flow_30</bpmn:incoming>
-      <bpmn:outgoing>Flow_02</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:exclusiveGateway id="RequestType" name="Request&#10;type?" default="Flow_24">
       <bpmn:incoming>Flow_02</bpmn:incoming>
       <bpmn:outgoing>Flow_03</bpmn:outgoing>
@@ -156,27 +128,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_23</bpmn:outgoing>
       <bpmn:outgoing>Flow_24</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="GetDocuments" name="P1 / P11&#10;Obtain missing or&#10;formally authorised records">
-      <bpmn:documentation>Request and record receipt of missing referral material, or obtain a formally authorised modification request. Do not treat an email or phone call as treatment-change authorisation. In the classroom, completing this task simulates the reply; do not wait for an external message.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="simple_record" />
-        <zeebe:assignmentDefinition assignee="demo" />
-        <zeebe:ioMapping>
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
-          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
-          <zeebe:input source="= null" target="action" />
-          <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:output source="= patientId" target="patientId" />
-          <zeebe:output source="= staffRole" target="staffRole" />
-          <zeebe:output source="= notes" target="GetDocumentsNotes" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_19</bpmn:incoming>
-      <bpmn:incoming>Flow_29</bpmn:incoming>
-      <bpmn:incoming>Flow_52</bpmn:incoming>
-      <bpmn:outgoing>Flow_30</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:userTask id="ReviewReferral" name="P2&#10;Consultant reviews referral;&#10;records decision and reason">
       <bpmn:documentation>Only an authorised Consultant decides acceptance. Record decision, clinician identity and reason. Urgent referrals and requested timeframes must be passed to booking staff.</bpmn:documentation>
       <bpmn:extensionElements>
@@ -196,8 +147,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:output source="= action" target="referralDecision" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_03</bpmn:incoming>
-      <bpmn:incoming>Flow_34</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_ReviewReferral</bpmn:incoming>
       <bpmn:outgoing>Flow_04</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="ReferralDecision" name="Referral&#10;decision?" default="Flow_34">
@@ -256,7 +206,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:output source="= staffRole" target="staffRole" />
           <zeebe:output source="= notes" target="BookVisitNotes" />
           <zeebe:output source="= action" target="visitOutcome" />
-          <zeebe:output source="= appointmentDate" target="appointmentDate" />
+          <zeebe:output source="= if is defined(appointmentDate) then appointmentDate else attendedOn" target="appointmentDate" />
           <zeebe:output source="= appointmentTime" target="appointmentTime" />
           <zeebe:output source="= waitReason" target="waitReason" />
         </zeebe:ioMapping>
@@ -273,24 +223,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_Declined</bpmn:outgoing>
       <bpmn:outgoing>Flow_Dna</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="AwaitAttendance" name="P3&#10;Appointment booked;&#10;await attendance">
-      <bpmn:documentation>Reached only when BookVisit records visitOutcome=booked. The patient has a slot and has not attended. Completing this task writes a new visitOutcome and returns to VisitOutcome, so attended, cancellation, decline and DNA do not share the booking path.</bpmn:documentation>
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="await_attendance" />
-        <zeebe:assignmentDefinition assignee="demo" />
-        <zeebe:ioMapping>
-          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
-          <zeebe:input source="= null" target="action" />
-          <zeebe:input source="= &#34;&#34;" target="notes" />
-          <zeebe:output source="= patientId" target="patientId" />
-          <zeebe:output source="= notes" target="AwaitAttendanceNotes" />
-          <zeebe:output source="= action" target="visitOutcome" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_Booked</bpmn:incoming>
-      <bpmn:outgoing>Flow_AwaitReturn</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:userTask id="RecordDecline" name="P4&#10;Record declined&#10;appointment">
       <bpmn:documentation>Reached only when visitOutcome=declined. Records the decline, then the clinician decides the pathway at ClinicalChange. This is not the patient-cancelled path and not DNA.</bpmn:documentation>
       <bpmn:extensionElements>
@@ -380,8 +312,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:output source="= action" target="letterStatus" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_09</bpmn:incoming>
-      <bpmn:incoming>Flow_38</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_DispatchLetter</bpmn:incoming>
       <bpmn:outgoing>Flow_10</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="CarePlan" name="Clinical&#10;plan?" default="Flow_43">
@@ -558,11 +489,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:outgoing>Flow_52</bpmn:outgoing>
       <bpmn:outgoing>Flow_53</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="MoneyAffected" name="Financial&#10;impact?" default="Flow_55">
-      <bpmn:incoming>Flow_53</bpmn:incoming>
-      <bpmn:outgoing>Flow_54</bpmn:outgoing>
-      <bpmn:outgoing>Flow_55</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:userTask id="FinanceAdjustment" name="P7 / P11 / P12&#10;Approve and record refund,&#10;payment transfer or retention">
       <bpmn:documentation>Only authorised Finance approves full/partial refunds or payment transfer/retention. Record decision, amount, reason and provider result linked to patient, appointment and original transaction. Clinical staff supply treatment facts but do not approve refunds. Pending provider results remain open for recorded follow-up. The V2 form shows the original charge and does not write it back. A partial refund lower than that charge, or any other invalid amount, fails request-refund once.</bpmn:documentation>
       <bpmn:extensionElements>
@@ -584,8 +510,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <zeebe:output source="= action" target="financeAdjustment" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_54</bpmn:incoming>
-      <bpmn:incoming>Flow_58</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_FinanceAdjustment</bpmn:incoming>
       <bpmn:outgoing>Flow_56</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="AdjustmentOutcome" name="Adjustment&#10;recorded?" default="Flow_58">
@@ -746,17 +671,17 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_Join_MarkPaymentInvestigate</bpmn:incoming>
       <bpmn:outgoing>Flow_67b</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_01" sourceRef="Start" targetRef="Register" />
-    <bpmn:sequenceFlow id="Flow_24" name="Select type" sourceRef="RequestType" targetRef="Register" />
-    <bpmn:sequenceFlow id="Flow_30" name="Recheck" sourceRef="GetDocuments" targetRef="Register" />
+    <bpmn:sequenceFlow id="Flow_01" sourceRef="Start" targetRef="Join_Register" />
+    <bpmn:sequenceFlow id="Flow_24" name="Select type" sourceRef="RequestType" targetRef="Join_Register" />
+    <bpmn:sequenceFlow id="Flow_30" name="Recheck" sourceRef="GetDocuments" targetRef="Join_Register" />
     <bpmn:sequenceFlow id="Flow_02" sourceRef="Register" targetRef="RequestType" />
-    <bpmn:sequenceFlow id="Flow_03" name="Referral" sourceRef="RequestType" targetRef="ReviewReferral">
+    <bpmn:sequenceFlow id="Flow_03" name="Referral" sourceRef="RequestType" targetRef="Join_ReviewReferral">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "referral"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_18" name="Admin enquiry" sourceRef="RequestType" targetRef="AdminEnquiry">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "enquiry_admin"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_19" name="Missing documents" sourceRef="RequestType" targetRef="GetDocuments">
+    <bpmn:sequenceFlow id="Flow_19" name="Missing documents" sourceRef="RequestType" targetRef="Join_GetDocuments">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "referral_incomplete"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_20" name="Clinical enquiry" sourceRef="RequestType" targetRef="ClinicalEnquiry">
@@ -771,11 +696,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_23" name="Reports" sourceRef="RequestType" targetRef="AuditReports">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= requestKind = "report"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_29" name="More info" sourceRef="ReferralDecision" targetRef="GetDocuments">
+    <bpmn:sequenceFlow id="Flow_29" name="More info" sourceRef="ReferralDecision" targetRef="Join_GetDocuments">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "more_information"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_52" name="Missing / invalid" sourceRef="ChangeValid" targetRef="GetDocuments" />
-    <bpmn:sequenceFlow id="Flow_34" name="Select decision" sourceRef="ReferralDecision" targetRef="ReviewReferral" />
+    <bpmn:sequenceFlow id="Flow_34" name="Select decision" sourceRef="ReferralDecision" targetRef="Join_ReviewReferral" />
     <bpmn:sequenceFlow id="Flow_04" sourceRef="ReviewReferral" targetRef="ReferralDecision" />
     <bpmn:sequenceFlow id="Flow_05" name="Accept" sourceRef="ReferralDecision" targetRef="Join_BookVisit">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= referralDecision = "accept"</bpmn:conditionExpression>
@@ -826,11 +751,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_41" name="Review / approve" sourceRef="MonitorLetters" targetRef="Join_ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_43" name="Select care plan" sourceRef="CarePlan" targetRef="Join_ClinicalCare" />
     <bpmn:sequenceFlow id="Flow_08" sourceRef="ClinicalCare" targetRef="UrgentFollowupNeeded" />
-    <bpmn:sequenceFlow id="Flow_09" name="No" sourceRef="UrgentFollowupNeeded" targetRef="DispatchLetter" />
+    <bpmn:sequenceFlow id="Flow_09" name="No" sourceRef="UrgentFollowupNeeded" targetRef="Join_DispatchLetter" />
     <bpmn:sequenceFlow id="Flow_37" name="Yes" sourceRef="UrgentFollowupNeeded" targetRef="UrgentFinance">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= urgentCase = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_38" name="Follow-up recorded" sourceRef="UrgentFinance" targetRef="DispatchLetter" />
+    <bpmn:sequenceFlow id="Flow_38" name="Follow-up recorded" sourceRef="UrgentFinance" targetRef="Join_DispatchLetter" />
     <bpmn:sequenceFlow id="Flow_10" sourceRef="DispatchLetter" targetRef="DispatchClinicLetter" />
     <bpmn:sequenceFlow id="Flow_11" name="Sent" sourceRef="LetterOutcome" targetRef="CarePlan">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= letterStatus = "sent"</bpmn:conditionExpression>
@@ -885,11 +810,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
     <bpmn:sequenceFlow id="Flow_53" name="Authorised" sourceRef="ChangeValid" targetRef="MoneyAffected">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= changeTarget != "invalid"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_54" name="Yes" sourceRef="MoneyAffected" targetRef="FinanceAdjustment">
+    <bpmn:sequenceFlow id="Flow_54" name="Yes" sourceRef="MoneyAffected" targetRef="Join_FinanceAdjustment">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= moneyAffected = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_55" name="No" sourceRef="MoneyAffected" targetRef="ChangeRoute" />
-    <bpmn:sequenceFlow id="Flow_58" name="Pending / retry" sourceRef="AdjustmentOutcome" targetRef="FinanceAdjustment" />
+    <bpmn:sequenceFlow id="Flow_58" name="Pending / retry" sourceRef="AdjustmentOutcome" targetRef="Join_FinanceAdjustment" />
     <bpmn:sequenceFlow id="Flow_56" sourceRef="FinanceAdjustment" targetRef="RequestRefund" />
     <bpmn:sequenceFlow id="Flow_56b" sourceRef="RequestRefund" targetRef="AdjustmentOutcome" />
     <bpmn:sequenceFlow id="Flow_57" name="Recorded" sourceRef="AdjustmentOutcome" targetRef="ChangeRoute">
@@ -998,6 +923,119 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmn:incoming>Flow_06_check</bpmn:incoming>
       <bpmn:outgoing>Flow_06b</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_Join_Register" sourceRef="Join_Register" targetRef="Register" />
+    <bpmn:sequenceFlow id="Flow_Join_GetDocuments" sourceRef="Join_GetDocuments" targetRef="GetDocuments" />
+    <bpmn:sequenceFlow id="Flow_Join_ReviewReferral" sourceRef="Join_ReviewReferral" targetRef="ReviewReferral" />
+    <bpmn:exclusiveGateway id="Join_DispatchLetter" gatewayDirection="Converging">
+      <bpmn:documentation>Exclusive merge before DispatchLetter. Pass-through only. The ordinary letter path and the urgent-finance follow-up meet here.</bpmn:documentation>
+      <bpmn:incoming>Flow_09</bpmn:incoming>
+      <bpmn:incoming>Flow_38</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_DispatchLetter</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_Join_DispatchLetter" sourceRef="Join_DispatchLetter" targetRef="DispatchLetter" />
+    <bpmn:exclusiveGateway id="Join_FinanceAdjustment" gatewayDirection="Converging">
+      <bpmn:documentation>Exclusive merge before FinanceAdjustment. Pass-through only. A new financial impact and a pending retry meet here.</bpmn:documentation>
+      <bpmn:incoming>Flow_54</bpmn:incoming>
+      <bpmn:incoming>Flow_58</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_FinanceAdjustment</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_Join_FinanceAdjustment" sourceRef="Join_FinanceAdjustment" targetRef="FinanceAdjustment" />
+    <bpmn:userTask id="Register" name="P1 / P10 / P13&#10;Register request;&#10;check documents and ID">
+      <bpmn:documentation>Medical Secretaries / Call Handling: identify patient and existing case; check referral documents without judging clinical suitability. Select request type. Record enquiry priority, owner and receipt time; flag urgent clinical concerns immediately. Existing-care requests must reference the authorised case. The requested period is either 1 to 365 days or 1 to 52 weeks; V2 stores timeframe as that number followed by the unit. Demo only; enter no real patient or card data.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="register_request" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(specialty) then specialty else null" target="specialty" />
+          <zeebe:input source="= if is defined(priority) then priority else null" target="priority" />
+          <zeebe:input source="= if is defined(timeframeUnit) then timeframeUnit else &#34;&#34;" target="timeframeUnit" />
+          <zeebe:input source="= if is defined(timeframeDays) then timeframeDays else &#34;&#34;" target="timeframeDays" />
+          <zeebe:input source="= if is defined(timeframeWeeks) then timeframeWeeks else &#34;&#34;" target="timeframeWeeks" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= specialty" target="specialty" />
+          <zeebe:output source="= priority" target="priority" />
+          <zeebe:output source="= timeframeUnit" target="timeframeUnit" />
+          <zeebe:output source="= timeframeDays" target="timeframeDays" />
+          <zeebe:output source="= timeframeWeeks" target="timeframeWeeks" />
+          <zeebe:output source="= if timeframeUnit = &#34;weeks&#34; then timeframeWeeks else timeframeDays" target="timeframeAmount" />
+          <zeebe:output source="= if timeframeUnit = &#34;weeks&#34; then string(timeframeWeeks) + &#34; weeks&#34; else string(timeframeDays) + &#34; days&#34;" target="timeframe" />
+          <zeebe:output source="= notes" target="RegisterNotes" />
+          <zeebe:output source="= action" target="requestKind" />
+          <zeebe:output source="= false" target="urgentCase" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Join_Register</bpmn:incoming>
+      <bpmn:outgoing>Flow_02</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Join_Register" gatewayDirection="Converging">
+      <bpmn:documentation>Exclusive merge before Register. Pass-through only: no condition and no default. Completes the Group 10 merging-gateway feedback for paths that still entered this task directly.</bpmn:documentation>
+      <bpmn:incoming>Flow_01</bpmn:incoming>
+      <bpmn:incoming>Flow_24</bpmn:incoming>
+      <bpmn:incoming>Flow_30</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_Register</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="GetDocuments" name="P1 / P11&#10;Obtain missing or&#10;formally authorised records">
+      <bpmn:documentation>Request and record receipt of missing referral material, or obtain a formally authorised modification request. Do not treat an email or phone call as treatment-change authorisation. In the classroom, completing this task simulates the reply; do not wait for an external message.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="simple_record" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= if is defined(staffRole) then staffRole else &#34;&#34;" target="staffRole" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= staffRole" target="staffRole" />
+          <zeebe:output source="= notes" target="GetDocumentsNotes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Join_GetDocuments</bpmn:incoming>
+      <bpmn:incoming>Flow_52</bpmn:incoming>
+      <bpmn:outgoing>Flow_30</bpmn:outgoing>
+      <bpmn:outgoing>Flow_10r4iy5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_10r4iy5" sourceRef="GetDocuments" targetRef="Join_GetDocuments" />
+    <bpmn:exclusiveGateway id="Join_GetDocuments" gatewayDirection="Converging">
+      <bpmn:documentation>Exclusive merge before GetDocuments. Pass-through only. Missing documents, more information and an invalid change request meet here.</bpmn:documentation>
+      <bpmn:incoming>Flow_19</bpmn:incoming>
+      <bpmn:incoming>Flow_29</bpmn:incoming>
+      <bpmn:incoming>Flow_10r4iy5</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_GetDocuments</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Join_ReviewReferral" gatewayDirection="Converging">
+      <bpmn:documentation>Exclusive merge before ReviewReferral. Pass-through only. The new referral and the decision-gateway default both enter here.</bpmn:documentation>
+      <bpmn:incoming>Flow_03</bpmn:incoming>
+      <bpmn:incoming>Flow_34</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_ReviewReferral</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="MoneyAffected" name="Financial&#10;impact?" default="Flow_55">
+      <bpmn:incoming>Flow_53</bpmn:incoming>
+      <bpmn:outgoing>Flow_54</bpmn:outgoing>
+      <bpmn:outgoing>Flow_55</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="AwaitAttendance" name="P3&#10;Appointment booked;&#10;await attendance">
+      <bpmn:documentation>Reached only when BookVisit records visitOutcome=booked. The patient has a slot and has not attended. Completing this task writes a new visitOutcome and returns to VisitOutcome, so attended, cancellation, decline and DNA do not share the booking path.</bpmn:documentation>
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="await_attendance" />
+        <zeebe:assignmentDefinition assignee="demo" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= if is defined(patientId) then patientId else &#34;&#34;" target="patientId" />
+          <zeebe:input source="= null" target="action" />
+          <zeebe:input source="= &#34;&#34;" target="notes" />
+          <zeebe:output source="= patientId" target="patientId" />
+          <zeebe:output source="= notes" target="AwaitAttendanceNotes" />
+          <zeebe:output source="= action" target="visitOutcome" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Booked</bpmn:incoming>
+      <bpmn:outgoing>Flow_AwaitReturn</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
   <bpmn:message id="Message_PaymentResult" name="payment-result">
     <bpmn:extensionElements>
@@ -1033,9 +1071,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <dc:Bounds x="559" y="356" width="41" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GetDocuments_di" bpmnElement="GetDocuments" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="1040" y="540" width="220" height="100" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ReviewReferral_di" bpmnElement="ReviewReferral" bioc:stroke="#263746" bioc:fill="#eaf8f0">
         <dc:Bounds x="880" y="840" width="220" height="100" />
       </bpmndi:BPMNShape>
@@ -1063,11 +1098,8 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="VisitOutcome_di" bpmnElement="VisitOutcome" isMarkerVisible="true">
         <dc:Bounds x="1880" y="380" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1915" y="406" width="49" height="27" />
+          <dc:Bounds x="1825" y="426" width="49" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="AwaitAttendance_di" bpmnElement="AwaitAttendance" bioc:stroke="#263746" bioc:fill="#edf5ff">
-        <dc:Bounds x="3760" y="260" width="200" height="90" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="RecordDecline_di" bpmnElement="RecordDecline" bioc:stroke="#263746" bioc:fill="#eaf8f0">
         <dc:Bounds x="3760" y="760" width="200" height="90" />
@@ -1093,7 +1125,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="CarePlan_di" bpmnElement="CarePlan" isMarkerVisible="true">
         <dc:Bounds x="2380" y="870" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2382" y="833" width="36" height="27" />
+          <dc:Bounds x="2352" y="833" width="36" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Join_Funding" bpmnElement="Join_Funding" isMarkerVisible="true">
@@ -1153,12 +1185,6 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
           <dc:Bounds x="1163" y="1160" width="74" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="MoneyAffected_di" bpmnElement="MoneyAffected" isMarkerVisible="true">
-        <dc:Bounds x="1380" y="1110" width="40" height="40" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1378" y="1060" width="45" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="FinanceAdjustment_di" bpmnElement="FinanceAdjustment" bioc:stroke="#263746" bioc:fill="#fff3e5">
         <dc:Bounds x="1320" y="1620" width="220" height="100" />
       </bpmndi:BPMNShape>
@@ -1171,7 +1197,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNShape id="ChangeRoute_di" bpmnElement="ChangeRoute" isMarkerVisible="true">
         <dc:Bounds x="2080" y="1110" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2069" y="1058" width="63" height="27" />
+          <dc:Bounds x="2118" y="1086" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="AdminEnquiry_di" bpmnElement="AdminEnquiry" bioc:stroke="#263746" bioc:fill="#edf5ff">
@@ -1283,26 +1309,52 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <dc:Bounds x="1705" y="340" width="110" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_DispatchLetter_di" bpmnElement="Join_DispatchLetter" isMarkerVisible="true">
+        <dc:Bounds x="2020" y="380" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_FinanceAdjustment_di" bpmnElement="Join_FinanceAdjustment" isMarkerVisible="true">
+        <dc:Bounds x="1260" y="1650" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_Register_di" bpmnElement="Join_Register" isMarkerVisible="true">
+        <dc:Bounds x="360" y="260" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GetDocuments_di" bpmnElement="GetDocuments" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="1020" y="570" width="220" height="100" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_GetDocuments_di" bpmnElement="Join_GetDocuments" isMarkerVisible="true">
+        <dc:Bounds x="1183" y="430" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_ReviewReferral_di" bpmnElement="Join_ReviewReferral" isMarkerVisible="true">
+        <dc:Bounds x="970" y="750" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="MoneyAffected_di" bpmnElement="MoneyAffected" isMarkerVisible="true">
+        <dc:Bounds x="1320" y="1110" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1318" y="1060" width="45" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AwaitAttendance_di" bpmnElement="AwaitAttendance" bioc:stroke="#263746" bioc:fill="#edf5ff">
+        <dc:Bounds x="3760" y="245" width="200" height="90" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01" bioc:stroke="#1768a6">
-        <di:waypoint x="270" y="400" />
-        <di:waypoint x="310" y="400" />
+        <di:waypoint x="250" y="380" />
+        <di:waypoint x="250" y="280" />
+        <di:waypoint x="360" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_24_di" bpmnElement="Flow_24" bioc:stroke="#667481">
         <di:waypoint x="610" y="380" />
-        <di:waypoint x="610" y="320" />
-        <di:waypoint x="420" y="320" />
-        <di:waypoint x="420" y="350" />
+        <di:waypoint x="610" y="280" />
+        <di:waypoint x="400" y="280" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="462" y="303" width="55" height="14" />
+          <dc:Bounds x="572" y="310" width="55" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_30_di" bpmnElement="Flow_30" bioc:stroke="#667481">
-        <di:waypoint x="1150" y="540" />
-        <di:waypoint x="1150" y="300" />
-        <di:waypoint x="420" y="300" />
-        <di:waypoint x="420" y="350" />
+        <di:waypoint x="1130" y="570" />
+        <di:waypoint x="1130" y="280" />
+        <di:waypoint x="400" y="280" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="753" y="276" width="43" height="14" />
+          <dc:Bounds x="1091" y="414" width="43" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02_di" bpmnElement="Flow_02" bioc:stroke="#1768a6">
@@ -1311,10 +1363,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_di" bpmnElement="Flow_03" bioc:stroke="#1768a6">
         <di:waypoint x="630" y="400" />
-        <di:waypoint x="1010" y="400" />
-        <di:waypoint x="1010" y="840" />
+        <di:waypoint x="989" y="400" />
+        <di:waypoint x="989" y="751" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1020" y="456" width="40" height="14" />
+          <dc:Bounds x="936" y="448" width="40" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18_di" bpmnElement="Flow_18" bioc:stroke="#667481">
@@ -1329,10 +1381,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Flow_19_di" bpmnElement="Flow_19" bioc:stroke="#667481">
         <di:waypoint x="610" y="380" />
         <di:waypoint x="610" y="360" />
-        <di:waypoint x="1130" y="360" />
-        <di:waypoint x="1130" y="540" />
+        <di:waypoint x="1206" y="360" />
+        <di:waypoint x="1206" y="433" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="902" y="336" width="95" height="14" />
+          <dc:Bounds x="952" y="336" width="95" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_20_di" bpmnElement="Flow_20" bioc:stroke="#667481">
@@ -1377,17 +1429,18 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Flow_29_di" bpmnElement="Flow_29" bioc:stroke="#667481">
         <di:waypoint x="1190" y="880" />
         <di:waypoint x="1190" y="780" />
-        <di:waypoint x="1150" y="780" />
-        <di:waypoint x="1150" y="640" />
+        <di:waypoint x="1250" y="780" />
+        <di:waypoint x="1250" y="450" />
+        <di:waypoint x="1223" y="450" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1155" y="733" width="46" height="14" />
+          <dc:Bounds x="1197" y="693" width="46" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_52_di" bpmnElement="Flow_52" bioc:stroke="#667481">
         <di:waypoint x="1200" y="1110" />
         <di:waypoint x="1200" y="1020" />
         <di:waypoint x="1130" y="1020" />
-        <di:waypoint x="1130" y="640" />
+        <di:waypoint x="1130" y="670" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1146" y="995" width="78" height="14" />
         </bpmndi:BPMNLabel>
@@ -1395,10 +1448,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Flow_34_di" bpmnElement="Flow_34" bioc:stroke="#667481">
         <di:waypoint x="1200" y="910" />
         <di:waypoint x="1200" y="960" />
-        <di:waypoint x="990" y="960" />
-        <di:waypoint x="990" y="940" />
+        <di:waypoint x="850" y="960" />
+        <di:waypoint x="850" y="770" />
+        <di:waypoint x="970" y="770" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1003" y="943" width="74" height="14" />
+          <dc:Bounds x="896" y="943" width="74" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_di" bpmnElement="Flow_04" bioc:stroke="#1768a6">
@@ -1406,28 +1460,29 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="1180" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05_di" bpmnElement="Flow_05" bioc:stroke="#1768a6">
-        <di:waypoint x="1220" y="890" />
-        <di:waypoint x="1280" y="890" />
+        <di:waypoint x="1200" y="870" />
+        <di:waypoint x="1200" y="830" />
+        <di:waypoint x="1280" y="830" />
         <di:waypoint x="1280" y="400" />
         <di:waypoint x="1390" y="400" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1243" y="516" width="34" height="14" />
+          <dc:Bounds x="1323" y="414" width="34" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_31_di" bpmnElement="Flow_31" bioc:stroke="#667481">
-        <di:waypoint x="1210" y="880" />
-        <di:waypoint x="1210" y="800" />
-        <di:waypoint x="1430" y="800" />
+        <di:waypoint x="1200" y="870" />
+        <di:waypoint x="1200" y="790" />
+        <di:waypoint x="1430" y="790" />
         <di:waypoint x="1430" y="640" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1266" y="776" width="41" height="14" />
+          <dc:Bounds x="1315" y="763" width="41" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_33_di" bpmnElement="Flow_33" bioc:stroke="#667481">
         <di:waypoint x="1220" y="890" />
         <di:waypoint x="1300" y="890" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1240" y="866" width="32" height="14" />
+          <dc:Bounds x="1254" y="873" width="32" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_32_di" bpmnElement="Flow_32" bioc:stroke="#667481">
@@ -1503,7 +1558,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="1410" y="780" />
         <di:waypoint x="1410" y="870" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1747" y="783" width="45" height="14" />
+          <dc:Bounds x="1757" y="763" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_36_di" bpmnElement="Flow_36" bioc:stroke="#667481">
@@ -1513,31 +1568,31 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="885" y="1000" />
         <di:waypoint x="885" y="1080" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1419" y="976" width="84" height="14" />
+          <dc:Bounds x="1668" y="1003" width="84" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_Booked_di" bpmnElement="Flow_Booked" bioc:stroke="#1768a6">
-        <di:waypoint x="1911" y="391" />
-        <di:waypoint x="1930" y="391" />
-        <di:waypoint x="1930" y="280" />
-        <di:waypoint x="3760" y="299" />
+        <di:waypoint x="1900" y="380" />
+        <di:waypoint x="1900" y="285" />
+        <di:waypoint x="3760" y="285" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2710" y="215" width="38" height="14" />
+          <dc:Bounds x="2692" y="212" width="38" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_AwaitReturn_di" bpmnElement="Flow_AwaitReturn" bioc:stroke="#1768a6">
-        <di:waypoint x="3860" y="350" />
+        <di:waypoint x="3860" y="335" />
         <di:waypoint x="3860" y="680" />
-        <di:waypoint x="1910" y="680" />
-        <di:waypoint x="1910" y="280" />
+        <di:waypoint x="1920" y="680" />
+        <di:waypoint x="1920" y="280" />
         <di:waypoint x="1860" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_Declined_di" bpmnElement="Flow_Declined" bioc:stroke="#667481">
-        <di:waypoint x="1910" y="420" />
-        <di:waypoint x="1910" y="805" />
+        <di:waypoint x="1920" y="400" />
+        <di:waypoint x="1940" y="400" />
+        <di:waypoint x="1940" y="805" />
         <di:waypoint x="3760" y="805" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2700" y="780" width="48" height="14" />
+          <dc:Bounds x="2720" y="780" width="43" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_DeclineToChange_di" bpmnElement="Flow_DeclineToChange" bioc:stroke="#667481">
@@ -1549,11 +1604,12 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="750" y="1150" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_Dna_di" bpmnElement="Flow_Dna" bioc:stroke="#667481">
-        <di:waypoint x="1890" y="420" />
-        <di:waypoint x="1890" y="1025" />
+        <di:waypoint x="1890" y="410" />
+        <di:waypoint x="1880" y="410" />
+        <di:waypoint x="1880" y="1025" />
         <di:waypoint x="3760" y="1025" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2700" y="1000" width="72" height="14" />
+          <dc:Bounds x="2696" y="1000" width="69" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_DnaToChange_di" bpmnElement="Flow_DnaToChange" bioc:stroke="#667481">
@@ -1574,12 +1630,12 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Flow_39_di" bpmnElement="Flow_39" bioc:stroke="#667481">
         <di:waypoint x="2580" y="400" />
         <di:waypoint x="2590" y="400" />
-        <di:waypoint x="2590" y="800" />
-        <di:waypoint x="1370" y="800" />
+        <di:waypoint x="2590" y="790" />
+        <di:waypoint x="1370" y="790" />
         <di:waypoint x="1370" y="890" />
         <di:waypoint x="1390" y="890" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2417" y="813" width="87" height="14" />
+          <dc:Bounds x="2196" y="770" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_41_di" bpmnElement="Flow_41" bioc:stroke="#667481">
@@ -1589,7 +1645,7 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="1410" y="980" />
         <di:waypoint x="1410" y="910" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1681" y="953" width="85" height="14" />
+          <dc:Bounds x="1667" y="963" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_43_di" bpmnElement="Flow_43" bioc:stroke="#667481">
@@ -1608,11 +1664,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Flow_09_di" bpmnElement="Flow_09" bioc:stroke="#1768a6">
         <di:waypoint x="1820" y="870" />
         <di:waypoint x="1820" y="720" />
-        <di:waypoint x="2040" y="720" />
-        <di:waypoint x="2040" y="400" />
-        <di:waypoint x="2080" y="400" />
+        <di:waypoint x="2000" y="720" />
+        <di:waypoint x="2000" y="400" />
+        <di:waypoint x="2020" y="400" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1915" y="696" width="15" height="14" />
+          <dc:Bounds x="2002" y="414" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_37_di" bpmnElement="Flow_37" bioc:stroke="#667481">
@@ -1625,11 +1681,10 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_38_di" bpmnElement="Flow_38" bioc:stroke="#667481">
         <di:waypoint x="2090" y="1670" />
-        <di:waypoint x="2060" y="1670" />
-        <di:waypoint x="2060" y="400" />
-        <di:waypoint x="2080" y="400" />
+        <di:waypoint x="2040" y="1670" />
+        <di:waypoint x="2040" y="420" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1952" y="1023" width="95" height="14" />
+          <dc:Bounds x="2042" y="1310" width="95" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10" bioc:stroke="#1768a6">
@@ -1691,11 +1746,11 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_59_di" bpmnElement="Flow_59" bioc:stroke="#667481">
         <di:waypoint x="2120" y="1130" />
-        <di:waypoint x="2740" y="1130" />
-        <di:waypoint x="2740" y="1450" />
+        <di:waypoint x="2710" y="1130" />
+        <di:waypoint x="2710" y="1450" />
         <di:waypoint x="2770" y="1450" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2400" y="1106" width="50" height="14" />
+          <dc:Bounds x="2385" y="1106" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13_di" bpmnElement="Flow_13" bioc:stroke="#1768a6">
@@ -1807,11 +1862,12 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
         <di:waypoint x="3540" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_61_di" bpmnElement="Flow_61" bioc:stroke="#667481">
-        <di:waypoint x="2120" y="1130" />
-        <di:waypoint x="2660" y="1130" />
+        <di:waypoint x="2100" y="1110" />
+        <di:waypoint x="2100" y="1080" />
+        <di:waypoint x="2660" y="1080" />
         <di:waypoint x="2660" y="910" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2347" y="1106" width="50" height="14" />
+          <dc:Bounds x="2336" y="1056" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_62_di" bpmnElement="Flow_62" bioc:stroke="#667481">
@@ -1835,32 +1891,35 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_53_di" bpmnElement="Flow_53" bioc:stroke="#667481">
         <di:waypoint x="1220" y="1130" />
-        <di:waypoint x="1380" y="1130" />
+        <di:waypoint x="1320" y="1130" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1265" y="1106" width="53" height="14" />
+          <dc:Bounds x="1238" y="1106" width="53" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_54_di" bpmnElement="Flow_54" bioc:stroke="#667481">
-        <di:waypoint x="1400" y="1150" />
-        <di:waypoint x="1400" y="1620" />
+        <di:waypoint x="1340" y="1150" />
+        <di:waypoint x="1340" y="1560" />
+        <di:waypoint x="1220" y="1560" />
+        <di:waypoint x="1220" y="1670" />
+        <di:waypoint x="1260" y="1670" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1410" y="1375" width="18" height="14" />
+          <dc:Bounds x="1252" y="1310" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_55_di" bpmnElement="Flow_55" bioc:stroke="#667481">
-        <di:waypoint x="1420" y="1130" />
+        <di:waypoint x="1360" y="1130" />
         <di:waypoint x="2080" y="1130" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1502" y="1106" width="15" height="14" />
+          <dc:Bounds x="1450" y="1106" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_58_di" bpmnElement="Flow_58" bioc:stroke="#667481">
         <di:waypoint x="1740" y="1650" />
         <di:waypoint x="1740" y="1580" />
-        <di:waypoint x="1430" y="1580" />
-        <di:waypoint x="1430" y="1620" />
+        <di:waypoint x="1280" y="1580" />
+        <di:waypoint x="1280" y="1650" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1530" y="1556" width="72" height="14" />
+          <dc:Bounds x="1446" y="1556" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_56_di" bpmnElement="Flow_56" bioc:stroke="#667481">
@@ -1928,6 +1987,34 @@ P11/P12: formal clinical change first; Finance approves affected payments / refu
       <bpmndi:BPMNEdge id="Edge_Flow_Join_MarkPaymentInvestigate" bpmnElement="Flow_Join_MarkPaymentInvestigate">
         <di:waypoint x="3195" y="1600" />
         <di:waypoint x="3195" y="1630" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Join_Register_di" bpmnElement="Flow_Join_Register">
+        <di:waypoint x="380" y="300" />
+        <di:waypoint x="380" y="325" />
+        <di:waypoint x="420" y="325" />
+        <di:waypoint x="420" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Join_GetDocuments_di" bpmnElement="Flow_Join_GetDocuments">
+        <di:waypoint x="1183" y="450" />
+        <di:waypoint x="1100" y="450" />
+        <di:waypoint x="1100" y="570" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Join_ReviewReferral_di" bpmnElement="Flow_Join_ReviewReferral">
+        <di:waypoint x="990" y="790" />
+        <di:waypoint x="990" y="840" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Join_DispatchLetter_di" bpmnElement="Flow_Join_DispatchLetter">
+        <di:waypoint x="2060" y="400" />
+        <di:waypoint x="2080" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Join_FinanceAdjustment_di" bpmnElement="Flow_Join_FinanceAdjustment">
+        <di:waypoint x="1300" y="1670" />
+        <di:waypoint x="1320" y="1670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10r4iy5_di" bpmnElement="Flow_10r4iy5">
+        <di:waypoint x="1150" y="570" />
+        <di:waypoint x="1150" y="450" />
+        <di:waypoint x="1183" y="450" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Referrer_di" bpmnElement="Referrer" isHorizontal="true">
         <dc:Bounds x="150" y="80" width="900" height="60" />

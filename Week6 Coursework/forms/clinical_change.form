@@ -1,0 +1,119 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P11 / P12 — Authorise modification\n\n_Demo only._",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "Patient / case ID",
+      "validate": {
+        "required": true,
+        "pattern": "^[A-Za-z][A-Za-z0-9-]{2,30}$"
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      },
+      "description": "Start with a letter, then letters, digits or a hyphen. Example: DEMO-001."
+    },
+    {
+      "id": "Field_clinicianId",
+      "type": "textfield",
+      "key": "clinicianId",
+      "label": "Clinician ID / name",
+      "validate": {
+        "required": true,
+        "pattern": "^[A-Za-z][A-Za-z0-9 .'-]{1,40}$"
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      },
+      "description": "Start with a letter. Digits are allowed after that. A value made only of digits is rejected."
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "Outcome / next action",
+      "values": [
+        {
+          "label": "Authorise treatment change - no financial impact",
+          "value": "reschedule_unpaid"
+        },
+        {
+          "label": "Authorise treatment change - Finance review required",
+          "value": "reschedule_paid"
+        },
+        {
+          "label": "Authorise follow-up / rebook - no financial impact",
+          "value": "follow_up_unpaid"
+        },
+        {
+          "label": "Authorise follow-up / rebook - Finance review required",
+          "value": "follow_up_paid"
+        },
+        {
+          "label": "Authorise stop / discharge - no financial impact",
+          "value": "discharge_unpaid"
+        },
+        {
+          "label": "Authorise stop / discharge - Finance review required",
+          "value": "discharge_paid"
+        },
+        {
+          "label": "Formal clinical authorisation is missing",
+          "value": "invalid"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Modification notes",
+      "validate": {
+        "required": true,
+        "minLength": 2
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "Complete task",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "clinical_change",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

@@ -54,16 +54,16 @@
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
-			<!-- Source assets live in bpmn/ and forms/; packaged to classpath for deploy. -->
+			<!-- Deploy the Week 6 V3 diagram and forms, not the Release 1 BPMN in this module. -->
 			<resource>
-				<directory>${project.basedir}/bpmn</directory>
+				<directory>${project.basedir}/../../Week6 Coursework/bpmn</directory>
 				<includes>
-					<include>*.bpmn</include>
+					<include>Hospital_All_Processes_V3.bpmn</include>
 				</includes>
 				<targetPath>bpmn</targetPath>
 			</resource>
 			<resource>
-				<directory>${project.basedir}/forms</directory>
+				<directory>${project.basedir}/../../Week6 Coursework/forms</directory>
 				<includes>
 					<include>*.form</include>
 				</includes>

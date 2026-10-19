@@ -31,7 +31,7 @@ public class HospitalPathwayApplication {
 		return args -> {
 			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 			Resource[] bpmnFiles = resolver.getResources(
-					"classpath*:bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn");
+					"classpath*:bpmn/Hospital_All_Processes_V3.bpmn");
 			Resource[] formFiles = resolver.getResources("classpath*:forms/*.form");
 			if (bpmnFiles.length != 1) {
 				throw new IllegalStateException("未找到全院流程图");
@@ -46,7 +46,7 @@ public class HospitalPathwayApplication {
 			}
 
 			DeploymentEvent deployment = command.send().join();
-			LOG.info("已部署 Hospital_All_Processes_Simple_C8，部署键 {}", deployment.getKey());
+			LOG.info("已部署 Hospital_All_Processes_V3_C8，部署键 {}", deployment.getKey());
 			LOG.info("已部署 {} 个表单（硬编码下拉，无 valuesKey）", formFiles.length);
 			// Ruby：request-refund、mark-payment-investigate（另主讲既有 request-payment）
 			LOG.info(

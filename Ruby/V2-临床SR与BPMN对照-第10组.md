@@ -1,0 +1,542 @@
+# SR 格子对应 BPMN 方框原名
+
+# SR elements mapped to the original BPMN box names
+
+左边是临床 SR 图上的英文，下面附中文。右边每个 BPMN 方框先写 `Hospital_All_Processes_V2.bpmn` 上的英文原文，紧接着写 `Hospital_All_Processes_V2_中文.bpmn` 上同一方框的中文。换行各自按图抄。一个 SR 格子经常对上好几个方框。质量云（help / hurt 的终点）没有方框。
+
+The left side is the English on the clinical SR diagram, with Chinese under it. Each BPMN box on the right is given first in the original English on `Hospital_All_Processes_V2.bpmn`, then in the Chinese of the same box on `Hospital_All_Processes_V2_中文.bpmn`. Line breaks follow each diagram. One SR element often maps to several boxes. Quality clouds (the ends of help / hurt links) have no boxes.
+
+P13 那一块在这张临床 SR 里没有格子。它单独列在文末。
+
+The P13 block has no element on this clinical SR. It is listed on its own at the end.
+
+这张临床 SR 不用再改。它已经把临床要的结果和依赖画全。下面缺的是 V2 上属于行政、财务或等待的步骤，故意不画进这张临床图。诊后信的 `[P]` 也留着：V2 还没有单独的批准字段，不能把格子改成已经做到。
+
+This clinical SR does not need another change. It already draws the clinical results and the dependencies. What is missing below belongs to admin, finance or a wait on V2, and is left off this clinical view on purpose. The letter stays `[P]`: V2 still has no separate approval field, so the element cannot be redrawn as already achieved.
+
+---
+
+## 概括
+
+## Summary
+
+| SR 上的字 / Wording on the SR | BPMN 方框 / BPMN boxes | 为什么这样对应 / Why this mapping |
+| --- | --- | --- |
+| Checked referral package [M]<br>已核验的转诊材料包 [M]<br>D4 Checked referral package<br>D4 已核验的转诊材料包 | P1 / P10 / P13<br>Register request;<br>check documents and ID<br>登记请求；<br>核验材料与身份<br><br>P1 / P11<br>Obtain missing or<br>formally authorised records<br>补齐缺失或<br>正式授权的记录 | 临床要的是已经核过的一包材料，所以对上行政泳道里核验材料和补齐记录。方框第一行还有 P10 / P13，是因为咨询和报表也从登记进；对上 D4 的是正文里的 check documents and ID。<br>Clinical work needs a package that has already been checked, so this maps to the admin boxes that check documents and obtain missing records. The first line also carries P10 / P13 because enquiries and reports enter through registration. What matches D4 is check documents and ID in the box text. |
+| Review referral; record decision [M]<br>审阅转诊并记录决定 [M]<br>Referral decision recorded<br>转诊决定已记录<br>D2 Referral decision recorded<br>D2 转诊决定已记录 | P2<br>Consultant reviews referral;<br>records decision and reason<br>顾问审阅转诊；<br>记录决定和理由<br><br>Referral<br>decision?<br>转诊<br>决定？ | D2 要的是决定已经写下，不是必须接受。审阅任务写下决定，网关把接受、拒绝、转科、还要材料都算已经记录。<br>D2 asks for a decision that has been written down, not for acceptance. The review task writes the decision. The gateway counts accept, reject, redirect and more information as recorded. |
+| D5 Authorised acceptance before a new patient appointment<br>D5 新患者预约之前须先有已授权的接受 | 只有 `Referral decision?` / `转诊决定？` 的 **Accept** / **接受** 线进入<br>Only the **Accept** / **接受** flow from `Referral decision?` / `转诊决定？` enters<br><br>P3 / P4 / P12<br>Book visit; notify patient;<br>record attendance / contact<br>预约就诊；通知患者；<br>记录到诊 / 联系 | 新患者第一次门诊必须先被接受。只有 Accept 进入预约方框。拒绝、转科、还要材料不到这里。<br>A first appointment for a new patient requires prior acceptance. Only Accept enters the booking box. Reject, redirect and more information do not. |
+| Assess patient; record clinical notes [M/P]<br>评估患者并记录临床笔记 [M/P]<br>Record care decision [M] (treatment / follow-up / discharge)<br>记录护理决定 [M]（治疗 / 复诊 / 出院）<br>Clinical care and plan recorded<br>临床护理与计划已记录<br>D12 Appropriate clinical assessment and care<br>D12 适当的临床评估与护理 | P5 / P9 / P12<br>Consult / treat / review;<br>authorise care and clinic letter<br>问诊 / 治疗 / 复查；<br>授权护理和诊后信<br><br>Clinical<br>plan?<br>临床<br>计划？ | 评估、护理决定和 D12 是同一次到诊后的临床工作，所以对上同一个问诊方框。Clinical plan? 把这个方框交出的治疗、复诊、出院分开。只有 Attended 才进入，没来的人没有评估。标 [M/P] 是因为人来判断，系统不自动诊断。<br>Assessment, the care decision and D12 are the clinical work after one attendance, so they share the consultation box. Clinical plan? splits the treatment, follow-up and discharge this box hands over. Only Attended enters. A patient who did not come has no assessment. [M/P] means a person judges, and the system does not diagnose. |
+| Prepare / approve clinic letter [P]<br>撰写 / 批准诊后信 [P]<br>Clinic letter clinically approved [P]<br>诊后信已获临床批准 [P]<br>D7 Clinic letter clinically approved<br>D7 诊后信已获临床批准 | 批准写在上面那个 P5 方框的 *authorise … clinic letter* / *授权……诊后信*<br>Approval is written in *authorise … clinic letter* / *授权……诊后信* on the P5 box above<br><br>P9<br>Check and dispatch<br>approved clinic letter<br>核对并发送<br>已批准的诊后信<br><br>P9<br>Dispatch clinic<br>letter<br>发出诊后信 | 橙色六边形没有自己的方框。批准写在问诊方框后半句。标 [P] 是因为还没有单独批准字段，也挡不住没批准就发出去。行政真正发出去是后面两个 P9。<br>The orange hexagon has no box of its own. Approval is the second half of the consultation box. It stays [P] because there is still no separate approval field, and nothing stops an unapproved letter being sent. Admin actually sends it in the two P9 boxes. |
+| Clinic and treatment appointments arranged after authorisation<br>授权之后安排门诊与治疗预约<br>D8 Arrange clinic and treatment appointments<br>D8 安排门诊与治疗预约 | 门诊：<br>Outpatient:<br>P3 / P4 / P12<br>Book visit; notify patient;<br>record attendance / contact<br>预约就诊；通知患者；<br>记录到诊 / 联系<br><br>P3<br>Check / reserve<br>outpatient slot<br>查询 / 占用<br>门诊号源<br><br>治疗：<br>Treatment:<br>P6<br>Confirm authorised treatment<br>and investigation appointments<br>确认已授权的治疗<br>和检查预约<br><br>P6<br>Reserve treatment<br>slot / resources<br>占用治疗<br>号源 / 资源<br><br>P6<br>Send booking<br>confirmation<br>发送预约<br>确认 | D8 是授权之后由行政订号，所以对上两段行政方框。门诊订号在 Accept 之后。治疗订号在临床计划选了治疗并且经费通过之后，或紧急授权之后。<br>D8 is admin booking a slot after the matching authorisation, so it maps to two stretches of admin boxes. The outpatient booking is after Accept. The treatment booking is after the plan is treatment and funding has cleared, or after urgent authorisation. |
+| Authorise urgent care; record reason [M]<br>授权紧急护理并记录理由 [M]<br>Urgent pathway supported (when required)<br>需要时支持紧急路径<br>Clinical work not delayed solely by payment confirmation gaps<br>临床工作不因付款确认缺口而单独延误<br>D18 Urgent care not blocked solely by payment delay<br>D18 紧急护理不因付款延误而单独受阻 | P8<br>Clinician authorises<br>urgent care with reason<br>临床人员授权紧急治疗<br>并写下理由<br><br>Urgent care<br>authorised?<br>紧急治疗<br>已授权？<br><br>P8<br>Finance follows up<br>after urgent care<br>紧急治疗后<br>财务跟进 | 授权并写下理由就是这个 P8 临床任务。紧急路径是这一整段。D18 没有自己的方框：Authorised 不等付款，先去订治疗，财务事后跟进。Hold 回到经费，不是这朵云。<br>Authorising and recording the reason is this P8 clinical task. The urgent pathway is the whole stretch. D18 has no box of its own: Authorised does not wait for payment, books treatment first, and finance follows up afterwards. Hold returns to funding and is not this cloud. |
+| Clinical pathway managed appropriately<br>临床路径得到适当管理 | 没有单独方框。就是上面 D2、D12、D7、D8 那几块加在一起<br>No box of its own. It is D2, D12, D7 and D8 above, taken together | 它是 D2、D12、D7、D8 四件都有，所以没有单独方框。<br>It is D2, D12, D7 and D8 all present, so it has no box of its own. |
+| Safe clinical decisions<br>安全的临床决定 | 没有方框<br>No box | 这是云。审阅转诊和写下护理决定的 help 在这里结束，不是下一个任务。<br>This is a cloud. The help links from reviewing the referral and recording the care decision end here. It is not the next task. |
+| Timely clinical care<br>及时的临床护理 | 没有方框<br>No box | 这是云。评估会拖时间，所以那条是 hurt。紧急授权的 help 也在这里结束。<br>This is a cloud. Assessment takes time, so that link is hurt. The help from urgent authorisation also ends here. |
+
+方框中文取自中文图，与英文图是同一批方框。左边 SR 英文下面的中文是对照，不是 SR 图上的字。
+
+The Chinese on the boxes is taken from the Chinese diagram. These are the same boxes as on the English diagram. The Chinese under the SR English on the left is a gloss. It is not wording on the SR diagram.
+
+---
+
+## 1. 材料：Checked referral package [M]、D4
+
+## 1. Documents: Checked referral package [M], D4
+
+SR 这一格要的是一包已经核过的转诊材料。临床依赖行政。
+
+This SR element is a referral package that has already been checked. Clinical work depends on admin.
+
+对应两个方框，都在行政泳道：
+
+It maps to two boxes, both in the admin lane:
+
+```
+P1 / P10 / P13
+Register request;
+check documents and ID
+```
+
+```
+P1 / P10 / P13
+登记请求；
+核验材料与身份
+```
+
+```
+P1 / P11
+Obtain missing or
+formally authorised records
+```
+
+```
+P1 / P11
+补齐缺失或
+正式授权的记录
+```
+
+材料不够时，`Request type?` / `请求类型？` 或 `Referral decision?` / `转诊决定？` 走 **Missing documents** / **材料缺失**，或 **More info** / **补充材料**，进第二个方框，再回到第一个。
+
+When the documents are incomplete, `Request type?` / `请求类型？` or `Referral decision?` / `转诊决定？` follows **Missing documents** / **材料缺失**, or **More info** / **补充材料**, enters the second box, then returns to the first.
+
+这个登记方框第一行写了 P1 / P10 / P13，是因为咨询和报表也从这里进。对上 D4 的是方框正文里的 *check documents and ID* / *核验材料与身份*。P13 的报表是另一个方框，见文末。
+
+The first line of this registration box says P1 / P10 / P13 because enquiries and reports also enter here. What matches D4 is *check documents and ID* / *核验材料与身份* in the box text. The P13 report is a different box; see the end.
+
+---
+
+## 2. 转诊决定：Review referral; record decision [M]、Referral decision recorded、D2
+
+## 2. Referral decision: Review referral; record decision [M], Referral decision recorded, D2
+
+对应临床泳道：
+
+This maps to the clinical lane:
+
+```
+P2
+Consultant reviews referral;
+records decision and reason
+```
+
+```
+P2
+顾问审阅转诊；
+记录决定和理由
+```
+
+接着是网关：
+
+Then the gateway:
+
+```
+Referral
+decision?
+```
+
+```
+转诊
+决定？
+```
+
+四条出去的线都算“决定已经写下”：
+
+All four outgoing flows count as “the decision has been recorded”:
+
+| 网关上的线 / Flow on the gateway | 下一方框 / Next box | 为什么这样对应 / Why this mapping |
+| --- | --- | --- |
+| Accept<br>接受 | 见下一节 D5<br>See D5 in the next section | 决定已经写下，而且是接受，所以才进入新患者预约。这是 D5。<br>The decision is recorded, and it is acceptance, so the flow enters a new-patient appointment. This is D5. |
+| Reject<br>拒绝 | 结束事件 `Referral rejected` / `转诊被拒绝`<br>End event `Referral rejected` / `转诊被拒绝` | 拒绝也是已经写下的决定，所以仍算 D2。转诊在这里结束，没有预约。<br>A rejection is still a written decision, so it still counts as D2. The referral ends here, with no appointment. |
+| Redirect<br>转科 | `P2 Record authorised redirect and notify referrer` / `P2 记录获授权的转科并通知转诊方`，然后 `P2 Notify referrer` / `P2 通知转诊方`，结束在 `Referral closed` / `转诊关闭`<br>`P2 Record authorised redirect and notify referrer` / `P2 记录获授权的转科并通知转诊方`, then `P2 Notify referrer` / `P2 通知转诊方`, ending at `Referral closed` / `转诊关闭` | 转科同样是已经写下的决定。记下转科并通知转诊方之后关闭，不到新门诊。<br>A redirect is also a written decision. It is recorded, the referrer is told, and the referral closes. It does not reach a new clinic visit. |
+| More info<br>补充材料 | `P1 / P11 Obtain missing or formally authorised records` / `P1 / P11 补齐缺失或正式授权的记录` | 还要材料也是已经写下的决定。先回到补记录，材料齐了再审一次。<br>Asking for more information is also a written decision. The flow returns for the missing records, and the referral is reviewed again once they arrive. |
+
+---
+
+## 3. D5 Authorised acceptance before a new patient appointment
+
+## 3. D5 新患者预约之前须先有已授权的接受
+
+SR 没有再画一个新任务。D5 就是上一节那个 P2 方框，再加上网关的一条线。
+
+The SR does not draw a new task. D5 is the P2 box from the previous section, plus one flow on the gateway.
+
+只有这条：
+
+Only this flow:
+
+`Referral decision?` / `转诊决定？` → **Accept** / **接受** →
+
+```
+P3 / P4 / P12
+Book visit; notify patient;
+record attendance / contact
+```
+
+```
+P3 / P4 / P12
+预约就诊；通知患者；
+记录到诊 / 联系
+```
+
+Reject、Redirect、More info 不到这个方框。
+
+Reject, Redirect and More info do not reach this box.
+
+---
+
+## 4. 问诊和护理决定：Assess patient、Record care decision、Clinical care and plan recorded、D12
+
+## 4. Consultation and care decision: Assess patient, Record care decision, Clinical care and plan recorded, D12
+
+这四句 SR 对上临床泳道的同一个方框：
+
+These four SR wordings map to the same box in the clinical lane:
+
+```
+P5 / P9 / P12
+Consult / treat / review;
+authorise care and clinic letter
+```
+
+```
+P5 / P9 / P12
+问诊 / 治疗 / 复查；
+授权护理和诊后信
+```
+
+- *Assess patient; record clinical notes* 对上 *Consult / treat / review* / *问诊 / 治疗 / 复查*
+- *Assess patient; record clinical notes* maps to *Consult / treat / review* / *问诊 / 治疗 / 复查*
+- *Record care decision (treatment / follow-up / discharge)* 对上这个方框提交的决定
+- *Record care decision (treatment / follow-up / discharge)* maps to the decision submitted by this box
+- D12 是患者要的“得到评估和护理”，也是这个方框。进入它的线是 `Visit outcome?` / `就诊结果？` 的 **Attended** / **已到诊**
+- D12 is what the patient wants: assessment and care. It is also this box. The flow that enters it is **Attended** / **已到诊** from `Visit outcome?` / `就诊结果？`
+
+决定写完后，网关按三个值分开：
+
+After the decision is recorded, the gateway splits on three values:
+
+```
+Clinical
+plan?
+```
+
+```
+临床
+计划？
+```
+
+| 网关上的线 / Flow on the gateway | 下一方框 / Next box | 为什么这样对应 / Why this mapping |
+| --- | --- | --- |
+| Treatment<br>治疗 | `P7 Assess funding; record payment / approval status` / `P7 评估经费；记录付款 / 批复状态` | SR 括号里的「治疗」就是这条线。治疗要花钱，经费不是这张临床 SR 的目标，所以离开临床，进 P7。<br>The word “treatment” in the SR bracket is this flow. Treatment costs money, and funding is not a goal of this clinical SR, so the flow leaves the clinical view and enters P7. |
+| Follow-up<br>复诊 | 回到 `P3 / P4 / P12 Book visit; notify patient; record attendance / contact` / `P3 / P4 / P12 预约就诊；通知患者；记录到诊 / 联系`<br>Back to `P3 / P4 / P12 Book visit; notify patient; record attendance / contact` / `P3 / P4 / P12 预约就诊；通知患者；记录到诊 / 联系` | 复诊仍然是授权之后的预约，所以回到 D8 的 Book visit，不是另画一个临床任务。<br>A follow-up is still an appointment after authorisation, so it returns to the Book visit of D8. It is not a new clinical task. |
+| Discharge<br>出院 | 结束事件 `Care episode ended` / `本次护理结束`<br>End event `Care episode ended` / `本次护理结束` | 出院之后没有下一项临床工作，所以这次护理在这里结束。<br>After discharge there is no further clinical work, so this episode of care ends here. |
+
+`Clinical plan?` / `临床计划？` 下面的 Treatment / 治疗 会进到经费方框。经费那一块本身不在这张临床 SR 里，见文末。
+
+**Treatment** / **治疗** under `Clinical plan?` / `临床计划？` enters the funding box. Funding itself is not on this clinical SR; see the end.
+
+---
+
+## 5. 诊后信：Prepare / approve clinic letter [P]、Clinic letter clinically approved [P]、D7
+
+## 5. Clinic letter: Prepare / approve clinic letter [P], Clinic letter clinically approved [P], D7
+
+SR 的橙色六边形没有自己的 BPMN 方框。批准写在第 4 节那个方框的后半句：
+
+The orange hexagon on the SR has no BPMN box of its own. Approval is written in the second half of the box in section 4:
+
+```
+P5 / P9 / P12
+Consult / treat / review;
+authorise care and clinic letter
+```
+
+```
+P5 / P9 / P12
+问诊 / 治疗 / 复查；
+授权护理和诊后信
+```
+
+*authorise … clinic letter* / *授权……诊后信* 就是 Prepare / approve clinic letter。
+
+*authorise … clinic letter* / *授权……诊后信* is Prepare / approve clinic letter.
+
+行政真正发出去，是这两个方框：
+
+Admin actually sends the letter in these two boxes:
+
+```
+P9
+Check and dispatch
+approved clinic letter
+```
+
+```
+P9
+核对并发送
+已批准的诊后信
+```
+
+```
+P9
+Dispatch clinic
+letter
+```
+
+```
+P9
+发出诊后信
+```
+
+中间有网关 `Letter status?` / `信件状态？`。**Sent** / **已发送** 才进 `Clinical plan?` / `临床计划？`。**Clinical correction** / **临床更正** 回到上面的 P5 方框。
+
+Between them is the gateway `Letter status?` / `信件状态？`. Only **Sent** / **已发送** enters `Clinical plan?` / `临床计划？`. **Clinical correction** / **临床更正** returns to the P5 box above.
+
+信如果延迟，还有一个方框，SR 没有单独格子，挂在发送后面：
+
+If the letter is delayed, there is another box. The SR has no separate element for it. It sits after dispatch:
+
+```
+P9
+Monitor delay; remind
+and escalate if overdue
+```
+
+```
+P9
+监控延误；逾期则
+提醒并升级
+```
+
+做完回到 P5 方框（线上的字是 Review / approve / 复查 / 批准）。
+
+When that finishes, the flow returns to the P5 box. The wording on the flow is Review / approve / 复查 / 批准.
+
+---
+
+## 6. 预约：Clinic and treatment appointments arranged after authorisation、D8
+
+## 6. Appointments: Clinic and treatment appointments arranged after authorisation, D8
+
+SR 这一格对上行政泳道的两次订号。
+
+This SR element maps to two bookings in the admin lane.
+
+第一次门诊，在 D5 的 Accept / 接受 之后：
+
+The first is the outpatient visit, after Accept / 接受 in D5:
+
+```
+P3 / P4 / P12
+Book visit; notify patient;
+record attendance / contact
+```
+
+```
+P3 / P4 / P12
+预约就诊；通知患者；
+记录到诊 / 联系
+```
+
+```
+P3
+Check / reserve
+outpatient slot
+```
+
+```
+P3
+查询 / 占用
+门诊号源
+```
+
+治疗或检查，在 `Clinical plan?` / `临床计划？` 的 **Treatment** / **治疗** 并且经费已通过之后，或紧急授权之后：
+
+Treatment or investigation comes after **Treatment** / **治疗** on `Clinical plan?` / `临床计划？`, once funding has been approved, or after urgent authorisation:
+
+```
+P6
+Confirm authorised treatment
+and investigation appointments
+```
+
+```
+P6
+确认已授权的治疗
+和检查预约
+```
+
+```
+P6
+Reserve treatment
+slot / resources
+```
+
+```
+P6
+占用治疗
+号源 / 资源
+```
+
+```
+P6
+Send booking
+confirmation
+```
+
+```
+P6
+发送预约
+确认
+```
+
+号源不够时的方框，SR 没有单独格子：
+
+When no slot is available, there is a box. The SR has no separate element for it:
+
+```
+P6
+Flag resource
+unavailable
+```
+
+```
+P6
+标记资源
+不可用
+```
+
+它再回到上面的 P6 Confirm / P6 确认已授权的治疗和检查预约 方框。
+
+It then returns to the P6 Confirm / P6 确认已授权的治疗和检查预约 box above.
+
+---
+
+## 7. 紧急：Authorise urgent care; record reason [M]、Urgent pathway supported、D18
+
+## 7. Urgent care: Authorise urgent care; record reason [M], Urgent pathway supported, D18
+
+```
+P8
+Clinician authorises
+urgent care with reason
+```
+
+```
+P8
+临床人员授权紧急治疗
+并写下理由
+```
+
+这就是 SR 的 *Authorise urgent care; record reason [M]*。
+
+This is the SR element *Authorise urgent care; record reason [M]*.
+
+它前面的入口在财务泳道。`Funding status?` / `经费状态？` 走 **Urgent review** / **紧急复核** 才到这个 P8。正常缴费的 `P7 Assess funding…` / `P7 评估经费……`、`P7 Send payment request to external provider` / `P7 向外部服务商发送付款请求`、`P7 Payment result received` / `P7 收到付款结果` 不在临床 SR 里。
+
+The entry before it is in the finance lane. Only **Urgent review** / **紧急复核** from `Funding status?` / `经费状态？` reaches this P8. The ordinary payment boxes, `P7 Assess funding…` / `P7 评估经费……`, `P7 Send payment request to external provider` / `P7 向外部服务商发送付款请求` and `P7 Payment result received` / `P7 收到付款结果`, are not on the clinical SR.
+
+P8 下面的网关：
+
+The gateway under P8:
+
+```
+Urgent care
+authorised?
+```
+
+```
+紧急治疗
+已授权？
+```
+
+| 网关上的线 / Flow on the gateway | 下一方框 / Next box | 为什么这样对应 / Why this mapping |
+| --- | --- | --- |
+| Authorised<br>已授权 | `P6 Confirm authorised treatment and investigation appointments` / `P6 确认已授权的治疗和检查预约`（不等付款结果）<br>`P6 Confirm authorised treatment and investigation appointments` / `P6 确认已授权的治疗和检查预约` (does not wait for the payment result) | D18 要的是紧急治疗不因付款还没确认而被挡住。这条线不等付款结果，直接去 P6 订治疗，所以它就是那朵云。<br>D18 asks that urgent care is not blocked only because payment is not yet confirmed. This flow does not wait for the payment result and goes straight to P6, so it is that cloud. |
+| Hold<br>暂缓 | 回到 `P7 Assess funding; record payment / approval status` / `P7 评估经费；记录付款 / 批复状态`<br>Back to `P7 Assess funding; record payment / approval status` / `P7 评估经费；记录付款 / 批复状态` | 临床没有授权例外，钱的规则还在，所以回到经费评估。这条线不是 D18。<br>The clinician did not authorise the exception, and the payment rule still applies, so the flow returns to funding assessment. This flow is not D18. |
+
+问诊之后如果要财务补记，网关 `Urgent finance follow-up?` / `需要财务紧急跟进？` 走 **Yes** / **是**，到：
+
+After the consultation, if finance must record the follow-up, `Urgent finance follow-up?` / `需要财务紧急跟进？` follows **Yes** / **是** to:
+
+```
+P8
+Finance follows up
+after urgent care
+```
+
+```
+P8
+紧急治疗后
+财务跟进
+```
+
+*Clinical work not delayed solely by payment confirmation gaps* 和 D18 没有自己的方框。对应的就是 **Authorised** / **已授权** 这条线：先到 P6，付款由上面这个 P8 Finance follows up / P8 紧急治疗后财务跟进 事后做。
+
+*Clinical work not delayed solely by payment confirmation gaps* and D18 have no box of their own. They correspond to the **Authorised** / **已授权** flow: it goes to P6 first, and payment is done afterwards by the P8 Finance follows up / P8 紧急治疗后财务跟进 box above.
+
+*Urgent pathway supported (when required)* 也没有单独方框，就是这一整段 P8。
+
+*Urgent pathway supported (when required)* has no separate box either. It is this whole P8 stretch.
+
+*Safe clinical decisions*、*Timely clinical care* 是云，没有方框。
+
+*Safe clinical decisions* and *Timely clinical care* are clouds. They have no boxes.
+
+---
+
+## 8. BPMN 上有方框、这张临床 SR 里没有格子
+
+## 8. Boxes on the BPMN that have no element on this clinical SR
+
+| BPMN 方框 / BPMN box | 和这张 SR 的关系 / Relation to this SR | 为什么这样对应 / Why this mapping |
+| --- | --- | --- |
+| P13<br>Authorised manager reviews<br>audit trail and pathway reports<br>授权管理人员查看<br>审计记录和路径报表 | 没有对应格子。做完结束在 `Report reviewed` / `报表已查看`<br>No matching element. It ends at `Report reviewed` / `报表已查看` | 报表不是临床要交出的结果，这期 SR 没有把它当成已承诺的能力。<br>A report is not a clinical result to hand over. This release of the SR does not treat it as a committed capability. |
+| P10<br>Resolve administrative<br>enquiry; record response<br>处理行政咨询；<br>记录答复 | 没有对应格子。结束在 `Enquiry resolved` / `咨询已处理`<br>No matching element. It ends at `Enquiry resolved` / `咨询已处理` | 行政咨询有自己的结束，放在行政视图，不是临床路径的一步。<br>An administrative enquiry ends on its own and belongs in the admin view. It is not a step of the clinical pathway. |
+| P10<br>CNS / clinician responds<br>and records clinical advice<br>专科护士 / 临床人员答复<br>并记录临床建议 | 没有对应格子。结束在 `Enquiry resolved` / `咨询已处理`<br>No matching element. It ends at `Enquiry resolved` / `咨询已处理` | 临床咨询是另一张视图。这张 SR 从转诊材料讲到评估和护理，不覆盖咨询。<br>A clinical enquiry belongs in another view. This SR runs from the referral package to assessment and care. It does not cover enquiries. |
+| P10<br>Finance responds to<br>payment / funding enquiry<br>财务答复<br>付款 / 经费咨询 | 没有对应格子。结束在 `Enquiry resolved` / `咨询已处理`<br>No matching element. It ends at `Enquiry resolved` / `咨询已处理` | 付款咨询由财务答复。临床 SR 只在 D18 碰到「等付款会有危险」。<br>A payment enquiry is answered by finance. This clinical SR touches payment only at D18, when waiting would be unsafe. |
+| P7<br>Assess funding; record<br>payment / approval status<br>评估经费；记录<br>付款 / 批复状态 | 没有对应格子。只有它的 **Urgent review** / **紧急复核** 线接到第 7 节的 P8<br>No matching element. Only its **Urgent review** / **紧急复核** flow connects to the P8 in section 7 | 普通经费评估是财务决定。临床图只用它的紧急复核线，接到 P8。<br>Ordinary funding assessment is a finance decision. This clinical view uses only its urgent-review flow, which reaches P8. |
+| P7<br>Send payment request<br>to external provider<br>向外部服务商<br>发送付款请求 | 没有对应格子<br>No matching element | 向支付服务商收款不是临床结果。<br>Sending a payment request to the provider is not a clinical result. |
+| P7<br>Payment result<br>received<br>收到<br>付款结果 | 没有对应格子<br>No matching element | 收到付款结果是财务和支付服务商之间的事。<br>Receiving the payment result is between finance and the payment provider. |
+| P7<br>Resolve funding issue /<br>investigate missing receipt<br>处理经费问题 /<br>追查缺失回执 | 没有对应格子<br>No matching element | 追查缺回执是财务补记，不是临床评估。<br>Investigating a missing receipt is a finance follow-up, not a clinical assessment. |
+| P7<br>Mark payment<br>investigate<br>标记付款<br>待追查 | 没有对应格子<br>No matching element | 把付款标成待追查，是为了避免重复收费，仍是财务步骤。<br>Marking a payment for investigation avoids a second charge. It remains a finance step. |
+| P7 / P11 / P12<br>Approve and record refund,<br>payment transfer or retention<br>批准并记录退款、<br>转账或保留费用 | 没有对应格子<br>No matching element | 退款、转账、保留费用由财务批准。临床不批退款。<br>A refund, transfer or retention is approved by finance. Clinical staff do not approve a refund. |
+| P7 / P11 / P12<br>Request refund /<br>record adjustment<br>请求退款 /<br>记录调整 | 没有对应格子<br>No matching element | 这是把财务决定记进账，不是临床格子。<br>This writes the finance decision into the ledger. It is not a clinical cell. |
+| P11 / P12<br>Authorise modification,<br>follow-up or cancellation<br>授权变更、<br>复诊或取消 | 没有对应格子。SR 里的 follow-up / 复诊 是第 4 节 `Clinical plan?` / `临床计划？` 的 **Follow-up** / **复诊** 线，回到 Book visit / 预约就诊<br>No matching element. Follow-up / 复诊 on the SR is the **Follow-up** / **复诊** flow from `Clinical plan?` / `临床计划？` in section 4, which returns to Book visit / 预约就诊 | 这是正式修改请求。SR 里的复诊是护理决定里的 Follow-up，回到 Book visit，不是这个变更任务。<br>This is a formal modification request. Follow-up on the SR is the Follow-up inside the care decision, which returns to Book visit. It is not this change task. |
+| P11 / P12<br>Notify care change<br>通知护理变更 | 没有对应格子<br>No matching element | 通知变更挂在正式修改后面。这张 SR 没有画这个变更任务。<br>Notifying the change sits after the formal modification. This SR does not draw that change task. |
+| P3<br>Appointment booked;<br>await attendance<br>已经预约；<br>等待到诊 | 没有对应格子。是 Book visit / 预约就诊 之后的等待<br>No matching element. It is the wait after Book visit / 预约就诊 | 号已经订上、人还没来。评估还没发生，所以还不是 D12。<br>The slot is taken and the patient has not come. The assessment has not happened, so this is not yet D12. |
+| P4<br>Record declined<br>appointment<br>记录患者<br>拒绝预约 | 没有对应格子<br>No matching element | 患者拒绝发生在评估之前。人没有进入问诊方框，所以不画在这张临床图上。<br>A decline happens before assessment. The patient does not enter the consultation box, so it is not drawn on this clinical diagram. |
+| P4<br>Record did not<br>attend<br>记录<br>未到诊 | 没有对应格子<br>No matching element | 未到诊同样发生在评估之前。先记下，再进变更，不是「评估患者」。<br>Did-not-attend also happens before assessment. It is recorded and then goes to a change. It is not “Assess patient”. |
+
+`Request type?` / `请求类型？` 用来把登记送进转诊、补材料、三类咨询、变更或报表。SR 只使用其中转到 P2 审阅的那条 **Referral** / **转诊**。
+
+`Request type?` / `请求类型？` sends the registration on to a referral, missing documents, the three kinds of enquiry, a change, or a report. The SR uses only the **Referral** / **转诊** flow, which goes to the P2 review.
+
+---
+
+## 9. 第 10 组反馈改了哪些方框
+
+## 9. Which boxes the Group 10 feedback changed
+
+原版是 `W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`。上面第 1–7 节的 P1、P2、P5、P6、P8、P9 方框原版就有，正文没有改名。
+
+The original file is `W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`. The P1, P2, P5, P6, P8 and P9 boxes in sections 1–7 were already there. Their text was not renamed.
+
+反馈第 3 条是合并网关。图上是空菱形，没有 P 编号，也不写业务字。它们只挡在方框前面，把原来直接扎进方框的几条线先收成一条：
+
+Feedback item 3 is the joining gateways. On the diagram they are empty diamonds. They have no P number and no business wording. They only sit in front of a box, and gather into one flow the flows that used to enter that box directly:
+
+| 空菱形 / Empty diamond | 挡在这个方框前面 / Sits in front of this box | 为什么这样对应 / Why this mapping |
+| --- | --- | --- |
+| Join_BookVisit | P3 / P4 / P12 Book visit; notify patient; record attendance / contact<br>P3 / P4 / P12 预约就诊；通知患者；记录到诊 / 联系 | 接受、复诊、待定重试都要进同一个预约方框。菱形先收成一条，不产生新的临床结果，所以 SR 仍对上 Book visit，不对上菱形。<br>Accept, follow-up and pending/retry all enter the same booking box. The diamond gathers them into one flow and produces no new clinical result, so the SR still matches Book visit, not the diamond. |
+| Join_VisitOutcome | Visit outcome? / 就诊结果？ | 查号、跳过查号、等待到诊都要回到同一次就诊结果。菱形只汇线。<br>The slot check, the skip and the wait all return to the same visit outcome. The diamond only gathers the flows. |
+| Join_ClinicalCare | P5 / P9 / P12 Consult / treat / review; authorise care and clinic letter<br>P5 / P9 / P12 问诊 / 治疗 / 复查；授权护理和诊后信 | 已到诊、信的更正、逾期后的复查都进同一个问诊方框。临床结果仍由这个方框写下。<br>Attended, a letter correction and a review after delay all enter the same consultation box. The clinical result is still written by that box. |
+| Join_Funding | P7 Assess funding; record payment / approval status<br>P7 评估经费；记录付款 / 批复状态 | 治疗、重新评估、紧急暂缓都回到经费。经费本身不在这张临床 SR 上。<br>Treatment, reassessment and an urgent hold all return to funding. Funding itself is not on this clinical SR. |
+| Join_BookTreatment | P6 Confirm authorised treatment and investigation appointments<br>P6 确认已授权的治疗和检查预约 | 经费通过、已付款、紧急授权、资源不足后返回，都进同一个治疗预约方框。D8 对上的是这个方框。<br>Cleared funding, paid, urgent authorisation and a return after no resource all enter the same treatment-booking box. D8 matches that box. |
+| Join_ClinicalChange | P11 / P12 Authorise modification, follow-up or cancellation<br>P11 / P12 授权变更、复诊或取消 | 患者取消、拒绝、未到诊和正式变更请求汇到变更任务。这张临床 SR 没有这个格子。<br>Patient cancellation, decline, did-not-attend and a formal change request meet at the change task. This clinical SR has no cell for it. |
+| Join_MarkPaymentInvestigate | P7 Mark payment investigate<br>P7 标记付款待追查 | 经费待追查和付款失败汇到标记待追查。这是财务步骤。<br>Funding pending investigation and an unsuccessful payment meet at mark-for-investigation. That is a finance step. |
+
+反馈第 4 条是把就诊结果拆开。原版 `Visit outcome?` / `就诊结果？` 上有一条线叫 **Cancel / DNA**，直接进 `P11 / P12 Authorise modification, follow-up or cancellation` / `P11 / P12 授权变更、复诊或取消`。
+
+Feedback item 4 splits the visit outcome. On the original, `Visit outcome?` / `就诊结果？` had one flow called **Cancel / DNA**, which went straight into `P11 / P12 Authorise modification, follow-up or cancellation` / `P11 / P12 授权变更、复诊或取消`.
+
+V2 的 `Visit outcome?` / `就诊结果？` 改成这些线，并多了三个方框、一个网关：
+
+On V2, `Visit outcome?` / `就诊结果？` uses these flows, and three boxes plus one gateway were added:
+
+| 线上的字 / Wording on the flow | 下一方框 / Next box | 为什么这样对应 / Why this mapping |
+| --- | --- | --- |
+| Attended<br>已到诊 | P5 / P9 / P12 Consult / treat / review; authorise care and clinic letter<br>P5 / P9 / P12 问诊 / 治疗 / 复查；授权护理和诊后信 | D12 是患者得到评估和护理。只有人已经到诊，才进 P5 问诊方框。<br>D12 is the patient receiving assessment and care. Only when the patient has attended does the flow enter the P5 consultation box. |
+| Booked<br>已预约 | P3 Appointment booked; await attendance<br>P3 已经预约；等待到诊 | 号已经订上、人还在等。评估还没发生，所以停在等待，不进临床格子。<br>The slot is taken and the patient is still waiting. The assessment has not happened, so the flow waits and does not enter the clinical cell. |
+| Pending / retry<br>待定 / 重试 | 回到 P3 / P4 / P12 Book visit… / 预约就诊……<br>Back to P3 / P4 / P12 Book visit… / 预约就诊…… | 号还没订成，回到预约再试。还没有到诊，也没有评估。<br>The slot was not taken, so the flow returns to booking and tries again. There is no attendance and no assessment yet. |
+| Patient cancelled<br>患者取消 | P11 / P12 Authorise modification, follow-up or cancellation<br>P11 / P12 授权变更、复诊或取消 | 患者取消要先记下，再由临床决定改期或取消。那是变更任务，不是「评估患者」。<br>A patient cancellation is recorded first, and the clinician then decides a new date or a cancellation. That is the change task, not “Assess patient”. |
+| Declined<br>已拒绝 | P4 Record declined appointment / P4 记录患者拒绝预约，然后再进上面的 P11 / P12<br>P4 Record declined appointment / P4 记录患者拒绝预约, then into the P11 / P12 box above | 拒绝预约发生在评估之前。先由 P4 记下，再进变更，不进问诊方框。<br>A declined appointment happens before assessment. P4 records it, then the flow enters the change. It does not enter the consultation box. |
+| Did not attend<br>未到诊 | P4 Record did not attend / P4 记录未到诊，然后再进上面的 P11 / P12<br>P4 Record did not attend / P4 记录未到诊, then into the P11 / P12 box above | 人没来，就没有 D12 的评估。先记下未到诊，再进变更。<br>The patient did not come, so there is no D12 assessment. The missed visit is recorded, and the flow then enters the change. |
+
+Book visit / 预约就诊 之后多了网关 `Reserve a slot?` / `需要占号源？`。**Booked, attended or waiting** / **已预约、已到诊或等待中** 去 `P3 Check / reserve outpatient slot` / `P3 查询 / 占用门诊号源`。**Declined, cancelled or DNA** / **拒绝、取消或未到诊** 跳过查号，直接到 `Visit outcome?` / `就诊结果？`。
+
+After Book visit / 预约就诊 there is a new gateway, `Reserve a slot?` / `需要占号源？`. **Booked, attended or waiting** / **已预约、已到诊或等待中** goes to `P3 Check / reserve outpatient slot` / `P3 查询 / 占用门诊号源`. **Declined, cancelled or DNA** / **拒绝、取消或未到诊** skips the slot check and goes straight to `Visit outcome?` / `就诊结果？`.
+
+反馈第 1、第 2 条不增加方框。日期、金额、下拉和必填写在这些方框打开的表单上：Book visit / 预约就诊 的日期和时间、Review referral / 审阅转诊 的决定、Clinical care / 临床护理 的治疗 / 复诊 / 出院、Funding / 经费 的金额。
+
+Feedback items 1 and 2 add no boxes. Dates, amounts, dropdowns and required fields sit on the forms these boxes open: the date and time on Book visit / 预约就诊, the decision on Review referral / 审阅转诊, treatment / follow-up / discharge on Clinical care / 临床护理, and the amount on Funding / 经费.

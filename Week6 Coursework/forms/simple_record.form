@@ -1,0 +1,95 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## Task record\n\nComplete this step and record what was done.\n\n_Demo only._",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "Patient / case ID",
+      "validate": {
+        "required": true,
+        "pattern": "^[A-Za-z][A-Za-z0-9-]{2,30}$"
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      },
+      "description": "Start with a letter, then letters, digits or a hyphen. Example: DEMO-001."
+    },
+    {
+      "id": "Field_staffRole",
+      "type": "textfield",
+      "key": "staffRole",
+      "label": "Staff name and role",
+      "validate": {
+        "required": true,
+        "pattern": "^[A-Za-z][A-Za-z .'-]{1,60}$"
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      },
+      "description": "Letters first. A value made only of digits is rejected."
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "Outcome / next action",
+      "values": [
+        {
+          "label": "Completed and recorded",
+          "value": "recorded"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Action record / reason",
+      "validate": {
+        "required": true,
+        "minLength": 2
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "Complete task",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "simple_record",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}

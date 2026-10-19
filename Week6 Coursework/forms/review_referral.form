@@ -1,0 +1,120 @@
+{
+  "components": [
+    {
+      "id": "Text_Title",
+      "type": "text",
+      "text": "## P2 — Consultant referral review\n\n_Demo only._",
+      "layout": {
+        "row": "Row_Title",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_patientId",
+      "type": "textfield",
+      "key": "patientId",
+      "label": "Patient / case ID",
+      "validate": {
+        "required": true,
+        "pattern": "^[A-Za-z][A-Za-z0-9-]{2,30}$"
+      },
+      "layout": {
+        "row": "Row_0",
+        "columns": null
+      },
+      "description": "Start with a letter, then letters, digits or a hyphen. Example: DEMO-001."
+    },
+    {
+      "id": "Field_clinicianId",
+      "type": "textfield",
+      "key": "clinicianId",
+      "label": "Clinician ID / name",
+      "validate": {
+        "required": true,
+        "pattern": "^[A-Za-z][A-Za-z0-9 .'-]{1,40}$"
+      },
+      "layout": {
+        "row": "Row_1",
+        "columns": null
+      },
+      "description": "Start with a letter. Digits are allowed after that. A value made only of digits is rejected."
+    },
+    {
+      "id": "Field_action",
+      "type": "select",
+      "key": "action",
+      "label": "Referral decision",
+      "values": [
+        {
+          "label": "Accept",
+          "value": "accept"
+        },
+        {
+          "label": "Reject",
+          "value": "reject"
+        },
+        {
+          "label": "Redirect to another specialty",
+          "value": "redirect"
+        },
+        {
+          "label": "Request more information",
+          "value": "more_information"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "row": "Row_2",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_decisionReason",
+      "type": "textarea",
+      "key": "decisionReason",
+      "label": "Decision reason",
+      "validate": {
+        "required": true,
+        "minLength": 2
+      },
+      "layout": {
+        "row": "Row_3",
+        "columns": null
+      }
+    },
+    {
+      "id": "Field_notes",
+      "type": "textarea",
+      "key": "notes",
+      "label": "Additional notes",
+      "validate": {
+        "required": false
+      },
+      "layout": {
+        "row": "Row_4",
+        "columns": null
+      }
+    },
+    {
+      "id": "Button_Submit",
+      "type": "button",
+      "label": "Record decision",
+      "action": "submit",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      }
+    }
+  ],
+  "type": "default",
+  "id": "review_referral",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.51.0"
+  },
+  "schemaVersion": 19
+}
