@@ -1,7 +1,7 @@
 # Submission Index — second release
 
 AISD (UFCEP6-0-3) · BPM&EA (UFCEP4-0-3) · Group hospital pathway
-Repository `https://github.com/Estrella6066773/HW_AISD` · prepared 19 October 2026 · describes the tree at `533a9a8`
+Repository `https://github.com/Estrella6066773/HW_AISD` · prepared 19 October 2026 · describes the revised release, tagged `submission-2026-10-20`; read its SHA from the tag
 
 This file is the entry point to the pack. It names the releases, gives every artefact's repository path and format, and marks what is not yet in place.
 
@@ -10,7 +10,7 @@ This file is the entry point to the pack. It names the releases, gives every art
 | Tag | Commit | Date | What it identifies |
 |-----|--------|------|--------------------|
 | `submission-2026-09-29` | `f6fec99` | 29 Sep 2026 | **Initial release.** Model `Hospital_All_Processes_Simple_C8` (`Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`); baseline for the 29 September logs. |
-| `submission-2026-10-20` | `533a9a8` | 19 Oct 2026 | **Revised release and current state.** Model `Hospital_All_Processes_V3_C8` (`Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`); carries the 19 October acceptance run. `main` and `origin/main` point here. |
+| `submission-2026-10-20` | the tag target | 19 Oct 2026 | **Revised release and current state.** Model `Hospital_All_Processes_V3_C8` (`Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`); carries the 19 October acceptance run. Read its SHA from the tag. |
 
 `standup-1-2026-09-16` and `sr3-2026-10-14` are not releases: they mark the first standup and the Sprint Review 3 snapshot. Read the revised release first.
 
