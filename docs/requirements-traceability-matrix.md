@@ -4,6 +4,8 @@
 
 > **Purpose**: Trace each requirement across the entire development lifecycle — from the strategic process model, through the operational BPMN, down to the actual implementation. This is a **grading criterion** (BPM&EA Task 3).
 >
+> **Current status (2026-10-19)**: the grades in section 2 are the 29 September snapshot and are left as written. Section 4 is the refreshed second-release position: **13 Supported / 25 Partial / 4 Unsupported**.
+>
 > **Status Legend**:
 > - ✅ **Supported** — The requirement is fully addressed in this deliverable
 > - ⚠️ **Partial** — Partially addressed; limitations documented in Notes
@@ -113,6 +115,7 @@
 
 ## 3. Unsupported / Partially Supported Requirements — Second Release Plan
 
+> **What the second release actually did (2026-10-19)**: BR-20 is delivered and now Supported (section 4.3). BR-36, BR-35 and BR-13 are partly delivered and keep their grade (section 4.4). Every other row below is unchanged, and section 4.5 states why for each rule. The plan text is left as written so the gap that was planned can be compared with what was built.
 | Req ID | Initial Release Status | Gap Description | Second Release Plan | Priority |
 |--------|----------------------|-----------------|---------------------|----------|
 | BR-01 | ⚠️ Partial | Missing-document request is a classroom user-task simulation | Strategic task Check referral documents is delivered; add a real or stubbed outbound request record and an acceptance test for the `referral_incomplete` path | P1 |
@@ -146,3 +149,94 @@
 | BR-41 | ⚠️ Partial | `AuditReports` is a placeholder human task | Produce management report views or exports for referral volumes, waits, letter delays, payment exceptions and pathway progress from domain tables | P2 |
 | BR-42 | ❌ Unsupported | No communication-preference capture or use | Add preference fields (postal / digital / accessible) and pass them into correspondence workers; add the preference to the strategic model and the operational model | P2 |
 | Strategic column remainder | ⚠️ Partial | PB-12 now draws the main stages. Still undrawn: chemotherapy cycle review (BR-25), urgent enquiry highlight (BR-29), audit as a stage (BR-38), identity matching (BR-39), outage back-entry (BR-40), management reports (BR-41), communication preferences (BR-42) | Keep those items out of the initial strategic picture unless a later release adds the stage; implementation gaps stay in the rows above | P2 |
+
+---
+
+## 4. Second Release Refresh — V2 (2026-10-19)
+
+> Refreshed for `PB-39` / `Est-01`. Section 2 is the 29 September snapshot and is left as written. This section answers one question per rule: did the second release move it, and if not, why not. A rule counts as **moved** only when the artefact its section 2 Notes named actually changed. A rule that only gained better wording in a task description has not moved.
+
+### 4.1 Evidence set
+
+| Artefact | Version graded here | What changed since 2026-09-29 |
+|----------|---------------------|------------------------------|
+| Strategic BPMN | `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn` | Nothing. The file and its abstraction note are unchanged (`88a5bcc`; stated in `Week6 Coursework/istar/PB-16_V1-V2_review-changes_2026-10-16.md` §1). |
+| Operational BPMN | `Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn`, process `Hospital_All_Processes_V2_C8` | New model, built in `8cda78c` … `787375e`. The 29 September model (`Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`, `Hospital_All_Processes_Simple_C8`) is untouched and remains the submitted baseline; V2 is added alongside it, not substituted for it. |
+| Forms | `Week3 Coursework/hospital-pathway/forms/` (12 forms; 11 at baseline) | 4 changed: `book_visit` (`e4b2159`, `8a10e24`), `finance_adjustment` (`32e6dbc`, `1816b8e`), `funding_assessment` (`9a0b294`), `register_request` (`c29df1c`, `8a10e24`). 1 new: `await_attendance` (`e4b2159`), which records the booked visit before the outcome decision. 7 unchanged: `book_treatment`, `clinical_care`, `clinical_change`, `dispatch_letter`, `review_referral`, `simple_record`, `urgent_authorisation`. |
+| Workers | `Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/` | `ChargeAmountRules` added (`cb23fdf`); `RefundWorkers` and `HospitalPathwayWorkers` changed (`cb23fdf`, `1816b8e`). `BookingWorkers`, `CareChangeWorkers`, `LetterWorkers` and the domain classes are unchanged. |
+| Acceptance tests | `pb14_acceptance.py`, `pb18_acceptance.py` | **Not re-run.** `PB-31` is still open. No test result below is a V2 result. |
+
+The V2 model changes that matter for traceability, in one place: the visit outcome is split into attended, pending/retry, patient-cancelled, booked-awaiting-attendance, declined and did-not-attend (`VisitOutcome`, `AwaitAttendance`, `RecordDecline`, `RecordDna`); the outpatient slot is skipped when the visit is not being booked (`VisitNeedsSlot`); the requested review period is stored as a number plus a unit and a past appointment date is rejected; the finance form shows the original charge and an invalid refund fails once. The seven exclusive merge gateways (`Join_BookVisit`, `Join_ClinicalCare`, `Join_Funding`, `Join_BookTreatment`, `Join_ClinicalChange`, `Join_VisitOutcome`, `Join_MarkPaymentInvestigate`) are pass-through and change no rule.
+
+### 4.2 Result
+
+| Release | ✅ Supported | ⚠️ Partial | ❌ Unsupported |
+|---------------|---:|---:|---:|
+| Initial release (29 September) | 12 | 26 | 4 |
+| Second release (V2, 19 October) | 13 | 25 | 4 |
+
+One grade moved: **BR-20** Partial → Supported. Of the other 29, three gaps narrowed without a grade change — **BR-36, BR-35, BR-13** (4.4) — and 26 were untouched (4.5, one reason per rule).
+
+### 4.3 The grade that moved — BR-20
+
+BR-20 asks that an authorised Finance member decides a refund, in full or in part, and that the amount is recorded. Section 2 marked it Partial for one reason: "no explicit full versus partial refund amount control".
+
+| Section 2 gap | What V2 has instead |
+|---------------|---------------------|
+| Refund decision is coarse (resolved / pending) | `finance_adjustment.form` selects `refund_full`, `refund_partial`, `transfer`, `retain` or `pending` (`32e6dbc`); `adjustmentAmount` is mandatory on every decision except `pending`. |
+| No amount control | `RefundWorkers.resolveAdjustment` maps each decision to its own ledger status, and `requirePartialAmount` rejects a partial amount that is not lower than the original charge (`1816b8e`). |
+| Original charge could be overwritten | The form displays `charge_amount` as the original charge and the worker does not write it back. An invalid amount or unknown decision fails the job once with `retries(0)` instead of failing three times (`cb23fdf`). |
+
+Evidence: `Week3 Coursework/hospital-pathway/forms/finance_adjustment.form`; `Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/RefundWorkers.java` (job-failure path lines 44–55, decision mapping 115–156); `ChargeAmountRules.java`; `Hospital_All_Processes_V2.bpmn`, `FinanceAdjustment` documentation; commits `32e6dbc`, `1816b8e`, `cb23fdf`.
+
+Why Supported rather than still Partial: the decision, the amount, and the rejection of an invalid amount now exist in both the form and the worker, so the gap the matrix named is closed rather than restated. Two limits are recorded rather than hidden. First, no acceptance test was executed; this follows the BR-11 precedent, where a modelled and implemented rule is Supported without its own test and the missing test is listed in Notes. Second, role enforcement is not part of this grade — the matrix consistently grades it under BR-37 (see the BR-02 and BR-09 notes), so BR-37 remains the row that carries that gap.
+
+### 4.4 Gaps narrowed, grade unchanged
+
+| Req ID | What V2 added | Why the grade did not move |
+|--------|---------------|----------------------------|
+| BR-36 | `RecordDecline` and `RecordDna` are separate tasks; `AwaitAttendance` holds the booked visit; `VisitOutcome` has six distinct conditions (attended, pending/retry, patient cancelled, booked, declined, dna); decline and DNA enter `Join_ClinicalChange`, so the pathway decision is made at `ClinicalChange` and paid cases reach `FinanceAdjustment` through `MoneyAffected`. `book_visit.form` and `await_attendance.form` offer the same separate outcomes. | The split is delivered, but no acceptance case runs DNA → pathway decision → Finance, and reschedule is still not a recorded outcome of its own: it is a re-booking through `BookVisit` with `pending`. Both were named in section 2's Notes, so the rule stays Partial. |
+| BR-35 | `book_visit.form` rejects a past appointment date (`disallowPassedDates`), hides date and time while `pending`, and makes `waitReason` mandatory (`no_slot`, `contact_incomplete`, `external_waiting`); the requested period is stored as a number plus a unit (`c29df1c`, `8a10e24`). | There is still no out-of-timeframe flag or pathway-team notification separate from the pending branch, and no follow-up booking test. The booking side is structured; the rule's named gap is not closed. |
+| BR-13 | `funding_assessment.form` requires `charge_amount` as a two-decimal number from 0.01 to 99999.99 on the patient-payment path and requires `insurerReference` on the insurer path (`9a0b294`), re-checked by `ChargeAmountRules.require` (`cb23fdf`). | Amount and reference are now structured, but there is still no dedicated limitations/restrictions field: they remain inside `notes`. Partial stands. |
+
+### 4.5 Rules that did not move, and why
+
+Each row names the artefact the rule actually depends on and what that artefact looks like in V2. "Unchanged" means byte-identical to the 29 September baseline except where a commit is named.
+
+| Req ID | Status | Artefact checked | Why it did not move |
+|--------|--------|------------------|---------------------|
+| BR-01 | ⚠️ Partial | `GetDocuments`, `register_request.form` | The missing-document path is unchanged: no outbound request record and still no acceptance case for `referral_incomplete`. The registration change (`c29df1c`) only adds the requested period. |
+| BR-04 | ⚠️ Partial | `BookVisit`, `book_visit.form` | The V2 form records one outcome plus free-text `notes`; there is no letter or phone channel field, no separate send task, and no test asserting a letter plus a two-week phone call. |
+| BR-05 | ⚠️ Partial | `book_visit.form` | Contact attempts are still `notes` text. The form has no repeatable attempt record (channel, outcome, timestamp). |
+| BR-06 | ⚠️ Partial | `Register`, `register_request.form` | Urgency is still a priority value (`routine`, `urgent`, `two_week_wait`). No skip-timescale path was added, and the model has no timer events at all. |
+| BR-08 | ⚠️ Partial | `clinical_care.form` | The form is unchanged from 29 September. V2 strengthened the task text to require consent and an authorised request with dates, cycles and resources, but no such field exists, so the rule still cannot be completed as written. |
+| BR-09 | ⚠️ Partial | `ClinicalCare`, `BookTreatment`, `book_treatment.form` | Process order still prevents most accidental skips, but every task remains `assignee="demo"`. The blocking cause is BR-37. |
+| BR-10 | ⚠️ Partial | `BookTreatment`, `ReserveTreatmentSlot`, `FlagResourceUnavailable` | Task and worker set unchanged. Laboratory and imaging outages remain inside the same mocked `book_treatment` step. |
+| BR-19 | ⚠️ Partial | `UrgentAuthorisation`, `urgent_authorisation.form` | Form unchanged. The path is still not exercised by PB-14 / PB-18, and clinician-only authorisation is still unenforced (BR-37). |
+| BR-21 | ⚠️ Partial | Three lanes, all forms | Lane separation is unchanged, and `staffRole` is a free-text field, not a role check. Cause is BR-37. |
+| BR-22 | ⚠️ Partial | `ClinicalChange`, `clinical_change.form`, `NotifyCareChange` | Form and worker unchanged. No acceptance case was added for an authorised change, the unauthorised skip, or Finance routing. |
+| BR-23 | ⚠️ Partial | `clinical_change.form` | Urgent postponement is still free text in `notes`; there is no dedicated urgent-postpone outcome or retrospective-authorisation field. |
+| BR-25 | ⚠️ Partial | `ClinicalCare`, `clinical_care.form` | Form unchanged: no blood-test or fitness fields. The stage is still absent from the strategic model. |
+| BR-27 | ⚠️ Partial | `AdminEnquiry` | Task text unchanged. No field or role restriction separates administrative content from clinical content. |
+| BR-28 | ⚠️ Partial | `Register`, three enquiry tasks | The form now carries priority, but owner and receipt time exist only in the task text, and no enquiry path writes an audit record. |
+| BR-29 | ⚠️ Partial | `Register`, `ClinicalEnquiry` | The urgency rules are still a stakeholder clarification. The only mechanism remains the manual priority field. |
+| BR-30 | ⚠️ Partial | `ClinicalCare`, `DispatchLetter`, `dispatch_letter.form` | Form unchanged: letter body, recipient list and approval timestamp are still free text or absent. |
+| BR-31 | ⚠️ Partial | `dispatch_letter.form`, `DispatchClinicLetter` | Unchanged. The clinical-edit ban is still policy text, because any `demo` user can complete the task. |
+| BR-32 | ⚠️ Partial | `dispatch_letter.form` | Unchanged. No appointment, approval or dispatch date is captured, so the seven-day target cannot be measured. |
+| BR-33 | ⚠️ Partial | `MonitorLetters` | Task text unchanged. The model still has no timer or scheduled monitor. |
+| BR-34 | ⚠️ Partial | `MonitorLetters` | Unchanged. Reminder suppression still has no reminder service behind it, and no delay-reason field was added. |
+| BR-38 | ⚠️ Partial | `AuditReports`, `AuditEventWriter` | The writer is unchanged. There is no read-only audit API, no refusal test, and the same selected workers are audited. |
+| BR-41 | ⚠️ Partial | `AuditReports` | Still a placeholder human task. No report view or export was built. |
+| BR-37 | ❌ Unsupported | Assignment of every user task | No candidate groups, claims or login were added. `AT-03` remains a recorded fail. |
+| BR-39 | ❌ Unsupported | `Register` | `patientId` is still free text. No match, duplicate check or ambiguous-match warning exists. |
+| BR-40 | ❌ Unsupported | `AuditReports`, fallback path | No offline log, catch-up task or availability control was added. |
+| BR-42 | ❌ Unsupported | `register_request.form`, correspondence workers | No preference field exists, and no worker reads one. |
+
+### 4.6 Two columns that were not refreshed
+
+- **Strategic BPMN** — `PB-12` has not changed since 29 September, so every strategic cell keeps its 29 September value. BR-25, BR-29, BR-38, BR-39, BR-40, BR-41 and BR-42 therefore remain ❌ in that column even where V2 implemented part of the operational work.
+- **Acceptance tests** — no test was re-run, so nothing moves on test evidence. The section 2 cells describe the 29 September executable; for V2 they must be read as "not re-run", never as "passed".
+
+### 4.7 What section 3 still covers
+
+Of the 30 rules section 3 plans for, one row is closed (BR-20), three are partly delivered (BR-36, BR-35, BR-13), and 26 are unchanged, of which 4 are still Unsupported. `BR-37` remains the highest-leverage item: it is P0, and it blocks BR-09, BR-21, BR-27 and BR-31 as well as `AT-03`. `BR-38` (audit immutability) and `BR-08` (consent and a structured treatment request) are the next P0 items whose artefacts did not change at all in V2.

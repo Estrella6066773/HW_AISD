@@ -57,7 +57,7 @@ The single SR view in `docs/istar/PB-16_sr.md` was replaced by three service-lev
 | View | File | What the review settled |
 | --- | --- | --- |
 | Clinical | `PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt` | The OR-refinement under the care outcome was removed, because one encounter records one care decision (treatment / follow-up / discharge) as a single task. `D5` narrowed to new-patient acceptance. `D7` is a goal. `D8` added for appointment arrangement after authorisation. `D18` is a softgoal, not a finance follow-up task. |
-| Admin | `PB-16_V1_Admin_SR_reviewed_2026-10-13.txt` | Rationale checked against the case *and* `Hospital_All_Processes_V2`, not the case alone. The visit goal now covers recording the outcome when no visit takes place: decline, patient cancellation and did-not-attend are recorded and passed on rather than booked. A slot helps that goal only when the visit is a booking. `D5` applies only to a new patient appointment. `D7` is the clinical-approval goal, and the depender is the letter-processing goal rather than the already-approved letter resource. `D20` keeps the appointment letter and the recorded contact attempts, and does not assign clinical explanation to Admin. |
+| Admin | `PB-16_V1_Admin_SR_reviewed_2026-10-19.txt` | Rationale checked against the case *and* `Hospital_All_Processes_V2`, not the case alone. The visit goal now covers recording the outcome when no visit takes place: decline, patient cancellation and did-not-attend are recorded and passed on rather than booked. A slot helps that goal only when the visit is a booking. `D5` applies only to a new patient appointment. `D7` is the clinical-approval goal, and the depender is the letter-processing goal rather than the already-approved letter resource. `D20` keeps the appointment letter and the recorded contact attempts, and does not assign clinical explanation to Admin. Re-exported on 2026-10-19: 20 nodes, 9 dependencies, layout re-laid on a 2013x1063 canvas, all 20 elements still carrying `Evidence` and a `V1 status`. |
 | Finance | `PB-16_V1_Finance_SR_reviewed_2026-10-13.txt` | Refunds, transfers and retained fees reviewed as separate finance decisions; 13 elements left at `V1 manual/partial` and 2 recorded as `V1 mock`. |
 
 Every element in the three views carries an `Evidence` field naming the case paragraph, the model task or the worker it rests on, and a `V1 status` field. That pairing is the point of the review: it separates what the case requires from what the initial release actually supported.
@@ -66,7 +66,7 @@ A constraint the views state explicitly, and one that should be repeated when pr
 
 ## 5. Requirement traceability
 
-`../requirements/requirements-traceability-matrix.md` grades every business rule from BR-01 to BR-42 against the models, forms, workers and tests: **12 supported, 26 partial, 4 unsupported**, with the second-release plan in section 3.
+`../../docs/requirements-traceability-matrix.md` grades every business rule from BR-01 to BR-42 against the models, forms, workers and tests: **12 supported, 26 partial, 4 unsupported** for the 29 September release, with the second-release plan in section 3. The V2 refresh of those grades is in the same file, section 4: **13 supported, 25 partial, 4 unsupported** as of 2026-10-19.
 
 ## 6. What the review did not change
 
@@ -74,3 +74,51 @@ A constraint the views state explicitly, and one that should be repeated when pr
 - The 29 September executable baseline, `W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` (process id `Hospital_All_Processes_Simple_C8`). The V2 model is added alongside it, not substituted for it. This is the model behind the submitted PDF export, and it does not contain the split visit outcomes.
 - The role-permission gap. `AT-03` is still recorded as a fail; the reviewed SR views do not claim role enforcement.
 - The workers. The V2 work changed the model, the forms and the finance rules; it is not a rewrite of the worker set.
+
+## 7. What the changes amount to, counted
+
+**Written**: 2026-10-19. **Method**: the counts below are taken from the artefacts, not from memory. Model files are the piStar exports parsed as JSON; BPMN counts use namespace-qualified XPath, so `zeebe:userTask` extension elements are not mistaken for tasks; "before" is `f6fec99` (29 September) and "after" is the state at `353f988` (19 October). Element-level figure differences are matched by element id.
+
+The purpose of this section is narrow: this file has said what changed; this says how much, so the increment can be described without adjectives. It adds no claim about what anyone said at a review — the points received are in `../feedback/feedback-response_2026-10-16.md`.
+
+| Dimension | 29 September | 19 October | Change |
+| --- | --- | --- | --- |
+| Strategic BPMN | one model, `88a5bcc` | the same model | none; `151a86d` changed one line of the abstraction note, not the model |
+| Operational BPMN — user tasks | 19 | 22 | +3 (`AwaitAttendance`, `RecordDecline`, `RecordDna`) |
+| Operational BPMN — service tasks | 8 | 8 | none |
+| Operational BPMN — exclusive gateways | 14 | 22 | +8 (seven `Join_*`, one `VisitNeedsSlot`) |
+| Operational BPMN — sequence flows | 76 | 91 | +15 |
+| Operational BPMN — `documentation` elements | 31 | 42 | +11 |
+| Forms | 11 | 12 | 4 changed, 1 new (`await_attendance`, 93 lines), 7 untouched |
+| Mandatory fields, the four changed forms | 4 / 3 / 4 / 6 | 7 / 5 / 5 / 8 | +8 in total (`book_visit`, `funding_assessment`, `finance_adjustment`, `register_request`) |
+| Value and date constraints | none stated | 9 numeric bounds, 1 `disallowPassedDates` | +10 |
+| i\* SD — actors in the figure | 11 | 9 | −2, aggregated |
+| i\* SD — dependencies in the figure | 24 | 13 | −11; the 24-item catalogue is kept in `../../docs/istar/PB-16_istar-sd-sr.md` |
+| i\* SR — structure | one document, 11 actor sections, about 52 nodes | three service views, 53 nodes, 21 dependencies | rebuilt by service |
+| i\* SR — per-element evidence | none | 74 elements, each with `Evidence` and a `V1 status` | +74 |
+| Traceability grades | 12 / 26 / 4 | 13 / 25 / 4 | one grade moved (BR-20); three gaps narrowed |
+| Unit tests | 12 | 19 | +7, all passing at `353f988` |
+
+### 7.1 What the figures show, element by element
+
+| Figure | Change |
+| --- | --- |
+| Admin, re-exported 2026-10-19 | 29 elements, **all 29 moved**, 0 text changes, 0 property changes, canvas 1520×760 → 2013×1063. The re-export is a re-layout, and nothing else |
+| Clinical | 23 → 22 elements. Four nodes removed: the separate treatment-plan, discharge-decision and follow-up tasks were folded into one `Record care decision` task, and "obtain later finance follow-up" was dropped. Three added: the dependency `D8`, one goal (appointments arranged after authorisation) and one quality (clinical work not delayed by payment confirmation gaps). 5 text changes, 9 status changes; canvas 1340×643 → 1400×745 |
+| Finance | 22 → 23 elements: `D17` added, the other 22 moved, no text or status change; canvas 1420×702 → 1464×1123 |
+| SD | the current PNG is byte-identical to `../../Ryan/2026-10-15/PB-16_V1_SD_reviewed_2026-10-13.png`, so the re-export produced no visual change |
+| Export scale | SD 3.8×, Admin 3.8×, Finance 3.9×, Clinical 1.0× (1416×730). Clinical is the only figure that would blur when projected |
+
+### 7.2 Five readings
+
+1. **The increment is evidence, not features.** Seven of the eight new gateways are `Join_*`, each with one unconditional outgoing flow and no default, so they change no decision. The traceability grades moved by one row. What grew is documentation (+11), per-element evidence (+74) and form constraints (+8 mandatory fields, +10 constraints).
+2. **There is exactly one functional expansion**: the visit outcome is split into attended, booked-awaiting-attendance, pending, patient-cancelled, declined and did-not-attend. That accounts for all three new tasks, `VisitNeedsSlot`, `await_attendance.form` and six outcome conditions.
+3. **The strategic layer is unchanged, and that is a result.** The review confirmed it did not need to change; a reader should not read its silence as an omission.
+4. **The review quantified how much of V1 was automated.** Of the 53 nodes in the three SR views, 43 carry a support claim, 4 of those are `V1 mock` or `V1 mock/manual`, and none is labelled as fully supported. The remaining 10 are not support claims: 3 business goals and 7 business qualities. This is a statement about the initial release, not about V2.
+5. **The figures cannot show the improvement themselves.** All three views carry `V1 status` and no `V2 status`, so what V2 added is evidenced by the operational model, the forms, the tests and the matrix rather than by the SR figures. The status field is also not one vocabulary: the 53 nodes use eight fixed English labels, while the 21 dependencies carry 15 different free Chinese phrases, so the two cannot be counted together. Anyone quoting a coverage figure should say which of the two they mean.
+
+### 7.3 What this cannot reconstruct
+
+- What a tutor said at SR1 or SR2, and how either review was marked. No minutes were kept, and `../process/part8-sprint-review-records.md` records that gap rather than filling it.
+- Why each change was made, except where the model itself says so: the seven `Join_*` gateways carry "Added in response to Group 10 feedback on merging gateways" in their `documentation`, and the rest is inference from commit messages.
+- Why each of the 11 dependencies left the SD figure. The figure states the 13 it uses and the catalogue keeps all 24, but no per-dependency reason for the selection is recorded.
