@@ -28,7 +28,7 @@ On 2026-10-16 the duplicate copies that had accumulated were consolidated, so th
 
 | Removed | Kept |
 | --- | --- |
-| `PB-16_V1_Admin_SR_reviewed_2026-10-13.txt` and the Clinical and Finance files in the repository root (byte-identical copies) | `istar/PB-16_V1_*_SR_reviewed_2026-10-13.txt` |
+| `PB-16_V1_Admin_SR_reviewed_2026-10-13.txt` and the Clinical and Finance files in the repository root (byte-identical copies) | `istar/PB-16_V1_*_SR_reviewed_2026-10-13.txt` (the Admin file was later renamed to `_2026-10-19` when it was re-exported; the name here is the one this consolidation kept) |
 | `PB-16_V1_SD_reviewed_2026-10-13.txt` in the repository root (identical to the file below) | `istar/V1_SD_diagram.txt` |
 | `acceptance/` — the acceptance PDF, both plans and both run logs (copies) | `../Ryan/2026-09-26/` for the plans and logs; `../submissions/AISD/` for the PDF |
 | `requirements/requirements-traceability-matrix.md` (identical copy) | `../docs/requirements-traceability-matrix.md` |
@@ -49,7 +49,8 @@ Still held in more than one place, and **not** consolidated here because the cop
 | Strategic BPMN | `../docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn` | Not executable. Unchanged since 2026-09-29. |
 | Abstraction note | `../docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md` | Maps the strategic stages to the operational tasks and states the gaps. |
 | i\* SD | `istar/V1_SD_diagram.txt` with `istar/V1_SD_diagram.png` | piStar 2.1.0 export. Nine aggregated actors; 13 of the 24 catalogue dependencies are shown. |
-| i\* SR | `istar/PB-16_V1_Admin_SR_reviewed_2026-10-13.txt`, `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt`, `istar/PB-16_V1_Finance_SR_reviewed_2026-10-13.txt` | One SR per reviewed service. Every element carries `Evidence` and a `V1 status`. |
+| i\* SR | `istar/PB-16_V1_Admin_SR_reviewed_2026-10-19.txt`, `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt`, `istar/PB-16_V1_Finance_SR_reviewed_2026-10-13.txt` | One SR per reviewed service. Every element carries `Evidence` and a `V1 status`. The Admin review was re-exported on 2026-10-19 and its model file took that date in its name; the older `_2026-10-13` Admin file was renamed, not kept alongside it. |
+| i\* figures | `istar/V1_SD_diagram.png`, `istar/PB-16_V1_Admin_SR_reviewed_2026-10-19.png`, `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.png`, `istar/PB-16_V1_Finance_SR_reviewed.png` | One PNG per model, all four in this folder. The Finance PNG was copied in from `../Ender/2026-10-17/` on 2026-10-19 and keeps its undated name. |
 | Requirement traceability | `../docs/requirements-traceability-matrix.md` | BR-01 to BR-42: initial release 12 supported, 26 partial, 4 unsupported; second-release refresh in section 4, 13 supported, 25 partial, 4 unsupported. Section 3 keeps the plan. |
 | V1 to V2 change note | `istar/PB-16_V1-V2_review-changes_2026-10-16.md` | Says what changed in each model and which commit carries it. |
 | Backlog numbering | `../docs/p3-product-backlog.md` | The single authoritative numbering. It lists product work only; `PB-30`, `PB-31`, `PB-34` and `PB-39` are this release. Coursework process work carries no `PB` number and is tracked in `plan/sprint3-4-plan_2026-10-16.md`, part B. |
@@ -60,7 +61,7 @@ The earlier `W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` (process id `
 
 ## Encoding of the i\* model files
 
-The four piStar model files — `istar/V1_SD_diagram.txt`, `istar/PB-16_V1_Admin_SR_reviewed_2026-10-13.txt`, `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt` and `istar/PB-16_V1_Finance_SR_reviewed_2026-10-13.txt` — are UTF-8 **without a byte-order mark**. Their `V1 status`, `Evidence` and `Qualification` values mix English and Chinese: the earlier sections are in English, the reviewed sections are in Chinese.
+The four piStar model files — `istar/V1_SD_diagram.txt`, `istar/PB-16_V1_Admin_SR_reviewed_2026-10-19.txt`, `istar/PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt` and `istar/PB-16_V1_Finance_SR_reviewed_2026-10-13.txt` — are UTF-8 **without a byte-order mark**. Their `V1 status`, `Evidence` and `Qualification` values mix English and Chinese: the earlier sections are in English, the reviewed sections are in Chinese.
 
 **Open them in a viewer set to UTF-8.** On a Windows machine whose default code page is GBK, some viewers — Notepad, and Excel if the file is opened as a table — render those Chinese values as mojibake. That is a viewer setting, not file damage. Checked on 2026-10-16: all four files pass a strict UTF-8 validation and each parses as valid JSON.
 
