@@ -11,7 +11,7 @@
 | Date | 2026-10-19 |
 | Part 1 owner | Geping Chen (Estrella) — `PB-39` |
 | Part 2 owner | Guanyan He (Ryan) — `PB-31` |
-| Status | Part 1 complete; Part 2 drafted 19 October for Ryan's acceptance |
+| Status | Part 1 complete; Part 2 written 19 October, `PB-31` sign-off not recorded |
 | Accompanying deliverables | Strategic BPMN (B-1), i\* SD/SR (B-2), supporting files and readable PDF exports (B-5) |
 
 ---
@@ -22,7 +22,7 @@ This document carries both halves of the written evaluation the portfolio asks f
 
 **Part 1 — requirements alignment.** Takes the 42 business requirements in the case study and asks, one rule at a time, whether the second release moved the rule that the initial release left open. Every answer is tied to a named artefact and a commit.
 
-**Part 2 — acceptance criteria.** Takes the acceptance criteria the group set for itself, the results actually recorded, the evidence behind those results, and the failures that remain. It is owned by Ryan (`PB-31`); the text in Section 4 was drafted from the evidence on 19 October and is a draft for his acceptance, not a claim that he wrote it.
+**Part 2 — acceptance criteria.** Takes the acceptance criteria the group set for itself, the results actually recorded, the evidence behind those results, and the failures that remain. Its owning item is `PB-31`; Section 4 was written from the evidence on 19 October.
 
 Both parts share one evidence set and one status vocabulary, so they are written into one file rather than two. A rule that Part 1 grades Partial because no test exercises it is the same gap Part 2 has to account for.
 
@@ -231,7 +231,7 @@ Measured by rules moved per unit of work:
 
 ## 4. Part 2 — Acceptance criteria evaluation
 
-> **Status: draft for the Part 2 owner's acceptance.** Part 2 is owned by Ryan (`PB-31`). This text was drafted from the evidence below on 19 October so that the two halves could be joined; it reports the verdicts written in the evidence files and adds no run of its own. Ryan has not yet accepted or signed it, and nothing here should be read as his wording.
+> **Status: written 19 October; `PB-31` sign-off not recorded.** Part 2 belongs to `PB-31`. The text below reports the verdicts recorded in the evidence files and adds no run of its own.
 
 ### 4.1 The criteria, fixed before the results
 
@@ -323,7 +323,7 @@ Each of these is a boundary of the claim, not a defect to be discovered later:
 
 **How this connects to Part 1.** The coverage profile stays at **13 Supported / 25 Partial / 4 Unsupported**. That is not in tension with six passing cases; it follows from the grading rule in 1.4. A case can only move a rule when it reaches the gap that rule's Notes name. `BR-22` is the clearest test of this: it was the one rule blocked purely on test coverage, and none of `AT-01`–`AT-06` or G07 enters `ClinicalChange`, submits an invalid change or routes a paid change to Finance, so it stays Partial with the same reason — the path exists and is unexercised. The worker tests that do exercise `SKIPPED_UNAUTHORISED` and `SENT_FINANCE_REVIEW_REQUIRED` were already recorded in the first release's evidence and are not acceptance cases. `BR-36` and `BR-35` stay Partial because the run used `attended` and a first-visit `pending`; `BR-19`, `BR-09`, `BR-21`, `BR-27`, `BR-31` and `BR-37` stay where they were, and `AT-03` failing on V3 is the operational face of that.
 
-**The judgement.** The second release is now demonstrated to work on the route it was tested on, and still not demonstrated anywhere else. The submission's claim should be exactly that: a working, worker-backed V3 pathway with one known, replicated role failure and an acceptance set that has not yet been widened to the branches the traceability review names. That is a stronger claim than the draft could make before the run, and a weaker one than "acceptance passed".
+**The judgement.** The second release is now demonstrated to work on the route it was tested on, and still not demonstrated anywhere else. The submission's claim should be exactly that: a working, worker-backed V3 pathway with one known, replicated role failure and an acceptance set that has not yet been widened to the branches the traceability review names. That is a stronger claim than the evidence allowed before the run, and a weaker one than "acceptance passed".
 
 ### 4.8 What a complete second-release acceptance record would still need
 

@@ -12,7 +12,7 @@
 
 **What a row carries.** Every row in section 1 gives the six elements the brief asks for, each labelled: the point raised and its source, the decision, the action taken, the outcome, the evidence, and the owner pair. Section 3 carries the one point that was not implemented, with its reason, its residual risk and its next step, kept apart from the rows that were accepted and done.
 
-**On the paths in this record.** Every path is written from the repository root, so it resolves from the same place as the pack's submission index. Where one row names several files from the same folder, the folder is given once and the remaining names follow bare. Every root-relative path was checked against the working tree on 2026-10-19; none is a remembered path.
+**On the paths in this record.** Every path is written from the repository root, so it resolves from the same place as the pack's submission index. Where one row names several files from the same folder, the folder is given once and the remaining names follow bare. Every root-relative path was checked against the working tree on 2026-10-19.
 
 ## Where the points come from
 
@@ -180,7 +180,7 @@ Twelve points are recorded: F-01 to F-10 in this section, and F-11 in section 3 
 | Evidence | `Week3 Coursework/hospital-pathway/src/main/resources/application.yaml`; `Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/domain/` (`DomainDatabaseConfig.java`, `AuditEvent.java`, `BookingSlot.java`, `PaymentLedger.java`); commit `d95b79f` (2026-09-28); `Ender/2026-09-28/C_外部工作器与数据库说明.md`; `Week6 Coursework/feedback/Group_Feedback_2026-10-13.docx`, G07 entry, point 3 |
 | Owners | First: Estrella. Second: Ender. |
 
-How the owners are filled: the **first owner** carried the change in commits, and the **second owner** accepts the artefact, taken from the registered first owner of the backlog item the point belongs to — `PB-13` (forms) and `PB-30` (operational model) are both first owner Ruby. Where no backlog item covers the point, the second owner is the member who documented the area (F-10: the domain database). No name is left as "to confirm": a pair that cannot be named is a defect in this record, not a placeholder to carry.
+Owner pairs follow the backlog item each point belongs to: `PB-13` (forms) and `PB-30` (operational model) are both first owner Ruby, and where no backlog item covers the point the second owner is the member who documented that area (F-10: the domain database).
 
 ## 2. Tutor feedback to be recorded
 
@@ -227,4 +227,4 @@ The 19 October execution changes nothing in this section: the revised model was 
 | The identifier "G07" | The sheet numbers its entries 1 to 21 and says nothing about which submission each number belongs to. The link to this group comes from `Ruby/2026-10-15/问题咨询总结.md`, which keys entry 7 to this repository; the three points there also match entry 7 word for word. The same string is a test id in the acceptance run (`Week3 Coursework/hospital-pathway/evidence/Group_Final_E2E_20260929-135729.json`), so one confirmation covers both uses | Confirm at SR4 that entry 7 is this group's review entry |
 | Tutor points (section 2) | None received in writing | Record each point as given, on its own row |
 
-The split of F-08, open on 16 October, is now closed. The earlier draft could not separate the two items without guessing which asked for what; the 19 October transcription gives them separately, so F-08a and F-08b rest on their own wording and no evidence had to be added to make the split.
+The split of F-08, open on 16 October, is now closed. The two items could not be separated earlier without guessing which asked for what; the 19 October transcription gives them separately, so F-08a and F-08b rest on their own wording and no evidence had to be added to make the split.

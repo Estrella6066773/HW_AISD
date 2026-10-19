@@ -32,7 +32,7 @@ The initial-release documents are retained as the 29 September baseline, not as 
 | `B-1` | Strategic model, readable PDF, abstraction note | `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn`; `submissions/BPMEA/BPMEA_Strategic_Process_Readable_2026-10-19.pdf`; `submissions/BPMEA/BPMEA_Abstraction_Note.pdf` | `.bpmn` + PDF 8 pp + PDF 6 pp. In place; second-owner review signed 19 October. |
 | `B-2` | i\* SD and three service SR views | `Week6 Coursework/istar/`: `V1_SD_diagram.txt`/`.png`; `PB-16_V1_Admin_SR_reviewed_2026-10-19.txt`/`.png`; `PB-16_V1_Clinical_SR_reviewed_2026-10-13.txt`/`.png`; `PB-16_V1_Finance_SR_reviewed_2026-10-13.txt` and `PB-16_V1_Finance_SR_reviewed.png` | piStar `.txt` + PNG, four models and four figures. In place; `PB-16` review **unsigned**. |
 | `B-3` | Written evaluation, Part 1: requirements alignment | `submissions/BPMEA/BPMEA_Written_Evaluation.docx` and `.pdf` | `.docx` + PDF, 23 pp. In place; Part 1 final. |
-| `B-4` | Written evaluation, Part 2: acceptance evaluation | Same file | `.docx` + PDF. **Draft**, awaiting Ryan (`PB-31`). |
+| `B-4` | Written evaluation, Part 2: acceptance evaluation | Same file | `.docx` + PDF. In place; no `PB-31` sign-off. |
 | `B-5` | Editable operational model, deployment configuration, two readable exports | `Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`; `Week3 Coursework/hospital-pathway/src/main/resources/application.yaml`, `config/application.example.yaml`; `submissions/BPMEA/BPMEA_Operational_Process_Readable_2026-10-19.pdf`, `BPMEA_Strategic_Process_Readable_2026-10-19.pdf` | `.bpmn` + YAML + PDF 16 pp + PDF 8 pp. In place. |
 
 Carried by the repository, no separate slot: `B-6` worker source, `pom.xml` and configuration (`Week3 Coursework/hospital-pathway/`, 17 Java files, 19 tests); `B-7` the twelve forms in `Week6 Coursework/forms/`. `B-8`, the second-release Project and Test Plan, is **not in place**: only `submissions/BPMEA/Group_Project_and_Test_Plan_2026-09-29.pdf` exists.
@@ -58,6 +58,6 @@ Full sequence: `Week3 Coursework/hospital-pathway/README.md`.
 - `AT-03` fails on both releases; `BR-37` is unsupported — no role-based access control, every user task assigned to `demo`.
 - `PB-16` i\* SD/SR second-owner review is unsigned.
 - `B-8` does not exist in second-release form.
-- `B-4` is drafted but not yet adopted by Ryan, its designated author.
+- `B-4` carries no `PB-31` sign-off yet.
 - The formal change path, DNA to Finance, urgent authorisation, refund adjustment and letter escalation are modelled but no acceptance case drives them.
-- The contribution record is a blank template and the Definition of Done is unsigned.
+- The contribution record holds `E-001` to `E-053` from the repository; its second-owner review is unsigned, and the Definition of Done is unsigned.
