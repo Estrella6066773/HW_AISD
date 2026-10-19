@@ -20,7 +20,7 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 | `docs/` | Group-level deliverables: product backlog, task breakdown, sprint backlog, requirements traceability matrix, definition of done, i* models in `docs/istar/` |
 | `Ruby/`, `Est/`, `Ender/`, `Ryan/` | Individual workspaces: drafts, part-level documents, meeting notes |
 | `Week3 Coursework/` | Shared executable pathway package in `hospital-pathway/` (BPMN + forms + Java workers + test logs); workbook Word copies. Renamed from `Coursework/` in `03180bb`; anything still linking to `Coursework/hospital-pathway/` is a dead link. |
-| `Week6 Coursework/` | Second-release working set: operational BPMN V2, strategic BPMN, reviewed i\* SD and the three service SR views, feedback response record, requirements traceability, acceptance evidence, Sprint 3 and 4 plan. See its [README](Week6%20Coursework/README.md). |
+| `Week6 Coursework/` | Second-release working set: operational BPMN V3, strategic BPMN, reviewed i\* SD and the three service SR views, feedback response record, requirements traceability, acceptance evidence, Sprint 3 and 4 plan. See its [README](Week6%20Coursework/README.md). |
 | [`submissions/BPMEA/`](submissions/BPMEA/README.md) | BPM&EA-specific Project and Test Plan and submission index |
 | [`submissions/AISD/`](submissions/AISD/README.md) | AISD-specific Design Decisions and Acceptance Test Plan/Results |
 | `W01/` | Course materials: session slides, case study, assessment specifications |
@@ -33,19 +33,21 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 
 Present:
 
-- Executable Camunda 8 BPMN, eleven forms, Java workers and configuration
+- Executable Camunda 8 BPMN, twelve forms, Java workers and configuration
 - Strategic BPMN and abstraction note in `docs/strategic-bpmn/`
 - i\* SD/SR in `docs/istar/` (second-owner checklist still unsigned)
-- Requirements traceability matrix, with 12 supported, 26 partial and 4 unsupported business rules
+- Requirements traceability matrix, with 12 supported, 26 partial and 4 unsupported business rules for the initial release, and 13 / 25 / 4 after the second-release re-check
 - Course indexes in `submissions/BPMEA/` and `submissions/AISD/`
 - The initial-release presentation and demonstration were given on 29 September. The second-release presentation is still to be delivered.
 
 Still open:
 
 - Second-owner review of the submission documents
-- Role-permission test AT-03 remains FAIL
-- Exception routes without a final-model run stay unevidenced; the local c8run environment does not start, so they are not being rerun
+- Role-permission test AT-03 remains FAIL, on both releases
+- Exception routes stay unevidenced even after the 19 October run: the formal change path, DNA to Finance, urgent authorisation, the refund adjustment and letter escalation are modelled but no case drives them
 - Contribution record `Est/est：PB-17贡献记录表.md` is still a blank template
+
+**Second release was executed on 19 October.** `Hospital_All_Processes_V3_C8` was deployed to a local Camunda 8.10.0-alpha5 (c8run, started with `--disable-connectors`) and the six acceptance cases plus a full G07 path were re-run against it: five of the six pass, G07 reached `COMPLETED` with nine human tasks and no active incident, and `AT-03` fails exactly as it did on 29 September. A clean `mvn -B clean test` passes 19 unit tests. The master record is [`Camunda_V3_Acceptance_2026-10-19.txt`](<Week3 Coursework/hospital-pathway/evidence/Camunda_V3_Acceptance_2026-10-19.txt>); the evaluation is Part 2 of [`BPMEA_Written_Evaluation.md`](submissions/BPMEA/BPMEA_Written_Evaluation.md).
 
 ## Deliverables
 
