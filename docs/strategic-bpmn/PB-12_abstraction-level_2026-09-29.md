@@ -98,10 +98,16 @@ External scheduling, treatment resources, funding decisions and card payment are
 
 ## 7. Second-owner review
 
-Estrella reviews before this item is marked Done.
+Estrella reviewed this note before the item was marked Done.
 
-- [ ] The three lanes can be told apart, and clinical, administrative and financial decisions are not given to the same lane.
-- [ ] Referral, consultant decision, first appointment, treatment authorisation, funding and payment, clinic letter, enquiry, and change or follow-up are all on the diagram.
-- [ ] Each external message matches a participant in section 3.
-- [ ] The mapping in section 4 matches `Hospital_All_Processes_V3_C8`, the current running model.
-- [ ] Section 6 still matches the running solution, including AT-03 recorded as Fail.
+- [x] The three lanes can be told apart, and clinical, administrative and financial decisions are not given to the same lane.
+- [x] Referral, consultant decision, first appointment, treatment authorisation, funding and payment, clinic letter, enquiry, and change or follow-up are all on the diagram.
+- [x] Each external message matches a participant in section 3.
+- [x] The mapping in section 4 matches `Hospital_All_Processes_V3_C8`, the current running model.
+- [x] Section 6 still matches the running solution, including AT-03 recorded as Fail.
+
+**Second-owner review: accepted** — Estrella (Geping Chen), 2026-10-19.
+Items 1–3 checked as of 2026-10-19. Items 4 and 5 checked after the corrections A–D.
+Running baseline for the mapping: Hospital_All_Processes_V3_C8.
+No exceptions left open.
+The corrections A–D were applied to the first owner's text under her authorisation, and the first owner (Ruby, Hao Zheng) confirmed the revised text on 2026-10-19. That confirmation was given orally; no separate written note exists.
