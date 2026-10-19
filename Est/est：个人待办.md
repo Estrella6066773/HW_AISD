@@ -2,7 +2,7 @@
 
 **归属**：Estrella（Geping Chen　陈格平，UWE ID 23084393）**个人**
 **起表**：2026-10-16
-**最近同步**：2026-10-19（`A-1` 经一责 Ruby 复核定稿；`PB-12` 二责复核由本人签署；`A-2` 已落地——`submission-2026-09-29`（`f6fec99`）与 `submission-2026-10-20` 两个标签都在远端可认（修订版的 SHA 从标签上读），`Submission_Index` 的 `.md` 与两页 PDF 已出，根 README 已有 `Releases` 一节；并记入 V3 实跑结果、`B-3`／`B-4`、`B-6` 与验收证据各条；第四节结构不改）
+**最近同步**：2026-10-19（`A-1` 经一责 Ruby 复核定稿；`PB-12` 二责复核由本人签署；`A-2` 已落地——`submission-2026-09-29`（`f6fec99`）与 `submission-2026-10-20` 两个标签都在远端可认（修订版的 SHA 从标签上读），`Submission_Index` 的 `.md` 与两页 PDF 已出，根 README 已有 `Releases` 一节；`A-3` 已出 PDF 11 页与同目录 Markdown；并记入 V3 实跑结果、`B-3`／`B-4`、`B-6` 与验收证据各条；第四节结构不改）
 **第二版截止**：2026-10-20 23:59（AISD 与 BPM&EA 两个模块，日期口径仍挂 `Est-13`）
 **状态取值**：未开始 / 进行中 / 已完 / 待他人 / 待确认
 
@@ -25,7 +25,7 @@
 | ------ | --------------------------------------------------------------------------------------- | --------------- | ------ | -------------------------------------------------------------- | --- |
 | Est-01 | 追溯矩阵按第二版刷新：26 条部分支持、4 条未支持的规则里，哪些在第二版动了、哪些没动；动了的要有证据，没动的要写清原因                           | `PB-39`         | 10-20  | `../docs/requirements-traceability-matrix.md` 第 4 节            | 已完成 |
 | Est-02 | 收口两处未签的二责复核：`PB-12` 战略模型由本人签（2026-10-19 已签，签字见抽象说明第 7 节）；`PB-16` i SD/SR 由 Ryan 签，需要追他。**两份可交稿已出**：`est：PB-12二责复核意见_2026-10-19.md`（A–D 已改入原文、一责已确认）、`est：PB-16二责复核备料_2026-10-19.md`（口径待定后即可交） | `PB-12`、`PB-16` | 10-20  | `../docs/strategic-bpmn/`；`../docs/istar/PB-16_istar-sd-sr.md` | 进行中（`PB-12` 已签；`PB-16` 签字待人） |
-| Est-03 | 反馈处置记录逐条落行：实际收到的反馈才写，未收到的留空，不凭推测补。**记录本身已合规范**（规范只要求点、回应、两责、证据，未实施的写理由与遗留）；**只剩 `F-08` 拆不拆这一决定**——第 10 组原文全盘查无，只能二选一 | `A-3`         | 10-20  | `../Week6 Coursework/feedback/feedback-response_2026-10-16.md` | 待本人决定 |
+| Est-03 | 反馈处置记录逐条落行：实际收到的反馈才写，未收到的留空，不凭推测补。**记录已出 PDF**（11 页）；六项逐条标明，`F-08` 已按 10 月 19 日归档的第 10 组四条转写拆为 `F-08a`／`F-08b`（原件仍未入库），`F-11` 记未实施并写明遗留风险 | `A-3`         | 10-20  | `../submissions/AISD/AISD_Feedback_Response_Record.pdf`；源文件 `../Week6 Coursework/feedback/feedback-response_2026-10-16.md` | 已完成 |
 | Est-04 | 填贡献记录表：视图 A 按证据逐行登记、视图 B 按条目对账；每条证据要能打开并与条目负责人一致                                        | `C-3`         | 10-20  | `est：PB-17贡献记录表.md`（本目录）                                        | 未开始 |
 | Est-05 | 完成定义签字：一责 Ender，本人是二责，需要本人那一笔                                                           | `C-4`         | 10-20  | `../docs/definition-of-done.md`                                | 未开始 |
 | Est-06 | 自己那两行 Part 7 standup 记录：SU4（10-16 那场，已写）与 SU3（10-12 那场，已按实写「Not recorded」），按「完成 / 证据 / 下一步 / 阻塞 / 需要的支持 / 要交接的」六栏写自己的部分 | `C-1`         | 截止前 | `../Week6 Coursework/process/part7-standup-records.md`             | 已完成（SU4 有据可查，SU3 如实记未记录） |
@@ -83,7 +83,7 @@
 > **两门课交的不是同一批东西**：AISD 四个槽（演示、更新后的方案、反馈记录、规划证据）；BPM&EA 是模型与评估（战略模型、i 模型、两份评估、支持文件）。不要把一份包交到两个口。
 > **文件名都是建议名**：规范没写命名规则（`Est-19`）。定下后全文替换。
 
-**挡不挡提交**：`A-1` 幻灯片已定稿（`../submissions/AISD/AISD_Presentation_2026-10-19.pptx`，13 页，附同名 PDF；第 8、9 页已按 10 月 19 日的实跑结果改写），一责 Ruby 于 2026-10-19 复核，未要求改动。AISD 包仍不能整包提交：`A-2` 已不挡（两个发布标签在远端可认，`Submission_Index` 已出，根 README 有 `Releases` 一节），`A-3` 仍在进行（`F-08` 拆不拆未定），`A-4` 只有底稿且初始版没有风险记录。`B-3`／`B-4` 书面评估三件已出（`BPMEA_Written_Evaluation`，23 页）：第一部分定稿，第二部分已按实跑起草、待 Ryan 认领；`B-1`／`B-5` 的可读 PDF 已出（战略 8 页、运营 16 页）。BPM&EA 包同样还不能整包提交：`B-8` 只有 29 日版。
+**挡不挡提交**：`A-1` 幻灯片已定稿（`../submissions/AISD/AISD_Presentation_2026-10-19.pptx`，13 页，附同名 PDF；第 8、9 页已按 10 月 19 日的实跑结果改写），一责 Ruby 于 2026-10-19 复核，未要求改动。AISD 包仍不能整包提交：`A-2` 已不挡（两个发布标签在远端可认，`Submission_Index` 已出，根 README 有 `Releases` 一节），`A-3` 已出（`../submissions/AISD/AISD_Feedback_Response_Record.pdf`，11 页，六项逐条标明），`A-4` 只有底稿且初始版没有风险记录。`B-3`／`B-4` 书面评估三件已出（`BPMEA_Written_Evaluation`，23 页）：第一部分定稿，第二部分已按实跑起草、待 Ryan 认领；`B-1`／`B-5` 的可读 PDF 已出（战略 8 页、运营 16 页）。BPM&EA 包同样还不能整包提交：`B-8` 只有 29 日版。
 
 ---
 
@@ -95,7 +95,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | `A-1` | `AISD_Presentation_2026-10-19.pptx` ＋ 同名 PDF | **`.pptx` 或 PDF**（两者之一即可，交付时两种都放更稳） | references；指向支持证据的可打开链接；每位成员能讲自己那部分 | 骨架用 `../submissions/BPMEA/Hospital_Pathway_BPMEA_Presentation_2026-09-29.pptx`（8 页，第一版），内容换第二版；事实依据为 `BPMEA_Written_Evaluation`、`feedback-response_2026-10-16` 与 10 月 19 日的 V3 实跑记录 | Ruby | **已定稿**：13 页，`.pptx` ＋ PDF 都在 `../submissions/AISD/`；一责 Ruby 于 2026-10-19 复核，未要求改动；每页备注写明由谁讲、讲哪几点 |
 | `A-2` | 无独立文件：Blackboard 的说明框里填仓库链接；包内放 `Submission_Index.pdf` | 原文不指定文件格式，机制是 **repository link** | `identifiable initial release and revised versions`＋`updated run instructions` | `../README.md`、两个标签、`../Week3 Coursework/hospital-pathway/README.md` 的 How to run | Ruby | **已齐**：`submission-2026-09-29`（`f6fec99`）与 `submission-2026-10-20` 都在远端可认（修订版的 SHA 从标签上读）；`../submissions/Submission_Index.md` 与两页 A4 的 `../submissions/Submission_Index.pdf` 已出，两个版本、两门课的交付件清单、验收证据与尚未到位的六项都在其中；根 README 有 `Releases` 一节，两版并排写明并指出修订版为当前版；运行说明已按目录树核过（`c8run.exe start --disable-connectors`、gRPC 26500、`mvn -B spring-boot:run` 与三个验收脚本） |
-| `A-3` | `AISD_Feedback_Response_Record.pdf` | 无格式规定 | feedback、decision、action、evidence、outcome、outstanding work 六项齐；未实施的写理由与遗留风险 | `../Week6 Coursework/feedback/feedback-response_2026-10-16.md` | Estrella | 进行中：`F-01`–`F-10` 已落行，`F-11` 记为未实施，导师栏留空 |
+| `A-3` | `AISD_Feedback_Response_Record.pdf` | 无格式规定 | feedback、decision、action、evidence、outcome、outstanding work 六项齐；未实施的写理由与遗留风险 | `../Week6 Coursework/feedback/feedback-response_2026-10-16.md` | Estrella | **已出**：`../submissions/AISD/AISD_Feedback_Response_Record.pdf`（11 页）与同名 `.md`；六项逐条标明，`F-08` 拆为 `F-08a`／`F-08b`，`F-11` 记未实施并写明遗留风险，导师栏留空；证据路径逐条核过 |
 | `A-4` | `AISD_Planning_Evidence.pdf` | 无格式规定 | **初始版与修订版的计划**、任务记录、两次 sprint review、**风险记录** | `../Week6 Coursework/plan/sprint3-4-plan_2026-10-16.md`＋`process/part7`、`part8`＋初始版冲刺待办 `../docs/p6-sprint-backlog.md` | Ender | 只有底稿；风险记录只有第二版那 6 行，初始版没有 |
 
 **第一次发布的三件不进第二版的槽**：Acceptance Test Plan、Justification of Decisions、详细运营 BPMN。它们通过 `A-2` 的仓库与 `A-4` 的记录继续支撑评分。要放进包里只能标注「初始版交付件，仅备查」，不能当本轮主件。
@@ -146,7 +146,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 | 判分块 | 权重 | 靠哪几件 | 现状 |
 | --- | --- | --- | --- |
 | Further development | 25% | `A-2`（仓库里的模型、worker、表单）＋ 运营模型的可读 PDF（与 `B-5` 里那份是同一个文件） | 模型与表单在；可读导出已出（10-19）；第二版已于 10-19 实跑：G07 走到 `COMPLETED`，六件过、`AT-03` 仍败 |
-| Response to feedback | 20% | `A-3` | 同伴 10 条已成文；导师反馈未收到 |
+| Response to feedback | 20% | `A-3` | 反馈共 12 条（同伴 7 条、自查 5 条）已成文并出 PDF（11 页）；导师反馈未收到 |
 | Project plan evaluation and justification | 25% | `A-4` | 只有底稿 |
 | Standup 3 | 5%（个人） | `C-1` | 记为 Not recorded |
 | Standup 4 | 5%（个人） | `C-1` | 本人已写，其余三人空 |
@@ -165,7 +165,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 
 | 要交的 | 性质 | 落在哪 | 现状 |
 | --- | --- | --- | --- |
-| `A-3` 反馈处置记录（一责） | 20% 那一块 | 见 4.1 | 进行中（`Est-03`） |
+| `A-3` 反馈处置记录（一责） | 20% 那一块 | 见 4.1 | 已出（`Est-03`） |
 | `B-3` 书面评估第一部分：需求对齐（一责） | BPM&EA 全套第 3 项 | 见 4.2 | 已出（`Est-21`） |
 | `B-2` i 模型源文件（一责），并追 Ryan 签二责 | BPM&EA 全套第 2 项 | 见 4.2 | 源文件在；二责未签（`Est-02`） |
 | `C-1` Standup 4 本人那一行（10-16） | 个人 5% | 见 4.3 | 已写（`Est-06`） |
@@ -189,7 +189,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 6. **`C-2` 的 SR3 七个字段**：已开、已打快照，内容全空。SR4 一公布日期就当天补，并同样打 `sr4-…` 快照。
 7. **`B-8` 项目与测试计划的第二版**：只有 29 日版；注意 7.4 的 AI 禁用。
 8. **`C-3` 贡献记录**：不单独计分，但影响小组分的个人认定。
-9. **`A-3` 的 `F-08` 拆分**：等第 10 组原文；导师反馈截至 10-19 一条未收到，第 2 节按事实留白。
+9. **`A-3` 反馈处置记录**：已收口。PDF 11 页与同目录 Markdown 都在 `submissions/AISD/`；`F-08` 已按第 10 组四条转写拆为 `F-08a`／`F-08b`，导师反馈截至 10-19 一条未收到，第 2 节按事实留白。
 10. **`C-4` 与二责签字**：形式性，但会写进提交说明。
 11. **计划 B 部分缺「依赖」一列**：规范要求每个活动都有 owner 两名、estimate、acceptance conditions、**dependencies**、status；`sprint3-4-plan` 的 A 部分有 `Depends on`，B 部分没有。
 
