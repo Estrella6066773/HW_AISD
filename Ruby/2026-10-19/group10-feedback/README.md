@@ -1,7 +1,7 @@
 # 第10组反馈改动（先放在这里，未覆盖 Week6 / Week3 原文件）
 
-来源图：`Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn`。  
-原图没有改。这份是可以打开、可以部署的副本。
+来源图：`Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`。  
+原图没有改。这份是可以打开、可以部署的副本，流程号与正式部署一致：`Hospital_All_Processes_V3_C8`。
 
 ## 四条反馈现在怎样
 
@@ -16,7 +16,7 @@
 
 ## 文件夹
 
-- `Hospital_All_Processes_V2.bpmn`：补了五个汇合网关的新图
+- `Hospital_All_Processes_V3.bpmn`：补了五个汇合网关的新图
 - `forms/`：12 份表单
 - `.process-application`：让 Modeler 把图和表单一起部署
 - `istar/可提高处.md`：对照 i\* 之后建议改、以及不要改的地方
@@ -25,6 +25,4 @@
 
 用 Camunda Modeler 打开本文件夹（识别为 Process Application），部署整个应用，不要只部署 BPMN。表单是按 `formId` 引用的，只部署图的话任务会找不到表单。
 
-流程 id 仍是 `Hospital_All_Processes_V2_C8`。
-
-不要同时运行 `Week3 Coursework/hospital-pathway` 的 `mvn spring-boot:run`。那个程序部署的仍是旧图 `W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`，会把引擎里的流程换回第一版。
+流程 id 是 `Hospital_All_Processes_V3_C8`，与 `Week6 Coursework/bpmn/` 里的主图一致。不要同时运行 `Week3 Coursework/hospital-pathway` 的 `mvn spring-boot:run`：那个程序现在也部署 `Hospital_All_Processes_V3.bpmn`，两边一起部署会在引擎里留下同一流程号的两个版本。

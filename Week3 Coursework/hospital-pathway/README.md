@@ -38,7 +38,7 @@ Keep the process running after `Started HospitalPathwayApplication`.
 
 ### 3. Start a process
 
-Tasklist → Processes → start `Hospital_All_Processes_V2_C8` (assignee `demo`). This is the full pathway diagram with the exclusive merge gateways. The earlier `Hospital_All_Processes_Simple_C8` file is the previous diagram and does not contain the split visit outcomes.
+Tasklist → Processes → start `Hospital_All_Processes_V3_C8` (assignee `demo`). This is the full pathway diagram with the exclusive merge gateways. The module's `pom.xml` packages the model and the forms from `../../Week6 Coursework/`, so the V3 file is what gets deployed; the local `bpmn/Hospital_All_Processes_V2.bpmn` is kept as an earlier copy and is no longer packaged. The earlier `Hospital_All_Processes_Simple_C8` file is the previous diagram and does not contain the split visit outcomes.
 
 ## Do you need Java every time?
 

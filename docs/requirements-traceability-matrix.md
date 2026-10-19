@@ -4,7 +4,7 @@
 
 > **Purpose**: Trace each requirement across the entire development lifecycle — from the strategic process model, through the operational BPMN, down to the actual implementation. This is a **grading criterion** (BPM&EA Task 3).
 >
-> **Current status (2026-10-19)**: the grades in section 2 are the 29 September snapshot and are left as written. Section 4 is the refreshed second-release position: **13 Supported / 25 Partial / 4 Unsupported**.
+> **Current status (2026-10-19)**: the grades in section 2 are the 29 September snapshot and are left as written. Section 4 is the refreshed second-release position: **13 Supported / 25 Partial / 4 Unsupported**. Sections 4.1–4.7 were written against V2; **4.8 re-checks them against V3, the operational model of record**, and confirms the same count.
 >
 > **Status Legend**:
 > - ✅ **Supported** — The requirement is fully addressed in this deliverable
@@ -240,3 +240,30 @@ Each row names the artefact the rule actually depends on and what that artefact 
 ### 4.7 What section 3 still covers
 
 Of the 30 rules section 3 plans for, one row is closed (BR-20), three are partly delivered (BR-36, BR-35, BR-13), and 26 are unchanged, of which 4 are still Unsupported. `BR-37` remains the highest-leverage item: it is P0, and it blocks BR-09, BR-21, BR-27 and BR-31 as well as `AT-03`. `BR-38` (audit immutability) and `BR-08` (consent and a structured treatment request) are the next P0 items whose artefacts did not change at all in V2.
+
+---
+
+### 4.8 V3 re-check (2026-10-19, after `357528e`)
+
+Sections 4.1–4.7 are the V2 record and are left as written. Later on 19 October, commit `357528e` deleted `Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn`, added `Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn` (process `Hospital_All_Processes_V3_C8`) and changed the build so that it packages that file and `Week6 Coursework/forms/`. This subsection records what the re-check found.
+
+| Item | V2 (4.1) | V3 (model of record) |
+|------|----------|----------------------|
+| Operational BPMN | `Hospital_All_Processes_V2.bpmn`, `..._V2_C8` | `Hospital_All_Processes_V3.bpmn`, `..._V3_C8` |
+| Tasks and events | 22 user tasks, 8 service tasks, 2 send tasks, one message catch event (`PaymentReceived`) | identical; no task, event or condition was added |
+| Exclusive gateways | 22, including seven `Join_*` | 27, including twelve `Join_*`; the five added are `Join_ReviewReferral`, `Join_GetDocuments`, `Join_DispatchLetter`, `Join_FinanceAdjustment`, `Join_Register` |
+| Assignment | every user task `assignee="demo"` | unchanged: 22 of 22 `assignee="demo"`, zero `candidateGroups`, zero `candidateUsers` |
+| Timers | none | none. No `timerEventDefinition`, no boundary event, no parallel or event-based gateway |
+| Deployed forms | `Week3 Coursework/hospital-pathway/forms/` | `Week6 Coursework/forms/`: the same 12 filenames, but every file differs from the Week3 copy (input patterns and descriptions added); `dispatch_letter` also gains `letterClinicallyApproved`, `book_visit` gains `attendedOn` |
+| Worker source | `Week3 Coursework/hospital-pathway/src/...` | byte-identical Java sources in `Week6 Coursework/code/src/...`; no worker changed. The only file that differs is the copied `application.yaml`, in one comment that names its working directory |
+
+**Effect on the grades: none.** The count stays **13 / 25 / 4**.
+
+- BR-20 stays ✅ Supported: the refund decision, the amount and the invalid-amount rejection are unchanged.
+- BR-36, BR-35 and BR-13 stay ⚠️ Partial for the reasons in 4.4. BR-36's record is slightly stronger because `book_visit.attendedOn` is mapped into `appointmentDate`, but reschedule is still not an outcome of its own.
+- BR-30 stays ⚠️ Partial. The new `letterClinicallyApproved` checkbox is collected on the form, but `DispatchLetter` maps no input for it and `LetterWorkers.dispatchClinicLetter` never reads it. It is a self-declaration the process cannot check, not the approval record the rule asks for.
+- BR-37 stays ❌ Unsupported: no candidate groups appeared.
+- BR-06, BR-32, BR-33 and BR-34 stay ⚠️ Partial: V3 adds no timer.
+- The five new `Join_*` gateways are pass-through, like the seven before them. They change no route and no condition.
+
+When citing 4.1 from here, read its operational row as V3 and its forms row as `Week6 Coursework/forms/`. Nothing else in 4.1 is affected.

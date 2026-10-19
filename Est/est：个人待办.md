@@ -30,7 +30,7 @@
 | Est-05 | 完成定义签字：一责 Ender，本人是二责，需要本人那一笔                                                           | `C-4`         | 10-20  | `../docs/definition-of-done.md`                                | 未开始 |
 | Est-06 | 自己那两行 Part 7 standup 记录：SU4（10-16 那场，已写）与 SU3（10-12 那场，已按实写「Not recorded」），按「完成 / 证据 / 下一步 / 阻塞 / 需要的支持 / 要交接的」六栏写自己的部分 | `C-1`         | 截止前 | `../Week6 Coursework/process/part7-standup-records.md`             | 已完成（SU4 有据可查，SU3 如实记未记录） |
 | Est-20 | 签 `PB-12` 二责复核前，先核第 4 节的映射是否仍指旧模型。**已核完**：第 4 节两处、第 6 节一处过时，第 8 行衔接模型仍指 `Simple_C8`；意见与建议改法见 `est：PB-12二责复核意见_2026-10-19.md` | `B-1`         | 10-20  | `est：PB-12二责复核意见_2026-10-19.md`；原件 `../docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md` 第 4、6、7 节 | 已完成（待一责改稿） |
-| Est-21 | 把需求对齐评估写成书面件：以 `../docs/requirements-traceability-matrix.md` 第 3、4 节为底稿，产出 `B-3`／`B-4` 那份书面评估的第一部分，最终形态必须是 `.docx` 或 PDF，Markdown 不算 | `B-3`、`B-4` | 10-20 | 产出件建议 `../submissions/BPMEA/`；底稿为追溯表第 3、4 节 | 未开始 |
+| Est-21 | 把需求对齐评估写成书面件：以 `../docs/requirements-traceability-matrix.md` 第 3、4 节为底稿，产出 `B-3`／`B-4` 那份书面评估的第一部分，最终形态必须是 `.docx` 或 PDF，Markdown 不算。**已按 V3 模型重写并定稿 Markdown，并已导出 `.docx` 与 PDF** | `B-3`、`B-4` | 10-20 | `../submissions/BPMEA/BPMEA_Written_Evaluation.md`；导出件 `../submissions/BPMEA/BPMEA_Written_Evaluation.docx` 与 `../submissions/BPMEA/BPMEA_Written_Evaluation.pdf`（17 页）；底稿为追溯表第 3、4 节与第 4.8 节 | 已完成（Markdown 定稿，`docx`／PDF 已导出到 `submissions/BPMEA/`） |
 
 
 `PB-34`（V1→V2 变更说明）本人一责，已完，不在表上。
@@ -41,7 +41,7 @@
 
 `Est-21` 是 2026-10-19 新增的：权威表（End of Week 6 · Full Portfolio）把「需求对齐评估」与「验收标准评估」列为判分对象，并要求书面评估用 `.docx` 或 PDF。此前只做了分析，没有可交的书面件。
 
-`Est-02` 两笔分开算：`PB-12` 在本人手上，`PB-16` 在 Ryan 手上。前者不能直接签——`PB-12_abstraction-level` 的复核清单第 4 项写的是「映射与 `Hospital_All_Processes_Simple_C8` 一致」，而第二版的运行模型已是 `Hospital_All_Processes_V2_C8`；第 5 项又要求「第 6 节与运行中的方案一致」。这两项照现状勾不上，所以单列为 `Est-20`。
+`Est-02` 两笔分开算：`PB-12` 在本人手上，`PB-16` 在 Ryan 手上。前者不能直接签——`PB-12_abstraction-level` 的复核清单第 4 项写的是「映射与 `Hospital_All_Processes_Simple_C8` 一致」，而第二版的运行模型已先后换成 `Hospital_All_Processes_V2_C8`、`Hospital_All_Processes_V3_C8`（V3 为当前模型）；第 5 项又要求「第 6 节与运行中的方案一致」。这两项照现状勾不上，所以单列为 `Est-20`。
 
 ---
 
@@ -114,14 +114,14 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 | `B-2` | `iStar_SD.txt` ＋ `iStar_SD.png`；`iStar_SR_Admin.txt`／`_Clinical.txt`／`_Finance.txt` 各配一张图 | 可编辑源文件（`where supported`）— 即 piStar 导出的 `.txt`；图随文件 | 角色、目标、软目标、任务、资源、依赖 | `../Week6 Coursework/istar/V1_SD_diagram.txt`、`V1_SD_diagram.png`、三份 `PB-16_V1_*_SR_reviewed_*.txt` | Estrella | 源文件四份在，**四张图已齐**（Admin `_2026-10-19.png`、Finance、Clinical、SD 各一张，10-19 补齐）；Ryan 二责复核未签，备料见 `est：PB-16二责复核备料_2026-10-19.md` |
 | `B-3` | 与 `B-4` 合为一份 `BPMEA_Written_Evaluation.docx`（另出 PDF） | **`.docx` 或 PDF**（原文点名） | 第一部分：需求对齐评估——逐条规则与模型／表单／worker／测试的对应，动了与没动都说清 | `../docs/requirements-traceability-matrix.md` 第 3、4 节 | Estrella（`PB-39`） | 分析完，**书面件没有**（`Est-21`） |
 | `B-4` | 同上，第二部分 | 同上 | 第二部分：验收标准评估——初版与修订后的验收标准、实际测试结果、支持证据、已识别的失败，以及有理由的评估 | `../Ryan/2026-09-26/PB-14_*`、`PB-18_*` 及其运行记录；`../submissions/AISD/Group_Acceptance_Test_Plan_and_Results_2026-09-29.pdf` | Ryan（`PB-31`），汇总人未定 | 只有 9 月 29 日那份验收 PDF，**不是第二版评估**；`AT-03` 仍为失败 |
-| `B-5` | `BPMEA_Supporting_Files/`：可编辑运营模型、部署配置、**两份可读 PDF**、i 源文件 | 可编辑 `.bpmn`＋部署配置；`readable PDF exports`（原文为**复数**） | 运营模型 `Hospital_All_Processes_V2_C8`；部署配置；运营与战略各一份可读导出 | `../Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn`；`../Week3 Coursework/hospital-pathway/src/main/resources/application.yaml`、`config/application.example.yaml` | Ruby（`PB-30`） | 模型与配置在；**可读导出两份都缺**，仓库里只有 29 日旧模型的九页 PDF |
+| `B-5` | `BPMEA_Supporting_Files/`：可编辑运营模型、部署配置、**两份可读 PDF**、i 源文件 | 可编辑 `.bpmn`＋部署配置；`readable PDF exports`（原文为**复数**） | 运营模型 `Hospital_All_Processes_V3_C8`；部署配置；运营与战略各一份可读导出 | `../Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`；`../Week3 Coursework/hospital-pathway/src/main/resources/application.yaml`、`config/application.example.yaml` | Ruby（`PB-30`） | 模型与配置在；**可读导出两份都缺**，仓库里只有 29 日旧模型的九页 PDF |
 
 **随仓库交付、第二版不另设槽的支撑件**（9 月 29 日布告 BPM&EA 第 2、3、4 项的要求）：
 
 | 编号 | 文件或位置 | 格式 | 必须包含 | 负责 | 现状 |
 | --- | --- | --- | --- | --- | --- |
 | `B-6` | `../Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/`、`pom.xml`、两份 yaml | 源码 ＋ 依赖 ＋ 配置模板 | 17 个 Java 文件、10 个作业类型 | Ender 等 | 在；29 日之后有改动，**未重跑** |
-| `B-7` | `../Week3 Coursework/hospital-pathway/forms/`（12 份 `.form`） | 可编辑 form 文件 ＋ 任务绑定 | 绑定写在 BPMN 各任务的 `formDefinition`；`await_attendance` 是第二版新增 | Estrella（`PB-13`） | 在 |
+| `B-7` | `../Week6 Coursework/forms/`（12 份 `.form`；`../Week3 Coursework/hospital-pathway/forms/` 是 10 月 19 日输入校验之前的旧版） | 可编辑 form 文件 ＋ 任务绑定 | 绑定写在 BPMN 各任务的 `formDefinition`；`await_attendance` 是第二版新增 | Estrella（`PB-13`） | 在 |
 | `B-8` | `../submissions/BPMEA/Group_Project_and_Test_Plan_2026-09-29.pdf` → 待换第二版 | 未规定 | 产品待办、冲刺待办、规划证据、测试计划、测试结果、测试证据 | Ruby | **只有 29 日版**。规范 7.4：**这一件不允许使用生成式 AI** |
 
 ---

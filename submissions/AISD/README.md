@@ -2,7 +2,7 @@
 
 The 29 September announcement requests a detailed operational BPMN, an Acceptance Test Plan, a Justification of Decisions and supporting editable/PDF files. Those documents describe the **initial release**, which used the [29 September Camunda 8 BPMN](<../../Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn>), the [forms](<../../Week3 Coursework/hospital-pathway/forms/>) and the [Java module](<../../Week3 Coursework/hospital-pathway/>), all shared with BPM&EA under `Week3 Coursework/hospital-pathway/`.
 
-The 29 September model's process id is `Hospital_All_Processes_Simple_C8`. It does not contain the split visit outcomes. The improved model for the second release is [`Hospital_All_Processes_V2.bpmn`](<../../Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn>), process id `Hospital_All_Processes_V2_C8`; see the [Week 6 folder index](<../../Week6 Coursework/README.md>) for the full second-release working set.
+The 29 September model's process id is `Hospital_All_Processes_Simple_C8`. It does not contain the split visit outcomes. The improved model for the second release is [`Hospital_All_Processes_V3.bpmn`](<../../Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn>), process id `Hospital_All_Processes_V3_C8`; it superseded V2 in `357528e` on 19 October. See the [Week 6 folder index](<../../Week6 Coursework/README.md>) for the full second-release working set.
 
 | AISD written deliverable | Submitted file |
 | --- | --- |

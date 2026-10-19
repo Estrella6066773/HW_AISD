@@ -2,7 +2,7 @@ spring:
   application:
     name: hospital-pathway
   datasource:
-    # 应用领域库（文件型 H2）。路径相对进程工作目录 Week6 Coursework/hospital-pathway/。
+    # 应用领域库（文件型 H2）。路径相对进程工作目录 Week6 Coursework/code/。
     # 勿与 c8run / Zeebe 引擎自带库混用。不含卡号字段。
     url: jdbc:h2:file:./data/hospital-domain;DB_CLOSE_DELAY=-1;AUTO_SERVER=FALSE
     driver-class-name: org.h2.Driver
