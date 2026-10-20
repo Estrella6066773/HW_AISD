@@ -40,7 +40,7 @@
 - **F1** 给 `Hospital_All_Processes_V3.bpmn` 补一份可读的 PDF 导出（目前只有 9 月 29 日旧模型那份 9 页 PDF）。V2 已在 `357528e` 被 V3 取代，导出对象随之为 V3 → `PB-30`
 - **F2** 重跑 `pb14_acceptance.py` / `pb18_acceptance.py` 并归档新记录 → `PB-31`
 
-> **2026-10-19 夜补记（事实已变，原文保留）**：`PB-31` 的复跑已经做了。V3 部署到本地 Camunda 8.10.0-alpha5（`c8run.exe start --disable-connectors`）后，六个验收用例加 G07 在同一次连续会话里对 V3 重跑：`AT-01`、`AT-02`、`AT-04`、`AT-05`、`AT-06` 通过，G07 走到 `COMPLETED`（9 个人工任务、无活动事件），**`AT-03` 仍失败**（模型没有 candidate group，秘书仍能完成 Consultant Accept）。记录在 `Week3 Coursework/hospital-pathway/evidence/Camunda_V3_Acceptance_2026-10-19.txt`，结论写入 `submissions/BPMEA/BPMEA_Written_Evaluation.md` 第 4 节与 `docs/requirements-traceability-matrix.md` 第 4.9 节。`F2` 因此关闭；`E6` 里「副本跑不起来」仍成立（那份副本本身没有源码），只是完整包已经跑通。
+> **2026-10-19 夜补记（事实已变，原文保留）**：`PB-31` 的复跑已经做了。V3 部署到本地 Camunda 8.10.0-alpha5（`c8run.exe start --disable-connectors`）后，六个验收用例加 G07 在同一次连续会话里对 V3 重跑：`AT-01`、`AT-02`、`AT-04`、`AT-05`、`AT-06` 通过，G07 走到 `COMPLETED`（9 个人工任务、无活动事件），**`AT-03` 仍失败**（模型没有 candidate group，秘书仍能完成 Consultant Accept）。记录在 `Week3 Coursework/hospital-pathway/evidence/Camunda_V3_Acceptance_2026-10-19.txt`，结论写入 `submissions/BPMEA/BPMEA_Written_Evaluation.pdf` 第 4 节与 `docs/requirements-traceability-matrix.md` 第 4.9 节。`F2` 因此关闭；`E6` 里「副本跑不起来」仍成立（那份副本本身没有源码），只是完整包已经跑通。
 - **F3** 已查明并处置：四份 i\* 模型文件（`istar/V1_SD_diagram.txt` 与三份 `*_SR_reviewed_2026-10-13.txt`）是**合法 UTF-8（无 BOM）、JSON 校验通过**，磁盘上没有乱码；花屏是查看器按 GBK 解码所致。处置见 `Week6 Coursework/README.md` 的「Encoding of the i\* model files」一节。是否把中文批注统一改成英文，另列为待定。
 
 ### G 类 · 无法在仓库内核实

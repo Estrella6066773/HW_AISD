@@ -2,7 +2,7 @@
 
 Executable Camunda 8 pathway: BPMN + 12 forms + Java job types (shared payment/booking communication; member A refund/investigate; member B slots; member C letters/referrer notification; member D care-change).
 
-This module is the shared implementation for both courses. The course-specific written submission indexes are in [BPM&EA](../../submissions/BPMEA/README.md) and [AISD](../../submissions/AISD/README.md); the same BPMN, forms and worker source are not duplicated there.
+This module is the shared implementation for both courses. The course-specific written submissions are in [BPM&EA](../../submissions/BPMEA/) and [AISD](../../submissions/AISD/), indexed by [`Submission_Index.pdf`](../../submissions/Submission_Index.pdf); the same BPMN, forms and worker source are not duplicated there.
 
 `Week6 Coursework/code/` is a trimmed second copy of this module, kept so the Week 6 folder can be read on its own: its Java sources, tests and test resources are identical, but its `pom.xml` packages `../bpmn` and `../forms` from that folder. This module is the one the evidence and the commands below refer to; run one copy at a time, because both deploy the same model and subscribe to the same job types.
 
