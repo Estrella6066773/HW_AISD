@@ -52,7 +52,7 @@ Present:
 
 Still open:
 
-- Second-owner review of `PB-16` i\* SD/SR: reviewed on 20 October. The nine Admin SR contribution links were corrected in the source the same evening; the Finance SR labels were checked against the catalogue and left as drawn; the Admin figure has not been re-exported (section 12 of `docs/istar/PB-16_istar-sd-sr.md`)
+- Second-owner review of `PB-16` i\* SD/SR: reviewed on 20 October. The nine Admin SR contribution links were corrected in the source the same evening and the figure was re-exported from it (`312d90b`); the Finance SR labels were checked against the catalogue and left as drawn (section 12 of `docs/istar/PB-16_istar-sd-sr.md`)
 - Role-permission test AT-03 remains FAIL on both releases. `BR-37` is recorded as unsupported for the same reason: the model carries no candidate groups, so every user task is still assigned to `demo`
 - The second-release Project and Test Plan (`B-8`) is in place as `submissions/BPMEA/Group_Project_and_Test_Plan_2026-10-20.pdf`, with the `.docx` beside it; the 29 September PDF remains the initial-release record. What stays open is inside it: the criteria no acceptance case drove are marked NOT EXECUTED
 - In the AISD pack, the feedback response (`A-3`, eleven pages) and the planning evidence (`A-4`, eight pages) are in place under `submissions/AISD/`; `A-4` states its own gaps rather than filling them — `SR2` has no minutes, `SU3` has no record because 12 October carries no project commit to read one from, and `SR3` left no minute so its fields are read back from the sixteen commits in the increment, each claim naming the commit it rests on. No tutor feedback had arrived in writing by 20 October, so the tutor rows in `A-3` are blank

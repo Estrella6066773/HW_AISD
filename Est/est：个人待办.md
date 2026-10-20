@@ -83,7 +83,7 @@
 > **两门课交的不是同一批东西**：AISD 四个槽（演示、更新后的方案、反馈记录、规划证据）；BPM&EA 是模型与评估（战略模型、i 模型、两份评估、支持文件）。不要把一份包交到两个口。
 > **文件名都是建议名**：规范没写命名规则（`Est-19`）。定下后全文替换。
 
-**挡不挡提交**：`A-1` 幻灯片已定稿（`../submissions/AISD/AISD_Presentation_2026-10-19.pptx`，13 页，附同名 PDF；第 8、9 页已按 10 月 19 日的实跑结果改写），一责 Ruby 于 2026-10-19 复核，未要求改动。AISD 包仍不能整包提交：`A-2` 已不挡（两个发布标签在远端可认，`Submission_Index` 已出，根 README 有 `Releases` 一节），`A-3` 已出（`../submissions/AISD/AISD_Feedback_Response_Record.pdf`，11 页，六项逐条标明），`A-4` 已出（`../submissions/AISD/AISD_Planning_Evidence.pdf`，8 页，两版计划、评审记录与两版风险记录都在内，缺口按实留白）。`B-3`／`B-4` 书面评估三件已出（`BPMEA_Written_Evaluation`，23 页）：第一部分定稿，第二部分已按实跑成稿、`PB-31` 签认尚未登记；`B-1`／`B-5` 的可读 PDF 已出（战略 8 页、运营 16 页）。BPM&EA 包：`B-8` 已出第二版（`../submissions/BPMEA/Group_Project_and_Test_Plan_2026-10-20.pdf` ＋ `.docx`，9 页，六件验收用例按实跑记录、`AT-03` 记为失败，29 日版留作初始版记录）。`B-4` 的 `PB-31` 签认与 `B-2` 的二责签字都已于 2026-10-20 登记。**不再有缺件**，只剩一处不一致：`B-2` 的 Admin 图仍是改正九条箭头之前的样子，须在 piStar 里按 `…_2026-10-19.txt` 重出一张，否则包内源文件与图对不上。
+**挡不挡提交**：`A-1` 幻灯片已定稿（`../submissions/AISD/AISD_Presentation_2026-10-19.pptx`，13 页，附同名 PDF；第 8、9 页已按 10 月 19 日的实跑结果改写），一责 Ruby 于 2026-10-19 复核，未要求改动。AISD 包仍不能整包提交：`A-2` 已不挡（两个发布标签在远端可认，`Submission_Index` 已出，根 README 有 `Releases` 一节），`A-3` 已出（`../submissions/AISD/AISD_Feedback_Response_Record.pdf`，11 页，六项逐条标明），`A-4` 已出（`../submissions/AISD/AISD_Planning_Evidence.pdf`，8 页，两版计划、评审记录与两版风险记录都在内，缺口按实留白）。`B-3`／`B-4` 书面评估三件已出（`BPMEA_Written_Evaluation`，23 页）：第一部分定稿，第二部分已按实跑成稿，`PB-31` 签认已于 2026-10-20 登记；`B-1`／`B-5` 的可读 PDF 已出（战略 8 页、运营 16 页）。BPM&EA 包：`B-8` 已出第二版（`../submissions/BPMEA/Group_Project_and_Test_Plan_2026-10-20.pdf` ＋ `.docx`，9 页，六件验收用例按实跑记录、`AT-03` 记为失败，29 日版留作初始版记录）。`B-4` 的 `PB-31` 签认与 `B-2` 的二责签字都已于 2026-10-20 登记。**不再有缺件，也不再有图与源不一致的地方**：`B-2` 的 Admin 图已于 2026-10-20 19:34 按改正后的 `…_2026-10-19.txt` 重出（`312d90b`），四份模型图与源文件全部对得上。
 
 ---
 
@@ -111,7 +111,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 | 编号 | 要交的文件 | 格式（原文要求） | 必须包含 | 从哪份源文件来 | 负责 | 现状 |
 | --- | --- | --- | --- | --- | --- | --- |
 | `B-1` | `BPMEA_Strategic_Process.bpmn` ＋ `BPMEA_Strategic_Process.pdf` ＋ `BPMEA_Abstraction_Note.pdf` | `.bpmn` 可编辑；**可读 PDF 导出**；说明文档 | 组织职责、外部交互、与运营流程的衔接 | `../docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn`、`PB-12_abstraction-level_2026-09-29.md` | Ruby，二责本人 | **三件已齐、内容已改**：可读导出 8 页；抽象说明 PDF 6 页，第 4 节已补 `VisitNeedsSlot` 与六路就诊结果，第 6 节退款一格记为已收口，卷首注明现行模型为 V3。**二责复核已于 2026-10-19 签署**（`Est-02`），签字见抽象说明第 7 节 |
-| `B-2` | `iStar_SD.txt` ＋ `iStar_SD.png`；`iStar_SR_Admin.txt`／`_Clinical.txt`／`_Finance.txt` 各配一张图 | 可编辑源文件（`where supported`）— 即 piStar 导出的 `.txt`；图随文件 | 角色、目标、软目标、任务、资源、依赖 | `../Week6 Coursework/istar/V1_SD_diagram.txt`、`V1_SD_diagram.png`、三份 `PB-16_V1_*_SR_reviewed_*.txt` | Estrella | 源文件四份在，**四张图已齐**（Admin `_2026-10-19.png`、Finance、Clinical、SD 各一张，10-19 补齐）；Ryan 二责复核已于 2026-10-20 落签；九条 Admin 贡献链接当日改正（`…_2026-10-19.txt`），Finance 的 `D18` 与 `D14`–`D17` 已按第 5 节日录逐条复核，非元模型错误，按设计保留；Admin 图未重出 |
+| `B-2` | `iStar_SD.txt` ＋ `iStar_SD.png`；`iStar_SR_Admin.txt`／`_Clinical.txt`／`_Finance.txt` 各配一张图 | 可编辑源文件（`where supported`）— 即 piStar 导出的 `.txt`；图随文件 | 角色、目标、软目标、任务、资源、依赖 | `../Week6 Coursework/istar/V1_SD_diagram.txt`、`V1_SD_diagram.png`、三份 `PB-16_V1_*_SR_reviewed_*.txt` | Estrella | 源文件四份在，**四张图已齐**（Admin `_2026-10-19.png`、Finance、Clinical、SD 各一张，10-19 补齐）；Ryan 二责复核已于 2026-10-20 落签；九条 Admin 贡献链接当日改正（`…_2026-10-19.txt`），Admin 图已于 2026-10-20 19:34 按改后源文件重出（`312d90b`），图与源一致；Finance 的 `D18` 与 `D14`–`D17` 已按第 5 节日录逐条复核，非元模型错误，按设计保留 |
 | `B-3` | 与 `B-4` 合为一份 `BPMEA_Written_Evaluation.docx`（另出 PDF） | **`.docx` 或 PDF**（原文点名） | 第一部分：需求对齐评估——逐条规则与模型／表单／worker／测试的对应，动了与没动都说清 | `../docs/requirements-traceability-matrix.md` 第 3、4 节 | Estrella（`PB-39`） | **已出**：`BPMEA_Written_Evaluation.docx`／PDF，23 页（`Est-21`） |
 | `B-4` | 同上，第二部分 | 同上 | 第二部分：验收标准评估——初版与修订后的验收标准、实际测试结果、支持证据、已识别的失败，以及有理由的评估 | 10 月 19 日 V3 实跑的六件记录（`../Week3 Coursework/hospital-pathway/evidence/`）；`../submissions/AISD/Group_Acceptance_Test_Plan_and_Results_2026-09-29.pdf` | Ryan（`PB-31`），汇总人未定 | 已按实跑起草在 `BPMEA_Written_Evaluation` 第 4 节：六过一败，`AT-03` 两版同败；`PB-31` 签认已于 2026-10-20 登记 |
 | `B-5` | `BPMEA_Supporting_Files/`：可编辑运营模型、部署配置、**两份可读 PDF**、i 源文件 | 可编辑 `.bpmn`＋部署配置；`readable PDF exports`（原文为**复数**） | 运营模型 `Hospital_All_Processes_V3_C8`；部署配置；运营与战略各一份可读导出 | `../Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`；`../Week6 Coursework/code/src/main/resources/application.yaml`、`config/application.example.yaml` | Ruby（`PB-30`） | **两份可读导出已出**（10-19）：运营 `BPMEA_Operational_Process_Readable_2026-10-19.pdf`（16 页，A3 横版，75 个节点无一被页边切断）、战略同上（8 页）。脚本 `../Week6 Coursework/scripts/render_bpmn_readable_pdf.py` 可复现 |
@@ -260,7 +260,7 @@ AISD 那一份**不放** 29 日的验收计划与设计决策作主件：四个�
 | 单包还是分槽、命名规则、大小上限 | 规范一字未提，见 `Est-19` |
 | 修订版标签打在哪一笔 | **已定**：`submission-2026-10-20` 就是修订版的发布标识，指向最终提交的树，提交号从标签上读（`git rev-parse submission-2026-10-20^{commit}`）。这条曾挂着，理由是「`HEAD` 还在 `c452381`、第二版还在改，标签要等最后一批改动之后再打」；现在不必再等 |
 | SR4 开在哪一天 | **已定**：2026-10-20，即 `../docs/definition-of-done.md` 签署记录所记的那次定稿会，四人到场；快照 `sr4-2026-10-20` |
-| 合并后的模型能否部署 | 决定现场走整条流程，还是按 9 月 29 日布告的备选方案改成每人一个小模型 |
+| 合并后的模型能否部署 | **已定**：能。`Hospital_All_Processes_V3.bpmn` 于 2026-10-19 部署成功（deployment key `2251799813928657`），G07 跑通到 `COMPLETED`，现场走整条流程，不必退回 9 月 29 日布告的备选方案 |
 
 ---
 

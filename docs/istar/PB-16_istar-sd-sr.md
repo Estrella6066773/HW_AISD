@@ -287,13 +287,17 @@ External scheduling and payment remain real strategic dependees (D9, D16) even t
 
 ## 10. Second-owner review
 
-Second owner: **Ryan / Guanyan He**. Items below are left unchecked for human review.
+Second owner: **Ryan / Guanyan He**. The five items below were written for the earlier Mermaid views. Section 12 records final acceptance against the selected piStar models, and it certifies four of the five; the fifth could not be certified and is left open for that reason.
 
-- [ ] Second owner confirms the actor set matches the case and the initial-release boundary
-- [ ] Second owner confirms every SD dependency D1–D24 appears in the SR diagrams
-- [ ] Second owner confirms out-of-scope items in Section 8 match the agreed release boundary
-- [ ] Second owner confirms the models do not claim forced role login as already implemented
-- [ ] Second owner confirms Mermaid diagrams render and edge labels remain readable
+| Item | Status, 20 October 2026 |
+|---|---|
+| Actor set matches the case and the initial-release boundary | Certified — the selected SD has 9 actors, checked against section 4 |
+| Every SD dependency D1–D24 appears in the SR diagrams | **Not certified** — the selected views cover 16 of the 24 catalogued dependencies |
+| Out-of-scope items in section 8 match the agreed release boundary | Certified — section 8 read against the 29 September boundary |
+| The models do not claim forced role login as already implemented | Certified — role-based login stays a requirement, and `AT-03` records the gap on both releases |
+| Mermaid diagrams render and edge labels remain readable | Certified for the Mermaid views that remain; the delivered figures are the four piStar exports |
+
+The one that stays open does not block the SD or the three SR views: it is a coverage claim over a catalogue that is wider than the selected views, and section 11 recorded it as uncertified on the day.
 
 
 ## 11. Ryan review record
@@ -304,7 +308,7 @@ Second owner: **Ryan / Guanyan He**. Items below are left unchecked for human re
 - Scope: the selected SD and three SR models in `Week6 Coursework/istar/` (the SD has 9 actors and 13 dependencies), checked against the dependency catalogue. This does not certify every D1-D24 dependency in the older Mermaid views.
 - Decision: **Reviewed - changes requested; final approval pending.**
 
-The selected SD matches the catalogue's names, types and directions. Corrections remain in the Finance SR (D18 must be aligned with the Quality dependency in the SD, and D14/D15/D16/D17 labels require alignment) and the Admin SR (nine Contribution links target Goals rather than Qualities; D1/D14 labels require alignment). The older five-item checklist in section 10 must be reconciled with the actual selected-view scope before it can be approved. No unchecked item above has been certified by this record.
+The selected SD matches the catalogue's names, types and directions. Corrections remain in the Finance SR (D18 must be aligned with the Quality dependency in the SD, and D14/D15/D16/D17 labels require alignment) and the Admin SR (nine Contribution links target Goals rather than Qualities; D1/D14 labels require alignment). The older five-item checklist in section 10 must be reconciled with the actual selected-view scope before it can be approved. No item in section 10 was certified by this record.
 
 *This section records the review as it stood on 20 October. The Admin SR part is superseded by section 12.1, where the nine links were corrected; the Finance SR part is answered in section 12.2, where the labels are found to match the catalogue's meaning; the D1/D14 label question is answered there too.*
 
@@ -333,7 +337,7 @@ The other four were not contribution links at all, and changing their target alo
 
 The file now holds 8 contribution links, every one targeting a quality; and 7 AND-refinement and 5 needed-by links, every one targeting a goal or a task. Nothing else in the source was touched: the diff is 8 lines, 4 link types and 1 node type.
 
-**The PNG has not been re-exported.** `PB-16_V1_Admin_SR_reviewed_2026-10-19.png` still shows the old arrows and does not match the source it is named after. The group re-exports it from piStar; until that is done the figure and the source disagree.
+**The PNG was re-exported on 20 October.** `PB-16_V1_Admin_SR_reviewed_2026-10-19.png` was regenerated from the corrected source in piStar at 19:34 that evening (commit `312d90b`), so the figure and the source it is named after now agree: the image grew from 7672 × 3636 to 8764 × 4140 as the arrow set changed. The file name keeps its 19 October date because that is when the review itself was taken and when the source was first named; the export that matches it is the later one.
 
 ### 12.2 Finance SR: reviewed against the catalogue and left as designed
 
