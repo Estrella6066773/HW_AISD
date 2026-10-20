@@ -83,7 +83,7 @@
 > **两门课交的不是同一批东西**：AISD 四个槽（演示、更新后的方案、反馈记录、规划证据）；BPM&EA 是模型与评估（战略模型、i 模型、两份评估、支持文件）。不要把一份包交到两个口。
 > **文件名都是建议名**：规范没写命名规则（`Est-19`）。定下后全文替换。
 
-**挡不挡提交**：`A-1` 幻灯片已定稿（`../submissions/AISD/AISD_Presentation_2026-10-19.pptx`，13 页，附同名 PDF；第 8、9 页已按 10 月 19 日的实跑结果改写），一责 Ruby 于 2026-10-19 复核，未要求改动。AISD 包仍不能整包提交：`A-2` 已不挡（两个发布标签在远端可认，`Submission_Index` 已出，根 README 有 `Releases` 一节），`A-3` 已出（`../submissions/AISD/AISD_Feedback_Response_Record.pdf`，11 页，六项逐条标明），`A-4` 已出（`../submissions/AISD/AISD_Planning_Evidence.pdf`，7 页，两版计划、评审记录与两版风险记录都在内，缺口按实留白）。`B-3`／`B-4` 书面评估三件已出（`BPMEA_Written_Evaluation`，23 页）：第一部分定稿，第二部分已按实跑成稿、`PB-31` 签认尚未登记；`B-1`／`B-5` 的可读 PDF 已出（战略 8 页、运营 16 页）。BPM&EA 包同样还不能整包提交：`B-8` 只有 29 日版。
+**挡不挡提交**：`A-1` 幻灯片已定稿（`../submissions/AISD/AISD_Presentation_2026-10-19.pptx`，13 页，附同名 PDF；第 8、9 页已按 10 月 19 日的实跑结果改写），一责 Ruby 于 2026-10-19 复核，未要求改动。AISD 包仍不能整包提交：`A-2` 已不挡（两个发布标签在远端可认，`Submission_Index` 已出，根 README 有 `Releases` 一节），`A-3` 已出（`../submissions/AISD/AISD_Feedback_Response_Record.pdf`，11 页，六项逐条标明），`A-4` 已出（`../submissions/AISD/AISD_Planning_Evidence.pdf`，7 页，两版计划、评审记录与两版风险记录都在内，缺口按实留白）。`B-3`／`B-4` 书面评估三件已出（`BPMEA_Written_Evaluation`，23 页）：第一部分定稿，第二部分已按实跑成稿、`PB-31` 签认尚未登记；`B-1`／`B-5` 的可读 PDF 已出（战略 8 页、运营 16 页）。BPM&EA 包同样还不能整包提交：`B-8` 已出第二版（`../submissions/BPMEA/Group_Project_and_Test_Plan_2026-10-20.pdf` ＋ `.docx`，9 页，六件验收用例按实跑记录、`AT-03` 记为失败，29 日版留作初始版记录），余下卡口是 `B-4` 的 `PB-31` 签认与 `B-2` 的二责签字。
 
 ---
 
@@ -122,7 +122,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 | --- | --- | --- | --- | --- | --- |
 | `B-6` | `../Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/`、`pom.xml`、两份 yaml | 源码 ＋ 依赖 ＋ 配置模板 | 17 个 Java 文件、10 个作业类型 | Ender 等 | 在；29 日之后有改动，10 月 19 日在 `dbc0a33` 干净重跑，19 项测试全过（`evidence/Java_Clean_Build_Test_2026-10-19.txt`） |
 | `B-7` | `../Week6 Coursework/forms/`（12 份 `.form`；`../Week3 Coursework/hospital-pathway/forms/` 是 10 月 19 日输入校验之前的旧版） | 可编辑 form 文件 ＋ 任务绑定 | 绑定写在 BPMN 各任务的 `formDefinition`；`await_attendance` 是第二版新增 | Estrella（`PB-13`） | 在 |
-| `B-8` | `../submissions/BPMEA/Group_Project_and_Test_Plan_2026-09-29.pdf` → 待换第二版 | 未规定 | 产品待办、冲刺待办、规划证据、测试计划、测试结果、测试证据 | Ruby | **只有 29 日版**。规范 7.4：**这一件不允许使用生成式 AI** |
+| `B-8` | `../submissions/BPMEA/Group_Project_and_Test_Plan_2026-10-20.pdf`（29 日版留作初始版记录） | 未规定 | 产品待办、冲刺待办、规划证据、测试计划、测试结果、测试证据 | Ruby | **第二版已出**：`.pdf` ＋ `.docx`，9 页；六件验收用例带实例号与证据文件，`AT-03` 记失败，未跑的判据逐条写 NOT EXECUTED。规范 7.4：**这一件不允许使用生成式 AI**，文中只填已落盘的实跑结果 |
 
 ---
 
@@ -187,7 +187,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 4. **`B-4` 书面评估第二部分**：第二部分已按 19 日实跑成稿（`BPMEA_Written_Evaluation` 第 4 节，六过一败，`AT-03` 两版同败），`PB-31` 的签认尚未登记；验收证据本身不再是阻塞项。
 5. **`B-1` 抽象说明的四处改稿**：已收口。A–D 已改入原文，一责 Ruby 于 2026-10-19 确认改后文本，二责复核同日签署 accepted；三件交付物齐，签字见抽象说明第 7 节。
 6. **`C-2` 的 SR3 七个字段**：已开、已打快照，内容全空。SR4 一公布日期就当天补，并同样打 `sr4-…` 快照。
-7. **`B-8` 项目与测试计划的第二版**：只有 29 日版；注意 7.4 的 AI 禁用。
+7. **`B-8` 项目与测试计划的第二版**：已收口。`Group_Project_and_Test_Plan_2026-10-20.pdf` ＋ `.docx`（9 页）在 `submissions/BPMEA/`，六件验收用例逐条带实例号与证据文件，`AT-03` 记失败，未跑的判据写 NOT EXECUTED，29 日版留作初始版记录；仍注意 7.4 的 AI 禁用，文中只填实跑结果。
 8. **`C-3` 贡献记录**：不单独计分，但影响小组分的个人认定。
 9. **`A-3` 反馈处置记录**：已收口。PDF 11 页与同目录 Markdown 都在 `submissions/AISD/`；`F-08` 已按第 10 组四条转写拆为 `F-08a`／`F-08b`，导师反馈截至 10-19 一条未收到，第 2 节按事实留白。
 10. **`C-4` 与二责签字**：形式性，但会写进提交说明。
