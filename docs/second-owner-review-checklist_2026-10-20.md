@@ -254,4 +254,4 @@ Two things this checklist asked for were **not** done, and are recorded as gaps 
 1. **The eight dependencies missing from the piStar sources** were not added. Item 2 of the five-item checklist therefore remains unticked in the model notes, and the reviewer's signature records the gap instead of hiding it.
 2. **The Admin SR figure was not re-exported** after the nine contribution links were corrected in the source. The source and the PNG disagree until it is.
 
-The Finance SR label corrections listed in section 12.2 of the model notes also remain open: `D18` carries a different id there than in the SD, and the `D14`–`D17` labels differ in wording.
+The Finance SR labels were checked against the catalogue in section 12.2 of the model notes and left as drawn: no link there is of a forbidden type, D18's task-level slice is the documented way this service view states a softgoal that belongs to the clinical boundary, and D17 restores a dependency the SD diagram omits. That figure still matches its source.

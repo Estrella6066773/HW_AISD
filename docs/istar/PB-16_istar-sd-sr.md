@@ -306,7 +306,7 @@ Second owner: **Ryan / Guanyan He**. Items below are left unchecked for human re
 
 The selected SD matches the catalogue's names, types and directions. Corrections remain in the Finance SR (D18 must be aligned with the Quality dependency in the SD, and D14/D15/D16/D17 labels require alignment) and the Admin SR (nine Contribution links target Goals rather than Qualities; D1/D14 labels require alignment). The older five-item checklist in section 10 must be reconciled with the actual selected-view scope before it can be approved. No unchecked item above has been certified by this record.
 
-*This section records the review as it stood on 20 October. The Admin SR part is superseded by section 12.1, where the nine links were corrected; the Finance SR part and the D1/D14 label question remain open, see section 12.2.*
+*This section records the review as it stood on 20 October. The Admin SR part is superseded by section 12.1, where the nine links were corrected; the Finance SR part is answered in section 12.2, where the labels are found to match the catalogue's meaning; the D1/D14 label question is answered there too.*
 
 Typed review record entered at Ryan's explicit request. SR model files and figures were not modified.
 
@@ -335,8 +335,20 @@ The file now holds 8 contribution links, every one targeting a quality; and 7 AN
 
 **The PNG has not been re-exported.** `PB-16_V1_Admin_SR_reviewed_2026-10-19.png` still shows the old arrows and does not match the source it is named after. The group re-exports it from piStar; until that is done the figure and the source disagree.
 
-### 12.2 Corrections still open
+### 12.2 Finance SR: reviewed against the catalogue and left as designed
 
-The Finance SR items in section 11 are **not** corrected: `D18` carries a different id there than in the SD (`648f5d89…` against `40a913f4…`), and the `D14`–`D17` labels still differ in wording from the SD. The Admin SR `D1` and `D14` label wording is also unchanged: the correction in section 12.1 touched the nine contribution links and one node type, nothing else. Those are label and identity questions rather than metamodel defects, and they were left for the next revision rather than settled at speed on the submission evening.
+Section 11 asked for the Finance SR labels to be aligned. Read against the catalogue in section 5, none of the four is a metamodel defect, and the group is not changing them. The reasons differ, so they are separated here rather than dismissed together.
+
+**D18 is a deliberate service-view slice, not a mistake.** The catalogue types D18 as a softgoal, "Urgent care not blocked solely by payment delay". The Finance SR renders it as `Clinical team` depending on the Finance task `Follow up after urgent care [M/P]`; the model's own `Qualification` for that dependency records why: the aspiration belongs to the clinical boundary, and carrying it inside Finance would make Finance look as though it owned the authorisation of urgent treatment. The softgoal is present where it belongs, in the Clinical SR, as `Clinical work not delayed solely by payment confirmation gaps` → `Finance`. Retargeting D18 at a quality in the Finance view would put a clinical softgoal into a service view that has no claim to it, so the reading is correct as drawn and the type difference from the catalogue is the price of it.
+
+**D17 is an addition, not a mismatch.** The piStar SD diagram draws 13 of the 24 catalogued dependencies and D17 is not among them; the Finance SR restores it, which is what brings the patient into this view. Its dependum is the Finance goal `Funding and payment managed` rather than the catalogue's narrower "Charging and refunds follow the recorded rules" — broader than the catalogue, not narrower, and therefore not a misstatement. Section 11's wording, "the `D14`–`D17` labels differ from the SD", cannot apply to D17 at all: the SD has no D17 to differ from.
+
+**D14, D15 and D16 differ in wording only.** Each keeps the catalogue's depender, dependee and direction, and each carries its case basis and qualification in `customProperties`. A reader comparing the labels side by side will see different wording for the same dependency; a reader following the edge will find the same dependency.
+
+**On the ids.** D14, D15 and D16 keep the same id in the SD and in this SR. D18 does not, but it also does not in the Clinical SR, which shares `648f5d89…` with the Finance SR against the SD's `40a913f4…`. Making the Finance id match the SD would break the Finance–Clinical pair instead, so the ids are left as they are. No link in the file resolves to a missing node: all 28 resolve, and all four contribution links target a quality.
+
+That is the difference between this item and the Admin SR. There, nine contribution links pointed at goals, which the metamodel forbids; here every link is of a permitted type. **The Finance figure therefore still matches its source**, and unlike the Admin figure it was not invalidated by any change.
+
+The Admin SR `D1` and `D14` label wording is unchanged: the correction in section 12.1 touched the nine contribution links and one node type, nothing else. That one is a wording question only, and is left for the next revision.
 
 This acceptance is therefore an acceptance of the SD and the Clinical and Finance SRs as they stand, and of the Admin SR after the correction above. Item 2 of the section 10 checklist remains uncertified, as it was in section 11: the piStar sources cover 16 of the 24 catalogued dependencies and `D3, D11, D13, D19, D21, D22, D23, D24` do not appear in them. The five boxes in section 10 are left unticked for that reason; this record does not tick them.
