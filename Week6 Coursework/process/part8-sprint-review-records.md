@@ -29,7 +29,7 @@ The specification asks for a record of what each review showed and a version or 
 | SR1 | none made | `standup-1-2026-09-16` points at `93dfaf5` (16 September 04:42), the state that existed on the morning of the review. It was created to mark the standup, so it is the nearest thing to an SR1 snapshot but it is not one and is not claimed as one |
 | SR2 | none made | `submission-2026-09-29` (`f6fec99`) is the release tag from the following evening, not a review snapshot |
 | SR3 | `sr3-2026-10-14` → `25f53f7` | Taken at the last commit before the session slot; `2d09f5a` (21:01 the same day) came after the review and is excluded |
-| SR4 | `sr4-2026-10-20` → the commit tagged below | Taken on the day of the session, 20 October; see the section below for what was on screen |
+| SR4 | `sr4-2026-10-20` → `a0d8f55` | Taken at the commit the 20 October finalisation session produced, so it shows what was on screen rather than the state at submission |
 
 ## Sprint Review 3 — 2026-10-14
 
