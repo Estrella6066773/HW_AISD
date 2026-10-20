@@ -50,7 +50,7 @@ An item must not be marked Done by ticking items from a group that does not appl
 - [ ] Code compiles / runs without errors
 - [ ] No hardcoded secrets or credentials; no patient data and no card data committed
 - [ ] Code is self-documenting (clear variable names, comments where needed)
-- [ ] At least one team member (Second Owner) reviewed the changes
+- [x] At least one team member (Second Owner) reviewed the changes — Ender, Ryan and Estrella reviewed the worker module on 2026-10-20; record in `Week6 Coursework/process/B-6_worker-review_2026-10-20.md`.
 
 ## Documentation — every increment
 

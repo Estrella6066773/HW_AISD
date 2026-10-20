@@ -307,3 +307,15 @@ Second owner: **Ryan / Guanyan He**. Items below are left unchecked for human re
 The selected SD matches the catalogue's names, types and directions. Corrections remain in the Finance SR (D18 must be aligned with the Quality dependency in the SD, and D14/D15/D16/D17 labels require alignment) and the Admin SR (nine Contribution links target Goals rather than Qualities; D1/D14 labels require alignment). The older five-item checklist in section 10 must be reconciled with the actual selected-view scope before it can be approved. No unchecked item above has been certified by this record.
 
 Typed review record entered at Ryan's explicit request. SR model files and figures were not modified.
+
+
+## 12. Final acceptance, 20 October 2026
+
+- Reviewers: **Guanyan He (Ryan)**, second owner, with **Geping Chen (Estrella)** as first owner and the whole group present.
+- Decision: **Accepted as delivered.**
+
+The corrections listed in section 11 are recorded there and were **not applied**. The group took that decision on the afternoon of 20 October 2026, with all four members present and each having checked the artefacts locally: the figures are kept exactly as they stand, because the submission deadline did not allow the piStar sources and their PNG exports to be revised and re-checked.
+
+This acceptance is therefore an acceptance of the delivered figures, not a finding that the listed defects are absent. Item 2 of the section 10 checklist remains uncertified, as it was in section 11: the piStar sources cover 16 of the 24 catalogued dependencies and `D3, D11, D13, D19, D21, D22, D23, D24` do not appear in them. The five boxes in section 10 are left unticked for that reason; this record does not tick them.
+
+No figure, source file or PNG was modified to produce this record.
