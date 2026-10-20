@@ -63,7 +63,7 @@ An item must not be marked Done by ticking items from a group that does not appl
 
 - [x] Screenshot, log or document evidence is committed to the repository at a path that can be opened, named `PB-xx_name_type_date` — the acceptance records follow the form (`PB-14_acceptance-run-log_2026-10-19.json`, `PB-18_acceptance-run-log_2026-10-19.json`); the build and test logs are named by subject instead (`Java_Test_Results_2026-10-20.txt`), and both are opened from the evidence column.
 - [x] That path is written in the item's Evidence column in `docs/p3-product-backlog.md`, and in the Evidence column in `docs/p6-sprint-backlog.md` for sprint tasks.
-- [ ] Git commit message describes what was changed and references the backlog item, for example `docs(PB-01): add role permission table` — **not met**: of 198 commits on `main`, 18 carry a `PB-xx` reference; the commit carrying the 19 October acceptance evidence, `41d2f10`, carries none. Messages describe the change, but the reference convention was not applied.
+- [ ] Git commit message describes what was changed and references the backlog item, for example `docs(PB-01): add role permission table` — **not met**: of the 225 commits on `main` at `493ca84`, 11 subject lines carry a `PB-xx` reference and 6 of those use the `type(PB-xx):` form the example shows; the commit carrying the 19 October acceptance evidence, `41d2f10`, carries none. Messages describe the change, but the reference convention was not applied.
 - [x] Backlog item status is updated in `docs/p3-product-backlog.md`, and in `docs/p6-sprint-backlog.md` for sprint tasks.
 
 ## Group sign-off
@@ -85,6 +85,6 @@ The three items left unticked are known and accepted rather than outstanding wor
 
 1. **Timeouts** in the worker error handling. The model has no timer, so a timeout path does not exist to handle.
 2. **Form works for all user roles.** There is no role layer; every task is assigned to `demo`. This is the same defect `AT-03` records on both releases.
-3. **Commit messages referencing the backlog item.** 18 of 198 commits on `main` carry a `PB-xx` reference. The convention was written down and never applied consistently, and rewriting the history to satisfy it would misrepresent what happened.
+3. **Commit messages referencing the backlog item.** At commit `493ca84`, 11 of 225 subject lines carry a `PB-xx` reference, 6 of them in the `type(PB-xx):` form the example shows. The convention was written down and never applied consistently, and rewriting the history to satisfy it would misrepresent what happened.
 
 Signing this checklist means the group agrees the completed items are Done and the three gaps above are recorded truthfully. It does not mean every item on the list is satisfied.
