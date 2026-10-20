@@ -294,3 +294,16 @@ Second owner: **Ryan / Guanyan He**. Items below are left unchecked for human re
 - [ ] Second owner confirms out-of-scope items in Section 8 match the agreed release boundary
 - [ ] Second owner confirms the models do not claim forced role login as already implemented
 - [ ] Second owner confirms Mermaid diagrams render and edge labels remain readable
+
+
+## 11. Ryan review record
+
+- Reviewer: **Guanyan He (Ryan)**, second owner.
+- Date: **20 October 2026**.
+- Reviewed repository version: **b4e0d23**.
+- Scope: the selected SD and three SR models in `Week6 Coursework/istar/` (the SD has 9 actors and 13 dependencies), checked against the dependency catalogue. This does not certify every D1-D24 dependency in the older Mermaid views.
+- Decision: **Reviewed - changes requested; final approval pending.**
+
+The selected SD matches the catalogue's names, types and directions. Corrections remain in the Finance SR (D18 must be aligned with the Quality dependency in the SD, and D14/D15/D16/D17 labels require alignment) and the Admin SR (nine Contribution links target Goals rather than Qualities; D1/D14 labels require alignment). The older five-item checklist in section 10 must be reconciled with the actual selected-view scope before it can be approved. No unchecked item above has been certified by this record.
+
+Typed review record entered at Ryan's explicit request. SR model files and figures were not modified.
