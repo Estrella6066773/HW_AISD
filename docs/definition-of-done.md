@@ -57,7 +57,7 @@ An item must not be marked Done by ticking items from a group that does not appl
 - [x] Changes are reflected in the root `README.md` when the repository structure or the deliverable index changes — the `Releases` section carries both tags and the second-release layout.
 - [x] Assumptions are recorded where they belong: group assumptions in the Part 1 case summary (`Ruby/2026-09-14/ruby：part1案例摘要.md`), and item-level assumptions such as mocked external services in the item's own file — the mocked payment and letter services are stated in the worker notes and in §4.6 of `submissions/BPMEA/BPMEA_Written_Evaluation.pdf`.
 - [x] Known limitations are documented — `Limits recorded, not hidden` in `submissions/Submission_Index.pdf` page 2, and §4.6 of the written evaluation.
-- [x] The item's row in `docs/p3-product-backlog.md` shows the correct Status — corrected on 20 October for `PB-13` (was `Not started`), `PB-30`, `PB-31` and `PB-16`.
+- [x] The item's row in `docs/p3-product-backlog.md` shows the correct Status — re-read on 20 October 2026 against the tagged tree and the acceptance record, under the rule in Note 8 of that file: thirteen Done, eleven In progress, six Not started. The earlier pass on the same day corrected `PB-13` (was `Not started`), `PB-30`, `PB-31` and `PB-16`.
 
 ## Delivery Evidence — every increment
 
