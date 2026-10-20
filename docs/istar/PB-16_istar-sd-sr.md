@@ -337,6 +337,6 @@ The file now holds 8 contribution links, every one targeting a quality; and 7 AN
 
 ### 12.2 Corrections still open
 
-The Finance SR items in section 11 are **not** corrected: `D18` carries a different id there than in the SD (`648f5d89…` against `40a913f4…`), and the `D14`–`D17` labels still differ in wording from the SD. Those are label and identity questions rather than metamodel defects, and they were left for the next revision rather than settled at speed on the submission evening.
+The Finance SR items in section 11 are **not** corrected: `D18` carries a different id there than in the SD (`648f5d89…` against `40a913f4…`), and the `D14`–`D17` labels still differ in wording from the SD. The Admin SR `D1` and `D14` label wording is also unchanged: the correction in section 12.1 touched the nine contribution links and one node type, nothing else. Those are label and identity questions rather than metamodel defects, and they were left for the next revision rather than settled at speed on the submission evening.
 
 This acceptance is therefore an acceptance of the SD and the Clinical and Finance SRs as they stand, and of the Admin SR after the correction above. Item 2 of the section 10 checklist remains uncertified, as it was in section 11: the piStar sources cover 16 of the 24 catalogued dependencies and `D3, D11, D13, D19, D21, D22, D23, D24` do not appear in them. The five boxes in section 10 are left unticked for that reason; this record does not tick them.
