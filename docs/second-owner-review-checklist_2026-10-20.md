@@ -1,5 +1,7 @@
 # Second-owner review checklist — 20 October 2026
 
+> **Closed.** All the reviews this checklist was written to drive were signed and recorded on 20 October 2026. Section 12 carries the outcomes; the authoritative record for each item is the file named in its own section, not this sheet. Sections 1–11 are kept as written that evening, so their `Unsigned` and `Status today` cells describe the starting position, not the state at close.
+
 **Status**: internal working document, written on the evening of 20 October 2026. It is not a submission deliverable and does not go into either pack. Each reviewer signs their own line; nobody signs for anyone else.
 
 **Deadline**: 23:59 tonight. Every item below can be finished by opening files that already exist. Nothing here asks anyone to restart c8run, re-run Maven, redeploy a model or export a PDF.
@@ -230,3 +232,26 @@ Working record only. The record that counts is the file named in each section ab
 | B-4 | Ruby | | Accepted / not signed | |
 | B-3 | — | | Not required (section 8) | — |
 | B-8 | — | | Not required (section 8) | — |
+
+---
+
+## 12. Outcomes at close, 20 October 2026
+
+Every review above was completed and recorded on the day. This table is an index to the records; where it and a section above disagree, the section above was written earlier and the record named here wins.
+
+| Item | Reviewer | Outcome | Where the record lives |
+|------|----------|---------|------------------------|
+| B-2 | Ryan | Reviewed; changes requested, then the Admin correction applied. Item 2 of the five-item checklist stays unticked and says why. | `docs/istar/PB-16_istar-sd-sr.md` sections 11 and 12 |
+| B-5 | Ender | Accepted | PB-30 Status cell, `docs/p3-product-backlog.md` |
+| B-6 | Ender, Ryan, Estrella, by file | Accepted for 13 of 17 files; the four with no recorded author are left unmarked rather than claimed | `Week6 Coursework/process/B-6_worker-review_2026-10-20.md` |
+| B-7 | Ruby | Accepted | PB-13 Status cell, `docs/p3-product-backlog.md` |
+| B-4 | Ruby | Accepted | PB-31 Status cell, `docs/p3-product-backlog.md` |
+| B-3 | — | Not required by the rule; left unsigned | This section, and section 8 above |
+| B-8 | — | Not required by the rule; left unsigned | This section, and section 8 above |
+
+Two things this checklist asked for were **not** done, and are recorded as gaps rather than closed:
+
+1. **The eight dependencies missing from the piStar sources** were not added. Item 2 of the five-item checklist therefore remains unticked in the model notes, and the reviewer's signature records the gap instead of hiding it.
+2. **The Admin SR figure was not re-exported** after the nine contribution links were corrected in the source. The source and the PNG disagree until it is.
+
+The Finance SR label corrections listed in section 12.2 of the model notes also remain open: `D18` carries a different id there than in the SD, and the `D14`–`D17` labels differ in wording.

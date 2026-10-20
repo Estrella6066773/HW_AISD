@@ -77,7 +77,7 @@
 | E-012 | — | Ruby | 参与（第 10 组反馈归档） | ART | `Ruby/2026-10-19/group10-feedback/`（模型、12 份表单、README） | 2026-10-19 | — | 通过 | Estrella 2026-10-20 | 可部署副本，未覆盖 `Week6 Coursework/` 的主文件 |
 | E-013 | — | Ruby | 复核（`A-1` 幻灯片） | ART | `submissions/AISD/AISD_Presentation_2026-10-19.pptx` | 2026-10-19 | — | 缺件 | Estrella 2026-10-20 | 复核一事只见于 `Est/est：个人待办.md` 的记述，无签字件、无提交记录 |
 | E-014 | — | Estrella | 主笔（Part 3） | ART | `docs/p3-product-backlog.md`；`Est/est：part3产品待办.md`（归档草稿） | 2026-09-15 至 2026-10-16 | — | 通过 | Estrella 2026-10-20 | 表头署 Estrella 主笔、Ryan 复核 |
-| E-015 | PB-16 | Estrella | 第一负责人 | ART | `docs/istar/PB-16_istar-sd-sr.md`；`docs/istar/PB-16_sd.md`；`docs/istar/PB-16_sr.md`；`docs/istar/PB-16_sd-overview.png` | 2026-09-29 | Done | 通过 | Estrella 2026-10-20 | 二责复核清单（Ryan）仍未签 |
+| E-015 | PB-16 | Estrella | 第一负责人 | ART | `docs/istar/PB-16_istar-sd-sr.md`；`docs/istar/PB-16_sd.md`；`docs/istar/PB-16_sr.md`；`docs/istar/PB-16_sd-overview.png` | 2026-09-29 | Done | 通过 | Estrella 2026-10-20 | 二责复核已由 Ryan 于 2026-10-20 落签；五项清单第 2 项按缺口未勾 |
 | E-016 | PB-16 | Estrella | 参与 | ART | `Week6 Coursework/istar/PB-16_V1_Admin_SR_reviewed_2026-10-19.txt` 与同目录 `.png`；提交 `353f988` | 2026-10-19 | Done | 通过 | Estrella 2026-10-20 | Admin 视图复审后重出，文件名改为此日期 |
 | E-017 | PB-34 | Estrella | 第一负责人 | ART | `Week6 Coursework/istar/PB-16_V1-V2_review-changes_2026-10-16.md` | 2026-10-16 | Done | 通过 | Estrella 2026-10-20 | 逐件写明改了什么、由哪笔提交承载 |
 | E-018 | PB-28 | Estrella | 参与（条目一责为 Ruby） | ART | `docs/requirements-traceability-matrix.md` | 2026-09-16 至 2026-10-19 | Done | 通过 | Estrella 2026-10-20 | 该文件各笔提交均记在本人名下，一责 Ruby 无相关提交；条目负责人栏与产出入不一致 |
@@ -112,7 +112,7 @@
 | E-047 | PB-18 | Ryan | 第一负责人 | LOG | `Ryan/2026-09-26/PB-18_acceptance-run-log_2026-09-29.json` | 2026-09-29 | In progress | 通过 | Estrella 2026-10-20 | 四个例外路径的实际结果 |
 | E-048 | — | Ryan | 主笔（D 组工作器与数据库说明） | ART | `Ryan/2026-09-28/D_外部工作器与数据库说明.md`；`docs/superpowers/plans/2026-09-28-member-d-notifications.md`；提交 `0695a4a`、`9cd42b2` | 2026-09-28 | — | 通过 | Estrella 2026-10-20 | `PB-21` 的实现边界写在这里 |
 | E-049 | PB-21 | Ryan | 第一负责人 | CMT | `Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/CareChangeWorkers.java`、`domain/AuditEvent.java`；提交 `0695a4a`、`9cd42b2` | 2026-09-28 | In progress | 通过 | Estrella 2026-10-20 | 只做了护理变更通知；改期、停治的正式申请未实现。`9cd42b2` 当日曾加入 `evidence/PB-21_member-D_simple_2026-09-28/` 六件运行证据，同日被 `57d0b36` 删除，现仓库内已无运行证据（见第五节第 9 条） |
-| E-050 | PB-16 | Ryan | 第二负责人 | ART | `Week6 Coursework/istar/V1_SD_diagram.txt`、`V1_SD_diagram.png`；`Ryan/2026-10-15/PB-16_V1_SD_reviewed_2026-10-13.png`；提交 `c8b371e`、`5398f2c`、`13abe30` | 2026-10-15 至 2026-10-16 | Done | 通过 | Estrella 2026-10-20 | SD 模型改版由他做；二责复核清单仍未签，改与签是两件事 |
+| E-050 | PB-16 | Ryan | 第二负责人 | ART | `Week6 Coursework/istar/V1_SD_diagram.txt`、`V1_SD_diagram.png`；`Ryan/2026-10-15/PB-16_V1_SD_reviewed_2026-10-13.png`；提交 `c8b371e`、`5398f2c`、`13abe30` | 2026-10-15 至 2026-10-16 | Done | 通过 | Estrella 2026-10-20 | SD 模型改版由他做；二责复核已于 2026-10-20 落签，改与签仍是两件事 |
 | E-051 | PB-11 | Ryan | 第一负责人 | CMT | `Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/domain/AuditEvent.java`、`AuditEventWriter.java`、`AuditEventRepository.java`；提交 `0695a4a` | 2026-09-28 | Not started | 通过 | Estrella 2026-10-20 | 三份审计实现文件在，提交 `0695a4a` 在；「普通用户改不动审计记录」仍没有验证，待办要的拒绝截图不存在 |
 | E-052 | — | Ryan | 参与（W02 Referral 模型） | ART | `Ryan/2026-09-21/W02_Referral.bpmn`；提交 `396b6ad` | 2026-09-21 | — | 通过 | Estrella 2026-10-20 | 转诊协作模型，第 2 周练习 |
 | E-053 | PB-31 | Ryan | 第一负责人 | — | 仓库内没有他名下与 `PB-31` 相关的提交或文件；实跑记录记在 Estrella 名下（见 E-020） | — | Done | 缺件 | Estrella 2026-10-20 | 仓库内没有他名下与 `PB-31` 相关的提交或文件；实跑记录记在 Estrella 名下（见 E-020）；待办把 `PB-31` 记为 Done、一责为他 |
@@ -158,7 +158,7 @@
 | PB-14 | P1 | Ryan | Ender | In progress | 2 | 是 | 是（署名一致，提交均非本人） | 部分 | 29 日两案 PASS（E-044、E-045），19 日复跑在 E-020；二责 Ender 无签字 |
 | PB-18 | P1 | Ryan | Ender | In progress | 2 | 是 | 是（署名一致，提交均非本人） | 部分 | `AT-03` FAIL 如实记录，`AT-04` 至 `AT-06` PASS（E-046、E-047） |
 | PB-15 | P0 | Ruby | Estrella | 已撤出（2026-10-16） | 0 | — | 不适用 | 不适用 | 撤出后由 `Week6 Coursework/process/part7-standup-records.md` 与 `part8-sprint-review-records.md` 承载 |
-| PB-16 | P0 | Estrella | Ryan | Done | 4 | 是 | 是 | 可认定完成（附一处过程缺口） | 模型与四张图齐（E-015、E-016、E-038、E-050）；二责复核清单仍未签，待办在证据栏自己写了这句却仍记 Done |
+| PB-16 | P0 | Estrella | Ryan | Done | 4 | 是 | 是 | 可认定完成（附一处过程缺口） | 模型与四张图齐（E-015、E-016、E-038、E-050）；二责复核已于 2026-10-20 落签，但五项清单的第 2 项按缺口未勾（八条依赖不在 piStar 源内）；Admin 图未按改正后的源重出 |
 | PB-17 | P0 | Estrella | Ender | 已撤出（2026-10-16） | 1 | 是 | 是 | 不适用 | 落点即本表（E-031）；待办 Note 9 指到 `Est/est：PB-17贡献记录表.md` |
 | — | — | — | — | In progress（重复行） | 0 | — | — | — | 模板录入时 `PB-18` 出现两次；上一条为准，此行不另计证据，保留以说明模板问题 |
 | PB-19 | P1 | Ender | Ryan | Not started | 0 | — | — | 不可认定完成 | 正式的变更申请未实现 |
@@ -171,9 +171,9 @@
 | PB-26 | P2 | Estrella | Ender | Not started | 0 | — | — | 不可认定完成 | 十项报表一项未出 |
 | PB-27 | P2 | Estrella | Ryan | Not started | 0 | — | — | 不可认定完成 | 无产物 |
 | PB-28 | P0 | Ruby | Ryan | Done | 1 | 是 | 否 | 可认定完成 | 42 条与第 4 节齐（E-018）；一责 Ruby、二责 Ryan，文件各笔提交都在 Estrella 名下，而她不在负责人栏 |
-| PB-29 | P0 | Ender | Estrella | 已撤出（2026-10-16） | 0 | — | 不适用 | 不适用 | 落点 `docs/definition-of-done.md`；四人未签，`C-4` 仍开 |
+| PB-29 | P0 | Ender | Estrella | 已撤出（2026-10-16） | 0 | — | 不适用 | 不适用 | 落点 `docs/definition-of-done.md`；四人已于 2026-10-20 签署，31 项中 28 项勾选、3 项未勾并写明理由 |
 | PB-30 | P0（第二版） | Ruby | Ender | In progress | 4 | 是 | 否 | 部分 | 模型、补入的汇合网关、两份可读 PDF 都在（E-006 至 E-008、E-028），验收条件「有可读导出」已满足；但多数模型改动与两份导出记在 Estrella 名下，她不在负责人栏；待办证据栏仍写「可读 PDF 待出」 |
-| PB-31 | P0（第二版） | Ryan | Ruby | Done | 1 | 是（记录本身可开） | 否 | 部分 | 实跑与 19 项单测记录完整（E-020）；一责 Ryan 名下无任何相关提交，E-053 就是这条空登记；第 2 部分书面评估的 `PB-31` 签认尚未登记；待办记 Done 早于该签认 |
+| PB-31 | P0（第二版） | Ryan | Ruby | Done | 1 | 是（记录本身可开） | 否 | 部分 | 实跑与 19 项单测记录完整（E-020）；一责 Ryan 名下无任何相关提交，E-053 就是这条空登记；第 2 部分书面评估的 `PB-31` 签认已于 2026-10-20 登记；一责名下无产物这一点不因签认而消失 |
 | PB-34 | P0（第二版） | Estrella | Ryan | Done | 1 | 是 | 是 | 可认定完成 | 变更说明逐件给出文件与提交（E-017） |
 | PB-39 | P0（第二版） | Estrella | Ryan | Done | 1 | 是 | 是 | 可认定完成 | 第 4 节给出 13／25／4 与每条未动的原因（E-019） |
 
@@ -188,10 +188,10 @@
 
 **本轮核对发现的其他口径不一致（只登记，不改原件）**
 
-1. **`PB-30` 的证据栏过期。** 待办写「可读 PDF 导出仍需产出」，但 `submissions/BPMEA/` 下已有两份（16 页运营、8 页战略，2026-10-19），验收条件里的「有可读导出」已满足。状态仍记 `In progress`。
-2. **`PB-13` 的状态低于实物。** 12 份表单在 `Week6 Coursework/forms/`，被 19 日实跑用上，待办仍记 `Not started`，也没有表单截图。
-3. **`PB-31` 记 `Done`，但一责名下没有一笔相关提交。** 实跑与日志全部记在 Estrella 名下（`41d2f10`），第 2 部分书面评估的扉页写明负责人是 Ryan、正文的 `PB-31` 签认尚未登记。状态早于该签认。
-4. **`PB-16` 记 `Done`，二责复核清单仍未签。** 待办在证据栏里自己写了这句，状态还是 `Done`。本表把它记为「可认定完成（附一处过程缺口）」，不替它抹平。
+1. **`PB-30` 已于 2026-10-20 收口。** 证据栏原写「可读 PDF 导出仍需产出」，而 `submissions/BPMEA/` 下两份早在（16 页运营、8 页战略，2026-10-19）；本轮把状态改为 `Done` 并登记二责复核，这条不再成立，留在此处只记改前的样子。
+2. **`PB-13` 已于 2026-10-20 收口。** 12 份表单在 `Week6 Coursework/forms/`，被 19 日实跑用上；状态由 `Not started` 改为 `Done` 并登记二责复核。仍缺的是必填校验的浏览器截图：约束已定义并绑定，但 19 日的驱动走 REST 直发，没有证明表单拦下过空值。
+3. **`PB-31` 记 `Done`，但一责名下没有一笔相关提交。** 实跑与日志全部记在 Estrella 名下（`41d2f10`）。签认已于 2026-10-20 补登记，与状态不再错位；但该条的验收条件之一是「记下结果由其产出」，而仓库仍证明不了 Ryan 写过其中任何一件。
+4. **`PB-16` 记 `Done`，五项清单的第 2 项仍未勾。** 二责已于 2026-10-20 落签，签认不再缺失；未勾的是第 2 项——`D3, D11, D13, D19, D21, D22, D23, D24` 这八条不在 piStar 源里。本表把它记为「可认定完成（附一处过程缺口）」，不替它抹平。
 5. **负责人栏与产出的落点不一致的条目有六条。** `PB-09`（Estrella／Ryan，实现 `a0ac6cb` 记在 Ender 名下）、`PB-14`、`PB-18`（一责 Ryan、二责 Ender）、`PB-28`（Ruby／Ryan）、`PB-30`（Ruby／Ender）、`PB-31`（Ryan／Ruby）：能打开的产物或提交记在负责人栏之外的人名下，负责人本人名下没有对应提交。其中三条落在 Estrella 名下，而她在 `PB-28`、`PB-30`、`PB-31` 三条的负责人栏里一个都不是。视图 B 的「负责人是否一致」按条目逐条填，上列六条填「否」；`PB-16` 虽由 Ender 补了 Finance 一图，但一责 Estrella 与二责 Ryan 各自有件，仍填「是」。
 6. **归档草稿里有一处死链。** `Est/est：part3产品待办.md` 的 `PB-20`（现 `PB-22`）行把证据写成 `Ruby/2026-09-22/PB-20_角色权限矩阵.md`；该文件在仓库里不存在，`Ruby/2026-09-22/` 下只有紧急治疗模型。草稿已归档，但它把「角色权限矩阵」说成有件，容易被当成 `PB-22` 的证据。
 7. **模板自身有两处问题，已按原样保留并标注。** `PB-18` 在视图 B 出现两次；`PB-15`、`PB-17`、`PB-29` 三行仍以在办状态列出，而它们 2026-10-16 已撤出。
@@ -229,7 +229,7 @@
 - [x] 四个人都有证据，不存在一人多、一人空 —— **成立，但「一人多」确实存在，如实照录**：`main` 上 Estrella 113 笔、Ruby 62 笔、Ryan 15 笔、Ender 8 笔（合计 198 笔）。四人都有可打开的产物（E-001 至 E-052 逐行给出路径），没有一人为空；E-040、E-053 两行如实写「无证据」，登记的是缺什么，不替任何人补一件。Ender 的 8 笔里有 7 笔是产物或文档、1 笔是改名，视图 A 只登记得出 9 行。
 - [x] 每个位置都真实可打开，没有占位内容 —— **成立**：视图 A 与视图 B 引用的路径与文件名于 2026-10-20 逐一核过，按原路径测过的一律存在；少数只写文件名的地方，所在目录由同一行给出，也已核到。没有「见上文」「截图」这类占位写法，`E-040`、`E-053` 两行直接写「无证据」。唯一的例外是 `Ruby/2026-09-22/PB-20_角色权限矩阵.md`，它出现在第五节的死链说明里，不是证据行。
 - [ ] 每行姓名与产品待办登记的负责人一致 —— **不成立**：`PB-09`、`PB-14`、`PB-18`、`PB-28`、`PB-30`、`PB-31` 六条的产物或提交落在负责人栏之外，负责人本人名下没有对应提交；视图 B 的「负责人是否一致」据实把这六条填「否」（见第五节第 5 条）。本表按「谁做了什么就记谁」登记，不把名字改回负责人栏来凑这一条。
-- [x] 标完成的条目全部有可打开证据，反例如实标出 —— **成立**：`PB-12`、`PB-16`、`PB-28`、`PB-31`、`PB-34`、`PB-39` 六条 Done 各有可开路径（`PB-30` 尚在 In progress）；T01 缺权限表、`AT-03` 两版同败、`PB-16` 二责未签三处反例都写在表内，没有一处被改成「完成」。
+- [x] 标完成的条目全部有可打开证据，反例如实标出 —— **成立**：`PB-12`、`PB-16`、`PB-28`、`PB-31`、`PB-34`、`PB-39` 六条 Done 各有可开路径（`PB-30` 亦已于 2026-10-20 改判 `Done`）；T01 缺权限表、`AT-03` 两版同败、`PB-16` 五项清单第 2 项未勾三处反例都写在表内，没有一处被改成「完成」。
 - [ ] 提交记录类证据带条目编号，显示名与邮箱能对应到人 —— **不成立**：`main` 的 198 笔里，整条提交信息带 `PB-xx` 的 18 笔、带 `Txx` 的 1 笔；题名为 `1` 的 8 笔、`2` 的 2 笔、`更新` 的 2 笔，`Merge branch 'main'` 22 笔，长度不足 9 个字符的共 23 笔。承载 19 日实跑证据的 `41d2f10` 题名是「Execute the revised model against a live Camunda engine and record the results」，没有条目编号。显示名与邮箱在 `main` 上是四人对四人，能对应（见第二节）；但 Ruby 另有一个 Gitee 身份 `16025137+Rubyzheng@user.noreply.gitee.com`，共 17 笔，2026-09-14 至 15，全部不在 `main` 的历史上，只在旧线上可见。
 - [ ] 每次评审有版本快照 —— **不成立**：SR3 有 `sr3-2026-10-14`（指向 `25f53f7`）；SR1、SR2 没有，`standup-1-2026-09-16` 只能算「最接近」，`submission-2026-09-29` 是次日的发布标签，不能顶替；SR4 按 `Week6 Coursework/process/part8-sprint-review-records.md` 第 58 行排在 10 月 19 日那一周，仓库里没有它的记录，也没有 `sr4-` 开头的标签。
 - [ ] 站会个人记录逐人留档 —— **不成立**：`Week6 Coursework/process/part7-standup-records.md` 里 SU3 四人全记「Not recorded」，SU4 只有 Estrella 一行，Ruby、Ryan、Ender 三格空白。视图 A 只登记得出 E-030 一行。
