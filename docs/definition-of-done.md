@@ -50,7 +50,7 @@ An item must not be marked Done by ticking items from a group that does not appl
 - [x] Code compiles / runs without errors — `mvn -B clean test` reports BUILD SUCCESS, 19 tests (evidence/Java_Test_Results_2026-10-20.txt).
 - [x] No hardcoded secrets or credentials; no patient data and no card data committed — `application.yaml` holds the local `demo`/`demo` and an empty-password H2 file; the database file is not committed.
 - [x] Code is self-documenting (clear variable names, comments where needed).
-- [x] At least one team member (Second Owner) reviewed the changes — Ender, Ryan and Estrella reviewed the worker module on 2026-10-20; record in `Week6 Coursework/process/B-6_worker-review_2026-10-20.md`.
+- [x] At least one team member (Second Owner) reviewed the changes — Ender, Ryan and Estrella reviewed 13 of the 17 worker files on 2026-10-20; the four files with no recorded author are not marked as reviewed, because independence cannot be shown for them. Record in `Week6 Coursework/process/B-6_worker-review_2026-10-20.md`.
 
 ## Documentation — every increment
 
