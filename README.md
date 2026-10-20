@@ -52,12 +52,12 @@ Present:
 
 Still open:
 
-- Second-owner review of `PB-16` i\* SD/SR; the checklist is still unsigned
+- Second-owner review of `PB-16` i\* SD/SR: reviewed on 20 October and accepted the delivered figures, with the corrections recorded but not applied (section 12 of `docs/istar/PB-16_istar-sd-sr.md`)
 - Role-permission test AT-03 remains FAIL on both releases. `BR-37` is recorded as unsupported for the same reason: the model carries no candidate groups, so every user task is still assigned to `demo`
 - The second-release Project and Test Plan (`B-8`) is in place as `submissions/BPMEA/Group_Project_and_Test_Plan_2026-10-20.pdf`, with the `.docx` beside it; the 29 September PDF remains the initial-release record. What stays open is inside it: the criteria no acceptance case drove are marked NOT EXECUTED
 - In the AISD pack, the feedback response (`A-3`, eleven pages) and the planning evidence (`A-4`, seven pages) are in place under `submissions/AISD/`; `A-4` states its own gaps — `SR2` has no minutes and `SR4` was not held — rather than filling them. No tutor feedback had arrived in writing by 20 October, so the tutor rows in `A-3` are blank
 - Exception routes stay unevidenced even after the 19 October run: the formal change path, DNA to Finance, urgent authorisation, the refund adjustment and letter escalation are modelled but no case drives them
-- The contribution record `Est/est：PB-17贡献记录表.md` is filled from the repository (53 rows, `E-001` to `E-053`); its second-owner review is unsigned, and the Definition of Done is unsigned
+- The contribution record `Est/est：PB-17贡献记录表.md` is filled from the repository (53 rows, `E-001` to `E-053`) and carries Ender's review of 20 October; the Definition of Done carries a four-member sign-off of the same date, with three of its 31 items left unticked and the reason written beside each
 
 **Second release was executed on 19 October.** `Hospital_All_Processes_V3_C8` was deployed to a local Camunda 8.10.0-alpha5 (c8run, started with `--disable-connectors`) and the six acceptance cases plus a full G07 path were re-run against it: five of the six pass, G07 reached `COMPLETED` with nine human tasks and no active incident, and `AT-03` fails exactly as it did on 29 September. A clean `mvn -B clean test` passes 19 unit tests. The master record is [`Camunda_V3_Acceptance_2026-10-19.txt`](<Week3 Coursework/hospital-pathway/evidence/Camunda_V3_Acceptance_2026-10-19.txt>); the evaluation is Part 2 of [`BPMEA_Written_Evaluation.pdf`](submissions/BPMEA/BPMEA_Written_Evaluation.pdf).
 
