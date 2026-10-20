@@ -26,7 +26,7 @@
 | Est-01 | 追溯矩阵按第二版刷新：26 条部分支持、4 条未支持的规则里，哪些在第二版动了、哪些没动；动了的要有证据，没动的要写清原因                           | `PB-39`         | 10-20  | `../docs/requirements-traceability-matrix.md` 第 4 节            | 已完成 |
 | Est-02 | 收口两处未签的二责复核：`PB-12` 战略模型由本人签（2026-10-19 已签，签字见抽象说明第 7 节）；`PB-16` i SD/SR 由 Ryan 签，需要追他。**两份可交稿已出**：`est：PB-12二责复核意见_2026-10-19.md`（A–D 已改入原文、一责已确认）、`est：PB-16二责复核备料_2026-10-19.md`（口径待定后即可交） | `PB-12`、`PB-16` | 10-20  | `../docs/strategic-bpmn/`；`../docs/istar/PB-16_istar-sd-sr.md` | 进行中（`PB-12` 已签；`PB-16` 签字待人） |
 | Est-03 | 反馈处置记录逐条落行：实际收到的反馈才写，未收到的留空，不凭推测补。**记录已出 PDF**（11 页）；六项逐条标明，`F-08` 已按 10 月 19 日归档的第 10 组四条转写拆为 `F-08a`／`F-08b`（原件仍未入库），`F-11` 记未实施并写明遗留风险 | `A-3`         | 10-20  | `../submissions/AISD/AISD_Feedback_Response_Record.pdf`；源文件 `../Week6 Coursework/feedback/feedback-response_2026-10-16.md` | 已完成 |
-| Est-04 | 填贡献记录表：视图 A 按证据逐行登记、视图 B 按条目对账；每条证据要能打开并与条目负责人一致                                        | `C-3`         | 10-20  | `est：PB-17贡献记录表.md`（本目录）                                        | 未开始 |
+| Est-04 | 填贡献记录表：视图 A 按证据逐行登记、视图 B 按条目对账；每条证据要能打开并与条目负责人一致                                        | `C-3`         | 10-20  | `est：PB-17贡献记录表.md`（本目录）                                        | 已完成（视图 A 53 行，`E-001` 至 `E-053`；视图 B 已出，2026-10-20 更新） |
 | Est-05 | 完成定义签字：一责 Ender，本人是二责，需要本人那一笔                                                           | `C-4`         | 10-20  | `../docs/definition-of-done.md`                                | 未开始 |
 | Est-06 | 自己那两行 Part 7 standup 记录：SU4（10-16 那场，已写）与 SU3（10-12 那场，已按实写「Not recorded」），按「完成 / 证据 / 下一步 / 阻塞 / 需要的支持 / 要交接的」六栏写自己的部分 | `C-1`         | 截止前 | `../Week6 Coursework/process/part7-standup-records.md`             | 已完成（SU4 有据可查，SU3 如实记未记录） |
 | Est-20 | 签 `PB-12` 二责复核前，先核第 4 节的映射是否仍指旧模型。**已核完并已改入原文**：第 4 节两处、第 6 节一处过时，第 8 行衔接模型仍指 `Simple_C8`；意见见 `est：PB-12二责复核意见_2026-10-19.md`，四处已于 10-19 改入 `PB-12_abstraction-level_2026-09-29.md`，`BPMEA_Abstraction_Note.pdf` 随之重出（6 页） | `B-1`         | 10-20  | `est：PB-12二责复核意见_2026-10-19.md`；原件 `../docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md` 第 4、6、7 节 | 已完成（一责 2026-10-19 确认改稿，二责已签） |
@@ -94,7 +94,7 @@
 | 编号 | 要交的文件 | 格式（原文要求） | 必须包含 | 从哪份源文件来 | 负责 | 现状 |
 | --- | --- | --- | --- | --- | --- | --- |
 | `A-1` | `AISD_Presentation_2026-10-19.pptx` ＋ 同名 PDF | **`.pptx` 或 PDF**（两者之一即可，交付时两种都放更稳） | references；指向支持证据的可打开链接；每位成员能讲自己那部分 | 骨架用 `../submissions/BPMEA/Hospital_Pathway_BPMEA_Presentation_2026-09-29.pptx`（8 页，第一版），内容换第二版；事实依据为 `BPMEA_Written_Evaluation`、`feedback-response_2026-10-16` 与 10 月 19 日的 V3 实跑记录 | Ruby | **已定稿**：13 页，`.pptx` ＋ PDF 都在 `../submissions/AISD/`；一责 Ruby 于 2026-10-19 复核，未要求改动；每页备注写明由谁讲、讲哪几点 |
-| `A-2` | 无独立文件：Blackboard 的说明框里填仓库链接；包内放 `Submission_Index.pdf` | 原文不指定文件格式，机制是 **repository link** | `identifiable initial release and revised versions`＋`updated run instructions` | `../README.md`、两个标签、`../Week3 Coursework/hospital-pathway/README.md` 的 How to run | Ruby | **已齐**：`submission-2026-09-29`（`f6fec99`）与 `submission-2026-10-20` 都在远端可认（修订版的 SHA 从标签上读）；`../submissions/Submission_Index.docx` 与两页 A4 的 `../submissions/Submission_Index.pdf` 已出，两个版本、两门课的交付件清单、验收证据与尚未到位的六项都在其中；根 README 有 `Releases` 一节，两版并排写明并指出修订版为当前版；运行说明已按目录树核过（`c8run.exe start --disable-connectors`、gRPC 26500、`mvn -B spring-boot:run` 与三个验收脚本） |
+| `A-2` | 无独立文件：Blackboard 的说明框里填仓库链接；包内放 `Submission_Index.pdf` | 原文不指定文件格式，机制是 **repository link** | `identifiable initial release and revised versions`＋`updated run instructions` | `../README.md`、两个标签、`../Week3 Coursework/hospital-pathway/README.md` 的 How to run | Ruby | **已齐（标签重打之后）**：`submission-2026-09-29`（`f6fec99`）与 `submission-2026-10-20` 都在远端可认；`submission-2026-10-20` 指向最终提交的树，提交号从标签上读（`git rev-parse submission-2026-10-20^{commit}`）；`../submissions/Submission_Index.docx` 与两页 A4 的 `../submissions/Submission_Index.pdf` 已出，两个版本、两门课的交付件清单、验收证据与尚未到位的六项都在其中；根 README 有 `Releases` 一节，两版并排写明并指出修订版为当前版；运行说明已按目录树核过（`c8run.exe start --disable-connectors`、gRPC 26500、`mvn -B spring-boot:run` 与三个验收脚本） |
 | `A-3` | `AISD_Feedback_Response_Record.pdf` | 无格式规定 | feedback、decision、action、evidence、outcome、outstanding work 六项齐；未实施的写理由与遗留风险 | `../Week6 Coursework/feedback/feedback-response_2026-10-16.md` | Estrella | **已出**：`../submissions/AISD/AISD_Feedback_Response_Record.pdf`（11 页）与同名 `.docx`；六项逐条标明，`F-08` 拆为 `F-08a`／`F-08b`，`F-11` 记未实施并写明遗留风险，导师栏留空；证据路径逐条核过 |
 | `A-4` | `AISD_Planning_Evidence.pdf` | 无格式规定 | **初始版与修订版的计划**、任务记录、两次 sprint review、**风险记录** | `../Week6 Coursework/plan/sprint3-4-plan_2026-10-16.md`＋`process/part7`、`part8`＋初始版冲刺待办 `../docs/p6-sprint-backlog.md` | Ender | **已出**：`../submissions/AISD/AISD_Planning_Evidence.pdf`（7 页）与同名 `.docx`；两版计划、任务与站会记录、SR1–SR4 四栏（SR4 只有 10-19 一条决定、无日期与出席）、两版风险记录（初始版六条各附据、写明做了什么与没做什么）、经验教训六条。仍弱处：SR2 无记录、SU3 四行未记、初始版风险非当时在册，文内已按缺口写明 |
 
@@ -134,7 +134,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 | --- | --- | --- | --- | --- | --- |
 | `C-1` | `../Week6 Coursework/process/part7-standup-records.md` | *Retain a brief record of blockers, next actions and handovers* | 每人每场一行；六栏：完成／证据／下一步／阻塞／需要的支持／要交接的 | 每人写自己那行，Ruby 收 | SU4（10-16）：本人一行已写，其余三人空；SU3（10-12）：四行记「Not recorded」 |
 | `C-2` | `../Week6 Coursework/process/part8-sprint-review-records.md` | *Preserve a version or snapshot for each review*；每次评审后开回顾并记下下一冲刺的改进 | SR3、SR4 各七个字段（完成项、未完成项、关键决策、集成证据、测试证据、收到的反馈、待办变更）＋回顾两栏 | Ruby，二责 Ryan | SR3 已写日期、快照 `sr3-2026-10-14`，字段全空；SR4 日期未公布。SR1（9-16）、SR2（9-28）已在同一文件开头列明各有什么、缺什么、为什么不事后补写 |
-| `C-3` | `est：PB-17贡献记录表.md`（本目录） | *Retain contribution evidence for tutor moderation* | 视图 A 逐条证据、视图 B 按条目对账；每条能打开 | Estrella | 空模板（`Est-04`） |
+| `C-3` | `est：PB-17贡献记录表.md`（本目录） | *Retain contribution evidence for tutor moderation* | 视图 A 逐条证据、视图 B 按条目对账；每条能打开 | Estrella | 已填：视图 A 53 行（`E-001` 至 `E-053`），视图 B 已出，2026-10-20 更新（`Est-04`） |
 | `C-4` | `../docs/definition-of-done.md` | 该约定须 *accessible to the team* | 四名成员各一笔签字 | Ender，二责本人 | 四人未签（`Est-05`） |
 
 ---
@@ -170,7 +170,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 | `B-2` i 模型源文件（一责），并追 Ryan 签二责 | BPM&EA 全套第 2 项 | 见 4.2 | 源文件在；二责未签（`Est-02`） |
 | `C-1` Standup 4 本人那一行（10-16） | 个人 5% | 见 4.3 | 已写（`Est-06`） |
 | `C-1` Standup 3 本人那一行（10-12） | 个人 5% | 见 4.3 | 按实写「Not recorded」 |
-| `C-3` 贡献证据行 | 供 tutor 核查 | 见 4.3 | 空模板（`Est-04`） |
+| `C-3` 贡献证据行 | 供 tutor 核查 | 见 4.3 | 已填 53 行（`E-001` 至 `E-053`）＋视图 B（`Est-04`） |
 | `C-4` 完成定义本人签字 | 二责那一笔 | 见 4.3 | 未签（`Est-05`） |
 | `B-1` 战略模型二责签字 | 二责那一笔 | `../docs/strategic-bpmn/` | 已签（2026-10-19）；签前已核映射（`Est-20`）。三件交付物已齐，签字见抽象说明第 7 节 |
 | `A-1` 幻灯片二责复核 | 一责 Ruby | `../submissions/AISD/` | 已定稿（13 页，`.pptx` ＋ PDF）；一责 Ruby 于 2026-10-19 复核，未要求改动 |
@@ -183,7 +183,7 @@ AISD 第一次发布的「支持文件」三项（可编辑 `.bpmn`、可读 PDF
 
 1. **`A-1` 第二版幻灯片**：已定稿（`../submissions/AISD/AISD_Presentation_2026-10-19.pptx` ＋ 同名 PDF，13 页；第 8、9 页换成了 10 月 19 日的实跑结果与边界），一责 Ruby 于 2026-10-19 复核，未要求改动。AISD 的 25%＋20% 两块靠它当场呈现，这一件已落地。
 2. **`A-4` 规划证据汇总**：已收口。PDF 7 页与同名 `.docx` 都在 `submissions/AISD/`；两版计划、任务与站会记录、SR1–SR4、两版风险记录、经验教训齐。初始版风险六条按 9 月记录成文，每条写明做了什么、没做什么；SR2 无记录、SU3 四行未记、SR4 只有 19 日一条决定，文内按缺口写明。
-3. **修订版标签与根 README**（`A-2`）：已收口。`submission-2026-09-29`（`f6fec99`）与 `submission-2026-10-20` 都在远端可认（修订版的 SHA 从标签上读）；根 README 已加 `Releases` 一节，两版并排写明、修订版标为当前版。`standup-1-2026-09-16`、`sr3-2026-10-14` 不是发布标签；规范要的初始版**和**修订版，现在都认得出。
+3. **修订版标签与根 README**（`A-2`）：已收口，但以标签重打之后为准。`submission-2026-09-29`（`f6fec99`）与 `submission-2026-10-20` 都在远端可认；`submission-2026-10-20` 指向最终提交的树，提交号用 `git rev-parse submission-2026-10-20^{commit}` 读；根 README 已加 `Releases` 一节，两版并排写明、修订版标为当前版。`standup-1-2026-09-16`、`sr3-2026-10-14` 不是发布标签；规范要的初始版**和**修订版，现在都认得出。
 4. **`B-4` 书面评估第二部分**：第二部分已按 19 日实跑成稿（`BPMEA_Written_Evaluation` 第 4 节，六过一败，`AT-03` 两版同败），`PB-31` 的签认尚未登记；验收证据本身不再是阻塞项。
 5. **`B-1` 抽象说明的四处改稿**：已收口。A–D 已改入原文，一责 Ruby 于 2026-10-19 确认改后文本，二责复核同日签署 accepted；三件交付物齐，签字见抽象说明第 7 节。
 6. **`C-2` 的 SR3 七个字段**：已开、已打快照，内容全空。SR4 一公布日期就当天补，并同样打 `sr4-…` 快照。
@@ -231,7 +231,7 @@ AISD 那一份**不放** 29 日的验收计划与设计决策作主件：四个�
 
 **仓库侧四件事**
 
-1. 最后一批改动之后打修订版标签（例如 `submission-2026-10-20`），保留 `submission-2026-09-29`。**已做**：`submission-2026-10-20` 已打在修订版的最后一笔上并推到远端（提交号从标签上读，不写在这里），`submission-2026-09-29` 保留，见 4.1 的 `A-2` 行。
+1. 最后一批改动之后打修订版标签（例如 `submission-2026-10-20`），保留 `submission-2026-09-29`。**已做**：`submission-2026-10-20` 已重打并推到远端，指向最终提交的树（提交号从标签上读：`git rev-parse submission-2026-10-20^{commit}`），`submission-2026-09-29` 保留，见 4.1 的 `A-2` 行。
 2. 根 `README.md` 写明「本次提交对应哪个标签」，并链到 `../Week3 Coursework/hospital-pathway/README.md` 的 How to run。**已做**：根 README 已加 `Releases` 一节，两版并排，运行说明链已放进去。
 3. 无痕窗口打开一次，确认不登录也能看文件与标签。
 4. 评审快照：SR3 已打 `sr3-2026-10-14`（`25f53f7`，10-14 15:07，评审前最后一笔；当天 21:01 的 `2d09f5a` 不计入）；SR4 等日期。快照与提交标签是两回事，不能互相顶替。SR1 与 SR2 没有专门快照：`standup-1-2026-09-16` 指 `93dfaf5`，那是站会标签，只能算「最接近」，不要当评审快照用。
@@ -258,7 +258,7 @@ AISD 那一份**不放** 29 日的验收计划与设计决策作主件：四个�
 | 截止是 20 日还是 22 日 | 规范交付件表印 22 日，通知写 20 日 23:59，见 `Est-13` |
 | BPM&EA 规范原件与权重 | 五项已定，截图存 `../W01/BPMEA-Full-Portfolio-requirements_2026-10-19.png`；**缺原件与各项权重**，见 `Est-12` |
 | 单包还是分槽、命名规则、大小上限 | 规范一字未提，见 `Est-19` |
-| 修订版标签打在哪一笔 | **已定**：`submission-2026-10-20` 打在修订版的最后一笔上（提交号从标签上读，不写在这里）。这条曾挂着，理由是「`HEAD` 还在 `c452381`、第二版还在改，标签要等最后一批改动之后再打」；现在不必再等 |
+| 修订版标签打在哪一笔 | **已定**：`submission-2026-10-20` 就是修订版的发布标识，指向最终提交的树，提交号从标签上读（`git rev-parse submission-2026-10-20^{commit}`）。这条曾挂着，理由是「`HEAD` 还在 `c452381`、第二版还在改，标签要等最后一批改动之后再打」；现在不必再等 |
 | SR4 开在哪一天 | 12–16 日周表里有 Stand-up 04，没有 Sprint Review 04；规范只写 by 22 October |
 | 合并后的模型能否部署 | 决定现场走整条流程，还是按 9 月 29 日布告的备选方案改成每人一个小模型 |
 

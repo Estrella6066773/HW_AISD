@@ -7,7 +7,7 @@ BPM&EA and AISD · Group project · Agile Workshop Parts 1–8
 | Tag | Commit | Date | What it identifies |
 |-----|--------|------|--------------------|
 | `submission-2026-09-29` | `f6fec99` | 29 September 2026 | Initial release. The submitted baseline, with the 29 September model `Hospital_All_Processes_Simple_C8` and the results recorded against it. |
-| `submission-2026-10-20` | the tag target | 19 October 2026 | Revised release, and the **current** state: it carries the V3 model, the 19 October acceptance run and this index. This table cannot name its own commit, so read the SHA from the tag itself; any commit after it is documentation only. |
+| `submission-2026-10-20` | the tag target | 20 October 2026 | Revised release, and the **current** state: it carries the V3 model, the 19 October acceptance run and this index. This table cannot name its own commit; resolve it with `git rev-parse submission-2026-10-20^{commit}`. The tag marks the final submitted tree. |
 
 Read the revised release first. Its working model is `Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`, process id `Hospital_All_Processes_V3_C8`; the run instructions are in [`Week3 Coursework/hospital-pathway/README.md`](<Week3 Coursework/hospital-pathway/README.md>). The pack is indexed in [`submissions/Submission_Index.pdf`](submissions/Submission_Index.pdf). The other tags are not releases: `standup-1-2026-09-16` marks the first standup and `sr3-2026-10-14` is the Sprint Review 3 snapshot.
 
@@ -54,7 +54,7 @@ Still open:
 
 - Second-owner review of `PB-16` i\* SD/SR; the checklist is still unsigned
 - Role-permission test AT-03 remains FAIL on both releases. `BR-37` is recorded as unsupported for the same reason: the model carries no candidate groups, so every user task is still assigned to `demo`
-- The second-release Project and Test Plan (`B-8`) is not in place; only the 29 September PDF exists
+- The second-release Project and Test Plan (`B-8`) is in place as `submissions/BPMEA/Group_Project_and_Test_Plan_2026-10-20.pdf`, with the `.docx` beside it; the 29 September PDF remains the initial-release record. What stays open is inside it: the criteria no acceptance case drove are marked NOT EXECUTED
 - In the AISD pack, the feedback response (`A-3`, eleven pages) and the planning evidence (`A-4`, seven pages) are in place under `submissions/AISD/`; `A-4` states its own gaps — `SR2` has no minutes and `SR4` was not held — rather than filling them. No tutor feedback had arrived in writing by 20 October, so the tutor rows in `A-3` are blank
 - Exception routes stay unevidenced even after the 19 October run: the formal change path, DNA to Finance, urgent authorisation, the refund adjustment and letter escalation are modelled but no case drives them
 - The contribution record `Est/est：PB-17贡献记录表.md` is filled from the repository (53 rows, `E-001` to `E-053`); its second-owner review is unsigned, and the Definition of Done is unsigned
