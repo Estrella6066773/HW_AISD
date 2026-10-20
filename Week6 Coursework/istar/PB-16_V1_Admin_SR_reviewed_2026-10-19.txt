@@ -79,7 +79,7 @@
         {
           "id": "6561325b-1749-4c29-8586-d0a4a3dc1bbf",
           "text": "Patient pathway coordinated",
-          "type": "istar.Goal",
+          "type": "istar.Quality",
           "x": 939,
           "y": 272,
           "customProperties": {
@@ -619,30 +619,30 @@
     },
     {
       "id": "a2926e7a-8298-429d-9101-585e37849ade",
-      "type": "istar.ContributionLink",
+      "type": "istar.AndRefinementLink",
       "source": "4d0e8ca4-2865-4114-932a-15705c2331bc",
       "target": "1b6eb390-977f-4a6f-a5a2-4d9478d70c22",
       "label": "help"
     },
     {
       "id": "afc37f6d-ceeb-401d-bfd1-06a8a674a932",
-      "type": "istar.ContributionLink",
+      "type": "istar.NeededByLink",
       "source": "ed04f306-e70f-4afe-a50a-122a87dfe374",
-      "target": "1b6eb390-977f-4a6f-a5a2-4d9478d70c22",
+      "target": "eb020f4c-e650-40a3-97a1-8d3a79f99b40",
       "label": "help"
     },
     {
       "id": "e6093269-b607-4190-ab34-1304fdac2817",
-      "type": "istar.ContributionLink",
+      "type": "istar.AndRefinementLink",
       "source": "931f1222-13e1-40bd-9619-37d23276f79d",
       "target": "cdcc382f-4f3a-4903-bcd6-b8e3bb264acf",
       "label": "help"
     },
     {
       "id": "75d96b05-038e-423f-8e17-07d8be7559b4",
-      "type": "istar.ContributionLink",
+      "type": "istar.NeededByLink",
       "source": "b899350e-115c-4eb7-af23-8f87f2f26eda",
-      "target": "cdcc382f-4f3a-4903-bcd6-b8e3bb264acf",
+      "target": "77e388ce-2830-4165-88b0-30ed4894caf1",
       "label": "help"
     },
     {
