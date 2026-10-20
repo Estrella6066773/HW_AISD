@@ -1,0 +1,136 @@
+Java unit test results - 2026-10-20
+Repository commit: b4e0d23 (working tree dirty; see the change log at the end)
+Working directory: Week3 Coursework/hospital-pathway
+Toolchain: Oracle JDK 23.0.1 (build 23.0.1+11-39), JAVA_HOME=D:\Java\jdk-23, Apache Maven 3.9.10; pom targets Java 21 (javac release 21)
+Command: mvn -B clean test
+Result: Tests run: 19, Failures: 0, Errors: 0, Skipped: 0 - BUILD SUCCESS
+Per-class: CareChangeWorkersTest 7 passed; ChargeAmountRulesTest 2 passed; RefundWorkersTest 10 passed; total 19
+Source change since dbc0a33: none (src/test, src/main and pom.xml all unchanged)
+Total Maven time: 12.178 s (Finished at 2026-10-20T14:24:44+08:00)
+
+=== raw maven output ===
+
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< io.camunda.demo:hospital-pathway >------------------
+[INFO] Building Hospital Pathway 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ hospital-pathway ---
+[INFO] Deleting D:\OneDrive\MyProjects\HW_AISD\Week3 Coursework\hospital-pathway\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ hospital-pathway ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from ..\..\Week6 Coursework\bpmn to target\classes\bpmn
+[INFO] Copying 12 resources from ..\..\Week6 Coursework\forms to target\classes\forms
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ hospital-pathway ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 17 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ hospital-pathway ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ hospital-pathway ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 3 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.5:test (default-test) @ hospital-pathway ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running io.camunda.demo.hospital.CareChangeWorkersTest
+14:24:38.984 [main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+14:24:39.071 [main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 67 ms. Found 3 JPA repository interfaces.
+14:24:39.391 [main] INFO org.hibernate.orm.jpa -- HHH008540: Processing PersistenceUnitInfo [name: default]
+14:24:39.503 [main] INFO org.hibernate.orm.core -- HHH000001: Hibernate ORM core version 7.2.7.Final
+14:24:40.222 [main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo -- No LoadTimeWeaver setup: ignoring JPA class transformer
+14:24:40.579 [main] INFO org.hibernate.orm.connections.pooling -- HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:mem:care_change_workers_test]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.4.240
+	Default catalog/schema: CARE_CHANGE_WORKERS_TEST/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+14:24:41.839 [main] INFO org.hibernate.orm.core -- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+14:24:41.886 [main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default'
+14:24:42.047 [main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactories -- Hibernate is in classpath; If applicable, HQL parser will be used.
+mvn : Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases 
+of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/do
+c/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+所在位置 C:\Users\C3542\AppData\Local\Temp\ps-script-dc3f85d7-b420-4af4-b365-e5681684b573.ps1:104 字符: 57
++ ... \mvn_hospital_pathway_2026-10-20.log"; mvn -B clean test 2>&1 | Tee-O ...
++                                            ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Mockito is curr...ockito.html#0.3:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: A Java agent has been loaded dynamically (D:\.Software\apache-maven\repository\net\bytebuddy\byte-buddy-agent\
+1.17.8\byte-buddy-agent-1.17.8.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+14:24:43.462 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=1
+14:24:43.470 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=1
+14:24:43.576 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=2
+14:24:43.626 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=3
+14:24:43.652 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT, receipt=4
+14:24:43.668 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SENT_FINANCE_REVIEW_REQUIRED, receipt=5
+14:24:43.678 [main] INFO io.camunda.demo.hospital.CareChangeWorkers -- Care change: patient=D-TEST-001, status=SKIPPED_UNAUTHORISED, receipt=6
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.361 s -- in io.camunda.demo.hospital.CareChangeWorkersTest
+[INFO] Running io.camunda.demo.hospital.ChargeAmountRulesTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in io.camunda.demo.hospital.ChargeAmountRulesTest
+[INFO] Running io.camunda.demo.hospital.RefundWorkersTest
+14:24:43.731 [main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+14:24:43.752 [main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 18 ms. Found 3 JPA repository interfaces.
+14:24:43.779 [main] INFO org.hibernate.orm.jpa -- HHH008540: Processing PersistenceUnitInfo [name: default]
+14:24:43.811 [main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo -- No LoadTimeWeaver setup: ignoring JPA class transformer
+14:24:43.815 [main] INFO org.hibernate.orm.connections.pooling -- HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:mem:refund_workers_test]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.4.240
+	Default catalog/schema: REFUND_WORKERS_TEST/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+14:24:43.856 [main] INFO org.hibernate.orm.core -- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+14:24:43.861 [main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default'
+14:24:43.992 [main] INFO io.camunda.demo.hospital.RefundWorkers -- mark-payment-investigate case=A-INV-002 status=INVESTIGATE tx=INV-33FAC661 key=A-INV-002|investigate|unspecified
+14:24:44.016 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-006 decision=refund_partial status=SUCCESSFUL tx=RF-E0C749D8 key=A-REF-006|refund|refund_partial|10.00
+14:24:44.037 [main] INFO io.camunda.demo.hospital.RefundWorkers -- mark-payment-investigate case=A-INV-001 status=INVESTIGATE tx=TX-DEMO01 key=A-INV-001|investigate|TX-DEMO01
+14:24:44.056 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-002 decision=pending status=INVESTIGATE tx=RF-97B861F0 key=A-REF-002|refund|pending|10.01
+14:24:44.097 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-008 decision=transfer status=TRANSFERRED tx=TR-80200E4B key=A-REF-008|refund|transfer|18.00
+14:24:44.103 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-009 decision=retain status=RETAINED tx=RT-0CE51D61 key=A-REF-009|refund|retain|18.00
+14:24:44.131 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-003 decision=resolved status=SUCCESSFUL tx=RF-2DE051E3 key=A-REF-003|refund|resolved|12.00
+14:24:44.134 [main] INFO io.camunda.demo.hospital.RefundWorkers -- payment_ledger reuse key=A-REF-003|refund|resolved|12.00 status=SUCCESSFUL tx=RF-2DE051E3
+14:24:44.136 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-003 decision=resolved status=SUCCESSFUL tx=RF-2DE051E3 key=A-REF-003|refund|resolved|12.00
+14:24:44.153 [main] INFO io.camunda.demo.hospital.RefundWorkers -- request-refund case=A-REF-001 decision=resolved status=SUCCESSFUL tx=RF-264F0952 key=A-REF-001|refund|resolved|25.50
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.449 s -- in io.camunda.demo.hospital.RefundWorkersTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  12.178 s
+[INFO] Finished at: 2026-10-20T14:24:44+08:00
+[INFO] ------------------------------------------------------------------------
+
+=== change log (working tree state at run time) ===
+Modified before the test run, outside the module, not touched by this run:
+  submissions/AISD/AISD_Presentation_2026-10-19.pdf   (last write 2026-10-20 14:13:58)
+  submissions/AISD/AISD_Presentation_2026-10-19.pptx  (last write 2026-10-20 14:13:32)
+No other changes. target/ is gitignored.

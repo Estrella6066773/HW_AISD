@@ -7,11 +7,13 @@
 **Model:** `docs/strategic-bpmn/PB-12_strategic-process_2026-09-29.bpmn`  
 **Operational model this file connects to:** `Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn` (`Hospital_All_Processes_Simple_C8`)
 
+> **Current running model (19 October).** The second-release operational model is `Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`, process `Hospital_All_Processes_V3_C8`, and that is what the build packages and deploys. `Simple_C8` above is kept as the name of the model this note was written against on 29 September; the mapping in section 4 is stated in terms of the current model where the two differ, and the differences are marked in that table.
+
 This note explains the abstraction level of the strategic model, how each strategic activity lines up with the executable operational model, and which parts of the full case are left out of the picture.
 
 ## 1. What this model is
 
-The file is a BPMN collaboration for the initial release. The hospital process `Strategic_Hospital_Pathway` has `isExecutable="false"`. It has no Camunda form bindings and no job-worker types. It is not a deployment file. Deploy and demonstrate `Hospital_All_Processes_Simple_C8` instead.
+The file is a BPMN collaboration for the initial release. The hospital process `Strategic_Hospital_Pathway` has `isExecutable="false"`. It has no Camunda form bindings and no job-worker types. It is not a deployment file. Deploy and demonstrate the operational model instead: `Hospital_All_Processes_V3_C8` in the second release, `Hospital_All_Processes_Simple_C8` in the initial one.
 
 The picture shows the wider pathway: who receives a request, who is allowed to decide, and which outside organisations the hospital exchanges messages with. Each task is one business stage. The operational model expands that stage into user tasks, gateways, forms and workers.
 
@@ -47,8 +49,8 @@ Clinical staff do not approve refunds. Finance staff do not decide whether treat
 | Check referral documents | `Register`, `GetDocuments` |
 | Record the clinical decision | `ReviewReferral`, `ReferralDecision`, `Redirect`, `notify-referrer` |
 | Notify the referrer and close | `Redirect`, `EndRejected` |
-| Book the first appointment and notify the patient | `BookVisit`, `CheckVisitSlot` (`check-slot`), `send-booking-confirmation` |
-| Attendance recorded | Not a separate operational gateway. The operational model continues from `BookVisit` into `ClinicalCare` and the letter tasks on one path. |
+| Book the first appointment and notify the patient | `BookVisit`, `VisitNeedsSlot`, `CheckVisitSlot` (`check-slot`), `send-booking-confirmation`. `VisitNeedsSlot` sits between the booking and the slot check: a declined, cancelled or did-not-attend visit skips slot reservation instead of booking a slot it will not use. |
+| Attendance recorded | `AwaitAttendance` holds the booked visit until attendance is known. `VisitOutcome` then splits six ways: attended, pending / retry, patient cancelled, booked awaiting attendance, declined (`RecordDecline`) and did not attend (`RecordDna`). The initial release had one combined cancel/DNA flow; the split is new in the second release. |
 | Authorise the treatment booking | `ClinicalCare` |
 | Determine funding and payment | `Funding`, `FundingOutcome`, `RequestPayment`, `PaymentReceived`, `FundingIssue`, `UrgentAuthorisation`, `mark-payment-investigate` |
 | Confirm external treatment resources | `BookTreatment`, `reserve-appointment`, `flag-resource-unavailable`, `send-booking-confirmation` |
@@ -90,16 +92,22 @@ The strategic model does not draw these, and the running solution does not imple
 | Communication preferences | Not drawn | Forms do not capture postal, digital or accessible-format preferences |
 | Chemotherapy cycle review limited to clinical staff | Not a separate stage. Folded into treatment authorisation. | `ClinicalCare` text and a free-text form; no blood-test fields and no role check |
 | Urgent enquiry highlight | Not drawn | The case has not fixed the urgency rules. The form stores a priority value only. |
-| Full versus partial refund amount | The finance review task does not split the amount | `finance_adjustment.form` records a coarse outcome |
+| Full versus partial refund amount | The finance review task does not split the amount | **Closed in the second release.** `finance_adjustment.form` now selects `refund_full`, `refund_partial`, `transfer`, `retain` or `pending`, with `adjustmentAmount` mandatory on every decision except `pending`; `RefundWorkers.requirePartialAmount` rejects a partial amount that is not lower than the original charge. BR-20 is therefore Supported in section 4 of `docs/requirements-traceability-matrix.md`. |
 
 External scheduling, treatment resources, funding decisions and card payment are simulated. The strategic pools name those organisations. The operational model draws a pool for the payment provider and the referrer and the patient; scheduling, laboratory, imaging and the funder appear as workers or form fields rather than as further pools.
 
 ## 7. Second-owner review
 
-Estrella reviews before this item is marked Done.
+Estrella reviewed this note before the item was marked Done.
 
-- [ ] The three lanes can be told apart, and clinical, administrative and financial decisions are not given to the same lane.
-- [ ] Referral, consultant decision, first appointment, treatment authorisation, funding and payment, clinic letter, enquiry, and change or follow-up are all on the diagram.
-- [ ] Each external message matches a participant in section 3.
-- [ ] The mapping in section 4 matches `Hospital_All_Processes_Simple_C8`.
-- [ ] Section 6 still matches the running solution, including AT-03 recorded as Fail.
+- [x] The three lanes can be told apart, and clinical, administrative and financial decisions are not given to the same lane.
+- [x] Referral, consultant decision, first appointment, treatment authorisation, funding and payment, clinic letter, enquiry, and change or follow-up are all on the diagram.
+- [x] Each external message matches a participant in section 3.
+- [x] The mapping in section 4 matches `Hospital_All_Processes_V3_C8`, the current running model.
+- [x] Section 6 still matches the running solution, including AT-03 recorded as Fail.
+
+**Second-owner review: accepted** — Estrella (Geping Chen), 2026-10-19.\
+Items 1–3 checked as of 2026-10-19. Items 4 and 5 checked after the corrections A–D.\
+Running baseline for the mapping: Hospital_All_Processes_V3_C8.\
+No exceptions left open.\
+The corrections A–D were applied to the first owner's text under her authorisation, and the first owner (Ruby, Hao Zheng) confirmed the revised text on 2026-10-19. That confirmation was given orally; no separate written note exists.

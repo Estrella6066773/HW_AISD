@@ -4,7 +4,7 @@
 
 > **Purpose**: Trace each requirement across the entire development lifecycle — from the strategic process model, through the operational BPMN, down to the actual implementation. This is a **grading criterion** (BPM&EA Task 3).
 >
-> **Current status (2026-10-19)**: the grades in section 2 are the 29 September snapshot and are left as written. Section 4 is the refreshed second-release position: **13 Supported / 25 Partial / 4 Unsupported**.
+> **Current status (2026-10-19)**: the grades in section 2 are the 29 September snapshot and are left as written. Section 4 is the refreshed second-release position: **13 Supported / 25 Partial / 4 Unsupported**. Sections 4.1–4.7 were written against V2; **4.8 re-checks them against V3, the operational model of record**; **4.9 records the first acceptance run executed against V3** and confirms the same count.
 >
 > **Status Legend**:
 > - ✅ **Supported** — The requirement is fully addressed in this deliverable
@@ -164,7 +164,7 @@
 | Operational BPMN | `Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn`, process `Hospital_All_Processes_V2_C8` | New model, built in `8cda78c` … `787375e`. The 29 September model (`Week3 Coursework/hospital-pathway/bpmn/W02_Hospital_All_Processes_Clean_Lines_Camunda8.bpmn`, `Hospital_All_Processes_Simple_C8`) is untouched and remains the submitted baseline; V2 is added alongside it, not substituted for it. |
 | Forms | `Week3 Coursework/hospital-pathway/forms/` (12 forms; 11 at baseline) | 4 changed: `book_visit` (`e4b2159`, `8a10e24`), `finance_adjustment` (`32e6dbc`, `1816b8e`), `funding_assessment` (`9a0b294`), `register_request` (`c29df1c`, `8a10e24`). 1 new: `await_attendance` (`e4b2159`), which records the booked visit before the outcome decision. 7 unchanged: `book_treatment`, `clinical_care`, `clinical_change`, `dispatch_letter`, `review_referral`, `simple_record`, `urgent_authorisation`. |
 | Workers | `Week3 Coursework/hospital-pathway/src/main/java/io/camunda/demo/hospital/` | `ChargeAmountRules` added (`cb23fdf`); `RefundWorkers` and `HospitalPathwayWorkers` changed (`cb23fdf`, `1816b8e`). `BookingWorkers`, `CareChangeWorkers`, `LetterWorkers` and the domain classes are unchanged. |
-| Acceptance tests | `pb14_acceptance.py`, `pb18_acceptance.py` | **Not re-run.** `PB-31` is still open. No test result below is a V2 result. |
+| Acceptance tests | `pb14_acceptance.py`, `pb18_acceptance.py` | **Superseded — see 4.9.** No test was run against V2. The two scripts, plus a new `g07_e2e_acceptance.py`, were re-run against V3 on 19 October; every result recorded before 4.9 is the 29 September (initial-release) record, and 4.9 is the V3 record. |
 
 The V2 model changes that matter for traceability, in one place: the visit outcome is split into attended, pending/retry, patient-cancelled, booked-awaiting-attendance, declined and did-not-attend (`VisitOutcome`, `AwaitAttendance`, `RecordDecline`, `RecordDna`); the outpatient slot is skipped when the visit is not being booked (`VisitNeedsSlot`); the requested review period is stored as a number plus a unit and a past appointment date is rejected; the finance form shows the original charge and an invalid refund fails once. The seven exclusive merge gateways (`Join_BookVisit`, `Join_ClinicalCare`, `Join_Funding`, `Join_BookTreatment`, `Join_ClinicalChange`, `Join_VisitOutcome`, `Join_MarkPaymentInvestigate`) are pass-through and change no rule.
 
@@ -235,8 +235,79 @@ Each row names the artefact the rule actually depends on and what that artefact 
 ### 4.6 Two columns that were not refreshed
 
 - **Strategic BPMN** — `PB-12` has not changed since 29 September, so every strategic cell keeps its 29 September value. BR-25, BR-29, BR-38, BR-39, BR-40, BR-41 and BR-42 therefore remain ❌ in that column even where V2 implemented part of the operational work.
-- **Acceptance tests** — no test was re-run, so nothing moves on test evidence. The section 2 cells describe the 29 September executable; for V2 they must be read as "not re-run", never as "passed".
+- **Acceptance tests** — at the time this subsection was written no test had been re-run, so nothing moved on test evidence. That is still the outcome after the V3 run of 19 October (4.9), but for a different reason: the same six cases were re-run, and none of them drives a branch a Partial note names. The section 2 cells describe the 29 September executable; 4.9 gives the V3 verdicts and instance keys.
 
 ### 4.7 What section 3 still covers
 
 Of the 30 rules section 3 plans for, one row is closed (BR-20), three are partly delivered (BR-36, BR-35, BR-13), and 26 are unchanged, of which 4 are still Unsupported. `BR-37` remains the highest-leverage item: it is P0, and it blocks BR-09, BR-21, BR-27 and BR-31 as well as `AT-03`. `BR-38` (audit immutability) and `BR-08` (consent and a structured treatment request) are the next P0 items whose artefacts did not change at all in V2.
+
+---
+
+### 4.8 V3 re-check (2026-10-19, after `357528e`)
+
+Sections 4.1–4.7 are the V2 record and are left as written. Later on 19 October, commit `357528e` deleted `Week6 Coursework/bpmn/Hospital_All_Processes_V2.bpmn`, added `Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn` (process `Hospital_All_Processes_V3_C8`) and changed the build so that it packages that file and `Week6 Coursework/forms/`. This subsection records what the re-check found.
+
+| Item | V2 (4.1) | V3 (model of record) |
+|------|----------|----------------------|
+| Operational BPMN | `Hospital_All_Processes_V2.bpmn`, `..._V2_C8` | `Hospital_All_Processes_V3.bpmn`, `..._V3_C8` |
+| Tasks and events | 22 user tasks, 8 service tasks, 2 send tasks, one message catch event (`PaymentReceived`) | identical; no task, event or condition was added |
+| Exclusive gateways | 22, including seven `Join_*` | 27, including twelve `Join_*`; the five added are `Join_ReviewReferral`, `Join_GetDocuments`, `Join_DispatchLetter`, `Join_FinanceAdjustment`, `Join_Register` |
+| Assignment | every user task `assignee="demo"` | unchanged: 22 of 22 `assignee="demo"`, zero `candidateGroups`, zero `candidateUsers` |
+| Timers | none | none. No `timerEventDefinition`, no boundary event, no parallel or event-based gateway |
+| Deployed forms | `Week3 Coursework/hospital-pathway/forms/` | `Week6 Coursework/forms/`: the same 12 filenames, but every file differs from the Week3 copy (input patterns and descriptions added); `dispatch_letter` also gains `letterClinicallyApproved`, `book_visit` gains `attendedOn` |
+| Worker source | `Week3 Coursework/hospital-pathway/src/...` | byte-identical Java sources in `Week6 Coursework/code/src/...`; no worker changed. The only file that differs is the copied `application.yaml`, in one comment that names its working directory |
+
+**Effect on the grades: none.** The count stays **13 / 25 / 4**.
+
+- BR-20 stays ✅ Supported: the refund decision, the amount and the invalid-amount rejection are unchanged.
+- BR-36, BR-35 and BR-13 stay ⚠️ Partial for the reasons in 4.4. BR-36's record is slightly stronger because `book_visit.attendedOn` is mapped into `appointmentDate`, but reschedule is still not an outcome of its own.
+- BR-30 stays ⚠️ Partial. The new `letterClinicallyApproved` checkbox is collected on the form, but `DispatchLetter` maps no input for it and `LetterWorkers.dispatchClinicLetter` never reads it. It is a self-declaration the process cannot check, not the approval record the rule asks for.
+- BR-37 stays ❌ Unsupported: no candidate groups appeared.
+- BR-06, BR-32, BR-33 and BR-34 stay ⚠️ Partial: V3 adds no timer.
+- The five new `Join_*` gateways are pass-through, like the seven before them. They change no route and no condition.
+
+### 4.9 V3 acceptance run (2026-10-19, at `dbc0a33`)
+
+Sections 4.1–4.8 read the artefacts. This subsection records what happened when the acceptance cases were executed on a running engine. It is the only subsection here that rests on observed behaviour rather than on source, and it is written to answer one question: **does executing the model move a grade?** It does not.
+
+| Item | Value |
+|------|-------|
+| Engine | Camunda 8.10.0-alpha5 (c8run); REST `localhost:8080`, gRPC `26500`, `demo`/`demo`; started with `c8run.exe start --disable-connectors` |
+| Deployment | `Hospital_All_Processes_V3.bpmn` plus 12 forms; deployment key `2251799813928657`; `processDefinitionId` `Hospital_All_Processes_V3_C8`; definition key `2251799813928658`, version 1 |
+| Drivers | `pb14_acceptance.py` and `pb18_acceptance.py`, whose only change is that `PROCESS` now reads `CAMUNDA_PROCESS_ID` and defaults to V3; `g07_e2e_acceptance.py`, new, repeating the 29 September G07 method. Cases, data and checks unchanged; the BPMN and the 12 forms were not modified |
+| Build | `mvn -B clean test` at `dbc0a33`: BUILD SUCCESS, 19 tests, 0 failures (`CareChangeWorkersTest` 7, `ChargeAmountRulesTest` 2, `RefundWorkersTest` 10) |
+| Form bindings | 22 user tasks, 12 distinct `formId`, 12 files, all resolve, no orphan; `simple_record` reused by 11 record-keeping tasks |
+| Master record | `Week3 Coursework/hospital-pathway/evidence/Camunda_V3_Acceptance_2026-10-19.txt` |
+
+| Case | 29 September | 19 October (V3) | Instance key (V3) |
+|------|--------------|-----------------|-------------------|
+| `AT-01` main path | PASS | PASS | `2251799813930310` |
+| `AT-02` reject | PASS | PASS | `2251799813930247` |
+| `AT-03` unauthorised accept | FAIL | **FAIL** | `2251799813930421` |
+| `AT-04` no suitable slot | PASS (limited scope) | PASS | `2251799813930493` |
+| `AT-05` payment failure and retry | PASS | PASS | `2251799813930607` |
+| `AT-06` missing confirmation | PASS | PASS | `2251799813930876` |
+| `G07` end-to-end | PASS (selected route, version 1) | **PASS — COMPLETED**, nine human tasks, zero incidents | `2251799813931091` |
+
+**Effect on the grades: none. The count stays 13 / 25 / 4.** The rules the run could plausibly have touched, one at a time:
+
+| Req ID | Status | What the run did, and why the grade stands |
+|--------|--------|--------------------------------------------|
+| BR-22 | ⚠️ Partial | This was the one rule blocked purely on test coverage, so it is the real test of the rule. None of the seven cases enters `ClinicalChange`, submits an invalid change or routes a paid change to Finance. `SKIPPED_UNAUTHORISED` and `SENT_FINANCE_REVIEW_REQUIRED` are exercised by `CareChangeWorkersTest`, a worker unit test that was already in the 29 September record; a worker test is not an acceptance case. The reason stays "path exists, unexercised". |
+| BR-36 | ⚠️ Partial | G07 used `visitOutcome=attended`; `AT-04` used `pending` on a first visit. No decline, no DNA, no reschedule outcome, and no route to `FinanceAdjustment`. The delivered split is still untested end to end. |
+| BR-35 | ⚠️ Partial | `AT-04` is a first-visit pending, not a follow-up, and no case asserts an out-of-timeframe flag or a pathway notification. |
+| BR-19 | ⚠️ Partial | No case enters `UrgentAuthorisation` or `UrgentFinance`; `AT-05` drives the ordinary funding retry, not the urgent bypass. Clinician-only authorisation is still unenforced. |
+| BR-09, BR-21, BR-27, BR-31 | ⚠️ Partial | Unchanged, and now observed as well as inferred: `AT-03` fails on V3 exactly as it failed on 29 September. `staffRole` is still a free-text value the engine cannot check. |
+| BR-37 | ❌ Unsupported | The same failure, reproduced. No candidate groups appeared; every task was completed as `demo`. |
+| BR-20 | ✅ Supported (unchanged) | No case reaches `FinanceAdjustment`. `RefundWorkersTest` now holds ten tests against five on 29 September, which is worker evidence and not an acceptance case. |
+| BR-11 | ✅ Supported (unchanged) | G07 confirms the confirmed side of a treatment reservation (`booking_slot_status=CONFIRMED`, one reservation, one confirmation). No case drives a treatment resource to pending, so the treatment-pending half of the rule is still untested. |
+
+The Supported rules whose section 2 acceptance cell already named a case keep their wording; what changed is what stands behind it, since `AT-01`–`AT-06` now have a V3 run as well as a 29 September one. The cells that said "no acceptance test" keep that sentence, because the six cases are the same six: BR-20, BR-24 and BR-26 remain without an acceptance case, and BR-11's treatment-pending half is still untested.
+
+**One environment event belongs in the record.** The first c8run start, without `--disable-connectors`, was shut down at 21:38 because the bundled Connectors runtime never became healthy; one G07 attempt died at 21:38:33 with a connection reset (`Group_Final_E2E_20261019-213833.json`, instance `2251799813929726`, no completed tasks). Every case was re-run in one continuous session after restarting at 21:40 with connectors disabled, and all results above come from that session. The failed JSON is retained: the difference between a failed criterion and an environment that died mid-run is exactly what an acceptance record has to keep. The engine was healthy throughout; the shutdown was the connector health check, not the model.
+
+**Two limits on this evidence.** The drivers submit through REST `/v2`, so browser-side form validation — required fields, patterns, `disallowPassedDates`, conditional visibility — is not exercised. And the cases assert process variables and worker-log lines, not database rows. Both limits are carried in the written evaluation, Part 2 (§4.6).
+
+When citing 4.1 from here, read its acceptance row through this subsection, its operational row as V3 and its forms row as `Week6 Coursework/forms/`.
+
+Two files in the evidence folder are retained and are not results: `Group_Final_E2E_20261019-213833.json` (the connection reset at 21:38:33) and `Group_Final_E2E_20261019-214113.json` (a G07 instance that reached `COMPLETED` with the same variables but recorded no task trail; the cited run is `2251799813931091`). Neither supports a grade.

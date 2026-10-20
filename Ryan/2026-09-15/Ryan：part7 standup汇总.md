@@ -3,7 +3,7 @@
 **负责人**：D（第一负责人，汇总职责）  
 **第二负责人**：A（任务 14 ← A）  
 **对应 Workshop**：Part 7 Prepare For Standups（汇总方）  
-**说明**：个人 standup 由每人自写（见各成员 `part7 standup.md`）；本文件为 D 的**汇总**产出，非代写。
+**说明**：个人 standup 由每人自写（见各成员 `part7 standup.md`）；本文件是 D 的**汇总**产出。
 
 ## 汇总字段（建议）
 - 日期、出席

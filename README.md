@@ -2,6 +2,15 @@
 
 BPM&EA and AISD · Group project · Agile Workshop Parts 1–8
 
+## Releases
+
+| Tag | Commit | Date | What it identifies |
+|-----|--------|------|--------------------|
+| `submission-2026-09-29` | `f6fec99` | 29 September 2026 | Initial release. The submitted baseline, with the 29 September model `Hospital_All_Processes_Simple_C8` and the results recorded against it. |
+| `submission-2026-10-20` | the tag target | 19 October 2026 | Revised release, and the **current** state: it carries the V3 model, the 19 October acceptance run and this index. This table cannot name its own commit, so read the SHA from the tag itself; any commit after it is documentation only. |
+
+Read the revised release first. Its working model is `Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`, process id `Hospital_All_Processes_V3_C8`; the run instructions are in [`Week3 Coursework/hospital-pathway/README.md`](<Week3 Coursework/hospital-pathway/README.md>). The pack is indexed in [`submissions/Submission_Index.pdf`](submissions/Submission_Index.pdf). The other tags are not releases: `standup-1-2026-09-16` marks the first standup and `sr3-2026-10-14` is the Sprint Review 3 snapshot.
+
 ## Team
 
 | ID | Name | Blackboard | UWE ID | Parts led |
@@ -20,32 +29,37 @@ Every part has a first owner and a second owner; the full table is in `Ruby/2026
 | `docs/` | Group-level deliverables: product backlog, task breakdown, sprint backlog, requirements traceability matrix, definition of done, i* models in `docs/istar/` |
 | `Ruby/`, `Est/`, `Ender/`, `Ryan/` | Individual workspaces: drafts, part-level documents, meeting notes |
 | `Week3 Coursework/` | Shared executable pathway package in `hospital-pathway/` (BPMN + forms + Java workers + test logs); workbook Word copies. Renamed from `Coursework/` in `03180bb`; anything still linking to `Coursework/hospital-pathway/` is a dead link. |
-| `Week6 Coursework/` | Second-release working set: operational BPMN V2, strategic BPMN, reviewed i\* SD and the three service SR views, feedback response record, requirements traceability, acceptance evidence, Sprint 3 and 4 plan. See its [README](Week6%20Coursework/README.md). |
-| [`submissions/BPMEA/`](submissions/BPMEA/README.md) | BPM&EA-specific Project and Test Plan and submission index |
-| [`submissions/AISD/`](submissions/AISD/README.md) | AISD-specific Design Decisions and Acceptance Test Plan/Results |
+| `Week6 Coursework/` | Second-release working set: operational BPMN V3, strategic BPMN, reviewed i\* SD and the three service SR views, feedback response record, requirements traceability, acceptance evidence, Sprint 3 and 4 plan. See its [README](Week6%20Coursework/README.md). |
+| [`submissions/`](submissions/) | Submission pack. The shared [`Submission_Index.pdf`](submissions/Submission_Index.pdf) and its [Word copy](submissions/Submission_Index.docx) name both releases, route a marker through the artefacts and list what each course folder holds; the two course folders follow. |
+| [`submissions/BPMEA/`](submissions/BPMEA/) | BPM&EA-specific Project and Test Plan, written evaluation, abstraction note and readable BPMN exports |
+| [`submissions/AISD/`](submissions/AISD/) | AISD-specific Design Decisions, initial-release Acceptance Test Plan/Results and the second-release deck |
 | `W01/` | Course materials: session slides, case study, assessment specifications |
 | `W02/` | Week 2 slides and Camunda class examples |
 | `W03/` | October 2026 slides and the piStar i* tool. The decks do not print a week number |
 
 ## Current status
 
-**20 October 2026 23:59** is the deadline for the second-release deliverables in both modules. The 29 September initial release remains the recorded baseline, tagged `submission-2026-09-29` (`f6fec99`): the Java tests and one final-model self-pay route to `COMPLETED` are recorded against that state, and worker source, forms and the executable BPMN have changed since then, so those results describe that tagged baseline rather than the current tree. The executable package is `Week3 Coursework/hospital-pathway/`; `Coursework/` was renamed to `Week3 Coursework/` in `03180bb`. The 16 September Sprint 1 table in `docs/p6-sprint-backlog.md` remains the historical planning record. The second-release working set is in `Week6 Coursework/`.
+**20 October 2026 23:59** is the deadline for the second-release deliverables in both modules. The current tree is the revised release, tagged `submission-2026-10-20`, with the SHA read from the tag: it holds the V3 operational model, the twelve forms the build packages, and the 19 October acceptance run. The 29 September initial release, tagged `submission-2026-09-29` (`f6fec99`), remains the recorded baseline: the Java tests and one final-model self-pay route to `COMPLETED` are recorded against that state, and worker source, forms and the executable BPMN have changed since then, so those results describe that tagged baseline rather than the current tree. The executable package is `Week3 Coursework/hospital-pathway/`; `Coursework/` was renamed to `Week3 Coursework/` in `03180bb`. The 16 September Sprint 1 table in `docs/p6-sprint-backlog.md` remains the historical planning record. The second-release working set is in `Week6 Coursework/`.
 
 Present:
 
-- Executable Camunda 8 BPMN, eleven forms, Java workers and configuration
-- Strategic BPMN and abstraction note in `docs/strategic-bpmn/`
-- i\* SD/SR in `docs/istar/` (second-owner checklist still unsigned)
-- Requirements traceability matrix, with 12 supported, 26 partial and 4 unsupported business rules
-- Course indexes in `submissions/BPMEA/` and `submissions/AISD/`
-- The initial-release presentation and demonstration were given on 29 September. The second-release presentation is still to be delivered.
+- Executable Camunda 8 BPMN, `Week6 Coursework/bpmn/Hospital_All_Processes_V3.bpmn`, process id `Hospital_All_Processes_V3_C8`, with the twelve forms, Java workers and configuration
+- Strategic BPMN and abstraction note in `docs/strategic-bpmn/`, with the second-owner review signed on 19 October
+- i\* SD/SR in `docs/istar/`, with the four piStar sources and their figures in `Week6 Coursework/istar/` (the `PB-16` second-owner checklist is still unsigned)
+- Requirements traceability matrix, with 12 supported, 26 partial and 4 unsupported business rules for the initial release, and 13 / 25 / 4 after the second-release re-check
+- Release tags for both versions, and the pack index `submissions/Submission_Index.pdf` beside the files in `submissions/BPMEA/` and `submissions/AISD/`
+- The initial-release presentation and demonstration were given on 29 September. The second-release deck is `submissions/AISD/AISD_Presentation_2026-10-19.pptx`, with its PDF export alongside.
 
 Still open:
 
-- Second-owner review of the submission documents
-- Role-permission test AT-03 remains FAIL
-- Exception routes without a final-model run stay unevidenced; the local c8run environment does not start, so they are not being rerun
-- Contribution record `Est/est：PB-17贡献记录表.md` is still a blank template
+- Second-owner review of `PB-16` i\* SD/SR; the checklist is still unsigned
+- Role-permission test AT-03 remains FAIL on both releases. `BR-37` is recorded as unsupported for the same reason: the model carries no candidate groups, so every user task is still assigned to `demo`
+- The second-release Project and Test Plan (`B-8`) is not in place; only the 29 September PDF exists
+- In the AISD pack, the feedback response (`A-3`, eleven pages) and the planning evidence (`A-4`, seven pages) are in place under `submissions/AISD/`; `A-4` states its own gaps — `SR2` has no minutes and `SR4` was not held — rather than filling them. No tutor feedback had arrived in writing by 20 October, so the tutor rows in `A-3` are blank
+- Exception routes stay unevidenced even after the 19 October run: the formal change path, DNA to Finance, urgent authorisation, the refund adjustment and letter escalation are modelled but no case drives them
+- The contribution record `Est/est：PB-17贡献记录表.md` is filled from the repository (53 rows, `E-001` to `E-053`); its second-owner review is unsigned, and the Definition of Done is unsigned
+
+**Second release was executed on 19 October.** `Hospital_All_Processes_V3_C8` was deployed to a local Camunda 8.10.0-alpha5 (c8run, started with `--disable-connectors`) and the six acceptance cases plus a full G07 path were re-run against it: five of the six pass, G07 reached `COMPLETED` with nine human tasks and no active incident, and `AT-03` fails exactly as it did on 29 September. A clean `mvn -B clean test` passes 19 unit tests. The master record is [`Camunda_V3_Acceptance_2026-10-19.txt`](<Week3 Coursework/hospital-pathway/evidence/Camunda_V3_Acceptance_2026-10-19.txt>); the evaluation is Part 2 of [`BPMEA_Written_Evaluation.pdf`](submissions/BPMEA/BPMEA_Written_Evaluation.pdf).
 
 ## Deliverables
 

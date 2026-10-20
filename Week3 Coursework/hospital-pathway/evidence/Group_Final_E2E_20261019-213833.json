@@ -1,0 +1,17 @@
+{
+  "testId": "G07",
+  "caseReference": "GROUP-E2E-20261019-213833",
+  "startedAt": "2026-10-19T13:38:33.735030+00:00",
+  "method": "Camunda 8 REST /v2 with live Java worker application; fictional classroom data",
+  "processDefinitionId": "Hospital_All_Processes_V3_C8",
+  "tasks": [],
+  "engineVersion": "8.10.0-alpha5",
+  "definition": {
+    "processDefinitionId": "Hospital_All_Processes_V3_C8",
+    "processDefinitionKey": "2251799813928658",
+    "version": 1
+  },
+  "processInstanceKey": "2251799813929726",
+  "result": "FAIL",
+  "error": "[WinError 10054] 远程主机强迫关闭了一个现有的连接。"
+}

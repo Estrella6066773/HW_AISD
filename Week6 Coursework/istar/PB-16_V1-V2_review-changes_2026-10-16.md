@@ -4,6 +4,8 @@
 **Scope**: the i\* SD and SR views, the strategic BPMN and the operational BPMN, from the 29 September initial release to the current state.
 **Companion**: `../../Ruby/2026-10-15/V2流程-临床SR-战略图对照.md` explains how to read the three views and where they disagree.
 
+> **Status note added 2026-10-19.** Later on 19 October, `357528e` replaced the operational model with `bpmn/Hospital_All_Processes_V3.bpmn` (`Hospital_All_Processes_V3_C8`): the V2 content plus five further pass-through `Join_*` gateways, a renamed process, and no change to any task, event, condition or assignment. Sections 2 and 7 below remain the V1→V2 record and are left as written; where they call V2 the current model, read that as the V2 step in the history. The model of record is V3.
+
 ## How to read "V1" and "V2" here
 
 - **V1** is the 29 September initial release: the first version of each model, as submitted.

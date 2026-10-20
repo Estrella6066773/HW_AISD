@@ -62,7 +62,7 @@ The specification asks for a record of what each review showed and a version or 
 | Date and who attended | |
 | Completed tasks (by `PB` number) | |
 | Unfinished tasks, and why | |
-| Key decisions | |
+| Key decisions | 2026-10-19 — `PB-12` second-owner review signed by Estrella, after the first owner (Ruby) confirmed the corrected abstraction text. Signature: section 7 of `docs/strategic-bpmn/PB-12_abstraction-level_2026-09-29.md`. |
 | Evidence of integration (the increment shown, and how it holds together) | |
 | Testing or validation evidence | |
 | Feedback received | |
